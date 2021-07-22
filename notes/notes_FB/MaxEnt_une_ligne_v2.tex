@@ -1,0 +1,222 @@
+% !TEX encoding = UTF-8 Unicode
+\documentclass{svmult}
+
+% choose options for [] as required from the list
+% in the Reference Guide, Sect. 2.2
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+%\usepackage{psfig}
+\usepackage{graphicx}
+\usepackage{multicol}
+%\usepackage[frenchb]{babel}
+
+\usepackage[utf8]{inputenc}
+ \usepackage{url}
+ \usepackage{bm}
+
+\newcommand{\ii}{{[i\cup j]}}
+
+
+\usepackage{natbib}
+%\bibliographystyle{ksfh_nat}
+\bibliographystyle{apalike}
+
+
+% etc.
+% see the list of further useful packages
+% in the Reference Guide, Sects. 2.3, 3.1-3.3
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[toctitles]{titlesec}% http://ctan.org/pkg/titlesec
+\titleformat{\section}%
+  [hang]% <shape>
+  {\normalfont\bfseries\Large}% <format>
+  {}% <label>
+  {0pt}% <sep>
+  {}% <before code>
+\renewcommand{\thesection}{}% Remove section references...
+\renewcommand{\thesubsection}{}% Remove subsection references...
+%\renewcommand{\thesubsection}{\arabic{subsection}}%... from subsections
+
+\titlerunning{Maximum d'entropie, une ligne de bus (juillet 2021)}
+
+\begin{document}
+
+ 
+\title*{Maximum d'entropie, une seule ligne de bus}
+
+% Use \titlerunning{Short Title} for an abbreviated version of
+% your contribution title if the original one is too long
+\author{FB-RL-GG}
+% Use \authorrunning{Short Title} for an abbreviated version of
+% your contribution title if the original one is too long
+\institute{UNIL}
+%
+% Use the package "url.sty" to avoid
+% problems with special characters
+% used in your e-mail or web address
+%
+
+
+
+\maketitle
+%%%%%%%%%
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+%\pagestyle{fancyplain}
+%\rfoot{}
+% \cfoot{\fancyplain{}{\small JADT 2012 : $\mbox{11}^{\mbox{\tiny es}}$ Journ\'ees internationales d'Analyse statistique des  Donn\'ees Textuelles}} 
+%\renewcommand{\headrulewidth}{0pt}
+%\renewcommand{\footrulewidth}{0.5pt}
+%%%%%%%%%
+
+
+%\textwidth = 6.5 in
+%\textheight = 8 in
+%\oddsidemargin = 0.0 in
+%\evensidemargin = 0.0 in
+%\topmargin = 0.2 in
+%\headheight = 0.1 in
+%\parindent = 0.2 in
+
+ 
+\section*{Notations et formalisation du problème}
+Une ligne orientée allant de l'arrêt  $i=1$ jusqu'à $i=l$. Soit $x_i$ le nombre de passagers montant à l'arrêt $i$, et $y_i$ le nombre de passagers descendant à l'arrêt $i$. On a 
+$y_1=0$ et $x_l=0$. 
+
+\
+
+Soit $N_{ij}$ (avec $i<j$; sinon $N_{ij}=0$) le nombre de personnes montant en $i$ et descendant en $j$. 
+
+\
+
+Soit $n_{i,i+1}$ le nombre de personnes transportées dans le tronçon $i$, $i+1$. Par construction: 
+\begin{equation}
+\label{ }
+n_{i,i+1}=n_{i-1,i}+x_i-y_i\qquad\qquad n_{01}=0
+\end{equation}
+
+\
+
+On veut estimer les données $N_{ij}$. Par construction, 
+\begin{equation}
+\label{constraints_margins}
+N_{i\bullet}=x_i\qquad\qquad N_{\bullet j}=y_j\qquad\qquad N_{\bullet\bullet}=x_\bullet \stackrel{!}{=}y_\bullet
+\end{equation}
+Soit $f_{ij}^D:=\frac{N_{ij}}{N_{\bullet\bullet}}$ la distribution empirique à estimer. Soit $g_i:=\frac{x_i}{x_\bullet}$ et  $h_j:=\frac{y_j}{y_\bullet}$ les distributions marginales correspondantes. En fait $f_{ij}^D$ est une matrice $(l-1)\times (l-1)$, où $i=1,\ldots, l-1$ et $j=2,\ldots, l$ 
+
+
+
+\
+
+Pour la distribution théorique $f^M$, donnée par une matrice $(l-1)\times (l-1)$, on peut imaginer un prior
+\begin{equation}
+\label{nrem}
+f_{ij}^M=a_ib_j 1(i<j)\qquad\qquad \sum_{i=1}^{l-1} a_i B_i\stackrel{!}{=}1\qquad\qquad B_i:=\sum_{j=i+1}^l b_j
+\end{equation}
+dépendant des $2l-3$ paramètres libres $a_1,\ldots, a_{l-1}$ et  $b_2,\ldots, b_{l}$ (contraints par la normalisation). 
+
+\
+
+Les contraintes se réécrivent 
+\begin{equation}
+\label{ }
+f_{i\bullet}^D=g_i\quad i=1,\ldots, l-1
+\qquad\qquad \qquad\qquad 
+f_{\bullet j}^D=h_j\quad j=2,\ldots, l
+\end{equation}
+Il y en a aussi $2l-3$ (car $\sum_if_{i\bullet}^D=\sum_j f_{\bullet j}^D$). Cela permet d'espérer de déterminer $a$ et $b$ de telle sorte que $f^D=f^M\equiv f$, qui donnerait un minimum absolu de $K(f^D||f^M)$. 
+
+\
+
+Les premiers termes non nuls sont $f_{12}=a_1b_2$, $f_{13}=a_1b_3$.... $f_{1,l}=a_1b_l$, dont la somme $f_{1\bullet}=a_1B_1$ doit être $g_1$. 
+
+Puis $f_{23}=a_2b_3$, $f_{24}=a_2b_4$.... $f_{2,l}=a_2b_l$, dont la somme $f_{2\bullet}=a_2B_2$ doit être $g_2$. 
+
+\
+
+En général, on a $f_{i\bullet}=a_iB_i\stackrel{!}{=}g_i$ pour  $i=1,\ldots, l-1$. De même, la normalisation (\ref{nrem}) peut aussi s'écrire 
+\begin{displaymath}
+ \sum_{j=2}^{l} A_j b_j\stackrel{!}{=}1\qquad\qquad A_j=\sum_{a=1}^{j-1} a_i
+\end{displaymath}
+d'où l'on tire que $f_{\bullet j}=A_jb_j\stackrel{!}{=}h_j$ pour  $j=2,\ldots, l$.
+
+\
+
+Pas sûr que $f^D=f^M$ puisse être réalisé, peut-être faut il changer de prior $f^M$ : piste à ne pas abandonner. Mais... 
+
+
+\section{Approche: ``estimer une table de contingence $N$ dont les marges sont fixées"}
+... le problème d'estimer une table de contingence $N$ dont les marges sont fixées  (équation (\ref{constraints_margins})) a fait l'objet d'une énorme littérature... A étudier et poursuivre.
+
+\section{Modèle de Guillaume}
+(avec quelques notations utilisées ici). 
+\begin{enumerate}
+  \item[$\bullet$] Probabilité de monter en $i$:  $p_i^{\mbox{\tiny in}}=x_i/x_{\bullet}$. 
+    \item[$\bullet$] Probabilité de descendre en $i$: $p_i^{\mbox{\tiny out}}=y_i/n_{i-1,i}$. 
+      \item[$\bullet$] Probabilité de continuer de $i$ à $i+1$ : $c_i=1-p_i^{\mbox{\tiny out}}$. 
+          \item[$\bullet$] Probabilité $P_{ij}$ de trajet de $i$ à $j>i$: 
+\begin{equation}
+\label{ }
+P_{ij}=p_i^{\mbox{\tiny in}}c_{i+1}\ldots c_{j-1}p_j^{\mbox{\tiny out}}\quad \mbox{ pour } j\ge i+2
+\qquad\qquad P_{i,i+1}=p_i^{\mbox{\tiny in}}p_{i+1}^{\mbox{\tiny out}}
+\end{equation}
+Le produit commence par $c_{i+1}$, car, si l'on est monté en $i$, la probabilité d'effectuer le tronçon $i\to i+1$ vaut 1.
+\end{enumerate}
+
+Soit $X_i:=\sum_{k=1}^i x_k$ le nombre cumulé de montées, et $Y_i:=\sum_{k=1}^i y_k$ le nombre cumulé de descentes. On a 
+\begin{equation}
+\label{ }
+X_i\ge Y_i\quad i=1,\ldots,l\qquad\qquad X_l=Y_l\qquad\qquad n_{i,i+1}=X_i-Y_i
+\end{equation}
+Il est pratique de définir le ``transit d'avant"  $t_i:=X_{i-1}-Y_{i-1}=n_{i-1,i}$, en posant $t_1=1$ (au lieu de $t_0=0$) afin que  
+$p_1^{\mbox{\tiny out}}=y_1/t_1=0/1=0$. On a alors $p_i^{\mbox{\tiny out}}=y_i/t_i$ pour tout $i=1,\ldots, l$, avec 
+\begin{displaymath}
+p_l^{\mbox{\tiny out}}=\frac{y_l}{t_l}=\frac{y_l}{X_{l-1}-Y_{l-1}}=\frac{y_l}{y_l}=1
+\end{displaymath}
+comme il se doit, où on a utilisé $X_{l-1}-Y_{l-1}=X_{l-1}+0-Y_{l-1}-y_l+y_l=X_l-Y_l+y_l=y_l$. 
+
+
+\
+
+On observe que $P_{\bullet\bullet}=1$. On va redéfinir comme avant $f_{ij}:=P_{ij}$. 
+Le nombre attendu de trajets $N_{ij}$ est alors $N_{ij}=x_{\bullet} f_{ij}$. On observe que $N_{i\bullet}=x_i$ et $N_{j\bullet}=y_j$.
+
+\
+
+On observe aussi que les trajets attendus sont (pour les cas étudiés) de la forme (cf. (\ref{nrem}))
+\begin{equation}
+\label{nrem2}
+N_{ij}=N_{\bullet\bullet}a_ib_jI(j>i)
+\end{equation}
+et qu'ainsi la forme des histogrammes du nombre de sorties $j$ depuis un départ $i$ variable reste la même: 
+\begin{equation}
+\label{nrem3}
+N_{j|i}:=\frac{N_{ij}}{N_{i\bullet}}=\frac{N_{\bullet\bullet}a_ib_jI(j>i)}{N_{\bullet\bullet}a_i\sum_{k>i}b_k}=\frac{b_jI(j>i)}{B_i}
+\end{equation}
+avec $B_i:=\sum_{k>i}b_k$.
+
+ Par construction, $a_l$ et $b_1$ sont indéfinis dans  (\ref{nrem2}); on peut les poser égaux à zéro. On peut noter que 
+ $N_{ij}=0$ si $x_i=0$ ou si $y_j=0$.  On peut alors poser 
+ \begin{displaymath}
+a_i=:x_i\alpha_i\qquad\qquad\mbox{et}\qquad\qquad b_j=:y_j\beta_j
+\end{displaymath}
+et déterminer $\alpha$ et $\beta$ par itération. Les conditions $N_{i\bullet}=x_i$ et $N_{j\bullet}=y_j$ donnent 
+\begin{equation}
+\label{iterFit}
+\alpha_i=\frac{1}{\sum_{j>i}\beta_j y_j}\qquad i<l \qquad\qquad \beta_j =\frac{1}{\sum_{i<j}\alpha_i x_i}\qquad j>1
+\end{equation}
+qu'on peut itérer (iterative fitting) à partir (par exemple) des conditions initiales $\beta^{(0)}=(0,\frac{1}{l-1},\frac{1}{l-1},\cdots,\frac{1}{l-1})$, itérées par exemple $500$ fois. 
+
+
+\subsection{Simulations numériques}
+ Voir test\_markov\_Guillaume\_Francois.R : tout semble jouer avec l'exemple 1, pour lequel le transit $X_i-Y_i$ n'est jamais nul (sauf en $i=l$). Mais difficultés avec l'exemple 2 ($l=10$), pour lequel le bus est vide entre les arrêts 8 et 9 $(X_8-Y_8=0$), et donc  $p_9^{\mbox{\tiny out}}$ {\em n'est pas défini}.
+ 
+ Clairement, l'absence de voyageurs entre les arrêts 8 et 9 ``simplifie" le problème, qui doit être résolu comme deux problèmes ``disjoints": de la station 1 à la station 8 d'une part, et de la station 9 à la station 10 d'autre part: il faut commencer par déterminer les tronçons vides, puis résoudre les sous-problèmes délimités par les tronçons vides. 
+ 
+
+
+\end{document}
