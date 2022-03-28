@@ -1,4 +1,7 @@
-setwd("~/Documents/recherche/projet_tl")
+# Set working directory 
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
+# Load data
 data = read.csv("data/Ptr_marges.csv")
 
 nom_arrets = names(data)

@@ -1,6 +1,7 @@
 ############ Graphique de fréquentation annuelle des lignes TL
 
-setwd("/Users/rloup/Desktop")
+# Set working directory 
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 ### Connexion à la base de données
 library('RPostgreSQL')

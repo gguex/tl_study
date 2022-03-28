@@ -1,4 +1,5 @@
-setwd("/Users/rloup/Desktop/markov")
+# Set working directory 
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 ############# Connexion à la base de données
 
