@@ -507,20 +507,33 @@ df_free_edge = data.frame(from=in_node_nn, to=out_node_nn,
                           quant=total_edge_flow[(round(total_edge_flow, 10) > 0) & free_edge_vec] * to_num)
 
 # Computing in-network/def, out-network/def
-transfer_out = rep(0, n)
-transfer_out[non_null_edge[, 1]] = df_free_edge$quant
-transfer_in = rep(0, n)
-transfer_in[non_null_edge[, 2]] = df_free_edge$quant
+transfer_out = c()
+transfer_in = c()
+for(id_node in 1:n){
+  
+  # Free out/in-going flow from node in and out
+  id_free_edge_from = intersect(which(edge_mat[,1] == id_node), which(free_edge_vec))
+  id_free_edge_to = intersect(which(edge_mat[,2] == id_node), which(free_edge_vec))
+  
+  # Outgoing and ingoing flow
+  free_outgoing_flow = sum(total_edge_flow[id_free_edge_from])
+  free_ingoing_flow = sum(total_edge_flow[id_free_edge_to])
+  
+  # flow transfer 
+  transfer_out = c(transfer_out, free_outgoing_flow)
+  transfer_in = c(transfer_in, free_ingoing_flow)
+}
   
 full_df = inout_cor
 full_df["montees_initiales"] = round(sigma_in * to_num)
-full_df["transferts_in"] = transfer_in
+full_df["transferts_in"] = round(transfer_in * to_num)
 full_df["diff_in"] = full_df["montees_initiales"] + full_df["transferts_in"] - full_df["montees"]
 full_df["descentes_finales"] = round(sigma_out * to_num)
-full_df["transferts_out"] = transfer_out
+full_df["transferts_out"] = round(transfer_out * to_num)
 full_df["diff_out"] = full_df["descentes_finales"] + full_df["transferts_out"] - full_df["descentes"]
 
 View(full_df)
+View(df_free_edge)
 
 # View
 id_arret = 30
