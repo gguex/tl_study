@@ -1,0 +1,24 @@
+\documentclass[11p]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{bm}
+
+%opening
+\title{Bus lines, multilines approach}
+\author{notes GG}
+
+\begin{document}
+
+\maketitle
+
+\section{Formalism}
+
+\subsection{Network definition}
+
+Let $\mathcal{G} = (\mathcal{V}, \mathcal{E})$ be a oriented graph and $\mathbf{A}$ its adjacency matrix, representing a multimodal transportation network between $|\mathcal{V}| = n$ stops and possessing $l$ lines. Each stop belong to only one line, i.e. $\mathcal{V} = \bigcup_{k=1}^l \mathcal{V}_k$ and $\bigcap_{k=1}^l \mathcal{V}_k = \emptyset$, where $\mathcal{V}_k$ represents the set of nodes in line $k$. The edge set $\mathcal{E}$, can also be decomposed with $\mathcal{E} = \left(\bigcup_{k=1}^l \mathcal{E}_k\right) \cup \mathcal{E}_\text{trsf}$, where $\mathcal{E}_k$ contains edges connecting node inside transportation line $k$, and $\mathcal{E}_\text{trsf}$ contains edges permitting transfer between different transportation lines. We suppose that edges belong to only a unique set, i.e. $\mathbf{A} = \sum_{k=1}^l \mathbf{A}_k + \mathbf{A}_\text{trsf}$, and there are an uniquely define route inside lines, i.e. $a^k_{i \bullet} \leq 1$ and $a^k_{\bullet i} \leq 1$ $\forall i,k$. Transfer edges also define a subset of nodes $\mathcal{V}_\text{f} \subset \mathcal{V}$, containing \emph{free nodes}, i.e. nodes connected to a transfer edge. We have $i \in \mathcal{V}_\text{f} \iff a^\text{trsf}_{i \bullet} + a^\text{trsf}_{\bullet i} > 0$.
+
+\subsection{Problem definition}
+
+Suppose that we possess two $n$-length vectors $\mathbf{x}_\text{in} = (x^\text{in}_i)$ and $\mathbf{y}_\text{out} = (y^\text{out}_i)$, representing respectively the flow entering the network at stop $i$ and going out of the network at stop $i$. 
+
+\end{document}
