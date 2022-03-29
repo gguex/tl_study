@@ -542,7 +542,7 @@ barplot(arret_prob, las=2, horiz=T, cex.names=0.5, main=stop_names[id_arret])
 
 res_num = round(results_mat / rowSums(results_mat_old)[1] * inout_cor$montees[1])
 
-# TESTs (to earse)
+# TESTs (to eventually earse)
 
 which_edge = c(39, 51)
 edge_id =  which(edge_mat[, 1] == which_edge[1] & edge_mat[, 2] == which_edge[2])
