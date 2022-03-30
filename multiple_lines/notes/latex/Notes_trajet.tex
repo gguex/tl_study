@@ -13,26 +13,85 @@
 
 \section{Formalism}
 
-\subsection{Network definition}
+\subsection{The multi-lines transportation network}
 
-Let $\mathcal{G} = (\mathcal{V}, \mathcal{E})$ be a oriented graph and $\mathbf{A}$ its adjacency matrix, representing a multimodal transportation network between $|\mathcal{V}| = n$ stops and possessing $l$ lines. Each stop belong to only one line, i.e. $\mathcal{V} = \bigcup_{k=1}^l \mathcal{V}_k$ and $\bigcap_{k=1}^l \mathcal{V}_k = \emptyset$, where $\mathcal{V}_k$ represents the set of nodes in line $k$. The edge set $\mathcal{E}$, can also be decomposed with $\mathcal{E} = \left(\bigcup_{k=1}^l \mathcal{E}_k\right) \cup \mathcal{E}_\text{trsf}$, where $\mathcal{E}_k$ contains edges connecting node inside transportation line $k$, and $\mathcal{E}_\text{trsf}$ contains edges permitting transfer between different transportation lines. We suppose that edges belong to only a unique set, i.e. $\mathbf{A} = \sum_{k=1}^l \mathbf{A}_k + \mathbf{A}_\text{trsf}$, and there are an uniquely define route inside lines, i.e. $a^k_{i \bullet} \leq 1$ and $a^k_{\bullet i} \leq 1$ $\forall i,k$. Transfer edges also define a subset of nodes $\mathcal{V}_\text{f} \subset \mathcal{V}$, containing \emph{free nodes}, i.e. nodes connected to a transfer edge. We have $i \in \mathcal{V}_\text{f} \iff a^\text{trsf}_{i \bullet} + a^\text{trsf}_{\bullet i} > 0$.
-
-\subsection{Flow definition}
-
-
-A matrix $\mathbf{N} = (n_{ij})$, verifying:
-\begin{enumerate}
-	\item $n_{ij} \geq 0$
-	\item $a_{ij} = 0 \Rightarrow n_{ij} = 0$
-\end{enumerate}
-is a \emph{flow matrix} defined on $\mathcal{G}$. Again, we can decompose this matrix with 
+Let $\mathcal{G} = (\mathcal{V}, \mathcal{E})$ be a simple, oriented, and connected graph representing a transportation network between $|\mathcal{V}| = n$ nodes, having $|\mathcal{E}| = m$ edges, and possessing $p$ different transportation lines. Each node belongs to only one line, i.e. $\mathcal{V} = \bigcup_{k=1}^p \mathcal{V}_k$ and $\bigcap_{k=1}^p \mathcal{V}_k = \emptyset$, where $\mathcal{V}_k$ represents the set of nodes in line $k$. The edge set $\mathcal{E}$, can also be decomposed with
 \begin{equation}
-\mathbf{N} = \mathbf{N}_\text{W} + \mathbf{N}_\text{B} \qquad \mathbf{N}_\text{W} := \sum_{k=1}^l \mathbf{N}_k
+\mathcal{E} = \mathcal{E}_\text{W} \cup \mathcal{E}_\text{B}, \qquad \mathcal{E}_\text{W} := \bigcup_{k=1}^p \mathcal{E}_k, \\
+\mathcal{E}_\text{W} \cap \mathcal{E}_\text{B} = \emptyset, \quad \mathcal{E}_k \cap \mathcal{E}_l = \emptyset, \quad \forall k, l.
 \end{equation}
-where the flow $\mathbf{N}_\text{W}$ is the flow inside the lines, $\mathbf{N}_\text{B}$ the flow between lines, and $\mathbf{N}_l$ the flow inside line $l$.
+where $\mathcal{E}_k$ is the set of edges composing line $k$, $\mathcal{E}_\text{W}$ the set containing all edges inside lines, and $\mathcal{E}_\text{B}$ the set of transfer edges, connecting the different lines. \\
+The graph $\mathcal{G}$ can be represented by its adjacency matrix $\mathbf{A} = (a_{ij})$, which can also be decomposed with 
+\begin{equation}
+\mathbf{A} = \mathbf{A}_\text{W} + \mathbf{A}_\text{B}, \qquad \mathbf{A}_\text{W} = \sum_{k=1}^p \mathbf{A}_k,
+\end{equation}
+with $\mathbf{A}_k = (a^k_{ij})$ are edges of line $k$, $\mathbf{A}_\text{W} = (a^\text{W}_{ij})$ edges of inside all lines, and $\mathbf{A}_\text{B} = (a^\text{B}_{ij})$ transfer edges. We suppose that there is an uniquely define route inside lines, i.e. 
+\begin{equation}
+a^k_{i \bullet} \leq 1 \text{ and } a^k_{\bullet i} \leq 1, \qquad \forall i,k.
+\end{equation}
+where $\bullet$ designs a summation over the replaced index.
 
-Suppose that we possess two $n$-length vectors $\mathbf{l}_\text{in} = (l^\text{in}_i)$ and $\mathbf{l}_\text{out} = (l^\text{out}_i)$, representing ,respectively, the flow entering the line associated with stop $i$ and going out of this line at stop $i$. These vectors can in fact be expressed with: 
+\subsection{The origin-destination matrix}
+
+The $(n \times n)$ \emph{origin-destination matrix}, denoted by $\mathbf{N} = (n_{st})$, $n_{st} \geq 0, \; \forall s,t$, contains the flow (e.g. the number of passengers) entering the network in source node $s$ and leaving it in target node $t$. We can denote its margins with 
 \begin{align}
-\mathbf{l}_\text{in} &= \bm{\sigma}_\text{in} + 
+\bm{\sigma}_\text{in} := \mathbf{N} \mathbf{e}_n \\
+\bm{\sigma}_\text{out} := \mathbf{N}^\top \mathbf{e}_n \\
 \end{align}
+where $\mathbf{e}_n$ is the vector of ones of size $n$. The vector $\bm{\sigma}_\text{in} = (\sigma^\text{in}_i)$ is the \emph{vector of flow entering the network} and $\bm{\sigma}_\text{in} = (\sigma^\text{in}_i)$ is the \emph{vector of flow escaping the network}. We have
+\begin{equation}
+\sigma^\text{in}_{\bullet} = \sigma^\text{out}_{\bullet}.
+\end{equation}
+
+\subsection{The flow matrix}
+
+A flow on edges is represented by the $(n \times n)$ \emph{flow matrix} $\mathbf{X} = (x_{ij})$, verifying
+\begin{align}
+x_{ij} &\geq 0, \qquad \forall i,j, \\
+a_{ij} = 0 &\Rightarrow x_{ij} = 0, \qquad \forall i,j, \\ 
+x_{i\bullet} + \sigma^\text{in}_i &= x_{\bullet i} + \sigma^\text{out}_i, \qquad \forall i.
+\end{align}
+Again, we can decompose the flow matrix with 
+\begin{equation}
+\mathbf{X} = \mathbf{X}_\text{W} + \mathbf{X}_\text{B} \qquad \mathbf{X}_\text{W} := \sum_{k=1}^l \mathbf{X}_k
+\end{equation}
+where $\mathbf{X}_k$ represent the flow inside line $k$, $\mathbf{X}_\text{W}$ is the flow inside all lines, and $\mathbf{X}_\text{B}$ the flow between lines. This decomposition allows us to define 
+the \emph{vector of flow entering lines} $\bm{\rho}_\text{in} = (\rho^\text{in}_i)$ and the \emph{vector of flow escaping lines} $\bm{\rho}_\text{out} = (\rho^\text{out}_i)$, with
+\begin{align}
+\bm{\rho}_\text{in} &:= \bm{\sigma}_\text{in} + \mathbf{X}^\top_\text{B} \mathbf{e}_n, \\
+\bm{\rho}_\text{out} &:= \bm{\sigma}_\text{out} + \mathbf{X}_\text{B} \mathbf{e}_n,
+\end{align}
+where $\mathbf{e}_n$ is the vector of ones of size $n$. It is easy to see that we still have $\rho^\text{in}_\bullet = \rho^\text{out}_\bullet$. \\
+
+\subsection{Shortest-paths flow}
+
+Let $\mathcal{P}_{st}$ be the set of \emph{admissible} shortest-paths between $s$ and $t$ on $\mathcal{G}$. We can denote by $\text{P}_{st}(i, j)$ the probability of having edge $(i, j) \in \wp$ when drawing a path $\wp$ from $\mathcal{P}_{st}$. We have 
+\begin{equation}
+\text{P}_{st}(i, j) := \frac{1}{|\mathcal{P}_{st}|}\sum_{\wp \in \mathcal{P}_{st}} \delta((i, j) \in \wp),
+\end{equation}
+where $\delta(.)$ designate the indicator function. If we are given an origin-destination matrix $\mathbf{N} = (n_{st})$, we can compute the \emph{shortest-path flow matrix}, noted $\mathbf{X}_\text{sp} = (x^\text{sp}_{ij})$, with:
+\begin{equation}
+x^\text{sp}_{ij} = \sum_{st} \text{P}_{st}(i, j) n_{st} \label{sp_comp}
+\end{equation}
+This matrix contains the flow on each edge if we suppose that the flow follows shortest-paths.
+
+\subsection{Problem definition}
+
+We suppose that we know the flow entering and leaving each line, i.e. $\bm{\rho}_\text{in}$ and $\bm{\rho}_\text{out}$ and we are interested in finding trajectories $n_{st}$ of the flow in the network knowing the set $\mathcal{A}$ of admissible pair $(s, t)$, i.e. pair of nodes where there is a possible use of the network for traveling. This set can be given by the matrix $\mathbf{T} = (t_{st})$ defined by
+\begin{equation}
+t_{st} = \begin{cases}
+1 & \text{if } (s, t) \in \mathcal{A}, \\
+0 & \text{otherwise}.
+\end{cases}
+\end{equation}
+
+\subsection{Algorithm}
+Set $\bm{\sigma}^{(0)}_\text{in} = \bm{\rho}_\text{in} + \epsilon$ and $\bm{\sigma}^{(0)}_\text{out} = \bm{\rho}_\text{out} + \epsilon$, with $\epsilon$ a small positive scalar. Until convergence, do:
+\begin{enumerate}
+	\item Compute $\mathbf{N}^{(i)} = \textbf{Diag}(\mathbf{a}^{(i)}) (\mathbf{T} + \epsilon)\textbf{Diag}(\mathbf{b}^{(i)})$ with iterative fitting, such that $\mathbf{N}^{(i)} \mathbf{e}_n = \bm{\sigma}^{(i)}_\text{in}$ and $\left(\mathbf{N}^{(i)}\right)^\top \mathbf{e}_n = \bm{\sigma}^{(i)}_\text{out}$.
+	\item Compute the associated shortest-path flow matrix $\mathbf{X}^{(i)}$ with (\ref{sp_comp}).
+	\item Compute $\bm{\sigma}^{(i+1)}_\text{in} = \bm{\rho}_\text{in} -  (\mathbf{X}^{(i)})^\top_\text{B} \mathbf{e}_n$ and $\bm{\sigma}^{(i+1)}_\text{out} = \bm{\rho}_\text{out} - \mathbf{X}^{(i)}_\text{B} \mathbf{e}_n$. 
+\end{enumerate}
+
+
 \end{document}
