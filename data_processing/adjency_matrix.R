@@ -2,34 +2,35 @@
 ####### Setting paths
 
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-setwd("/Users/rloup/switchdrive/theseRomain/data")
+# setwd("/Users/rloup/switchdrive/theseRomain/data")
+
+
+###### Libraries
+library(RPostgreSQL) # Database connection
+library(tidyverse) # Data filter
+library(geosphere) # Distances between points
+
+
 
 ##### Distance Matrix #####
 
-
 # Database connexion
-library("RPostgreSQL")
+
 # Connexion à la base de données
 conn <- dbConnect("PostgreSQL", dbname = 'tl_small', host = 'localhost', user = 'rloup', password = '')
 
-library("sf")
 
 # Réseau de tous les arrêts
-df <- st_read(conn, query="
-select distinct stop_order.code_ligne_theo, stop_order.code_arret_theo, stop_order.libelle_arret_theo, stop_order.sequence_theo, stop_order.distance_arret_prec_theo, stop_order.direction_voy_theo,
-freq_theo.lat_arret, freq_theo.lon_arret, freq_theo.geom
-from stop_order
-inner join freq_theo
-on stop_order.code_arret_theo = freq_theo.code_arret_theo
-order by code_ligne_theo, direction_voy_theo, sequence_theo;")
+df <- st_read(conn, query="SELECT * FROM stop_frequentation_tot;")
+
+# Save data
+write.csv2(df, "stop_frequentation.csv", row.names = FALSE)
 
 df2 <- df
-df <- df2
-df$new_seq <- 1
-i <- 1
-j <- 1
 
-while (i <= length(df$code_arret_theo)) {
+# Rectify stop order
+j <- 1
+for (i in 1:dim(df)[1]) {
   df$new_seq[i] <- j
   if(df$code_ligne_theo[i] == df$code_ligne_theo[i+1] && df$code_ligne_theo[i] == df$code_ligne_theo[i+1] && df$direction_voy_theo[i] == df$direction_voy_theo[i+1]) {
     j <- j + 1
@@ -37,10 +38,11 @@ while (i <= length(df$code_arret_theo)) {
   else{
     j <- 1
   }
-  i <- i + 1
 }
 
-# Lier dernier arrêt de l'aller avec le premier du retour
+i<-1
+j<-1
+# Lier dernier arrêt de l'aller avec le premier du retour (inutile ?)
 while (i <= length(df$code_arret_theo)) {
   df$new_seq[i] <- j
   if(df$code_ligne_theo[i] == df$code_ligne_theo[i+1] && df$code_ligne_theo[i] == df$code_ligne_theo[i+1]) {
@@ -51,14 +53,10 @@ while (i <= length(df$code_arret_theo)) {
   }
   i <- i + 1
 }
-  
-# Libraries
-library(geosphere)
-df2 <- df
-#Database
-df <- read.csv("arrets_geom_inner.csv", header = TRUE)
 
-df <- filter(df,code_ligne_theo==6|code_ligne_theo==7|code_ligne_theo==8|code_ligne_theo==9)
+df$code_ligne_theo <- as.numeric(unlist(df$code_ligne_theo))
+# Select lines
+df <- filter(df,code_ligne_theo==6|code_ligne_theo==7|code_ligne_theo==8|code_ligne_theo==9|code_ligne_theo==72)
 
 
 
