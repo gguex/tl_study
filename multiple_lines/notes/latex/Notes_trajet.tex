@@ -4,7 +4,7 @@
 \usepackage{bm}
 
 %opening
-\title{Bus lines, multilines approach}
+\title{Transportation network with multiple lines}
 \author{notes GG}
 
 \begin{document}
@@ -13,12 +13,11 @@
 
 \section{Formalism}
 
-\subsection{The multi-lines transportation network}
+\subsection{The transportation network with multiple lines}
 
 Let $\mathcal{G} = (\mathcal{V}, \mathcal{E})$ be a simple, oriented, and connected graph representing a transportation network between $|\mathcal{V}| = n$ nodes, having $|\mathcal{E}| = m$ edges, and possessing $p$ different transportation lines. Each node belongs to only one line, i.e. $\mathcal{V} = \bigcup_{k=1}^p \mathcal{V}_k$ and $\bigcap_{k=1}^p \mathcal{V}_k = \emptyset$, where $\mathcal{V}_k$ represents the set of nodes in line $k$. The edge set $\mathcal{E}$, can also be decomposed with
 \begin{equation}
-\mathcal{E} = \mathcal{E}_\text{W} \cup \mathcal{E}_\text{B}, \qquad \mathcal{E}_\text{W} := \bigcup_{k=1}^p \mathcal{E}_k, \\
-\mathcal{E}_\text{W} \cap \mathcal{E}_\text{B} = \emptyset, \quad \mathcal{E}_k \cap \mathcal{E}_l = \emptyset, \quad \forall k, l.
+\mathcal{E} = \mathcal{E}_\text{W} \cup \mathcal{E}_\text{B}, \qquad \mathcal{E}_\text{W} := \bigcup_{k=1}^p \mathcal{E}_k, \qquad \mathcal{E}_\text{W} \cap \mathcal{E}_\text{B} = \emptyset, \quad \mathcal{E}_k \cap \mathcal{E}_l = \emptyset, \quad \forall k, l.
 \end{equation}
 where $\mathcal{E}_k$ is the set of edges composing line $k$, $\mathcal{E}_\text{W}$ the set containing all edges inside lines, and $\mathcal{E}_\text{B}$ the set of transfer edges, connecting the different lines. \\
 The graph $\mathcal{G}$ can be represented by its adjacency matrix $\mathbf{A} = (a_{ij})$, which can also be decomposed with 
@@ -29,14 +28,14 @@ with $\mathbf{A}_k = (a^k_{ij})$ are edges of line $k$, $\mathbf{A}_\text{W} = (
 \begin{equation}
 a^k_{i \bullet} \leq 1 \text{ and } a^k_{\bullet i} \leq 1, \qquad \forall i,k.
 \end{equation}
-where $\bullet$ designs a summation over the replaced index.
+where $\bullet$ designates a summation over the replaced index.
 
 \subsection{The origin-destination matrix}
 
 The $(n \times n)$ \emph{origin-destination matrix}, denoted by $\mathbf{N} = (n_{st})$, $n_{st} \geq 0, \; \forall s,t$, contains the flow (e.g. the number of passengers) entering the network in source node $s$ and leaving it in target node $t$. We can denote its margins with 
 \begin{align}
 \bm{\sigma}_\text{in} := \mathbf{N} \mathbf{e}_n \\
-\bm{\sigma}_\text{out} := \mathbf{N}^\top \mathbf{e}_n \\
+\bm{\sigma}_\text{out} := \mathbf{N}^\top \mathbf{e}_n
 \end{align}
 where $\mathbf{e}_n$ is the vector of ones of size $n$. The vector $\bm{\sigma}_\text{in} = (\sigma^\text{in}_i)$ is the \emph{vector of flow entering the network} and $\bm{\sigma}_\text{in} = (\sigma^\text{in}_i)$ is the \emph{vector of flow escaping the network}. We have
 \begin{equation}
@@ -90,7 +89,7 @@ Set $\bm{\sigma}^{(0)}_\text{in} = \bm{\rho}_\text{in} + \epsilon$ and $\bm{\sig
 \begin{enumerate}
 	\item Compute $\mathbf{N}^{(i)} = \textbf{Diag}(\mathbf{a}^{(i)}) (\mathbf{T} + \epsilon)\textbf{Diag}(\mathbf{b}^{(i)})$ with iterative fitting, such that $\mathbf{N}^{(i)} \mathbf{e}_n = \bm{\sigma}^{(i)}_\text{in}$ and $\left(\mathbf{N}^{(i)}\right)^\top \mathbf{e}_n = \bm{\sigma}^{(i)}_\text{out}$.
 	\item Compute the associated shortest-path flow matrix $\mathbf{X}^{(i)}$ with (\ref{sp_comp}).
-	\item Compute $\bm{\sigma}^{(i+1)}_\text{in} = \bm{\rho}_\text{in} -  (\mathbf{X}^{(i)})^\top_\text{B} \mathbf{e}_n$ and $\bm{\sigma}^{(i+1)}_\text{out} = \bm{\rho}_\text{out} - \mathbf{X}^{(i)}_\text{B} \mathbf{e}_n$. 
+	\item Compute $\bm{\sigma}^{(i+1)}_\text{in} = \bm{\rho}_\text{in} -  (\mathbf{X}^{(i)}_\text{B})^\top \mathbf{e}_n$ and $\bm{\sigma}^{(i+1)}_\text{out} = \bm{\rho}_\text{out} - \mathbf{X}^{(i)}_\text{B} \mathbf{e}_n$. 
 \end{enumerate}
 
 

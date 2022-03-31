@@ -6,7 +6,6 @@
 ####### LIBRARIES
 
 library(igraph)
-library(Matrix)
 
 ############################################################### 
 ####### Setting paths
@@ -19,7 +18,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 compute_sp_data = F
 epsilon = 1e-30
 conv_thres_if = 1e-15
-conv_thres_algo = 1e-30
+conv_thres_algo = 1e-15
 local_lambda = 1
 flow_error = 1e-20
 
@@ -263,10 +262,10 @@ for(id_line in id_line_vec){
 }
 
 # Fixed distributions of in and out
-rho_in = inout_cor$montees + epsilon
-rho_in = rho_in / sum(rho_in)
-rho_out = inout_cor$descentes + epsilon
-rho_out = rho_out / sum(rho_out)
+pi_in = inout_cor$montees + epsilon
+pi_in = pi_in / sum(pi_in)
+pi_out = inout_cor$descentes + epsilon
+pi_out = pi_out / sum(pi_out)
 
 ############################################################### 
 ####### Algorithm 
@@ -277,7 +276,7 @@ sigma_out = pi_out
 p_sigma_in = sigma_in
 p_sigma_out = sigma_out
 converge_algo = F
-it_algo = 1
+epoch_algo = 1
 
 while(!converge_algo){
   
@@ -285,37 +284,135 @@ while(!converge_algo){
   p_sigma_in_old = p_sigma_in
   p_sigma_out_old = p_sigma_out
   
-  # --- --- Iterative fitting 
+  # Shuffle free node
+  free_node_shuffled = sample(which(free_node_vec))
+  # Reset id 
+  id_sample = 1
+  # edge_cycle_done
+  node_cycle_done = F
+  # Has mod
+  modification_occured = T
   
-  converge_if = F
-  results_mat = admissible_sp_mat + epsilon
-  while(!converge_if){
-    # Saving old results
-    results_mat_old = results_mat 
-    # Normalizing by row
-    results_mat = results_mat * sigma_in / rowSums(results_mat)
-    # Normalizing by columns 
-    results_mat = t(t(results_mat) * sigma_out / rowSums(t(results_mat)))
-    # Checking for convergence
-    if(sum(abs(results_mat_old - results_mat)) < conv_thres_if){
-      converge_if = T
-    }
-  }
-  
-  # Find flow on edges 
-  total_edge_flow = as.vector(t(sp_edge_mat) %*% c(results_mat))
+  while(!node_cycle_done){
     
-  # --- --- In and out-flow correction on nodes
+    # --- --- Iterative fitting 
+    
+    if(modification_occured){
+      
+      converge_if = F
+      results_mat = admissible_sp_mat + epsilon
+      while(!converge_if){
+        # Saving old results
+        results_mat_old = results_mat 
+        # Normalizing by row
+        results_mat = results_mat * sigma_in / rowSums(results_mat)
+        # Normalizing by columns 
+        results_mat = t(t(results_mat) * sigma_out / rowSums(t(results_mat)))
+        # Checking for convergence
+        if(sum(abs(results_mat_old - results_mat)) < conv_thres_if){
+          converge_if = T
+        }
+      }
+      
+      # Find flow on edges 
+      total_edge_flow = as.vector(t(sp_edge_mat) %*% c(results_mat))
+      
+      # Modification occured off
+      modification_occured = F
+    }
+    
+    # --- --- Flow correction on node
+    
+    # Take the node
+    id_node = free_node_shuffled[id_sample]
+    
+    # Free out/in-going flow from node in and out
+    id_free_edge_from = intersect(which(edge_mat[,1] == id_node), which(free_edge_vec))
+    id_free_edge_to = intersect(which(edge_mat[,2] == id_node), which(free_edge_vec))
+    
+    # Outgoing and ingoing flow
+    free_outgoing_flow = sum(total_edge_flow[id_free_edge_from])
+    free_ingoing_flow = sum(total_edge_flow[id_free_edge_to])
+    
+    # Transfer flow 
+    trans_flow_out = pi_out[id_node] - sigma_out[id_node] 
+    trans_flow_in = pi_in[id_node] - sigma_in[id_node] 
+    
+    # Outgoing flow management
+    if(trans_flow_out - free_outgoing_flow < -flow_error){
+      
+      # Print Red-out
+      cat("Red-out;")
+      
+      # Modification occured on
+      modification_occured = T
+      
+      # Quantity to reduce
+      to_reduce_outgoing = local_lambda*(free_outgoing_flow - trans_flow_out)
+      
+      # Trying to see if possible to reduce locally
+      if(sigma_out[id_node] < to_reduce_outgoing) to_reduce_outgoing = sigma_out[id_node]
+      
+      # Reduce the outgoing flow 
+      sigma_out[id_node] = sigma_out[id_node] - to_reduce_outgoing + epsilon
+      
+    } else if(trans_flow_out - free_outgoing_flow > flow_error){
+      
+      # Print Inc-out
+      cat("Inc-out;")
+      
+      # Modification occured on
+      modification_occured = T
+      
+      # Increase the outgoing flow
+      sigma_out[id_node] = sigma_out[id_node] + local_lambda*(trans_flow_out - free_outgoing_flow) + epsilon
+      
+    }
+    
+    # Ingoing flow management
+    if(trans_flow_in - free_ingoing_flow < -flow_error){
+      
+      # Print Red-in
+      cat("Red-in;")
+      
+      # Modification occured on
+      modification_occured = T
+      
+      # Quantity to reduce
+      to_reduce_ingoing = local_lambda*(free_ingoing_flow - trans_flow_in)
+      
+      # Trying to see if possible to reduce locally
+      if(sigma_in[id_node] < to_reduce_ingoing) to_reduce_ingoing = sigma_in[id_node]
+      
+      # Reduce the ingoing flow 
+      sigma_in[id_node] = sigma_in[id_node] - to_reduce_ingoing + epsilon
+      
+    } else if(trans_flow_in - free_ingoing_flow > flow_error){
+      
+      # Print Inc-in
+      cat("Inc-in;")
+      
+      # Modification occured on
+      modification_occured = T
+      
+      # Increase the outgoing flow
+      sigma_in[id_node] = sigma_in[id_node] + local_lambda*(trans_flow_in - free_ingoing_flow) + epsilon
+      
+    }
   
-  # The flow on free edges
-  free_edge_loc = edge_mat[free_edge_vec, ]
-  X_b = sparseMatrix(i=free_edge_loc[, 1],j=free_edge_loc[, 2],x=total_edge_flow[free_edge_vec], dims=c(n, n))
-  
-  # Update sigma_in and sigma_out
-  sigma_in = pi_in - colSums(X_b)
-  sigma_out = pi_out - rowSums(X_b)
-  sigma_in[sigma_in < 0] = 0
-  sigma_out[sigma_out < 0] = 0
+    # Iterate on node 
+    
+    # Print node id
+    if(modification_occured){
+      cat("|", id_node, "|\n")
+    }
+    
+    id_sample = id_sample + 1
+    if(id_sample > length(free_node_shuffled)){
+      node_cycle_done = T
+    }
+    
+  }
   
   # --- --- Compute in-out balance 
   
@@ -366,13 +463,13 @@ while(!converge_algo){
   
   diff = sum(abs(p_sigma_in - p_sigma_in_old)) + sum(abs(p_sigma_out - p_sigma_out_old))
     
-  cat("It", it_algo, ": diff =", diff, ", out_error = ", out_error, "in_error = ", in_error,"\n")
+  cat("Epoch", epoch_algo, "ends, diff =", diff, ", out_error = ", out_error, "in_error = ", in_error,"\n")
   if(out_error + in_error < conv_thres_algo){
     converge_algo = T
   }
   
-  # Iteration
-  it_algo = it_algo + 1
+  #Epoch iteration
+  epoch_algo = epoch_algo + 1
 }
   
 # END 
