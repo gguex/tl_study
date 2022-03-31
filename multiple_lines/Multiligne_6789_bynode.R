@@ -272,18 +272,17 @@ rho_out = rho_out / sum(rho_out)
 ####### Algorithm 
 
 # Init
-sigma_in = pi_in
-sigma_out = pi_out
-p_sigma_in = sigma_in
-p_sigma_out = sigma_out
+sigma_in = rho_in
+sigma_out = rho_out
 converge_algo = F
 it_algo = 1
+X_b = matrix(1, n, n)
 
 while(!converge_algo){
   
-  # Save old distrib values
-  p_sigma_in_old = p_sigma_in
-  p_sigma_out_old = p_sigma_out
+  # --- --- Save old X_b
+  
+  X_b_old = X_b 
   
   # --- --- Iterative fitting 
   
@@ -312,62 +311,17 @@ while(!converge_algo){
   X_b = sparseMatrix(i=free_edge_loc[, 1],j=free_edge_loc[, 2],x=total_edge_flow[free_edge_vec], dims=c(n, n))
   
   # Update sigma_in and sigma_out
-  sigma_in = pi_in - colSums(X_b)
-  sigma_out = pi_out - rowSums(X_b)
+  sigma_in = rho_in - colSums(X_b)
+  sigma_out = rho_out - rowSums(X_b)
   sigma_in[sigma_in < 0] = 0
   sigma_out[sigma_out < 0] = 0
   
-  # --- --- Compute in-out balance 
-  
-  # IF
-  converge_if = F
-  results_mat = admissible_sp_mat + epsilon
-  while(!converge_if){
-    # Saving old results
-    results_mat_old = results_mat 
-    # Normalizing by row
-    results_mat = results_mat * sigma_in / rowSums(results_mat)
-    # Normalizing by columns 
-    results_mat = t(t(results_mat) * sigma_out / rowSums(t(results_mat)))
-    # Checking for convergence
-    if(sum(abs(results_mat_old - results_mat)) < conv_thres_if){
-      converge_if = T
-    }
-  }
-  
-  # Find flow on edges 
-  total_edge_flow = as.vector(t(sp_edge_mat) %*% c(results_mat))
-  
-  # Find flow on free edges
-  in_error_vec = c()
-  out_error_vec = c()
-  for(id_node in 1:n){
-    
-    # Free out/in-going flow from node in and out
-    id_free_edge_from = intersect(which(edge_mat[,1] == id_node), which(free_edge_vec))
-    id_free_edge_to = intersect(which(edge_mat[,2] == id_node), which(free_edge_vec))
-    
-    # Outgoing and ingoing flow
-    free_outgoing_flow = sum(total_edge_flow[id_free_edge_from])
-    free_ingoing_flow = sum(total_edge_flow[id_free_edge_to])
-    
-    # Errors vec
-    in_error_vec = c(in_error_vec, pi_in[id_node] - (sigma_in[id_node] + free_ingoing_flow))
-    out_error_vec = c(out_error_vec, pi_out[id_node] - (sigma_out[id_node] + free_outgoing_flow))
-  }
-  
-  # Total error in and out
-  out_error = sum(abs(out_error_vec))
-  in_error = sum(abs(in_error_vec))
-  
   # --- --- Check for convergence and iterate
-  p_sigma_in = sigma_in / sum(sigma_in)
-  p_sigma_out = sigma_out / sum(sigma_out)
   
-  diff = sum(abs(p_sigma_in - p_sigma_in_old)) + sum(abs(p_sigma_out - p_sigma_out_old))
+  diff = sum(abs(X_b - X_b_old))
     
-  cat("It", it_algo, ": diff =", diff, ", out_error = ", out_error, "in_error = ", in_error,"\n")
-  if(out_error + in_error < conv_thres_algo){
+  cat("It", it_algo, ": diff =", diff, "\n")
+  if(diff < conv_thres_algo){
     converge_algo = T
   }
   
@@ -444,17 +398,3 @@ arret_prob = rev(results_mat_old[id_arret, ])
 barplot(arret_prob, las=2, horiz=T, cex.names=0.5, main=stop_names[id_arret])
 
 res_num = round(results_mat / rowSums(results_mat_old)[1] * inout_cor$montees[1])
-
-# TESTs (to eventually earse)
-
-which_edge = c(39, 51)
-edge_id =  which(edge_mat[, 1] == which_edge[1] & edge_mat[, 2] == which_edge[2])
-
-sp_mat_from_edge = matrix(sp_edge_mat[, edge_id], n, n, byrow=T)
-sp_node_mat = which(sp_mat_from_edge > 0, arr.ind = T)
-
-nomb_t = c()
-for(i in 1:dim(sp_node_mat)[1]){
-  nomb_t = c(nomb_t, res_num[sp_node_mat[i,1], sp_node_mat[i,2]])
-}
-df_sp = data.frame(stop_names[sp_node_mat[,1]], stop_names[sp_node_mat[,2]], nomb_t)
