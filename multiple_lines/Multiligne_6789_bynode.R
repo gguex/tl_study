@@ -20,8 +20,6 @@ compute_sp_data = F
 epsilon = 1e-30
 conv_thres_if = 1e-15
 conv_thres_algo = 1e-30
-local_lambda = 1
-flow_error = 1e-20
 
 ############################################################### 
 ####### LOADING AND PREPROCESSING MATRICES
@@ -382,11 +380,11 @@ for(id_node in 1:n){
 }
   
 full_df = inout_cor
-full_df["montees_initiales"] = round(sigma_in * to_num)
-full_df["transferts_in"] = round(transfer_in * to_num)
+full_df["montees_initiales"] = round(sigma_in * to_num, 3)
+full_df["transferts_in"] = round(transfer_in * to_num, 3)
 full_df["diff_in"] = full_df["montees_initiales"] + full_df["transferts_in"] - full_df["montees"]
-full_df["descentes_finales"] = round(sigma_out * to_num)
-full_df["transferts_out"] = round(transfer_out * to_num)
+full_df["descentes_finales"] = round(sigma_out * to_num, 3)
+full_df["transferts_out"] = round(transfer_out * to_num, 3)
 full_df["diff_out"] = full_df["descentes_finales"] + full_df["transferts_out"] - full_df["descentes"]
 
 View(full_df)
