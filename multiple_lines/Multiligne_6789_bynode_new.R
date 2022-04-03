@@ -278,6 +278,9 @@ rho_out = rho_out / sum(rho_out)
 ############################################################### 
 ####### Algorithm 
 
+# Aux
+edge_to_sp = t(sp_edge_mat[, free_edge_vec])
+
 # Init
 sigma_in = rho_in
 sigma_out = rho_out
@@ -314,6 +317,9 @@ while(!converge_algo){
     }
   }
   
+  cat("rel_mat = ", relationship_ref_mat[1, 190], "|")
+  cat("res_mat = ", results_mat[1, 190], "|")
+  
   # Find flow on edges and free edges
   total_edge_flow = as.vector(t(sp_edge_mat) %*% c(t(results_mat)))
   free_edge_flow = total_edge_flow[free_edge_vec]
@@ -347,15 +353,17 @@ while(!converge_algo){
   # --- --- Correction on dependence
   
   # Revert back the flow
-  to_red_in_on_edge = as.vector(t(nodefrom_edge_mat[,free_edge_vec]) %*% p_to_red_in)
-  to_red_out_on_edge = as.vector(t(nodeto_edge_mat[,free_edge_vec]) %*% p_to_red_out)
-  to_red_max_on_edge = pmax(to_red_in_on_edge, to_red_out_on_edge)
-  to_red = apply(t(sp_edge_mat[, free_edge_vec]) * to_red_max_on_edge, 2, max)
+  to_red_in_edge = as.vector(t(nodefrom_edge_mat[,free_edge_vec]) %*% p_to_red_in)
+  to_red_out_edge = as.vector(t(nodeto_edge_mat[,free_edge_vec]) %*% p_to_red_out)
+  to_red_max_edge = pmax(to_red_in_edge, to_red_out_edge)
+  to_red = apply(edge_to_sp * to_red_max_edge, 2, max)
+  to_red_mat = matrix(to_red, n, n, byrow=T) * admissible_sp_mat
   max_to_red = max(to_red)
   
+  cat("coord_max = ", which(to_red_mat==max_to_red, arr.ind=T)[1,], "|")
+  
   # Reduce the dep
-  relationship_ref_mat = relationship_ref_mat - (relationship_ref_mat * matrix(to_red, n, n, byrow=T))
-  relationship_ref_mat = relationship_ref_mat * total_rel / sum(relationship_ref_mat)
+  relationship_ref_mat = relationship_ref_mat * (1 - to_red_mat)
   
   # --- --- Check for convergence and iterate
   
