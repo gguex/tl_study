@@ -17,11 +17,10 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 ####### PARAMETERS
 
 compute_sp_data = F
-epsilon = 1e-50
+epsilon = 1e-40
 conv_thres_if = 1e-5
-conv_thres_algo = 1e-10
-min_sigma = 0.01
-dep_lambda = 0.1
+conv_thres_algo = 1e-5
+min_sigma = 0.0001
 
 ############################################################### 
 ####### LOADING AND PREPROCESSING MATRICES
@@ -275,6 +274,8 @@ rho_out = inout_cor$descentes + epsilon
 rho_out = rho_out / sum(rho_out)
 
 
+
+
 ############################################################### 
 ####### Algorithm 
 
@@ -316,10 +317,7 @@ while(!converge_algo){
       converge_if = T
     }
   }
-  
-  cat("rel_mat = ", relationship_ref_mat[1, 190], "|")
-  cat("res_mat = ", results_mat[1, 190], "|")
-  
+
   # Find flow on edges and free edges
   total_edge_flow = as.vector(t(sp_edge_mat) %*% c(t(results_mat)))
   free_edge_flow = total_edge_flow[free_edge_vec]
@@ -331,20 +329,26 @@ while(!converge_algo){
   X_b = sparseMatrix(i=free_edge_loc[, 1], 
                      j=free_edge_loc[, 2], 
                      x=free_edge_flow, dims=c(n, n))
-  in_free_flow = colSums(X_b)
-  out_free_flow = rowSums(X_b)
+  from_free_flow = colSums(X_b)
+  to_free_flow = rowSums(X_b)
+  
+  ## FOR DEBUG
+  # df_edge = data.frame(free_edge_loc[, 1],free_edge_loc[, 2],free_edge_flow)
+  # df_edge = df_edge[df_edge$free_edge_flow > 0, ]
+  # print(df_edge)
+  ## FOR DEBUG
   
   # Update sigma_in and sigma_out
-  sigma_in = rho_in - in_free_flow
-  sigma_out = rho_out - out_free_flow
+  sigma_in = rho_in - from_free_flow
+  sigma_out = rho_out - to_free_flow
   
   # Still to reduce in/out
   to_red_in = min_sigma_in - sigma_in
   to_red_out = min_sigma_out - sigma_out
   to_red_in[to_red_in < 0] = 0
   to_red_out[to_red_out < 0] = 0
-  p_to_red_in = to_red_in / (in_free_flow + epsilon)
-  p_to_red_out = to_red_out / (out_free_flow + epsilon)
+  p_to_red_from = to_red_in / (from_free_flow + epsilon)
+  p_to_red_to = to_red_out / (to_free_flow + epsilon)
   
   # Cap sigma_in and sigma_out
   sigma_in[sigma_in < min_sigma_in] = min_sigma_in[sigma_in < min_sigma_in]
@@ -353,14 +357,25 @@ while(!converge_algo){
   # --- --- Correction on dependence
   
   # Revert back the flow
-  to_red_in_edge = as.vector(t(nodefrom_edge_mat[,free_edge_vec]) %*% p_to_red_in)
-  to_red_out_edge = as.vector(t(nodeto_edge_mat[,free_edge_vec]) %*% p_to_red_out)
+  to_red_in_edge = as.vector(t(nodeto_edge_mat[,free_edge_vec]) %*% p_to_red_from)
+  to_red_out_edge = as.vector(t(nodefrom_edge_mat[,free_edge_vec]) %*% p_to_red_to)
   to_red_max_edge = pmax(to_red_in_edge, to_red_out_edge)
   to_red = apply(edge_to_sp * to_red_max_edge, 2, max)
   to_red_mat = matrix(to_red, n, n, byrow=T) * admissible_sp_mat
   max_to_red = max(to_red)
   
-  cat("coord_max = ", which(to_red_mat==max_to_red, arr.ind=T)[1,], "|")
+  ## FOR DEBUG
+  # df_it_p = data.frame(which(to_red_mat==max_to_red, arr.ind=T))
+  # ref_vec = c()
+  # res_vec = c()
+  # for(row_id in 1:dim(df_it_p)[1]){
+  #   ref_vec = c(ref_vec, relationship_ref_mat[df_it_p$row[row_id], df_it_p$col[row_id]])
+  #   res_vec = c(res_vec, results_mat[df_it_p$row[row_id], df_it_p$col[row_id]])
+  # }
+  # df_it_p["reference"] = ref_vec
+  # df_it_p["flow_res"] = res_vec
+  # print(df_it_p)
+  ## FOR DEBUG
   
   # Reduce the dep
   relationship_ref_mat = relationship_ref_mat * (1 - to_red_mat)
@@ -370,7 +385,7 @@ while(!converge_algo){
   diff = sum(abs(X_b - X_b_old))
     
   cat("It", it_algo, ": diff =", diff, ", to_red_max =", max_to_red,"\n")
-  if(diff < conv_thres_algo){
+  if(diff < conv_thres_algo | max_to_red < conv_thres_algo){
     converge_algo = T
   }
   
@@ -406,11 +421,11 @@ total_edge_flow = as.vector(t(sp_edge_mat) %*% c(t(results_mat)))
 to_num = inout_cor$montees[1] / rowSums(results_mat_old)[1]
 
 # See link
-non_null_edge = edge_mat[(round(total_edge_flow, 15) > 0) & free_edge_vec, ]
+non_null_edge = edge_mat[(round(total_edge_flow, 10) > 0) & free_edge_vec, ]
 in_node_nn = stop_names[non_null_edge[,1]]
 out_node_nn = stop_names[non_null_edge[,2]]
 df_free_edge = data.frame(from=in_node_nn, to=out_node_nn, 
-                          quant=total_edge_flow[(round(total_edge_flow, 10) > 0) & free_edge_vec] * to_num)
+                          quant=round(total_edge_flow[(round(total_edge_flow, 10) > 0) & free_edge_vec] * to_num))
 
 # Computing in-network/def, out-network/def
 transfer_out = c()
@@ -434,9 +449,11 @@ full_df = inout_cor
 full_df["montees_initiales"] = round(sigma_in * to_num, 3)
 full_df["transferts_in"] = round(transfer_in * to_num, 3)
 full_df["diff_in"] = full_df["montees_initiales"] + full_df["transferts_in"] - full_df["montees"]
+full_df["err_in%"] = round(full_df["diff_in"] / full_df["montees"] * 100, 3)
 full_df["descentes_finales"] = round(sigma_out * to_num, 3)
 full_df["transferts_out"] = round(transfer_out * to_num, 3)
 full_df["diff_out"] = full_df["descentes_finales"] + full_df["transferts_out"] - full_df["descentes"]
+full_df["err_out%"] = round(full_df["diff_out"] / full_df["descentes"] * 100, 3)
 
 View(full_df)
 View(df_free_edge)
