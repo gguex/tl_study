@@ -77,14 +77,15 @@ This matrix contains the flow on each edge if we suppose that the flow follows s
 We can rewrite equation (\ref{sp_comp}) by defining the $(n^2 \times n^2)$ \emph{shortest-path - edge matrix} $\mathbf{S} = (s_{\alpha \beta})$ with
 \begin{equation}
 s_{\alpha \beta} = \begin{cases}
-\text{P}_{st}(i, j) & \text{if } \alpha = s + n(t - 1) \text{ and }  \beta = i + n(j - 1), \\
+\text{P}_{st}(i, j) & \text{if } \alpha = t + n(s - 1) \text{ and }  \beta = j + n(i - 1), \\
 0 & \text{otherwise}.
 \end{cases}
 \end{equation}
 Then (\ref{sp_comp}) writes
 \begin{equation}
-\
+\text{vec}(\mathbf{X}) = \mathbf{S}^\top \text{vec}(\mathbf{N}),
 \end{equation}
+where $\text{vec}(.)$ denotes the vectorization function of a matrix, obtained by stacking matrix columns on top of one another.
 
 \subsection{Problem definition}
 
