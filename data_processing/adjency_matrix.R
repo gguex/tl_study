@@ -5,30 +5,34 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 # setwd("/Users/rloup/switchdrive/theseRomain/data")
 
 
-###### Libraries
+####### Libraries
 library(RPostgreSQL) # Database connection
+library(sf) # Read database
 library(tidyverse) # Data filter
 library(geosphere) # Distances between points
 
 
-
-##### Distance Matrix #####
+####### Distance Matrix #######
 
 # Database connexion
-
-# Connexion à la base de données
 conn <- dbConnect("PostgreSQL", dbname = 'tl_small', host = 'localhost', user = 'rloup', password = '')
 
-
-# Réseau de tous les arrêts
+# Network of all stops
 df <- st_read(conn, query="SELECT * FROM stop_frequentation_tot;")
 
+# Extract lon/lat
+# df$test <- str_extract_all(df$geom_arret, "[0-9]+\\.[0-9]{1,20}")
+df$lon <- sapply(df$geom_arret, "[[", 1)
+df$lat <- sapply(df$geom_arret, "[[", 2)
+
+
+
 # Save data
-write.csv2(df, "stop_frequentation.csv", row.names = FALSE)
+#write.csv2(df, "stop_frequentation.csv", row.names = FALSE)
+# Call data
+#df <- read_csv2("stop_frequentation.csv")
 
-df2 <- df
-
-# Rectify stop order
+# Rectify stops order
 j <- 1
 for (i in 1:dim(df)[1]) {
   df$new_seq[i] <- j
@@ -40,23 +44,24 @@ for (i in 1:dim(df)[1]) {
   }
 }
 
-i<-1
-j<-1
-# Lier dernier arrêt de l'aller avec le premier du retour (inutile ?)
-while (i <= length(df$code_arret_theo)) {
-  df$new_seq[i] <- j
-  if(df$code_ligne_theo[i] == df$code_ligne_theo[i+1] && df$code_ligne_theo[i] == df$code_ligne_theo[i+1]) {
-    j <- j + 1
-  }
-  else{
-    j <- 1
-  }
-  i <- i + 1
-}
+# i<-1
+# j<-1
+# # Lier dernier arrêt de l'aller avec le premier du retour (inutile ?)
+# while (i <= length(df$code_arret_theo)) {
+#   df$new_seq[i] <- j
+#   if(df$code_ligne_theo[i] == df$code_ligne_theo[i+1] && df$code_ligne_theo[i] == df$code_ligne_theo[i+1]) {
+#     j <- j + 1
+#   }
+#   else{
+#     j <- 1
+#   }
+#   i <- i + 1
+# }
 
-df$code_ligne_theo <- as.numeric(unlist(df$code_ligne_theo))
+# df$code_ligne_theo <- as.numeric(unlist(df$code_ligne_theo))
+
 # Select lines
-df <- filter(df,code_ligne_theo==6|code_ligne_theo==7|code_ligne_theo==8|code_ligne_theo==9|code_ligne_theo==72)
+df <- filter(df,code_ligne_theo==6|code_ligne_theo==7|code_ligne_theo==8|code_ligne_theo==9)
 
 
 
@@ -83,7 +88,7 @@ j <- 1
 while (j <= length(df$code_arret_theo)) {
   while (i <= length(df$code_arret_theo)) {
     # function that show the distance between two lon lat points
-    x[i,j] <- (distm(c(df$lon_arret[i], df$lat_arret[i]), c(df$lon_arret[j], df$lat_arret[j]), fun = distHaversine))
+    x[i,j] <- (distm(c(df$lon[i], df$lat[i]), c(df$lon[j], df$lat[j]), fun = distHaversine))
     i <- i + 1
   }
   i <- 1
@@ -101,7 +106,7 @@ j <- 1
 while (j <= length(df$code_arret_theo)) {
   while (i <= length(df$code_arret_theo)) {
     # function that show the distance between two lon lat points
-    if( (distm(c(df$lon_arret[i], df$lat_arret[i]), c(df$lon_arret[j], df$lat_arret[j]), fun = distHaversine)) < d) {
+    if( (distm(c(df$lon[i], df$lat[i]), c(df$lon[j], df$lat[j]), fun = distHaversine)) < d) {
       a[i,j] <- 1
     } else {
       a[i,j] <- 0
