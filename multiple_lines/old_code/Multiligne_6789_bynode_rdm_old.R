@@ -6,7 +6,6 @@
 ####### LIBRARIES
 
 library(igraph)
-library(Matrix)
 
 ############################################################### 
 ####### Setting paths
@@ -17,10 +16,11 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 ####### PARAMETERS
 
 compute_sp_data = F
-epsilon = 1e-40
-conv_thres_if = 1e-5
-conv_thres_algo = 1e-5
-min_sigma = 0.0001
+epsilon = 1e-30
+conv_thres_if = 1e-15
+conv_thres_algo = 1e-15
+local_lambda = 1
+flow_error = 1e-20
 
 ############################################################### 
 ####### LOADING AND PREPROCESSING MATRICES
@@ -128,12 +128,6 @@ time_full = bus_time_mat + (adj_prox * change_time)
 full_g = graph_from_adjacency_matrix(adj_full, mode = "directed")
 edge_mat = as_edgelist(full_g)
 n_edges = dim(edge_mat)[1]
-nodefrom_edge_mat = matrix(0, n, n_edges)
-nodeto_edge_mat = matrix(0, n, n_edges) 
-for(i in 1:n_edges){
-  nodefrom_edge_mat[edge_mat[i, 1], i] = 1
-  nodeto_edge_mat[edge_mat[i, 2], i] = 1
-}
 
 # Vector giving index of free edges  
 free_edge_vec = rep(F, dim(edge_mat)[1])
@@ -268,129 +262,214 @@ for(id_line in id_line_vec){
 }
 
 # Fixed distributions of in and out
-rho_in = inout_cor$montees + epsilon
-rho_in = rho_in / sum(rho_in)
-rho_out = inout_cor$descentes + epsilon
-rho_out = rho_out / sum(rho_out)
-
-
-
+pi_in = inout_cor$montees + epsilon
+pi_in = pi_in / sum(pi_in)
+pi_out = inout_cor$descentes + epsilon
+pi_out = pi_out / sum(pi_out)
 
 ############################################################### 
 ####### Algorithm 
 
-# Aux
-edge_to_sp = t(sp_edge_mat[, free_edge_vec])
-
 # Init
-sigma_in = rho_in
-sigma_out = rho_out
-min_sigma_in = rho_in * min_sigma
-min_sigma_out = rho_out * min_sigma
+sigma_in = pi_in
+sigma_out = pi_out
+p_sigma_in = sigma_in
+p_sigma_out = sigma_out
 converge_algo = F
-it_algo = 1
-X_b = matrix(1, n, n)
-relationship_ref_mat = admissible_sp_mat
-total_rel = sum(admissible_sp_mat)
-max_to_red = 1
+epoch_algo = 1
 
 while(!converge_algo){
   
-  # --- --- Save old X_b
+  # Save old distrib values
+  p_sigma_in_old = p_sigma_in
+  p_sigma_out_old = p_sigma_out
   
-  X_b_old = X_b 
-  max_to_red_old = max_to_red
+  # Shuffle free node
+  free_node_shuffled = sample(which(free_node_vec))
+  # Reset id 
+  id_sample = 1
+  # edge_cycle_done
+  node_cycle_done = F
+  # Has mod
+  modification_occured = T
   
-  # --- --- Iterative fitting 
+  while(!node_cycle_done){
+    
+    # --- --- Iterative fitting 
+    
+    if(modification_occured){
+      
+      converge_if = F
+      results_mat = admissible_sp_mat + epsilon
+      while(!converge_if){
+        # Saving old results
+        results_mat_old = results_mat 
+        # Normalizing by row
+        results_mat = results_mat * sigma_in / rowSums(results_mat)
+        # Normalizing by columns 
+        results_mat = t(t(results_mat) * sigma_out / rowSums(t(results_mat)))
+        # Checking for convergence
+        if(sum(abs(results_mat_old - results_mat)) < conv_thres_if){
+          converge_if = T
+        }
+      }
+      
+      # Find flow on edges 
+      total_edge_flow = as.vector(t(sp_edge_mat) %*% c(results_mat))
+      
+      # Modification occured off
+      modification_occured = F
+    }
+    
+    # --- --- Flow correction on node
+    
+    # Take the node
+    id_node = free_node_shuffled[id_sample]
+    
+    # Free out/in-going flow from node in and out
+    id_free_edge_from = intersect(which(edge_mat[,1] == id_node), which(free_edge_vec))
+    id_free_edge_to = intersect(which(edge_mat[,2] == id_node), which(free_edge_vec))
+    
+    # Outgoing and ingoing flow
+    free_outgoing_flow = sum(total_edge_flow[id_free_edge_from])
+    free_ingoing_flow = sum(total_edge_flow[id_free_edge_to])
+    
+    # Transfer flow 
+    trans_flow_out = pi_out[id_node] - sigma_out[id_node] 
+    trans_flow_in = pi_in[id_node] - sigma_in[id_node] 
+    
+    # Outgoing flow management
+    if(trans_flow_out - free_outgoing_flow < -flow_error){
+      
+      # Print Red-out
+      cat("Red-out;")
+      
+      # Modification occured on
+      modification_occured = T
+      
+      # Quantity to reduce
+      to_reduce_outgoing = local_lambda*(free_outgoing_flow - trans_flow_out)
+      
+      # Trying to see if possible to reduce locally
+      if(sigma_out[id_node] < to_reduce_outgoing) to_reduce_outgoing = sigma_out[id_node]
+      
+      # Reduce the outgoing flow 
+      sigma_out[id_node] = sigma_out[id_node] - to_reduce_outgoing + epsilon
+      
+    } else if(trans_flow_out - free_outgoing_flow > flow_error){
+      
+      # Print Inc-out
+      cat("Inc-out;")
+      
+      # Modification occured on
+      modification_occured = T
+      
+      # Increase the outgoing flow
+      sigma_out[id_node] = sigma_out[id_node] + local_lambda*(trans_flow_out - free_outgoing_flow) + epsilon
+      
+    }
+    
+    # Ingoing flow management
+    if(trans_flow_in - free_ingoing_flow < -flow_error){
+      
+      # Print Red-in
+      cat("Red-in;")
+      
+      # Modification occured on
+      modification_occured = T
+      
+      # Quantity to reduce
+      to_reduce_ingoing = local_lambda*(free_ingoing_flow - trans_flow_in)
+      
+      # Trying to see if possible to reduce locally
+      if(sigma_in[id_node] < to_reduce_ingoing) to_reduce_ingoing = sigma_in[id_node]
+      
+      # Reduce the ingoing flow 
+      sigma_in[id_node] = sigma_in[id_node] - to_reduce_ingoing + epsilon
+      
+    } else if(trans_flow_in - free_ingoing_flow > flow_error){
+      
+      # Print Inc-in
+      cat("Inc-in;")
+      
+      # Modification occured on
+      modification_occured = T
+      
+      # Increase the outgoing flow
+      sigma_in[id_node] = sigma_in[id_node] + local_lambda*(trans_flow_in - free_ingoing_flow) + epsilon
+      
+    }
   
+    # Iterate on node 
+    
+    # Print node id
+    if(modification_occured){
+      cat("|", id_node, "|\n")
+    }
+    
+    id_sample = id_sample + 1
+    if(id_sample > length(free_node_shuffled)){
+      node_cycle_done = T
+    }
+    
+  }
+  
+  # --- --- Compute in-out balance 
+  
+  # IF
   converge_if = F
-  results_mat = relationship_ref_mat + epsilon
+  results_mat = admissible_sp_mat + epsilon
   while(!converge_if){
     # Saving old results
     results_mat_old = results_mat 
     # Normalizing by row
-    results_mat = results_mat * sigma_in / rowSums(results_mat + epsilon)
+    results_mat = results_mat * sigma_in / rowSums(results_mat)
     # Normalizing by columns 
-    results_mat = t(t(results_mat) * sigma_out / colSums(results_mat + epsilon))
+    results_mat = t(t(results_mat) * sigma_out / rowSums(t(results_mat)))
     # Checking for convergence
     if(sum(abs(results_mat_old - results_mat)) < conv_thres_if){
       converge_if = T
     }
   }
-
-  # Find flow on edges and free edges
-  total_edge_flow = as.vector(t(sp_edge_mat) %*% c(t(results_mat)))
-  free_edge_flow = total_edge_flow[free_edge_vec]
+  
+  # Find flow on edges 
+  total_edge_flow = as.vector(t(sp_edge_mat) %*% c(results_mat))
+  
+  # Find flow on free edges
+  in_error_vec = c()
+  out_error_vec = c()
+  for(id_node in 1:n){
     
-  # --- --- In and out-flow correction on nodes
+    # Free out/in-going flow from node in and out
+    id_free_edge_from = intersect(which(edge_mat[,1] == id_node), which(free_edge_vec))
+    id_free_edge_to = intersect(which(edge_mat[,2] == id_node), which(free_edge_vec))
+    
+    # Outgoing and ingoing flow
+    free_outgoing_flow = sum(total_edge_flow[id_free_edge_from])
+    free_ingoing_flow = sum(total_edge_flow[id_free_edge_to])
+    
+    # Errors vec
+    in_error_vec = c(in_error_vec, pi_in[id_node] - (sigma_in[id_node] + free_ingoing_flow))
+    out_error_vec = c(out_error_vec, pi_out[id_node] - (sigma_out[id_node] + free_outgoing_flow))
+  }
   
-  # The flow on free edges
-  free_edge_loc = edge_mat[free_edge_vec, ]
-  X_b = sparseMatrix(i=free_edge_loc[, 1], 
-                     j=free_edge_loc[, 2], 
-                     x=free_edge_flow, dims=c(n, n))
-  from_free_flow = colSums(X_b)
-  to_free_flow = rowSums(X_b)
-  
-  ## FOR DEBUG
-  # df_edge = data.frame(free_edge_loc[, 1],free_edge_loc[, 2],free_edge_flow)
-  # df_edge = df_edge[df_edge$free_edge_flow > 0, ]
-  # print(df_edge)
-  ## FOR DEBUG
-  
-  # Update sigma_in and sigma_out
-  sigma_in = rho_in - from_free_flow
-  sigma_out = rho_out - to_free_flow
-  
-  # Still to reduce in/out
-  to_red_in = min_sigma_in - sigma_in
-  to_red_out = min_sigma_out - sigma_out
-  to_red_in[to_red_in < 0] = 0
-  to_red_out[to_red_out < 0] = 0
-  p_to_red_from = to_red_in / (from_free_flow + epsilon)
-  p_to_red_to = to_red_out / (to_free_flow + epsilon)
-  
-  # Cap sigma_in and sigma_out
-  sigma_in[sigma_in < min_sigma_in] = min_sigma_in[sigma_in < min_sigma_in]
-  sigma_out[sigma_out < min_sigma_out] = min_sigma_out[sigma_out < min_sigma_out]
-  
-  # --- --- Correction on dependence
-  
-  # Revert back the flow
-  to_red_in_edge = as.vector(t(nodeto_edge_mat[,free_edge_vec]) %*% p_to_red_from)
-  to_red_out_edge = as.vector(t(nodefrom_edge_mat[,free_edge_vec]) %*% p_to_red_to)
-  to_red_max_edge = pmax(to_red_in_edge, to_red_out_edge)
-  to_red = apply(edge_to_sp * to_red_max_edge, 2, max)
-  to_red_mat = matrix(to_red, n, n, byrow=T) * admissible_sp_mat
-  max_to_red = max(to_red)
-  
-  ## FOR DEBUG
-  # df_it_p = data.frame(which(to_red_mat==max_to_red, arr.ind=T))
-  # ref_vec = c()
-  # res_vec = c()
-  # for(row_id in 1:dim(df_it_p)[1]){
-  #   ref_vec = c(ref_vec, relationship_ref_mat[df_it_p$row[row_id], df_it_p$col[row_id]])
-  #   res_vec = c(res_vec, results_mat[df_it_p$row[row_id], df_it_p$col[row_id]])
-  # }
-  # df_it_p["reference"] = ref_vec
-  # df_it_p["flow_res"] = res_vec
-  # print(df_it_p)
-  ## FOR DEBUG
-  
-  # Reduce the dep
-  relationship_ref_mat = relationship_ref_mat * (1 - to_red_mat)
+  # Total error in and out
+  out_error = sum(abs(out_error_vec))
+  in_error = sum(abs(in_error_vec))
   
   # --- --- Check for convergence and iterate
+  p_sigma_in = sigma_in / sum(sigma_in)
+  p_sigma_out = sigma_out / sum(sigma_out)
   
-  diff = sum(abs(X_b - X_b_old))
+  diff = sum(abs(p_sigma_in - p_sigma_in_old)) + sum(abs(p_sigma_out - p_sigma_out_old))
     
-  cat("It", it_algo, ": diff =", diff, ", to_red_max =", max_to_red,"\n")
-  if(diff < conv_thres_algo | max_to_red < conv_thres_algo){
+  cat("Epoch", epoch_algo, "ends, diff =", diff, ", out_error = ", out_error, "in_error = ", in_error,"\n")
+  if(out_error + in_error < conv_thres_algo){
     converge_algo = T
   }
   
-  # Iteration
-  it_algo = it_algo + 1
+  #Epoch iteration
+  epoch_algo = epoch_algo + 1
 }
   
 # END 
@@ -400,14 +479,14 @@ sigma_in = sigma_in / sum(sigma_in)
 sigma_out = sigma_out / sum(sigma_out)
 # Last Iterative fitting
 converge_if = F
-results_mat = relationship_ref_mat + epsilon
+results_mat = admissible_sp_mat + epsilon
 while(!converge_if){
   # Saving old results
   results_mat_old = results_mat 
   # Normalizing by row
-  results_mat = results_mat * sigma_in / rowSums(results_mat + epsilon)
+  results_mat = results_mat * sigma_in / rowSums(results_mat)
   # Normalizing by columns 
-  results_mat = t(t(results_mat) * sigma_out / colSums(results_mat + epsilon))
+  results_mat = t(t(results_mat) * sigma_out / rowSums(t(results_mat)))
   # Checking for convergence
   if(sum(abs(results_mat_old - results_mat)) < conv_thres_if){
     converge_if = T
@@ -415,17 +494,17 @@ while(!converge_if){
 }
 
 # Computing flow on edges
-total_edge_flow = as.vector(t(sp_edge_mat) %*% c(t(results_mat)))
+total_edge_flow = as.vector(t(sp_edge_mat) %*% c(results_mat))
 
 # To num number
 to_num = inout_cor$montees[1] / rowSums(results_mat_old)[1]
 
 # See link
-non_null_edge = edge_mat[(round(total_edge_flow, 10) > 0) & free_edge_vec, ]
+non_null_edge = edge_mat[(round(total_edge_flow, 15) > 0) & free_edge_vec, ]
 in_node_nn = stop_names[non_null_edge[,1]]
 out_node_nn = stop_names[non_null_edge[,2]]
 df_free_edge = data.frame(from=in_node_nn, to=out_node_nn, 
-                          quant=round(total_edge_flow[(round(total_edge_flow, 10) > 0) & free_edge_vec] * to_num))
+                          quant=total_edge_flow[(round(total_edge_flow, 10) > 0) & free_edge_vec] * to_num)
 
 # Computing in-network/def, out-network/def
 transfer_out = c()
@@ -446,14 +525,12 @@ for(id_node in 1:n){
 }
   
 full_df = inout_cor
-full_df["montees_initiales"] = round(sigma_in * to_num, 3)
-full_df["transferts_in"] = round(transfer_in * to_num, 3)
+full_df["montees_initiales"] = round(sigma_in * to_num)
+full_df["transferts_in"] = round(transfer_in * to_num)
 full_df["diff_in"] = full_df["montees_initiales"] + full_df["transferts_in"] - full_df["montees"]
-full_df["err_in%"] = round(full_df["diff_in"] / full_df["montees"] * 100, 3)
-full_df["descentes_finales"] = round(sigma_out * to_num, 3)
-full_df["transferts_out"] = round(transfer_out * to_num, 3)
+full_df["descentes_finales"] = round(sigma_out * to_num)
+full_df["transferts_out"] = round(transfer_out * to_num)
 full_df["diff_out"] = full_df["descentes_finales"] + full_df["transferts_out"] - full_df["descentes"]
-full_df["err_out%"] = round(full_df["diff_out"] / full_df["descentes"] * 100, 3)
 
 View(full_df)
 View(df_free_edge)
@@ -464,3 +541,17 @@ arret_prob = rev(results_mat_old[id_arret, ])
 barplot(arret_prob, las=2, horiz=T, cex.names=0.5, main=stop_names[id_arret])
 
 res_num = round(results_mat / rowSums(results_mat_old)[1] * inout_cor$montees[1])
+
+# TESTs (to eventually earse)
+
+which_edge = c(39, 51)
+edge_id =  which(edge_mat[, 1] == which_edge[1] & edge_mat[, 2] == which_edge[2])
+
+sp_mat_from_edge = matrix(sp_edge_mat[, edge_id], n, n, byrow=T)
+sp_node_mat = which(sp_mat_from_edge > 0, arr.ind = T)
+
+nomb_t = c()
+for(i in 1:dim(sp_node_mat)[1]){
+  nomb_t = c(nomb_t, res_num[sp_node_mat[i,1], sp_node_mat[i,2]])
+}
+df_sp = data.frame(stop_names[sp_node_mat[,1]], stop_names[sp_node_mat[,2]], nomb_t)
