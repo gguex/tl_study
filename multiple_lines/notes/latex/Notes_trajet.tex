@@ -37,7 +37,7 @@ The $(n \times n)$ \emph{origin-destination matrix}, denoted by $\mathbf{N} = (n
 \bm{\sigma}_\text{in} := \mathbf{N} \mathbf{e}_n \\
 \bm{\sigma}_\text{out} := \mathbf{N}^\top \mathbf{e}_n
 \end{align}
-where $\mathbf{e}_n$ is the vector of ones of size $n$. The vector $\bm{\sigma}_\text{in} = (\sigma^\text{in}_i)$ is the \emph{vector of flow entering the network} and $\bm{\sigma}_\text{in} = (\sigma^\text{in}_i)$ is the \emph{vector of flow escaping the network}. We have
+where $\mathbf{e}_n$ is the vector of ones of size $n$. The vector $\bm{\sigma}_\text{in} = (\sigma^\text{in}_i)$ is the \emph{vector of flow entering the network} and $\bm{\sigma}_\text{in} = (\sigma^\text{in}_i)$ is the \emph{vector of flow leaving the network}. We have
 \begin{equation}
 \sigma^\text{in}_{\bullet} = \sigma^\text{out}_{\bullet}.
 \end{equation}
@@ -55,7 +55,7 @@ Again, we can decompose the flow matrix with
 \mathbf{X} = \mathbf{X}_\text{W} + \mathbf{X}_\text{B} \qquad \mathbf{X}_\text{W} := \sum_{k=1}^l \mathbf{X}_k
 \end{equation}
 where $\mathbf{X}_k$ represent the flow inside line $k$, $\mathbf{X}_\text{W}$ is the flow inside all lines, and $\mathbf{X}_\text{B}$ the flow between lines. This decomposition allows us to define 
-the \emph{vector of flow entering lines} $\bm{\rho}_\text{in} = (\rho^\text{in}_i)$ and the \emph{vector of flow escaping lines} $\bm{\rho}_\text{out} = (\rho^\text{out}_i)$, with
+the \emph{vector of flow entering lines} $\bm{\rho}_\text{in} = (\rho^\text{in}_i)$ and the \emph{vector of flow leaving lines} $\bm{\rho}_\text{out} = (\rho^\text{out}_i)$, with
 \begin{align}
 \bm{\rho}_\text{in} &:= \bm{\sigma}_\text{in} + \mathbf{X}^\top_\text{B} \mathbf{e}_n, \\
 \bm{\rho}_\text{out} &:= \bm{\sigma}_\text{out} + \mathbf{X}_\text{B} \mathbf{e}_n,

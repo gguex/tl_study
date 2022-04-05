@@ -47,7 +47,7 @@ adj_prox = read.csv("data_multiligne/adj_prox.csv", sep=",", row.names = 1)
 adj_prox = as.matrix(adj_prox)
 diag(adj_prox) = 0
 
-# Erease same line join
+# Erase same line join
 for(id_line in 1:max(line_comp)){
   adj_prox[line_comp == id_line, line_comp == id_line] = 0
 }
@@ -361,7 +361,7 @@ while(!converge_algo){
   to_red_out_edge = as.vector(t(nodefrom_edge_mat[,free_edge_vec]) %*% p_to_red_to)
   to_red_max_edge = pmax(to_red_in_edge, to_red_out_edge)
   to_red = apply(edge_to_sp * to_red_max_edge, 2, max)
-  to_red_mat = matrix(to_red, n, n, byrow=T) * admissible_sp_mat
+  to_red_mat = matrix(to_red, n, n, byrow=T)
   max_to_red = max(to_red)
   
   ## FOR DEBUG
@@ -378,7 +378,7 @@ while(!converge_algo){
   ## FOR DEBUG
   
   # Reduce the dep
-  relationship_ref_mat = relationship_ref_mat * (1 - to_red_mat)
+  relationship_ref_mat = (relationship_ref_mat * (1 - to_red_mat)) * admissible_sp_mat
   
   # --- --- Check for convergence and iterate
   
