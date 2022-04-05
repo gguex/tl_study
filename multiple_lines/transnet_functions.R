@@ -9,9 +9,12 @@
 # Function: build_transport_structure
 #
 # Data_in:
+# - stopnames_df:   a dataframe containing, stop names, line number 
+#                   and direction.
 # Data out:
 # - A_W:  The (n x n) adjacency matrix within transportation lines.
 # - A_B:  The (n x n) adjacency matrix between transportation lines.
+# - stop_names: The n-length vectors containing unique id for each stops.
 #-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------

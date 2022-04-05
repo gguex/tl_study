@@ -48,7 +48,7 @@ A flow on edges is represented by the $(n \times n)$ \emph{flow matrix} $\mathbf
 \begin{align}
 x_{ij} &\geq 0, \qquad \forall i,j, \\
 a_{ij} = 0 &\Rightarrow x_{ij} = 0, \qquad \forall i,j, \\ 
-x_{i\bullet} + \sigma^\text{in}_i &= x_{\bullet i} + \sigma^\text{out}_i, \qquad \forall i.
+x_{i\bullet} + \sigma^\text{out}_i &= x_{\bullet i} + \sigma^\text{in}_i, \qquad \forall i.
 \end{align}
 Again, we can decompose the flow matrix with 
 \begin{equation}
@@ -72,7 +72,19 @@ where $\delta(.)$ designate the indicator function. If we are given an origin-de
 \begin{equation}
 x^\text{sp}_{ij} = \sum_{st} \text{P}_{st}(i, j) n_{st} \label{sp_comp}
 \end{equation}
-This matrix contains the flow on each edge if we suppose that the flow follows shortest-paths.
+This matrix contains the flow on each edge if we suppose that the flow follows shortest-paths. \\
+
+We can rewrite equation (\ref{sp_comp}) by defining the $(n^2 \times n^2)$ \emph{shortest-path - edge matrix} $\mathbf{S} = (s_{\alpha \beta})$ with
+\begin{equation}
+s_{\alpha \beta} = \begin{cases}
+\text{P}_{st}(i, j) & \text{if } \alpha = s + n(t - 1) \text{ and }  \beta = i + n(j - 1), \\
+0 & \text{otherwise}.
+\end{cases}
+\end{equation}
+Then (\ref{sp_comp}) writes
+\begin{equation}
+\
+\end{equation}
 
 \subsection{Problem definition}
 
