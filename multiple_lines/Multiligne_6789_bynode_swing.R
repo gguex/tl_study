@@ -20,8 +20,6 @@ compute_sp_data = F
 epsilon = 1e-40
 conv_thres_if = 1e-5
 conv_thres_algo = 1e-5
-mu_n = 1
-sigma_n = 5
 
 ############################################################### 
 ####### LOADING AND PREPROCESSING MATRICES
@@ -295,11 +293,6 @@ relationship_ref_mat = admissible_sp_mat
 total_rel = sum(admissible_sp_mat)
 max_to_red = 1
 
-# Compute free edges capacity
-max_outgoing_flow = as.vector(t(nodeto_edge_mat) %*% sigma_in)[free_edge_vec]
-max_ingoing_flow = as.vector(t(nodefrom_edge_mat) %*% sigma_out)[free_edge_vec]
-free_edge_capacity = pmin(max_outgoing_flow, max_ingoing_flow)
-
 while(!converge_algo){
   
   # --- --- Save old X_b
@@ -345,26 +338,30 @@ while(!converge_algo){
   ## FOR DEBUG
   
   # Get the flow allowed to pass through each nodes 
-  allowed_from_free_flow = rho_in * (1 - exp(-exp_lambda * from_free_flow / rho_in))
-  allowed_to_free_flow = rho_out * (1 - exp(-exp_lambda * to_free_flow / rho_out))
+  allowed_from_free_flow = tanh(from_free_flow / rho_in) * rho_in
+  allowed_to_free_flow = tanh(to_free_flow / rho_out) * rho_out
+  p_allowed_from = allowed_from_free_flow / (from_free_flow + epsilon)
+  p_allowed_to = allowed_to_free_flow / (to_free_flow + epsilon)
+  p_allowed_from[p_allowed_from == 0] = 1
+  p_allowed_to[p_allowed_to == 0] = 1
   
   # Get the flow allowed to pass through each edges
-  allowed_flow_from_edge = as.vector(t(nodeto_edge_mat[,free_edge_vec]) %*% allowed_from_free_flow)
-  allowed_flow_to_edge = as.vector(t(nodefrom_edge_mat[,free_edge_vec]) %*% allowed_to_free_flow)
-  min_allowed_flow_edge = pmin(allowed_flow_from_edge, allowed_flow_to_edge)
-  allowed_flow_edge = pmin(min_allowed_flow_edge, free_edge_flow)
+  p_allowed_from_edge = as.vector(t(nodeto_edge_mat[,free_edge_vec]) %*% p_allowed_from)
+  p_allowed_to_edge = as.vector(t(nodefrom_edge_mat[,free_edge_vec]) %*% p_allowed_to)
+  min_p_allowed_edge = pmin(p_allowed_from_edge, p_allowed_to_edge)
+  allowed_flow_edge = min_p_allowed_edge * free_edge_flow
   
   # Update sigma_in and sigma_out
   allowed_flow_mat = sparseMatrix(i=free_edge_loc[, 1], 
                                   j=free_edge_loc[, 2],
                                   x=allowed_flow_edge, dims=c(n, n))
-  sigma_in = rho_in - colSums(X_b)
-  sigma_out = rho_out - rowSums(X_b)
+  sigma_in = rho_in - colSums(allowed_flow_mat)
+  sigma_out = rho_out - rowSums(allowed_flow_mat)
   
   # --- --- Correction on dependence
   
   # Revert back the flow
-  p_to_red = allowed_flow_edge / (free_edge_flow + epsilon)
+  p_to_red = (free_edge_flow - allowed_flow_edge) / (free_edge_flow + epsilon)
   to_red = apply(edge_to_sp * p_to_red, 2, max)
   to_red_mat = matrix(to_red, n, n, byrow=T)
   max_to_red = max(to_red)
