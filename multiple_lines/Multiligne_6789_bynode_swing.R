@@ -20,6 +20,7 @@ compute_sp_data = F
 epsilon = 1e-40
 conv_thres_if = 1e-5
 conv_thres_algo = 1e-5
+max_p_sigma = 0.99
 
 ############################################################### 
 ####### LOADING AND PREPROCESSING MATRICES
@@ -338,8 +339,14 @@ while(!converge_algo){
   ## FOR DEBUG
   
   # Get the flow allowed to pass through each nodes 
-  allowed_from_free_flow = tanh(from_free_flow / rho_in) * rho_in
-  allowed_to_free_flow = tanh(to_free_flow / rho_out) * rho_out
+  # allowed_from_free_flow = tanh(from_free_flow / rho_in) * rho_in
+  # allowed_to_free_flow = tanh(to_free_flow / rho_out) * rho_out
+  allowed_from_free_flow = from_free_flow
+  allowed_to_free_flow = to_free_flow
+  allowed_from_free_flow[allowed_from_free_flow > rho_in*max_p_sigma] = 
+    rho_in[allowed_from_free_flow > rho_in*max_p_sigma]*max_p_sigma
+  allowed_to_free_flow[allowed_to_free_flow > rho_out*max_p_sigma] = 
+    rho_out[allowed_to_free_flow > rho_out*max_p_sigma]*max_p_sigma
   p_allowed_from = allowed_from_free_flow / (from_free_flow + epsilon)
   p_allowed_to = allowed_to_free_flow / (to_free_flow + epsilon)
   p_allowed_from[p_allowed_from == 0] = 1
