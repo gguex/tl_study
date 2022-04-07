@@ -34,13 +34,21 @@ where $\bullet$ designates a summation over the replaced index.
 
 The $(n \times n)$ \emph{origin-destination matrix}, denoted by $\mathbf{N} = (n_{st})$, $n_{st} \geq 0, \; \forall s,t$, contains the flow (e.g. the number of passengers) entering the network in source node $s$ and leaving it in target node $t$. We can denote its margins with 
 \begin{align}
-\bm{\sigma}_\text{in} := \mathbf{N} \mathbf{e}_n \\
-\bm{\sigma}_\text{out} := \mathbf{N}^\top \mathbf{e}_n
+\bm{\sigma}_\text{in} := \mathbf{N} \mathbf{e}_n \label{N_rowsum}\\
+\bm{\sigma}_\text{out} := \mathbf{N}^\top \mathbf{e}_n \label{N_colsum}
 \end{align}
 where $\mathbf{e}_n$ is the vector of ones of size $n$. The vector $\bm{\sigma}_\text{in} = (\sigma^\text{in}_i)$ is the \emph{vector of flow entering the network} and $\bm{\sigma}_\text{in} = (\sigma^\text{in}_i)$ is the \emph{vector of flow leaving the network}. We have
 \begin{equation}
 \sigma^\text{in}_{\bullet} = \sigma^\text{out}_{\bullet}.
 \end{equation}
+
+Note that if only $\bm{\sigma}_\text{in}$ and $\bm{\sigma}_\text{out}$ are given, a flow matrix $\mathbf{N}$ can be computed relatively to an \emph{orgin-destination affinity matrix} $\mathbf{S} = (s_{st})$, $0 \leq s_{st} \leq 1$, where $s_{st} = 1$ denote a perfect affinity and $s_{st} = 0$ no affinity, through
+
+\begin{equation}
+\mathbf{N} = \textbf{Diag}(\mathbf{a}) (\mathbf{S} + \epsilon) \textbf{Diag}(\mathbf{b}),
+\end{equation}
+where $\textbf{Diag}(.)$ denote the diagonal matrix obtained from a vector, $\epsilon$ a very small quantity, and vectors $\mathbf{a}$ and $\mathbf{b}$ are found through \emph{proportional iterative fitting} algorithm in order to have margin constraints (\ref{N_rowsum}) and (\ref{N_colsum}) respected for $\mathbf{N}$ (a small $\epsilon$ has to be added to $\bm{\sigma}_\text{in}$ and $\bm{\sigma}_\text{out}$ if they possess null components).
+
 
 \subsection{The flow matrix}
 
@@ -68,41 +76,51 @@ Let $\mathcal{P}_{st}$ be the set of \emph{admissible} shortest-paths between $s
 \begin{equation}
 \text{P}_{st}(i, j) := \frac{1}{|\mathcal{P}_{st}|}\sum_{\wp \in \mathcal{P}_{st}} \delta((i, j) \in \wp),
 \end{equation}
-where $\delta(.)$ designate the indicator function. If we are given an origin-destination matrix $\mathbf{N} = (n_{st})$, we can compute the \emph{shortest-path flow matrix}, noted $\mathbf{X}_\text{sp} = (x^\text{sp}_{ij})$, with:
-\begin{equation}
-x^\text{sp}_{ij} = \sum_{st} \text{P}_{st}(i, j) n_{st} \label{sp_comp}
-\end{equation}
-This matrix contains the flow on each edge if we suppose that the flow follows shortest-paths. \\
+where $\delta(.)$ designate the indicator function. Note that if there is an unique shortest-path between node $s$ and $t$, noted $\wp_{st}$, we have $\text{P}_{st}(i, j) = \delta((i, j) \in \wp_{st})$. \\
 
-We can rewrite equation (\ref{sp_comp}) by defining the $(n^2 \times n^2)$ \emph{shortest-path - edge matrix} $\mathbf{S} = (s_{\alpha \beta})$ with
+If we are given an origin-destination matrix $\mathbf{N} = (n_{st})$, we can compute the \emph{shortest-path flow matrix}, noted $\mathbf{X}_\text{sp} = (x^\text{sp}_{ij})$, with
 \begin{equation}
-s_{\alpha \beta} = \begin{cases}
+x^\text{sp}_{ij} = \sum_{st} \text{P}_{st}(i, j) n_{st} \label{sp_comp}.
+\end{equation}
+This matrix contains the flow on each edge if we suppose that the flow follows shortest-paths from origin to destination. \\
+
+We can rewrite equation (\ref{sp_comp}) by defining the $(n^2 \times n^2)$ \emph{shortest-path - edge matrix} $\mathbf{P} = (p_{\alpha \beta})$ with
+\begin{equation}
+p_{\alpha \beta} = \begin{cases}
 \text{P}_{st}(i, j) & \text{if } \alpha = t + n(s - 1) \text{ and }  \beta = j + n(i - 1), \\
 0 & \text{otherwise}.
 \end{cases}
 \end{equation}
 Then (\ref{sp_comp}) writes
 \begin{equation}
-\text{vec}(\mathbf{X}) = \mathbf{S}^\top \text{vec}(\mathbf{N}),
+\textbf{vec}(\mathbf{X}_\text{sp}) = \mathbf{P}^\top \textbf{vec}(\mathbf{N}),
 \end{equation}
-where $\text{vec}(.)$ denotes the vectorization function of a matrix, obtained by stacking matrix columns on top of one another.
+where $\textbf{vec}(.)$ denotes the vectorization function of a matrix, obtained by stacking matrix columns on top of one another. \\
+
+From equation (\ref{sp_comp}), we see that 
+\begin{equation}
+\frac{\partial x^\text{sp}_{ij}}{\partial n_{st}} = \text{P}_{st}(i, j),
+\end{equation}
+which equal to $1$ if there is a unique shortest-path between $s$ and $t$ and $(i,j)$ belongs to this path.
 
 \subsection{Problem definition}
 
-We suppose that we know the flow entering and leaving each line, i.e. $\bm{\rho}_\text{in}$ and $\bm{\rho}_\text{out}$ and we are interested in finding trajectories $n_{st}$ of the flow in the network knowing the set $\mathcal{A}$ of admissible pair $(s, t)$, i.e. pairs of nodes where there is a possible use of the network for traveling. This set can be given by the matrix $\mathbf{T} = (t_{st})$ defined by
-\begin{equation}
-t_{st} = \begin{cases}
-1 & \text{if } (s, t) \in \mathcal{A}, \\
-0 & \text{otherwise}.
-\end{cases}
-\end{equation}
+\paragraph{The problem:} We suppose that we know the flow entering and leaving each line, i.e. $\bm{\rho}_\text{in}$ and $\bm{\rho}_\text{out}$ and we want to find origin-destination trajectories $n_{st}$. \\
+
+By setting the problem like that, we easily see that it is ill posed. Several solutions exists (e.g. units remain on the same line and follows a first-in/first-out scheme) and we need to add some hypotheses to restrain it.
+
+\paragraph{Hypothesis 1:} Trajectories follow shortest-paths from origin $s$ to destination $t$. \\
+
+\paragraph{Hypothesis 2:} The number of trajectories $n_{st}$ should be as close as possible to $\rho^\text{in}_s \rho^\text{out}_t s_{st}$, where $S = (s_{st})$ is a given affinity matrix between origin and destination nodes. \\
 
 \subsection{Algorithm}
-Set $\bm{\sigma}^{(0)}_\text{in} = \bm{\rho}_\text{in} + \epsilon$ and $\bm{\sigma}^{(0)}_\text{out} = \bm{\rho}_\text{out} + \epsilon$, with $\epsilon$ a small positive scalar. Until convergence, do:
+Set $\bm{\sigma}^{(1)}_\text{in} = \bm{\rho}_\text{in}$, $\bm{\sigma}^{(1)}_\text{out} = \bm{\rho}_\text{out}$, and $\mathbf{S}^{(1)} = S$. Until convergence, do:
 \begin{enumerate}
-	\item Compute $\mathbf{N}^{(i)} = \textbf{Diag}(\mathbf{a}^{(i)}) (\mathbf{T} + \epsilon)\textbf{Diag}(\mathbf{b}^{(i)})$ with iterative fitting, such that $\mathbf{N}^{(i)} \mathbf{e}_n = \bm{\sigma}^{(i)}_\text{in}$ and $\left(\mathbf{N}^{(i)}\right)^\top \mathbf{e}_n = \bm{\sigma}^{(i)}_\text{out}$.
+	\item Compute $\mathbf{N}^{(i)} = \textbf{Diag}(\mathbf{a}^{(i)}) (\mathbf{S}^{(i)} + \epsilon)\textbf{Diag}(\mathbf{b}^{(i)})$ with iterative fitting, such that $\mathbf{N}^{(i)} \mathbf{e}_n = \bm{\sigma}^{(i)}_\text{in} + \epsilon$ and $\left(\mathbf{N}^{(i)}\right)^\top \mathbf{e}_n = \bm{\sigma}^{(i)}_\text{out}  + \epsilon$.
 	\item Compute the associated shortest-path flow matrix $\mathbf{X}^{(i)}$ with (\ref{sp_comp}).
 	\item Compute $\bm{\sigma}^{(i+1)}_\text{in} = \bm{\rho}_\text{in} -  (\mathbf{X}^{(i)}_\text{B})^\top \mathbf{e}_n$ and $\bm{\sigma}^{(i+1)}_\text{out} = \bm{\rho}_\text{out} - \mathbf{X}^{(i)}_\text{B} \mathbf{e}_n$. 
+	\item Set negative components of $\bm{\sigma}^{(i+1)}_\text{in}$ and $\bm{\sigma}^{(i+1)}_\text{out}$ to 0.
+	\item Update $\mathbf{S}^{(i + 1)}$ according to excess flow.
 \end{enumerate}
 
 
