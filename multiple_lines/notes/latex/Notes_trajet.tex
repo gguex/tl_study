@@ -114,13 +114,13 @@ By setting the problem like that, we easily see that it is ill posed. Several so
 \paragraph{Hypothesis 2:} The number of trajectories $n_{st}$ should be as close as possible to $\rho^\text{in}_s \rho^\text{out}_t s_{st}$, where $S = (s_{st})$ is a given affinity matrix between origin and destination nodes. \\
 
 \subsection{Algorithm}
-Set $\bm{\sigma}^{(1)}_\text{in} = \bm{\rho}_\text{in}$, $\bm{\sigma}^{(1)}_\text{out} = \bm{\rho}_\text{out}$, and $\mathbf{S}^{(1)} = S$. Until convergence, do:
+Set $\bm{\sigma}^{(1)}_\text{in} = \bm{\rho}_\text{in}$, $\bm{\sigma}^{(1)}_\text{out} = \bm{\rho}_\text{out}$, and $\mathbf{S}^{(1)} = \mathbf{S}$. Until convergence, do:
 \begin{enumerate}
 	\item Compute $\mathbf{N}^{(i)} = \textbf{Diag}(\mathbf{a}^{(i)}) (\mathbf{S}^{(i)} + \epsilon)\textbf{Diag}(\mathbf{b}^{(i)})$ with iterative fitting, such that $\mathbf{N}^{(i)} \mathbf{e}_n = \bm{\sigma}^{(i)}_\text{in} + \epsilon$ and $\left(\mathbf{N}^{(i)}\right)^\top \mathbf{e}_n = \bm{\sigma}^{(i)}_\text{out}  + \epsilon$.
 	\item Compute the associated shortest-path flow matrix $\mathbf{X}^{(i)}$ with (\ref{sp_comp}).
 	\item Compute $\bm{\sigma}^{(i+1)}_\text{in} = \bm{\rho}_\text{in} -  (\mathbf{X}^{(i)}_\text{B})^\top \mathbf{e}_n$ and $\bm{\sigma}^{(i+1)}_\text{out} = \bm{\rho}_\text{out} - \mathbf{X}^{(i)}_\text{B} \mathbf{e}_n$. 
 	\item Set negative components of $\bm{\sigma}^{(i+1)}_\text{in}$ and $\bm{\sigma}^{(i+1)}_\text{out}$ to 0.
-	\item Update $\mathbf{S}^{(i + 1)}$ according to excess flow.
+	\item Update $\mathbf{S}^{(i + 1)}$ according to the flow with is unable to pass.
 \end{enumerate}
 
 
