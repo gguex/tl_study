@@ -6,34 +6,45 @@
 
 
 #-------------------------------------------------------------------------------
-# Function: build_transport_structure
+# Function: build_network_structure
 #
-# Data_in:
-# - stopnames_df:   a dataframe containing, stop names, line number 
-#                   and direction.
-# Data out:
-# - A_W:  The (n x n) adjacency matrix within transportation lines.
-# - A_B:  The (n x n) adjacency matrix between transportation lines.
-# - stop_names: The n-length vectors containing unique id for each stops.
+# In:
+# - line_mbr: A n-length vector containing line memberships of stops.
+# - D:        A (n x n) pedestrian time matrix between stops.
+# - D_thres:  A scalar threshold on the pedestrian time for considering stops 
+#             linked.
+# Out:
+# - A_W:      A (n x n) adjacency matrix within transportation lines.
+# - A_B:      A (n x n) adjacency matrix between transportation lines.
 #-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
 # Function: build_sp_data
 #
-# Data_in:
-# Data out:
-# - T:  The (n x n) matrix of admissible shortest-paths in the network, 
-#       containing (n_sp) ones and (n^2 - n_sp) zeroes.
-# - S:  The (n_sp x m) shortest-path - edges matrix, with s_{ij} = 1 iff edge j
-#       is in shortest-path i.
+# In:  
+# - line_mbr: A n-length vector containing line memberships of stops.
+# - tour_mbr  A n-length vector containing tour memberships of stops.
+# - D:        A (n x n) pedestrian time matrix between stops.
+# - A_W:      A (n x n) adjacency matrix within transportation lines.
+# - A_B:      A (n x n) adjacency matrix between transportation lines. 
+# - travel_t: A n-length vector giving time needed to reach next stop.
+# - wait_t:   A n-length vector giving time needed to enter a line at each stop.
+# Out:
+# - T:        A (n x n) matrix of admissible shortest-paths in the network, 
+#             containing (n_sp) ones and (n^2 - n_sp) zeroes.
+# - S:        A (n_sp x m) shortest-path - edges matrix, with s_{ij} = 1 iff
+#             edge j is in shortest-path i.
 #-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
 # Function: build_in_out_flow 
 #
-# Data_in:
-# Data out:
-# - sigma_in: The n-length vector of flow entering lines.
-# - sigma_out: The n-length vector of flow leaving lines.
+# In:
+# - line_mbr: A n-length vector containing line memberships for stops.
+# - mes_in:   A n-length vector containing measured flow entering lines.
+# - mes_out:  A n-length vector containing measured flow leaving lines.
+# Out:
+# - rho_in:   A n-length vector of corrected flow entering lines.
+# - rho_out:  A n-length vector of corrected flow leaving lines.
 #-------------------------------------------------------------------------------
 
