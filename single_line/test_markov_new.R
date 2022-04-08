@@ -26,3 +26,29 @@ Z = solve(diag(dim(W)[1]) - W)
 # On construit la matrice de prob
 Ptr = outer(p_in[-l], rep(1,l-1)) * Z[-c(1, l+1), -c(1, l+1)] * outer(rep(1,l-1), p_out[-1])
 Ptr = rbind(cbind(rep(0, l-1), Ptr), rep(0, l))
+
+A = matrix(1, dim(Ptr)[1], dim(Ptr)[1])
+for(i in 1:dim(A)[1]){
+  for(j in 1:dim(A)[2]){
+    if(j <= i) A[i, j] = 0
+  }
+}
+
+sigma_in = n_montees / sum(n_montees)
+sigma_out = n_descentes / sum(n_descentes)
+converge_if = F
+results_mat = A
+epsilon = 1e-30
+conv_thres_if = 1e-10
+while(!converge_if){
+  # Saving old results
+  results_mat_old = results_mat 
+  # Normalizing by row
+  results_mat = results_mat * sigma_in / rowSums(results_mat + epsilon)
+  # Normalizing by columns 
+  results_mat = t(t(results_mat) * sigma_out / colSums(results_mat + epsilon))
+  # Checking for convergence
+  if(sum(abs(results_mat_old - results_mat)) < conv_thres_if){
+    converge_if = T
+  }
+}

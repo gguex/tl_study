@@ -10,13 +10,18 @@
 #
 # In:
 # - line_mbr: A n-length vector containing line memberships of stops.
+# - tour_mbr: A n-length vector containing tour memberships of stops.
 # - D:        A (n x n) pedestrian time matrix between stops.
-# - D_thres:  A scalar threshold on the pedestrian time for considering stops 
+# - thres_D:  A scalar threshold on the pedestrian time for considering stops 
 #             linked.
 # Out:
 # - A_W:      A (n x n) adjacency matrix within transportation lines.
 # - A_B:      A (n x n) adjacency matrix between transportation lines.
 #-------------------------------------------------------------------------------
+
+build_network_structure = function(line_mbr, tour_mbr, D, thres_D){
+  
+}
 
 #-------------------------------------------------------------------------------
 # Function: build_sp_data
@@ -36,15 +41,22 @@
 #             edge j is in shortest-path i.
 #-------------------------------------------------------------------------------
 
+build_sp_data = function(line_mbr, tour_mbr, D, A_W, A_B, travel_t, wait_t){
+  
+}
+
 #-------------------------------------------------------------------------------
 # Function: build_in_out_flow 
 #
 # In:
 # - line_mbr: A n-length vector containing line memberships for stops.
-# - mes_in:   A n-length vector containing measured flow entering lines.
-# - mes_out:  A n-length vector containing measured flow leaving lines.
+# - meas_in:  A n-length vector containing measured flow entering lines.
+# - meas_out: A n-length vector containing measured flow leaving lines.
 # Out:
 # - rho_in:   A n-length vector of corrected flow entering lines.
 # - rho_out:  A n-length vector of corrected flow leaving lines.
 #-------------------------------------------------------------------------------
 
+build_in_out_flow = function(line_mbr, meas_in, meas_out){
+  
+}
