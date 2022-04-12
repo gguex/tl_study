@@ -142,7 +142,7 @@ Set $\bm{\sigma}^{(1)}_\text{in} = \bm{\rho}_\text{in}$, $\bm{\sigma}^{(1)}_\tex
 	\item Compute the vectors of \emph{between-line allowed flow entering and leaving each nodes}, written resp. $\tilde{\mathbf{x}}^{(\tau)}_\text{B,in} = (\tilde{x}^{\text{B,in},(\tau)}_i)$ and $\tilde{\mathbf{x}}^{(\tau)}_\text{B,out} = (\tilde{x}^{\text{B,out},(\tau)}_i)$, with 
 	\begin{align}
 		\tilde{x}^{\text{B,in},(\tau)}_i &= \rho_i^\text{in} \phi \left( \frac{x^{\text{B,in},(\tau)}_i}{\rho_i^\text{in}} \right), \\
-		\tilde{x}^{\text{B,in},(\tau)}_i &= \rho_i^\text{out} \phi \left( \frac{x^{\text{B,out},(\tau)}_i}{\rho_i^\text{out}} \right),
+		\tilde{x}^{\text{B,out},(\tau)}_i &= \rho_i^\text{out} \phi \left( \frac{x^{\text{B,out},(\tau)}_i}{\rho_i^\text{out}} \right),
 	\end{align}
 	where $\phi(x)$ is a positive increasing function which should be the identity when $x \to 0$ and with $\phi(x) \leq 1$, $\forall x$. For example
 	\begin{enumerate}
@@ -170,7 +170,7 @@ Set $\bm{\sigma}^{(1)}_\text{in} = \bm{\rho}_\text{in}$, $\bm{\sigma}^{(1)}_\tex
 	\begin{equation}
 		\mathbf{S}^{(\tau + 1)} = \mathbf{S}^{(\tau)} \odot \mathbf{R}^{(\tau)},
 	\end{equation}
-	where $\odot$ designate the Hadamard (component-wise) product of matrices. 
+	where $\odot$ designates the Hadamard (component-wise) product of matrices. 
 \end{enumerate}
 
 

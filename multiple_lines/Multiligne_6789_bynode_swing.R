@@ -341,17 +341,17 @@ while(!converge_algo){
   
   # Get the flow allowed to pass through each nodes 
   
-  # allowed_from_free_flow = rho_in * (1 - exp(-lambda_sigma * from_free_flow / rho_in))
-  # allowed_to_free_flow = rho_out * (1 - exp(-lambda_sigma * to_free_flow / rho_out))
-  # allowed_from_free_flow[allowed_from_free_flow > from_free_flow] = from_free_flow[allowed_from_free_flow > from_free_flow]
-  # allowed_to_free_flow[allowed_to_free_flow > to_free_flow] = to_free_flow[allowed_to_free_flow > to_free_flow]
+  allowed_from_free_flow = rho_in * (1 - exp(-lambda_sigma * from_free_flow / rho_in))
+  allowed_to_free_flow = rho_out * (1 - exp(-lambda_sigma * to_free_flow / rho_out))
+  allowed_from_free_flow[allowed_from_free_flow > from_free_flow] = from_free_flow[allowed_from_free_flow > from_free_flow]
+  allowed_to_free_flow[allowed_to_free_flow > to_free_flow] = to_free_flow[allowed_to_free_flow > to_free_flow]
   
-  allowed_from_free_flow = from_free_flow
-  allowed_to_free_flow = to_free_flow
-  allowed_from_free_flow[allowed_from_free_flow > rho_in*max_p_sigma] =
-    rho_in[allowed_from_free_flow > rho_in*max_p_sigma]*max_p_sigma
-  allowed_to_free_flow[allowed_to_free_flow > rho_out*max_p_sigma] =
-    rho_out[allowed_to_free_flow > rho_out*max_p_sigma]*max_p_sigma
+  # allowed_from_free_flow = from_free_flow
+  # allowed_to_free_flow = to_free_flow
+  # allowed_from_free_flow[allowed_from_free_flow > rho_in*max_p_sigma] =
+  #   rho_in[allowed_from_free_flow > rho_in*max_p_sigma]*max_p_sigma
+  # allowed_to_free_flow[allowed_to_free_flow > rho_out*max_p_sigma] =
+  #   rho_out[allowed_to_free_flow > rho_out*max_p_sigma]*max_p_sigma
   
   p_allowed_from = allowed_from_free_flow / (from_free_flow + epsilon)
   p_allowed_to = allowed_to_free_flow / (to_free_flow + epsilon)

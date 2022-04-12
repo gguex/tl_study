@@ -21,6 +21,34 @@
 
 build_network_structure = function(line_mbr, tour_mbr, D, thres_D){
   
+  # Get the number of stops 
+  n = length(line_mbr)
+  # Get levels of lines
+  lines_lvl = as.factor(line_mbr)
+  # Get levels of tour
+  tour_lvl = as.factor(tour_mbr)
+  
+  # --- Build A_W
+  
+  # Make links to the next stop
+  A_W = matrix(0, n, n)
+  for(i in 1:(n-1)){
+    if(lines_lvl[i] == lines_lvl[i + 1]) A_W[i, i + 1] = 1
+  }
+  
+  # --- Build A_B
+  
+  # With distance threshold
+  A_B = 1*(D < thres_D)
+  # Removing diagonal
+  diag(A_B) = 0
+  # Removing same tour links
+  for(t_lvl in levels(tour_lvl)){
+    A_B[tour_lvl == t_lvl, tour_lvl == t_lvl] = 0
+  }
+  
+  # Return the results
+  return(list(A_W=A_W, A_B=A_B))
 }
 
 #-------------------------------------------------------------------------------
