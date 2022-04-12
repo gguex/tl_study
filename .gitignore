@@ -3,3 +3,6 @@
 .RData
 .Ruserdata
 tl_study.Rproj
+.DS_Store
+multiple_lines/.DS_Store
+multiple_lines/notes/.DS_Store
