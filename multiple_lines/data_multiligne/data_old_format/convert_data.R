@@ -76,5 +76,5 @@ bus_df = data.frame(stop_names=stop_names,
                     travel_time=travel_time_vec,
                     stopping_time=stop_time_vec)
 
-write.table(bus_df, "bus_df.csv", sep=",")
+write.table(bus_df, "bus_df.csv", sep=",", row.names = F)
 write.table(ped_time_mat, "ped_time.csv", sep=",", row.names=F, col.names=F)
