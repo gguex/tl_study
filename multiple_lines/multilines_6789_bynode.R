@@ -30,12 +30,12 @@ lambda_sigma = 100
 # --- Loading adjacency matrices 
 
 # Loading adjacency matrix without loop
-adj_line = read.csv("data_multiligne/adj_next.csv", sep=",", row.names = 1)
+adj_line = read.csv("multilines_data/old_format_data/adj_next.csv", sep=",", row.names = 1)
 adj_line = as.matrix(adj_line)
 diag(adj_line) = 0
 
 # Loading adjacency matrix with loops on the end of the line
-adj_line_wloop = read.csv("data_multiligne/adj_next_bind.csv", sep=",", row.names = 1)
+adj_line_wloop = read.csv("multilines_data/old_format_data/adj_next_bind.csv", sep=",", row.names = 1)
 adj_line_wloop = as.matrix(adj_line_wloop)
 diag(adj_line_wloop) = 0
 
@@ -44,7 +44,7 @@ g_adj_wloop = graph_from_adjacency_matrix(adj_line_wloop, mode = "directed")
 line_comp = components(g_adj_wloop)$membership
 
 # Loading proximity matrix
-adj_prox = read.csv("data_multiligne/adj_prox.csv", sep=",", row.names = 1)
+adj_prox = read.csv("multilines_data/old_format_data/adj_prox.csv", sep=",", row.names = 1)
 adj_prox = as.matrix(adj_prox)
 diag(adj_prox) = 0
 
@@ -80,13 +80,13 @@ rownames(adj_full) = NULL
 # --- Time matrices and vectors 
 
 # Pedestrian time between stops
-ped_time_mat = read.csv("data_multiligne/time_mat_s_6789_names.csv", sep=",")
+ped_time_mat = read.csv("multilines_data/old_format_data/time_mat_s_6789_names.csv", sep=",")
 ped_time_mat = as.matrix(ped_time_mat[, -1])
 colnames(ped_time_mat) = stop_names
 rownames(ped_time_mat) = stop_names
 
 # Mean stop time at bus stops
-stop_time_df = read.csv("data_multiligne/waiting_time_s_tp.csv", sep=",")
+stop_time_df = read.csv("multilines_data/old_format_data/waiting_time_s_tp.csv", sep=",")
 # Get the name of stop
 stop_time_rownames = trimws(paste(paste0("S", stop_time_df$code_ligne_theo), 
                            stop_time_df$direction_voy_theo, 
@@ -103,7 +103,7 @@ names(stop_time_vec) = stop_names
 stop_time_vec[stop_time_vec > 100] = 100
  
 # Bus time between stops
-mean_time_df = read.csv("data_multiligne/mean_time_i-j_s_tp.csv", sep=",")
+mean_time_df = read.csv("multilines_data/old_format_data/mean_time_i-j_s_tp.csv", sep=",")
 # Get the name of starting stop
 mt_rownames = trimws(paste(paste0("S", mean_time_df$code_ligne_theo), 
                            mean_time_df$direction_voy_theo, 
@@ -162,7 +162,7 @@ if(compute_sp_data){
   admissible_sp_mat[adj_line > 1] = 1
   
   # Create the file for the matrix 
-  file.create("aux_data/sp_edge_mat.csv")
+  file.create("network_data/sp_edge_mat.csv")
   
   # The shortest-path x edge matrix
   sp_edge_mat = c()
@@ -195,17 +195,17 @@ if(compute_sp_data){
         }
       }
       # Add the row on sp_edge_mat
-      write.table(t(sp_vec), "aux_data/sp_edge_mat.csv", append=T, row.names=F, col.names=F, sep=",")
+      write.table(t(sp_vec), "network_data/sp_edge_mat.csv", append=T, row.names=F, col.names=F, sep=",")
     }
   }
-  write.table(1*admissible_sp_mat, "aux_data/admissible_sp_mat.csv", row.names=F, col.names=F, sep=",")
+  write.table(1*admissible_sp_mat, "network_data/admissible_sp_mat.csv", row.names=F, col.names=F, sep=",")
 }
 
 # --- --- LOADING
 
 # Loading files
-admissible_sp_mat = as.matrix(read.csv("aux_data/admissible_sp_mat.csv", header=F))
-sp_edge_mat = as.matrix(read.csv("aux_data/sp_edge_mat.csv", header=F))
+admissible_sp_mat = as.matrix(read.csv("network_data/admissible_sp_mat.csv", header=F))
+sp_edge_mat = as.matrix(read.csv("network_data/sp_edge_mat.csv", header=F))
 
 # Setting col and row names of admissible paths
 rownames(admissible_sp_mat) = stop_names
@@ -224,7 +224,7 @@ free_node_vec[colSums(adj_prox) == 0] = F
 ####### LOADING AND PREPROCESSING IN, OUT AND TRAVEL DATA
 
 # Loading in/out data
-inout_data = read.csv("data_multiligne/stops_frequentation_6789.csv", sep=",",
+inout_data = read.csv("multilines_data/old_format_data/stops_frequentation_6789.csv", sep=",",
                       row.names = 1)
 inout_data["stop_names"] = stop_names
 
