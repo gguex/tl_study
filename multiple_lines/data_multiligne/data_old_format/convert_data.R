@@ -67,7 +67,7 @@ colnames(ped_time_mat) = stop_names
 #---------------------------
 
 # Building the complete dataframe
-bus_df = data.frame(stop_names=stop_names, 
+bus_df = data.frame(stop_names=stop_names,
                     label=inout_data$libelle_arret_theo2,
                     line_nbr=inout_data$code_ligne_theo,
                     direction=inout_data$direction_voy_theo,
@@ -76,5 +76,22 @@ bus_df = data.frame(stop_names=stop_names,
                     travel_time=travel_time_vec,
                     stopping_time=stop_time_vec)
 
-write.table(bus_df, "bus_df.csv", sep=",", row.names = F)
-write.table(ped_time_mat, "ped_time.csv", sep=",", row.names=F, col.names=F)
+# Changing the line 7 order
+new_index = 50:72
+old_index = c(63:72, 50:62)
+new_bus_df = bus_df
+new_bus_df[new_index, ] = bus_df[old_index, ]
+new_ped_time_mat = ped_time_mat
+new_ped_time_mat[new_index, ] = ped_time_mat[old_index, ]
+new_ped_time_mat[, new_index] = new_ped_time_mat[, old_index]
+
+# Fusion of SF for line 7
+ind_to_merge = c(59, 60)
+new_bus_df$passengers_in[ind_to_merge[2]] = new_bus_df$passengers_in[ind_to_merge[1]] + new_bus_df$passengers_in[ind_to_merge[2]]
+new_bus_df$passengers_out[ind_to_merge[2]] = new_bus_df$passengers_out[ind_to_merge[1]] + new_bus_df$passengers_out[ind_to_merge[2]]
+new_bus_df = new_bus_df[-ind_to_merge[1], ]
+new_bus_df$direction[50:58] = "A"
+new_ped_time_mat = new_ped_time_mat[-ind_to_merge[1], -ind_to_merge[1]]
+
+write.table(new_bus_df, "../bus_df.csv", sep=",", row.names = F)
+write.table(new_ped_time_mat, "../ped_time.csv", sep=",", row.names=F, col.names=F)
