@@ -12,7 +12,12 @@ library(igraph)
 library(Matrix)
 
 #-------------------------------------------------------------------------------
-# Function: build_network_structure
+# Function: build_network_structure()
+#
+# Description:  This function compute the network structure of a multiple line
+#               transportation network. It uses a matrix of pedestrian time to 
+#               build transfer edges, and make sure line from same tour are not 
+#               connected.
 #
 # In:
 # - line_mbr: A n-length vector containing line memberships of stops.
@@ -62,7 +67,13 @@ build_network_structure = function(line_mbr, tour_mbr, D, thres_D){
 }
 
 #-------------------------------------------------------------------------------
-# Function: build_sp_data
+# Function: build_sp_data()
+#
+# Description:  This function computes all the shortest-path data for a 
+#               transportation network. It make sure the saved shortest-path 
+#               gives a better traveling time compared to pedestrian time, and 
+#               that these shortest-paths are not "incoherent", regarding the 
+#               network structure.
 #
 # In:  
 # - line_mbr: A n-length vector containing line memberships of stops.
@@ -145,14 +156,16 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, D, A_W, A_B){
               function(a, b) which((edge_ref[,1] == a) & (edge_ref[,2] == b)), 
               sp[-length(sp)], sp[-1])
             
-            # Check if there are any consecutive transfer edge
+            # Check if there are no consecutive transfer edge
             if(!any(head(is_transfer_edge[index_sp_edge],-1) & 
                     tail(is_transfer_edge[index_sp_edge], -1))){
+              
               # Save the shortest path
               sp_ref = rbind(sp_ref, c(i, j))
               sp_edge_vec = rep(0, n_edges)
               sp_edge_vec[index_sp_edge] = 1
               P = rbind(P, sp_edge_vec)
+              
             }
             
           }
@@ -172,15 +185,48 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, D, A_W, A_B){
 #-------------------------------------------------------------------------------
 # Function: build_in_out_flow 
 #
+# Description:  This function compute a corrected version of ingoing and 
+#               outgoing flow inside the different lines, in order that the 
+#               balance is correct.
+#
 # In:
 # - line_mbr: A n-length vector containing line memberships for stops.
-# - meas_in:  A n-length vector containing measured flow entering lines.
-# - meas_out: A n-length vector containing measured flow leaving lines.
+# - flow_in:  A n-length vector containing measured flow entering lines.
+# - flow_out: A n-length vector containing measured flow leaving lines.
 # Out:
 # - rho_in:   A n-length vector of corrected flow entering lines.
 # - rho_out:  A n-length vector of corrected flow leaving lines.
 #-------------------------------------------------------------------------------
 
-build_in_out_flow = function(line_mbr, meas_in, meas_out){
+build_in_out_flow = function(line_mbr, flow_in, flow_out){
   
+  # --- Get number of stops and make levels for line_mbr
+  
+  # Get the number of stops 
+  n = length(line_mbr)
+  # Get levels of lines
+  lines_lvl = as.factor(line_mbr)
+  
+  # --- Correct the flow on every line
+  
+  # Loop on lines
+  for(l_lvl in levels(lines_lvl)){
+  
+    # Compute the flow balance
+    line_flow_in = flow_in[lines_lvl == l_lvl]
+    line_flow_out = flow_out[lines_lvl == l_lvl]
+    line_balance = line_flow_in - line_flow_out
+    line_flow = cumsum(line_balance)
+    
+    # If there is positive or negative flow at the end of the line, 
+    # we correct the values
+    correction = line_flow[length(line_flow)]
+    inout_cor[selected_ind[-1], ]$descentes = inout_data[selected_ind[-1], ]$descentes + correction / length(selected_ind[-1])
+    new_line_data = inout_cor[selected_ind, ]
+    new_line_balance = as.vector(t(new_line_data["montees"] - new_line_data["descentes"]))
+    new_line_flow = round(cumsum(new_line_balance), 2)
+    
+    # TO COMPLETE 
+    
+  }
 }
