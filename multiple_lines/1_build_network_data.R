@@ -26,9 +26,9 @@ d_file = "multilines_data/ped_time.csv"
 out_folder = "network_data"
 
 # Pedestrian threshold for connecting stops
-d_ped_threshold = 180
+d_ped_threshold = 120
 # The mean waiting time to enter a bus line
-waiting_time = 180
+waiting_time = 120
 
 #--------------------------------
 # Process
@@ -38,15 +38,24 @@ waiting_time = 180
 line_df = read.csv(line_data_file)
 # Load the distance file
 d_ped = as.matrix(read.csv(d_file, header=F))
+# Save n
+n = dim(line_df)[1]
+
 # Build the network structure 
-res_list = build_network_structure(interaction(line_df$line_nbr, 
-                                               line_df$direction), 
-                                   line_df$line_nbr,
-                                   d_ped,
-                                   d_ped_threshold)
+res_net_list = build_network_structure(interaction(line_df$line_nbr, 
+                                                   line_df$direction), 
+                                       line_df$line_nbr,
+                                       d_ped,
+                                       d_ped_threshold)
 
-
-
-
+# Build the shortest path data
+res_sp_list = build_sp_data(interaction(line_df$line_nbr, 
+                                        line_df$direction), 
+                            line_df$line_nbr,
+                            line_df$travel_time,
+                            rep(waiting_time, n),
+                            d_ped, 
+                            res_net_list$A_W,
+                            res_net_list$A_B)
 
 
