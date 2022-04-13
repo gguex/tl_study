@@ -4,6 +4,12 @@
 #
 #-------------------------------------------------------------------------------
 
+#-------------------------------------------------------------------------------
+# Needed libraries
+#-------------------------------------------------------------------------------
+
+library(igraph)
+library(Matrix)
 
 #-------------------------------------------------------------------------------
 # Function: build_network_structure
@@ -20,6 +26,8 @@
 #-------------------------------------------------------------------------------
 
 build_network_structure = function(line_mbr, tour_mbr, D, thres_D){
+  
+  # --- Get number of stops and make levels for line_mbr and tour_mbr
   
   # Get the number of stops 
   n = length(line_mbr)
@@ -47,8 +55,10 @@ build_network_structure = function(line_mbr, tour_mbr, D, thres_D){
     A_B[tour_lvl == t_lvl, tour_lvl == t_lvl] = 0
   }
   
-  # Return the results
+  # --- Return the results
+  
   return(list(A_W=A_W, A_B=A_B))
+  
 }
 
 #-------------------------------------------------------------------------------
@@ -57,11 +67,11 @@ build_network_structure = function(line_mbr, tour_mbr, D, thres_D){
 # In:  
 # - line_mbr: A n-length vector containing line memberships of stops.
 # - tour_mbr  A n-length vector containing tour memberships of stops.
+# - travel_t: A n-length vector giving time needed to reach next stop.
+# - wait_t:   A n-length vector giving time needed to enter a line at each stop.
 # - D:        A (n x n) pedestrian time matrix between stops.
 # - A_W:      A (n x n) adjacency matrix within transportation lines.
 # - A_B:      A (n x n) adjacency matrix between transportation lines. 
-# - travel_t: A n-length vector giving time needed to reach next stop.
-# - wait_t:   A n-length vector giving time needed to enter a line at each stop.
 # Out:
 # - T:        A (n x n) matrix of admissible shortest-paths in the network, 
 #             containing (n_sp) ones and (n^2 - n_sp) zeroes.
@@ -69,7 +79,29 @@ build_network_structure = function(line_mbr, tour_mbr, D, thres_D){
 #             edge j is in shortest-path i.
 #-------------------------------------------------------------------------------
 
-build_sp_data = function(line_mbr, tour_mbr, D, A_W, A_B, travel_t, wait_t){
+build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, D, A_W, A_B){
+  
+  # --- Get number of stops and make levels for line_mbr and tour_mbr
+  
+  # Get the number of stops 
+  n = length(line_mbr)
+  # Get levels of lines
+  lines_lvl = as.factor(line_mbr)
+  # Get levels of tour
+  tour_lvl = as.factor(tour_mbr)
+  
+  # --- Compute the traveling time with the line network 
+  
+  # Replace potential NA with large values
+  travel_t[is.na(travel_t)] = 1e10
+  # Adjacency matrix for traveling time
+  A_travel_time = A_W * travel_t + t(t(A_B) * wait_t)
+  # The graph for traveling
+  travel_time_g = graph_from_adjacency_matrix(A_travel_time, 
+                                              mode="directed", 
+                                              weighted=T)
+  # Travel time between stops
+  travel_time_mat = distances(full_time_g, mode="out")
   
 }
 
