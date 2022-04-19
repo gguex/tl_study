@@ -58,4 +58,11 @@ res_sp_list = build_sp_data(interaction(line_df$line_nbr,
                             res_net_list$A_W,
                             res_net_list$A_B)
 
+# Build the corrected balance 
+res_inout_list = build_in_out_flow(interaction(line_df$line_nbr, 
+                                               line_df$direction), 
+                                   line_df$passengers_in, 
+                                   line_df$passengers_out)
+
+
 

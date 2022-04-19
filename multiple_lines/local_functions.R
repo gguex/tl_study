@@ -209,24 +209,43 @@ build_in_out_flow = function(line_mbr, flow_in, flow_out){
   
   # --- Correct the flow on every line
   
+  # Vectors to store the corrected flow values 
+  rho_in = rep(0, n)
+  rho_out = rep(0, n)
   # Loop on lines
   for(l_lvl in levels(lines_lvl)){
   
-    # Compute the flow balance
+    # Compute the flow balance and the cumulative sum
     line_flow_in = flow_in[lines_lvl == l_lvl]
     line_flow_out = flow_out[lines_lvl == l_lvl]
     line_balance = line_flow_in - line_flow_out
     line_flow = cumsum(line_balance)
     
-    # If there is positive or negative flow at the end of the line, 
-    # we correct the values
+    # The quantity to correct
     correction = line_flow[length(line_flow)]
-    inout_cor[selected_ind[-1], ]$descentes = inout_data[selected_ind[-1], ]$descentes + correction / length(selected_ind[-1])
-    new_line_data = inout_cor[selected_ind, ]
-    new_line_balance = as.vector(t(new_line_data["montees"] - new_line_data["descentes"]))
-    new_line_flow = round(cumsum(new_line_balance), 2)
+    # We reduce (or raise, if negative correction) the flow in
+    line_rho_in = line_flow_in
+    line_rho_in[-length(line_rho_in)] = line_rho_in[-length(line_rho_in)] - correction / (2*(length(line_rho_in) - 1))
+    # We raise (or reduce, if negative correction) the flow out
+    line_rho_out = line_flow_out 
+    line_rho_out[-1] = line_rho_out[-1] + correction / (2*(length(line_rho_out) - 1))
+    # Check if there is any negative value, and correct it if it's the case
+    if(any(line_rho_in < 0)){
+      line_rho_out[line_rho_in < 0] = line_rho_out[line_rho_in < 0] - line_rho_in[line_rho_in < 0]
+      line_rho_in[line_rho_in < 0] = 0
+    }
+    if(any(line_rho_out < 0)){
+      line_rho_in[line_rho_out < 0] = line_rho_in[line_rho_out < 0] - line_rho_out[line_rho_out < 0]
+      line_rho_out[line_rho_out < 0] = 0
+    }
     
-    # TO COMPLETE 
-    
+    # Add the corrected flow for line to the vector of global corrected flow 
+    rho_in[lines_lvl == l_lvl] = line_rho_in
+    rho_out[lines_lvl == l_lvl] = line_rho_out
   }
+  
+  # --- Return the results
+  
+  return(list(rho_in=rho_in, rho_out=rho_out))
+  
 }
