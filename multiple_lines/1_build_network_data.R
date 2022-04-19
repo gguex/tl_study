@@ -23,7 +23,7 @@ line_data_file = "multilines_data/bus_df.csv"
 # The file containing the pedestrian distance between stops
 d_file = "multilines_data/ped_time.csv"
 # Out folder
-out_folder = "network_data"
+out_folder = "multilines_data/preprocessed_data/test_6789"
 
 # Pedestrian threshold for connecting stops
 d_ped_threshold = 120
@@ -63,6 +63,24 @@ res_inout_list = build_in_out_flow(interaction(line_df$line_nbr,
                                                line_df$direction), 
                                    line_df$passengers_in, 
                                    line_df$passengers_out)
+
+# Add corrected in/out data to dataframe
+line_df["rho_in"] = res_inout_list$rho_in
+line_df["rho_out"] = res_inout_list$rho_out
+
+# Save data 
+write.table(res_net_list$adj_w, paste0(out_folder, "/", "adj_w.csv"), sep=",",
+            row.names=F, col.names=F)
+write.table(res_net_list$adj_b, paste0(out_folder, "/", "adj_b.csv"), sep=",",
+            row.names=F, col.names=F)
+write.table(res_sp_list$edge_ref, paste0(out_folder, "/", "edge_ref.csv"), sep=",",
+            row.names=F)
+write.table(res_sp_list$sp_ref, paste0(out_folder, "/", "sp_ref.csv"), sep=",",
+            row.names=F)
+write.table(res_sp_list$p_mat, paste0(out_folder, "/", "p_mat.csv"), sep=",",
+            row.names=F, col.names=F)
+write.table(line_df, paste0(out_folder, "/", "line_df.csv"), sep=",",
+            row.names=F)
 
 
 
