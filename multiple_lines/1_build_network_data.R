@@ -69,17 +69,17 @@ line_df["rho_in"] = res_inout_list$rho_in
 line_df["rho_out"] = res_inout_list$rho_out
 
 # Save data 
-write.table(res_net_list$adj_w, paste0(out_folder, "/", "adj_w.csv"), sep=",",
+write.table(res_net_list$adj_w, paste0(out_folder, "/adj_w.csv"), sep=",",
             row.names=F, col.names=F)
-write.table(res_net_list$adj_b, paste0(out_folder, "/", "adj_b.csv"), sep=",",
+write.table(res_net_list$adj_b, paste0(out_folder, "/adj_b.csv"), sep=",",
             row.names=F, col.names=F)
-write.table(res_sp_list$edge_ref, paste0(out_folder, "/", "edge_ref.csv"), sep=",",
+write.table(res_sp_list$edge_ref, paste0(out_folder, "/edge_ref.csv"), sep=",",
             row.names=F)
-write.table(res_sp_list$sp_ref, paste0(out_folder, "/", "sp_ref.csv"), sep=",",
+write.table(res_sp_list$sp_ref, paste0(out_folder, "/sp_ref.csv"), sep=",",
             row.names=F)
-write.table(res_sp_list$p_mat, paste0(out_folder, "/", "p_mat.csv"), sep=",",
+write.table(res_sp_list$p_mat, paste0(out_folder, "/p_mat.csv"), sep=",",
             row.names=F, col.names=F)
-write.table(line_df, paste0(out_folder, "/", "line_df.csv"), sep=",",
+write.table(line_df, paste0(out_folder, "/line_df.csv"), sep=",",
             row.names=F)
 
 

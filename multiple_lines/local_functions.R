@@ -273,7 +273,6 @@ build_in_out_flow = function(line_mbr, flow_in, flow_out){
 #               stops, and the flow going in and out at each line stops.
 #
 # In:
-# - s_mat:    A (n x n) affinity matrix between stops.
 # - rho_in:   A n-length vector of flow entering lines.
 # - rho_out:  A n-length vector of flow leaving lines.
 # - edge_ref: A (m x 3) matrix, giving the edge starting node index, ending 
@@ -282,6 +281,9 @@ build_in_out_flow = function(line_mbr, flow_in, flow_out){
 #             admissible shortest-path.
 # - p_mat:    A (n_sp x m) shortest-path - edges matrix, with s_{ij} = 1 iff
 #             edge j is in shortest-path i.
+# - s_mat:    A (n x n) optional affinity matrix between stops. If None is given
+#             this matrix will set to 1 for each pair having an admissible 
+#             shorest-path (default = NULL).
 # - smooth_limit:     An boolean indicating if the algorithm should use the 
 #                     smooth limit for between-line flow (default = T).
 # - exp_lambda:       The exponential law parameter for the smooth limit
@@ -298,22 +300,27 @@ build_in_out_flow = function(line_mbr, flow_in, flow_out){
 # - n_mat:            A (n x n) matrix containing the origin-destination flow
 #                     when using the multiple lines network.
 #-------------------------------------------------------------------------------
-^
-compute_origin_destination = function(s_mat, rho_in, rho_out, edge_ref, sp_ref,
-                                      p_mat, smooth_limit=T, exp_lambda=10,
+
+compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat, 
+                                      s_mat=NULL, smooth_limit=T, exp_lambda=10,
                                       prop_limit=0.1, conv_thres_if=1e-5,
                                       conv_thres_algo=1e-5, epsilon=1e-40){
   
   # --- Get the network structure 
   
   # The number of stops 
-  n = dim(s_mat)[1]
+  n = length(rho_in)
   # The reference of transfer edges
   where_edge_btw = as.logical(edge_ref[, 3])
   # The list of in-out nodes for transfer edges 
   edge_btw_ref = edge_ref[where_edge_btw, 1:2]
   # The shortest-path - edge matrix retrained on transfer edges
   p_btw_mat = p_mat[, where_edge_btw]
+  # If s_mat is not given, build it
+  if(is.null(s_mat)){
+    s_mat = as.matrix(1*sparseMatrix(i=sp_ref[, 1], j=sp_ref[, 2], 
+                                     dims=c(n, n)))
+  }
   
   # --- Algorithm 
   
@@ -359,9 +366,9 @@ compute_origin_destination = function(s_mat, rho_in, rho_out, edge_ref, sp_ref,
     # Compute the flow on edges
     btw_edge_flow = as.vector(t(p_btw_mat) %*% sp_flow_vec)
     
-    # Compute the in-out flow on nodes 
-    x_btw = sparseMatrix(i=free_edge_loc[, 1], j=free_edge_loc[, 2], 
-                         x=free_edge_flow, dims=c(n, n))
+    # Compute the in-out between flow on nodes 
+    x_btw = sparseMatrix(i=edge_btw_ref[, 1], j=edge_btw_ref[, 2], 
+                         x=btw_edge_flow, dims=c(n, n))
     node_in_btw = colSums(x_btw)
     node_out_btw = rowSums(x_btw)
     
@@ -371,9 +378,9 @@ compute_origin_destination = function(s_mat, rho_in, rho_out, edge_ref, sp_ref,
     if(smooth_limit){
       # Compute the exponential law
       allowed_in_btw = rho_in * 
-        (1 - exp(-exp_lambda * node_in_btw / rho_in))
+        (1 - exp(-exp_lambda * node_in_btw / (rho_in + epsilon)))
       allowed_out_btw = rho_out * 
-        (1 - exp(-exp_lambda * node_out_btw / rho_out))
+        (1 - exp(-exp_lambda * node_out_btw / (rho_out + epsilon)))
       # If this is more than identity, set it to indentity  
       allowed_in_btw[allowed_in_btw > node_in_btw] = 
         node_in_btw[allowed_in_btw > node_in_btw]
@@ -385,10 +392,10 @@ compute_origin_destination = function(s_mat, rho_in, rho_out, edge_ref, sp_ref,
       allowed_in_btw = node_in_btw
       allowed_out_btw = node_out_btw
       # Replace the overflowing value with the limit
-      allowed_in_btw[allowed_in_btw > rho_in*prop_limit] =
-        rho_in[allowed_in_btw > rho_in*prop_limit]*prop_limit
-      allowed_out_btw[allowed_out_btw > rho_out*prop_limit] =
-        rho_out[allowed_out_btw > rho_out*prop_limit]*prop_limit
+      allowed_in_btw[allowed_in_btw > rho_in*(1 - prop_limit)] =
+        rho_in[allowed_in_btw > rho_in*(1 - prop_limit)]*(1 - prop_limit)
+      allowed_out_btw[allowed_out_btw > rho_out*(1 - prop_limit)] =
+        rho_out[allowed_out_btw > rho_out*(1 - prop_limit)]*(1 - prop_limit)
     }
     
     # --- Compute the allowed flow on edge
