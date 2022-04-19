@@ -295,7 +295,14 @@ relationship_ref_mat = admissible_sp_mat
 total_rel = sum(admissible_sp_mat)
 max_to_red = 1
 
-while(!converge_algo){
+time_if = c()
+time_betw_flow = c()
+time_allowed_flow_node = c()
+time_allowed_flow_edge = c()
+time_flow_update = c()
+time_affinity_update = c()
+
+while(!converge_algo & it_algo <= 30){
   
   # --- --- Save old X_b
   
@@ -303,6 +310,8 @@ while(!converge_algo){
   max_to_red_old = max_to_red
   
   # --- --- Iterative fitting 
+  
+  t1 = Sys.time()
   
   converge_if = F
   results_mat = relationship_ref_mat + epsilon
@@ -318,6 +327,11 @@ while(!converge_algo){
       converge_if = T
     }
   }
+  
+  t2 = Sys.time()
+  time_if = c(time_if, as.numeric(t2-t1))
+  
+  t1 = Sys.time()
 
   # Find flow on edges and free edges
   total_edge_flow = as.vector(t(sp_edge_mat) %*% c(t(results_mat)))
@@ -333,6 +347,9 @@ while(!converge_algo){
   from_free_flow = colSums(X_b)
   to_free_flow = rowSums(X_b)
   
+  t2 = Sys.time()
+  time_betw_flow = c(time_betw_flow, as.numeric(t2-t1))
+  
   ## FOR DEBUG
   # df_edge = data.frame(free_edge_loc[, 1],free_edge_loc[, 2],free_edge_flow)
   # df_edge = df_edge[df_edge$free_edge_flow > 0, ]
@@ -340,6 +357,8 @@ while(!converge_algo){
   ## FOR DEBUG
   
   # Get the flow allowed to pass through each nodes 
+  
+  t1 = Sys.time()
   
   allowed_from_free_flow = rho_in * (1 - exp(-lambda_sigma * from_free_flow / rho_in))
   allowed_to_free_flow = rho_out * (1 - exp(-lambda_sigma * to_free_flow / rho_out))
@@ -353,6 +372,11 @@ while(!converge_algo){
   # allowed_to_free_flow[allowed_to_free_flow > rho_out*max_p_sigma] =
   #   rho_out[allowed_to_free_flow > rho_out*max_p_sigma]*max_p_sigma
   
+  t2 = Sys.time()
+  time_allowed_flow_node = c(time_allowed_flow_node, as.numeric(t2-t1))
+  
+  t1 = Sys.time()
+  
   p_allowed_from = allowed_from_free_flow / (from_free_flow + epsilon)
   p_allowed_to = allowed_to_free_flow / (to_free_flow + epsilon)
   p_allowed_from[p_allowed_from == 0] = 1
@@ -364,6 +388,11 @@ while(!converge_algo){
   min_p_allowed_edge = pmin(p_allowed_from_edge, p_allowed_to_edge)
   allowed_flow_edge = min_p_allowed_edge * free_edge_flow
   
+  t2 = Sys.time()
+  time_allowed_flow_edge = c(time_allowed_flow_edge, as.numeric(t2-t1))
+  
+  t1 = Sys.time()
+  
   # Update sigma_in and sigma_out
   allowed_flow_mat = sparseMatrix(i=free_edge_loc[, 1], 
                                   j=free_edge_loc[, 2],
@@ -371,7 +400,12 @@ while(!converge_algo){
   sigma_in = rho_in - colSums(allowed_flow_mat)
   sigma_out = rho_out - rowSums(allowed_flow_mat)
   
+  t2 = Sys.time()
+  time_flow_update = c(time_flow_update, as.numeric(t2-t1))
+  
   # --- --- Correction on dependence
+  
+  t1 = Sys.time()
   
   # Revert back the flow
   p_to_red = (free_edge_flow - allowed_flow_edge) / (free_edge_flow + epsilon)
@@ -395,6 +429,9 @@ while(!converge_algo){
   # Reduce the dep
   relationship_ref_mat = (relationship_ref_mat * (1 - to_red_mat)) * admissible_sp_mat
   
+  t2 = Sys.time()
+  time_affinity_update = c(time_affinity_update, as.numeric(t2-t1))
+  
   # --- --- Check for convergence and iterate
   
   diff = sum(abs(X_b - X_b_old))
@@ -407,6 +444,13 @@ while(!converge_algo){
   # Iteration
   it_algo = it_algo + 1
 }
+
+cat(  "time_if", mean(time_if),
+      "|time_betw_flow", mean(time_betw_flow),
+      "|time_allowed_flow_node", mean(time_allowed_flow_node),
+      "|time_allowed_flow_edge", mean(time_allowed_flow_edge),
+      "|time_flow_update", mean(time_flow_update),
+      "|time_affinity_update", mean(time_affinity_update))
   
 # END 
 

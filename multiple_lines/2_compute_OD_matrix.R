@@ -22,7 +22,7 @@ source("local_functions.R")
 data_folder = "multilines_data/preprocessed_data/test_6789"
 
 # Conv threshold for iterative fitting
-conv_thres_if = 1e-5
+conv_thres_if = 100
 # Conv threshold
 conv_thres_algo = 1e-5
 # Smooth or strict limit
