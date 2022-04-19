@@ -22,7 +22,7 @@ library(Matrix)
 # In:
 # - line_mbr: A n-length vector containing line memberships of stops.
 # - tour_mbr: A n-length vector containing tour memberships of stops.
-# - dist_mat:     A (n x n) pedestrian time matrix between stops.
+# - dist_mat: A (n x n) pedestrian time matrix between stops.
 # - dist_thres: A scalar threshold on the pedestrian time for considering stops 
 #             linked.
 # Out:
