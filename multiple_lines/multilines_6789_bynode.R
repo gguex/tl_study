@@ -20,7 +20,7 @@ compute_sp_data = F
 epsilon = 1e-40
 conv_thres_if = 1e-5
 conv_thres_algo = 1e-5
-max_p_sigma = 0.9999
+max_p_sigma = 0.8
 lambda_sigma = 100
 
 ############################################################### 

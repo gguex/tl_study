@@ -296,6 +296,7 @@ build_in_out_flow = function(line_mbr, flow_in, flow_out){
 #                     (default = 1e-5).
 # - epsilon:          A small number, added in iterative fitting to make sure 
 #                     the components are not null (default = 1e-40).
+# - max_it:           The maximum number of iterations.
 # Out:
 # - n_mat:            A (n x n) matrix containing the origin-destination flow
 #                     when using the multiple lines network.
@@ -304,7 +305,8 @@ build_in_out_flow = function(line_mbr, flow_in, flow_out){
 compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat, 
                                       s_mat=NULL, smooth_limit=T, exp_lambda=10,
                                       prop_limit=0.1, conv_thres_if=1e-5,
-                                      conv_thres_algo=1e-5, epsilon=1e-40){
+                                      conv_thres_algo=1e-5, epsilon=1e-40,
+                                      max_it=200){
   
   # --- Get the network structure 
   
@@ -336,7 +338,7 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
   # Iteration counter
   it_algo = 1
   
-  while(!converge_algo){
+  while(!converge_algo & it_algo <= max_it){
     
     # --- Save old values
     
@@ -344,17 +346,17 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
     
     # --- Iterative fitting 
     
-    converge_if = F
     n_mat = s_it_mat + epsilon
+    converge_if = F
     while(!converge_if){
       # Saving old results
-      n_mat_ifold = n_mat 
+      n_mat_if_old = n_mat 
       # Normalizing by row
       n_mat = n_mat * sigma_in / rowSums(n_mat + epsilon)
       # Normalizing by columns 
       n_mat = t(t(n_mat) * sigma_out / colSums(n_mat + epsilon))
       # Checking for convergence
-      if(sum(abs(n_mat_ifold - n_mat)) < conv_thres_if){
+      if(sum(abs(n_mat_if_old - n_mat)) < conv_thres_if){
         converge_if = T
       }
     }
@@ -428,7 +430,7 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
     max_p_to_red = apply(t(p_btw_mat) * p_to_red, 2, max)
     # Convert it to a reduction factor and transform it in a s,t matrix
     red_mat = sparseMatrix(i=sp_ref[, 1], j=sp_ref[, 2], 
-                           x=1-max_p_to_red, dims=c(n, n))
+                           x=(1-max_p_to_red), dims=c(n, n))
     # Compute the updated version of origin-destination affinity matrix
     s_it_mat = s_it_mat * red_mat
     

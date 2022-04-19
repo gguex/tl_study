@@ -22,15 +22,19 @@ source("local_functions.R")
 data_folder = "multilines_data/preprocessed_data/test_6789"
 
 # Conv threshold for iterative fitting
-conv_thres_if = 100
+conv_thres_if = 1e-5
 # Conv threshold
-conv_thres_algo = 100
+conv_thres_algo = 1e-5
 # Smooth or strict limit
 smooth_limit = F
 # lambda for exponential law
-exp_lambda = 300
+exp_lambda = 100
 # prop limit 
 prop_limit = 0.2
+# epsilon
+epsilon = 1e-40
+# max iteration
+max_it = 30
 
 #--------------------------------
 # Process
@@ -60,7 +64,9 @@ n_mat = compute_origin_destination(rho_in,
                                    prop_limit = prop_limit,
                                    exp_lambda = exp_lambda,
                                    conv_thres_algo=conv_thres_algo,
-                                   conv_thres_if=conv_thres_if)
+                                   conv_thres_if=conv_thres_if,
+                                   epsilon=epsilon,
+                                   max_it=max_it)
 
 # --- See the result
 
@@ -76,7 +82,7 @@ sp_flow_vec = mapply(function(i, j) n_mat[i, j], sp_ref[,1], sp_ref[,2])
 btw_edge_flow = as.vector(t(p_btw_mat) %*% sp_flow_vec)
 # Compute the in-out between flow on nodes 
 x_btw = sparseMatrix(i=edge_btw_ref[, 1], j=edge_btw_ref[, 2], 
-                     x=btw_edge_flow, dims=c(n, n))
+                     x=btw_edge_flow, dims=c(length(rho_in), length(rho_in)))
 node_in_btw = colSums(x_btw)
 node_out_btw = rowSums(x_btw)
 
