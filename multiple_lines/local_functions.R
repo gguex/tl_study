@@ -22,15 +22,15 @@ library(Matrix)
 # In:
 # - line_mbr: A n-length vector containing line memberships of stops.
 # - tour_mbr: A n-length vector containing tour memberships of stops.
-# - D:        A (n x n) pedestrian time matrix between stops.
-# - thres_D:  A scalar threshold on the pedestrian time for considering stops 
+# - dist_mat:     A (n x n) pedestrian time matrix between stops.
+# - dist_thres: A scalar threshold on the pedestrian time for considering stops 
 #             linked.
 # Out:
-# - A_W:      A (n x n) adjacency matrix within transportation lines.
-# - A_B:      A (n x n) adjacency matrix between transportation lines.
+# - adj_w:    A (n x n) adjacency matrix within transportation lines.
+# - adj_b:    A (n x n) adjacency matrix between transportation lines.
 #-------------------------------------------------------------------------------
 
-build_network_structure = function(line_mbr, tour_mbr, D, thres_D){
+build_network_structure = function(line_mbr, tour_mbr, dist_mat, dist_thres){
   
   # --- Get number of stops and make levels for line_mbr and tour_mbr
   
@@ -44,25 +44,25 @@ build_network_structure = function(line_mbr, tour_mbr, D, thres_D){
   # --- Build A_W
   
   # Make links to the next stop
-  A_W = matrix(0, n, n)
+  adj_w = matrix(0, n, n)
   for(i in 1:(n-1)){
-    if(lines_lvl[i] == lines_lvl[i + 1]) A_W[i, i + 1] = 1
+    if(lines_lvl[i] == lines_lvl[i + 1]) adj_w[i, i + 1] = 1
   }
   
   # --- Build A_B
   
   # With distance threshold
-  A_B = 1*(D < thres_D)
+  adj_b = 1*(dist_mat < dist_thres)
   # Removing diagonal
-  diag(A_B) = 0
+  diag(adj_b) = 0
   # Removing same tour links
   for(t_lvl in levels(tour_lvl)){
-    A_B[tour_lvl == t_lvl, tour_lvl == t_lvl] = 0
+    adj_b[tour_lvl == t_lvl, tour_lvl == t_lvl] = 0
   }
   
   # --- Return the results
   
-  return(list(A_W=A_W, A_B=A_B))
+  return(list(adj_w=adj_w, adj_b=adj_b))
   
 }
 
@@ -80,19 +80,20 @@ build_network_structure = function(line_mbr, tour_mbr, D, thres_D){
 # - tour_mbr  A n-length vector containing tour memberships of stops.
 # - travel_t: A n-length vector giving time needed to reach next stop.
 # - wait_t:   A n-length vector giving time needed to enter a line at each stop.
-# - D:        A (n x n) pedestrian time matrix between stops.
-# - A_W:      A (n x n) adjacency matrix within transportation lines.
-# - A_B:      A (n x n) adjacency matrix between transportation lines. 
+# - dist_mat: A (n x n) pedestrian time matrix between stops.
+# - adj_w:    A (n x n) adjacency matrix within transportation lines.
+# - adj_b:    A (n x n) adjacency matrix between transportation lines. 
 # Out:
 # - edge_ref: A (m x 3) matrix, giving the edge starting node index, ending 
 #             node index, and a boolean indicating if this is an transfer edge.
 # - sp_ref:   A (n_sp x 2) matrix, giving the source-target node pair for each 
 #             admissible shortest-path.
-# - P:        A (n_sp x m) shortest-path - edges matrix, with s_{ij} = 1 iff
+# - p_mat:    A (n_sp x m) shortest-path - edges matrix, with s_{ij} = 1 iff
 #             edge j is in shortest-path i.
 #-------------------------------------------------------------------------------
 
-build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, D, A_W, A_B){
+build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, dist_mat, 
+                         adj_w, adj_b){
   
   # --- Get number of stops and make levels for line_mbr and tour_mbr
   
@@ -108,9 +109,9 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, D, A_W, A_B){
   # Replace potential NA with large values
   travel_t[is.na(travel_t)] = 1e10
   # Adjacency matrix for traveling time
-  A_travel_time = A_W * travel_t + t(t(A_B) * wait_t)
+  adj_travel_time = adj_w * travel_t + t(t(adj_b) * wait_t)
   # The graph for traveling
-  travel_time_g = graph_from_adjacency_matrix(A_travel_time, 
+  travel_time_g = graph_from_adjacency_matrix(adj_travel_time, 
                                               mode="directed", 
                                               weighted=T)
   # Travel time between stops
@@ -119,8 +120,8 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, D, A_W, A_B){
   # --- Compute the edge reference matrix
   
   # The edge reference 
-  edge_ref = which((A_W + A_B) == 1, arr.ind=T)
-  is_transfer_edge = as.logical(mapply(function(i, j) A_B[i, j], 
+  edge_ref = which((adj_w + adj_b) == 1, arr.ind=T)
+  is_transfer_edge = as.logical(mapply(function(i, j) adj_b[i, j], 
                                        edge_ref[,1], edge_ref[,2]))
   edge_ref = cbind(edge_ref, is_transfer_edge)
   n_edges = dim(edge_ref)[1]
@@ -128,11 +129,11 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, D, A_W, A_B){
   # --- Compute shortest-path data
   
   # Create the graph 
-  full_g = graph_from_adjacency_matrix(A_W + A_B, mode="directed")
+  full_g = graph_from_adjacency_matrix(adj_w + adj_b, mode="directed")
   
   # Make the containers for results
   sp_ref = c()
-  P = c()
+  p_mat = c()
   
   # Loop on pairs of nodes
   for(i in 1:n){
@@ -141,7 +142,8 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, D, A_W, A_B){
       
       # Check if the path is shorter with transport line (except line travel), 
       # and if i not j
-      if(((travel_time_mat[i, j] < D[i, j]) | (A_W[i, j] == 1)) & (i!=j)){
+      if( ((travel_time_mat[i, j] < dist_mat[i, j]) | (adj_w[i, j] == 1)) & 
+          (i!=j) ){
         
         # Get the shortest path
         sp = get.shortest.paths(full_g, i, j)$vpath[[1]]
@@ -149,7 +151,8 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, D, A_W, A_B){
         # If it exists 
         if(length(sp) > 1){
           # And if it does not start or end with a transfer edge
-          if( !(A_B[sp[length(sp) - 1], sp[length(sp)]] | A_B[sp[1], sp[2]]) ){
+          if( !(adj_b[sp[length(sp) - 1], sp[length(sp)]] | 
+                adj_b[sp[1], sp[2]]) ){
             
             # Get the index of edge in sp
             index_sp_edge = mapply(
@@ -164,7 +167,7 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, D, A_W, A_B){
               sp_ref = rbind(sp_ref, c(i, j))
               sp_edge_vec = rep(0, n_edges)
               sp_edge_vec[index_sp_edge] = 1
-              P = rbind(P, sp_edge_vec)
+              p_mat = rbind(p_mat, sp_edge_vec)
               
             }
             
@@ -178,7 +181,7 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, D, A_W, A_B){
   
   # --- Return the results
   
-  return(list(edge_ref=edge_ref, sp_ref=sp_ref, P=P))
+  return(list(edge_ref=edge_ref, sp_ref=sp_ref, p_mat=p_mat))
   
 }
 
@@ -225,17 +228,22 @@ build_in_out_flow = function(line_mbr, flow_in, flow_out){
     correction = line_flow[length(line_flow)]
     # We reduce (or raise, if negative correction) the flow in
     line_rho_in = line_flow_in
-    line_rho_in[-length(line_rho_in)] = line_rho_in[-length(line_rho_in)] - correction / (2*(length(line_rho_in) - 1))
+    line_rho_in[-length(line_rho_in)] = line_rho_in[-length(line_rho_in)] - 
+      correction / (2*(length(line_rho_in) - 1))
     # We raise (or reduce, if negative correction) the flow out
     line_rho_out = line_flow_out 
-    line_rho_out[-1] = line_rho_out[-1] + correction / (2*(length(line_rho_out) - 1))
+    line_rho_out[-1] = line_rho_out[-1] + 
+      correction / (2*(length(line_rho_out) - 1))
+    
     # Check if there is any negative value, and correct it if it's the case
     if(any(line_rho_in < 0)){
-      line_rho_out[line_rho_in < 0] = line_rho_out[line_rho_in < 0] - line_rho_in[line_rho_in < 0]
+      line_rho_out[line_rho_in < 0] = line_rho_out[line_rho_in < 0] - 
+        line_rho_in[line_rho_in < 0]
       line_rho_in[line_rho_in < 0] = 0
     }
     if(any(line_rho_out < 0)){
-      line_rho_in[line_rho_out < 0] = line_rho_in[line_rho_out < 0] - line_rho_out[line_rho_out < 0]
+      line_rho_in[line_rho_out < 0] = line_rho_in[line_rho_out < 0] - 
+        line_rho_out[line_rho_out < 0]
       line_rho_out[line_rho_out < 0] = 0
     }
     
