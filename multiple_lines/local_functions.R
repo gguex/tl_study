@@ -11,6 +11,8 @@
 library(igraph)
 library(Matrix)
 
+
+
 #-------------------------------------------------------------------------------
 # Function: build_network_structure()
 #
@@ -65,6 +67,8 @@ build_network_structure = function(line_mbr, tour_mbr, dist_mat, dist_thres){
   return(list(adj_w=adj_w, adj_b=adj_b))
   
 }
+
+
 
 #-------------------------------------------------------------------------------
 # Function: build_sp_data()
@@ -185,6 +189,8 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, dist_mat,
   
 }
 
+
+
 #-------------------------------------------------------------------------------
 # Function: build_in_out_flow 
 #
@@ -255,5 +261,49 @@ build_in_out_flow = function(line_mbr, flow_in, flow_out){
   # --- Return the results
   
   return(list(rho_in=rho_in, rho_out=rho_out))
+  
+}
+
+
+#-------------------------------------------------------------------------------
+# Function: compute_origin_destination
+#
+# Description:  This function compute the origin-destination matrix from a 
+#               graph with multiple lines structure, an affinity matrix between 
+#               stops, and the flow going in and out at each line stops.
+#
+# In:
+# - s_mat:    A (n x n) affinity matrix between stops.
+# - rho_in:   A n-length vector of flow entering lines.
+# - rho_out:  A n-length vector of flow leaving lines.
+# - edge_ref: A (m x 3) matrix, giving the edge starting node index, ending 
+#             node index, and a boolean indicating if this is an transfer edge.
+# - sp_ref:   A (n_sp x 2) matrix, giving the source-target node pair for each 
+#             admissible shortest-path.
+# - p_mat:    A (n_sp x m) shortest-path - edges matrix, with s_{ij} = 1 iff
+#             edge j is in shortest-path i.
+# - smooth_limit:     An boolean indicating if the algorithm should use the 
+#                     smooth limit for between-line flow (default = T).
+# - exp_lambda:       The exponential law parameter for the smooth limit
+#                     (default = 10).
+# - prop_limit:       The minimum percentage of flow newly entering in lines, 
+#                     used only if smooth_limit=F (default = 0.1).
+# - conv_thres_if:    A threshold for the convergence of the iterative fitting 
+#                     algorithm (default = 1e-5).
+# - conv_thres_algo:  A threshold for the convergence of the whole algorithm 
+#                     (default = 1e-5).
+# - epsilon:          A small number, added in iterative fitting to make sure 
+#                     the components are not null (default = 1e-40).
+# Out:
+# - n_mat:            A (n x n) matrix containing the origin-destination flow
+#                     when using the multiple lines network.
+#-------------------------------------------------------------------------------
+
+compute_origin_destination = function(s_mat, rho_in, rho_out, edge_ref, sp_ref,
+                                      p_mat, smooth_limit=T, exp_lambda=10,
+                                      prop_limit=0.1, conv_thres_if=1e-5,
+                                      conv_thres_algo=1e-5, epsilon=1e-40){
+  
+  
   
 }
