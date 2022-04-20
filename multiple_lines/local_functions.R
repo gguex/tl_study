@@ -277,8 +277,8 @@ build_in_out_flow = function(line_mbr, flow_in, flow_out){
 #             node index, and a boolean indicating if this is an transfer edge.
 # - sp_ref:   A (n_sp x 2) matrix, giving the source-target node pair for each 
 #             admissible shortest-path.
-# - p_mat:    A (n_sp x m) shortest-path - edges matrix, with s_{ij} = 1 iff
-#             edge j is in shortest-path i.
+# - p_mat:    A (n_sp x m) shortest-path - edges matrix, with p_{ij} = 1 iff
+#             edge j is in shortest-path i, 0 otherwise.
 # - s_mat:    A (n x n) optional affinity matrix between stops. If None is given
 #             this matrix will set to 1 for each pair having an admissible 
 #             shorest-path (default = NULL).
@@ -465,5 +465,58 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
   # --- Return results
   
   return(n_mat)
+  
+}
+
+#-------------------------------------------------------------------------------
+# Function: compute_x_from_n 
+#
+# Description:  This function compute the flow matrix on edges from the 
+#               origin-destination matrix and the network structure.
+#
+# In:
+# - n_mat:    A (n x n) matrix containing the origin-destination flow.
+# - edge_ref: A (m x 3) matrix, giving the edge starting node index, ending 
+#             node index, and a boolean indicating if this is an transfer edge.
+# - sp_ref:   A (n_sp x 2) matrix, giving the source-target node pair for each 
+#             admissible shortest-path.
+# - p_mat:    A (n_sp x m) shortest-path - edges matrix, with p_{ij} = 1 iff
+#             edge j is in shortest-path i, 0 otherwise.
+# Out:
+# - x_mat:    A (n x n) matrix of flow on each edge, with x_mat = x_wit + x_btw.
+# - x_wit:    A (n x n) matrix of flow on each edge inside lines.
+# - x_btw:    A (n x n) matrix of flow on each transfer edge between lines.
+#-------------------------------------------------------------------------------
+
+compute_x_from_n = function(n_mat, edge_ref, sp_ref, p_mat){
+  
+  # --- Get the network structure
+  
+  # Number of stops
+  n = dim(n_mat)[1]
+  # The reference of transfer edges
+  where_edge_btw = as.logical(edge_ref[, 3])
+  # The shortest-path order reference
+  sp_order_ref = mapply(function(i, j) i+n*(j-1), sp_ref[, 1], sp_ref[, 2])
+  
+  # --- Compute results 
+  
+  # Get the flow as vector in the admissible shortest-path order
+  sp_flow_vec = as.vector(n_mat)[sp_order_ref]
+  # Compute the flow on edges
+  edge_flow = as.vector(t(p_mat) %*% sp_flow_vec)
+  # Compute the matrix of edge flow
+  x_mat = as.matrix(sparseMatrix(i=edge_ref[, 1], j=edge_ref[, 2], 
+                                 x=edge_flow, dims=c(n, n)))
+  # Compute the matrix of transfer edge flow
+  x_btw = as.matrix(sparseMatrix(i=edge_ref[where_edge_btw, 1], 
+                                 j=edge_ref[where_edge_btw, 2], 
+                                 x=edge_flow[where_edge_btw], dims=c(n, n)))
+  # Compute the matrix of within line edge flow
+  x_wit = x_mat - x_btw 
+  
+  # --- Return results
+  
+  return(list(x_mat=x_mat, x_wit=x_wit, x_btw=x_btw))
   
 }

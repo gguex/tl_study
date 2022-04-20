@@ -60,9 +60,9 @@
                                      edge_ref,
                                      sp_ref, 
                                      p_mat, 
-                                     smooth_limit = smooth_limit,
-                                     prop_limit = prop_limit,
-                                     exp_lambda = exp_lambda,
+                                     smooth_limit=smooth_limit,
+                                     prop_limit=prop_limit,
+                                     exp_lambda=exp_lambda,
                                      conv_thres_algo=conv_thres_algo,
                                      conv_thres_if=conv_thres_if,
                                      epsilon=epsilon,
@@ -70,22 +70,11 @@
   
   # --- See the result
   
-  # The reference of transfer edges
-  where_edge_btw = as.logical(edge_ref[, 3])
-  # The list of in-out nodes for transfer edges 
-  edge_btw_ref = edge_ref[where_edge_btw, 1:2]
-  # The shortest-path - edge matrix retrained on transfer edges
-  p_btw_mat = p_mat[, where_edge_btw]
-  # Get the flow as vector in shortest-path order
-  sp_flow_vec = mapply(function(i, j) n_mat[i, j], sp_ref[,1], sp_ref[,2])
-  # Compute the flow on edges
-  btw_edge_flow = as.vector(t(p_btw_mat) %*% sp_flow_vec)
-  # Compute the in-out between flow on nodes 
-  x_btw = sparseMatrix(i=edge_btw_ref[, 1], j=edge_btw_ref[, 2], 
-                       x=btw_edge_flow, dims=c(length(rho_in), length(rho_in)))
-  node_in_btw = colSums(x_btw)
-  node_out_btw = rowSums(x_btw)
-  
+  # Compute the between lines flow on node 
+  x_res = compute_x_from_n(n_mat, edge_ref, sp_ref, p_mat)
+  node_in_btw = colSums(x_res$x_btw)
+  node_out_btw = rowSums(x_res$x_btw)
+
   # Update dataframe and View it
   line_res = line_df
   line_res["montees_initiales"] = round(rowSums(n_mat), 3)
@@ -99,3 +88,4 @@
   line_res["diff_out"] = round(line_res["descentes_finales"] + line_res["transferts_out"] - line_res["rho_out"], 3)
   line_res["err_out%"] = round(line_res["diff_out"] / line_res["rho_out"] * 100, 3)
   View(line_res)
+  
