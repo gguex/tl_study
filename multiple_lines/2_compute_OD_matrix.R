@@ -22,19 +22,19 @@ source("local_functions.R")
 data_folder = "multilines_data/preprocessed_data/test_6789"
 
 # Conv threshold for iterative fitting
-conv_thres_if = 100
+conv_thres_if = 1
 # Conv threshold
-conv_thres_algo = 1e-5
+conv_thres_algo = 10
 # Smooth or strict limit
 smooth_limit = F
 # lambda for exponential law
-exp_lambda = 100
+exp_lambda = 1.5
 # prop limit 
-prop_limit = 0.2
+prop_limit = 1 - 0.582812
 # epsilon
 epsilon = 1e-40
 # max iteration
-max_it = 30
+max_it = 5000
 
 #--------------------------------
 # Process

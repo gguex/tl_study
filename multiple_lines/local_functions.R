@@ -69,7 +69,6 @@ build_network_structure = function(line_mbr, tour_mbr, dist_mat, dist_thres){
 }
 
 
-
 #-------------------------------------------------------------------------------
 # Function: build_sp_data()
 #
@@ -190,7 +189,6 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, dist_mat,
 }
 
 
-
 #-------------------------------------------------------------------------------
 # Function: build_in_out_flow 
 #
@@ -306,7 +304,7 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
                                       s_mat=NULL, smooth_limit=T, exp_lambda=10,
                                       prop_limit=0.1, conv_thres_if=1e-5,
                                       conv_thres_algo=1e-5, epsilon=1e-40,
-                                      max_it=200){
+                                      max_it=200, red_tol=1e-4){
   
   # --- Get the network structure 
   
@@ -432,18 +430,20 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
     p_to_red = (btw_edge_flow - allowed_edge_flow) / (btw_edge_flow + epsilon)
     # Compute the maximum reduction needed on the shortest-path list
     max_p_to_red = apply(t(p_btw_mat) * p_to_red, 2, max)
+    max_p_to_red[max_p_to_red < red_tol] = 0
     # Convert it to a reduction factor and transform it in a s,t matrix
     red_mat = sparseMatrix(i=sp_ref[, 1], j=sp_ref[, 2], 
                            x=(1-max_p_to_red), dims=c(n, n))
     # Compute the updated version of origin-destination affinity matrix
-    s_it_mat = s_it_mat * red_mat
+    s_it_mat = as.matrix(s_it_mat * red_mat)
     
     # --- Check for convergence and iterate
     
     diff = sum(abs(n_mat_old - n_mat))
+    couple = which(red_mat == (1 - max(max_p_to_red)), arr.ind=T)[1,]
     
-    cat("It", it_algo, ": diff =", diff, ", to_red_max =", max(max_p_to_red),
-        "\n")
+    cat("It", it_algo, ": diff =", diff, ", to_red_max =", 
+        max(max_p_to_red), ", which =", couple,"\n")
     if(diff < conv_thres_algo){
       converge_algo = T
     }
