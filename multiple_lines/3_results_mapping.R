@@ -27,8 +27,12 @@ results_folder = "results/test_6789"
 # Process
 #--------------------------------
 
-# Reading results matrices 
-n_mat = 
+# --- Reading files
+
+# Reading results data 
+line_res = read.csv(paste0(results_folder, "/line_res.csv")) 
+n_mat = as.matrix(read.csv(paste0(results_folder, "/n_mat.csv"), header=F))
+x_mat = as.matrix(read.csv(paste0(results_folder, "/x_mat.csv"), header=F))
 # Reading shapefiles
 lines_shp = st_read("multilines_data/shapefiles/frequentation_lignes_tot.shp")
 stops_shp = st_read("multilines_data/shapefiles/frequentation_arrets_tot.shp")

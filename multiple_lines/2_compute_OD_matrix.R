@@ -95,5 +95,7 @@ write.table(line_res, paste0(out_folder, "/line_res.csv"), sep=",",
             row.names=F)
 write.table(x_res$x_mat, paste0(out_folder, "/x_mat.csv"), sep=",",
             row.names=F, col.names=F)
+write.table(x_res$x_btw, paste0(out_folder, "/x_btw.csv"), sep=",",
+            row.names=F, col.names=F)
 write.table(n_mat, paste0(out_folder, "/n_mat.csv"), sep=",",
             row.names=F, col.names=F)
