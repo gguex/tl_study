@@ -308,15 +308,6 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
                                       conv_thres_algo=1e-5, epsilon=1e-40,
                                       max_it=200){
   
-  # --- Timers
-  
-  time_if = c()
-  time_betw_flow = c()
-  time_allowed_flow_node = c()
-  time_allowed_flow_edge = c()
-  time_flow_update = c()
-  time_affinity_update = c()
-  
   # --- Get the network structure 
   
   # The number of stops 
@@ -327,21 +318,15 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
   edge_btw_ref = edge_ref[where_edge_btw, 1:2]
   # The shortest-path - edge matrix retrained on transfer edges
   p_btw_mat = p_mat[, where_edge_btw]
-  # The matrix of admissible sp 
+  # The shortest-path order reference
+  sp_order_ref = mapply(function(i, j) i+n*(j-1), sp_ref[, 1], sp_ref[, 2])
   
-  ######################
-  # POTENTIAL ERROR
-  ######################
-  where_adm_sp_mat = as.matrix(sparseMatrix(i=sp_ref[, 1], j=sp_ref[, 2], 
-                                        dims=c(n, n)))
-  where_adm_sp = c(where_adm_sp_mat)
   # If s_mat is not given, build it
   if(is.null(s_mat)){
-    s_mat = 1*where_adm_sp_mat
+    # The matrix of admissible sp 
+    s_mat = 1*as.matrix(sparseMatrix(i=sp_ref[, 1], j=sp_ref[, 2], 
+                                     dims=c(n, n)))
   }
-  ######################
-  # POTENTIAL ERROR
-  ######################
   
   # --- Algorithm 
   
@@ -365,8 +350,6 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
     
     # --- Iterative fitting 
     
-    t1 = Sys.time()
-    
     n_mat = s_it_mat + epsilon
     converge_if = F
     while(!converge_if){
@@ -382,21 +365,10 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
       }
     }
     
-    t2 = Sys.time()
-    time_if = c(time_if, as.numeric(t2-t1))
-    
     # --- Find between flow for edges and nodes
     
-    t1 = Sys.time()
-    
-    ######################
-    # POTENTIAL ERROR
-    ######################
-    # Get the flow as vector in shortest-path order
-    sp_flow_vec = as.vector(n_mat)[where_adm_sp]
-    ######################
-    # POTENTIAL ERROR
-    ######################
+    # Get the flow as vector in the admissible shortest-path order
+    sp_flow_vec = as.vector(n_mat)[sp_order_ref]
     # Compute the flow on edges
     btw_edge_flow = as.vector(t(p_btw_mat) %*% sp_flow_vec)
     
@@ -406,12 +378,7 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
     node_in_btw = colSums(x_btw)
     node_out_btw = rowSums(x_btw)
     
-    t2 = Sys.time()
-    time_betw_flow = c(time_betw_flow, as.numeric(t2-t1))
-    
-    # --- Compute the allowed flow on node
-    
-    t1 = Sys.time()
+    # --- Compute the allowed flow on nodes
     
     # If smooth limit
     if(smooth_limit){
@@ -437,12 +404,7 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
         rho_out[allowed_out_btw > rho_out*(1 - prop_limit)]*(1 - prop_limit)
     }
     
-    t2 = Sys.time()
-    time_allowed_flow_node = c(time_allowed_flow_node, as.numeric(t2-t1))
-    
     # --- Compute the allowed flow on edge
-    
-    t1 = Sys.time()
     
     # Compute the proportion of allowed flow
     p_allowed_in = allowed_in_btw / (node_in_btw + epsilon)
@@ -455,12 +417,7 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
       edge_btw_ref[ ,1], edge_btw_ref[,2])
     allowed_edge_flow = p_allowed_min * btw_edge_flow
     
-    t2 = Sys.time()
-    time_allowed_flow_edge = c(time_allowed_flow_edge, as.numeric(t2-t1))
-    
     # --- Update the flow entering and leaving the network
-    
-    t1 = Sys.time()
     
     # Set the allowed flow in a matrix
     allowed_flow_mat = sparseMatrix(i=edge_btw_ref[, 1], j=edge_btw_ref[, 2],
@@ -469,12 +426,7 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
     sigma_in = rho_in - colSums(allowed_flow_mat)
     sigma_out = rho_out - rowSums(allowed_flow_mat)
     
-    t2 = Sys.time()
-    time_flow_update = c(time_flow_update, as.numeric(t2-t1))
-    
     # --- Compute the reducing factor and update the affinity matrix
-    
-    t1 = Sys.time()
     
     # Compute the excess proportion of flow
     p_to_red = (btw_edge_flow - allowed_edge_flow) / (btw_edge_flow + epsilon)
@@ -485,9 +437,6 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
                            x=(1-max_p_to_red), dims=c(n, n))
     # Compute the updated version of origin-destination affinity matrix
     s_it_mat = s_it_mat * red_mat
-    
-    t2 = Sys.time()
-    time_affinity_update = c(time_affinity_update, as.numeric(t2-t1))
     
     # --- Check for convergence and iterate
     
@@ -503,14 +452,7 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
     it_algo = it_algo + 1
   }
   
-  # --- Return results 
-  
-  cat(  "time_if", mean(time_if),
-        "|time_betw_flow", mean(time_betw_flow),
-        "|time_allowed_flow_node", mean(time_allowed_flow_node),
-        "|time_allowed_flow_edge", mean(time_allowed_flow_edge),
-        "|time_flow_update", mean(time_flow_update),
-        "|time_affinity_update", mean(time_affinity_update))
+  # --- Return results
   
   return(n_mat)
   
