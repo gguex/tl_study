@@ -20,6 +20,8 @@
   
   # The folder containing preprocessed data
   data_folder = "multilines_data/preprocessed_data/test_6789"
+  # Output folder for results
+  out_folder = "results/test_6789"
   
   # Conv threshold for iterative fitting
   conv_thres_if = 10
@@ -28,13 +30,13 @@
   # Smooth or strict limit
   smooth_limit = T
   # lambda for exponential law
-  exp_lambda = 3
+  exp_lambda = 1.5
   # prop limit 
   prop_limit = 0.2
   # epsilon
   epsilon = 1e-40
   # max iteration
-  max_it = 5000
+  max_it = 200
   
   #--------------------------------
   # Process
@@ -74,6 +76,12 @@
   x_res = compute_x_from_n(n_mat, edge_ref, sp_ref, p_mat)
   node_in_btw = colSums(x_res$x_btw)
   node_out_btw = rowSums(x_res$x_btw)
+  
+  # Save data 
+  write.table(x_res$x_mat, paste0(out_folder, "/x_mat.csv"), sep=",",
+              row.names=F, col.names=F)
+  write.table(n_mat, paste0(out_folder, "/n_mat.csv"), sep=",",
+              row.names=F, col.names=F)
 
   # Update dataframe and View it
   line_res = line_df
