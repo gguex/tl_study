@@ -30,7 +30,7 @@ conv_thres_algo = 0.1
 # Smooth or strict limit
 smooth_limit = T
 # lambda for exponential law
-exp_lambda = 1.5
+exp_lambda = 2
 # prop limit 
 prop_limit = 0.2
 # epsilon
@@ -70,14 +70,14 @@ n_mat = compute_origin_destination(rho_in,
                                    epsilon=epsilon,
                                    max_it=max_it)
 
-# --- See the result
+# --- Save the results
 
 # Compute the between lines flow on node 
 x_res = compute_x_from_n(n_mat, edge_ref, sp_ref, p_mat)
 node_in_btw = colSums(x_res$x_btw)
 node_out_btw = rowSums(x_res$x_btw)
 
-# Update dataframe
+# Updated dataframe
 line_res = line_df
 line_res["sigma_in"] = round(rowSums(n_mat), 3)
 line_res["transferts_in"] = round(node_in_btw, 3)
@@ -86,16 +86,16 @@ line_res["diff_in"] = round(line_res["sigma_in"] + line_res["transferts_in"] - l
 line_res["err_in%"] = round(line_res["diff_in"] / line_res["rho_in"] * 100, 3)
 line_res["sigma_out"] = round(colSums(n_mat), 3)
 line_res["transferts_out"] = round(node_out_btw, 3)
-line_res["transferts_out%"] = round(line_res["sigma_out"] / line_res["rho_out"] * 100, 3)
+line_res["transferts_out%"] = round(line_res["transferts_out"] / line_res["rho_out"] * 100, 3)
 line_res["diff_out"] = round(line_res["sigma_out"] + line_res["transferts_out"] - line_res["rho_out"], 3)
 line_res["err_out%"] = round(line_res["diff_out"] / line_res["rho_out"] * 100, 3)
 
 # Save data 
 write.table(line_res, paste0(out_folder, "/line_res.csv"), sep=",",
             row.names=F)
+write.table(n_mat, paste0(out_folder, "/n_mat.csv"), sep=",",
+            row.names=F, col.names=F)
 write.table(x_res$x_mat, paste0(out_folder, "/x_mat.csv"), sep=",",
             row.names=F, col.names=F)
 write.table(x_res$x_btw, paste0(out_folder, "/x_btw.csv"), sep=",",
-            row.names=F, col.names=F)
-write.table(n_mat, paste0(out_folder, "/n_mat.csv"), sep=",",
             row.names=F, col.names=F)
