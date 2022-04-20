@@ -304,7 +304,7 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
                                       s_mat=NULL, smooth_limit=T, exp_lambda=10,
                                       prop_limit=0.1, conv_thres_if=1e-5,
                                       conv_thres_algo=1e-5, epsilon=1e-40,
-                                      max_it=200, red_tol=1e-4){
+                                      max_it=200){
   
   # --- Get the network structure 
   
@@ -345,6 +345,9 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
     # --- Save old values
     
     n_mat_old = n_mat
+    s_it_mat_old = s_it_mat
+    sigma_in_old = sigma_in
+    sigma_out_old = sigma_out
     
     # --- Iterative fitting 
     
@@ -430,7 +433,6 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
     p_to_red = (btw_edge_flow - allowed_edge_flow) / (btw_edge_flow + epsilon)
     # Compute the maximum reduction needed on the shortest-path list
     max_p_to_red = apply(t(p_btw_mat) * p_to_red, 2, max)
-    max_p_to_red[max_p_to_red < red_tol] = 0
     # Convert it to a reduction factor and transform it in a s,t matrix
     red_mat = sparseMatrix(i=sp_ref[, 1], j=sp_ref[, 2], 
                            x=(1-max_p_to_red), dims=c(n, n))
@@ -439,11 +441,19 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
     
     # --- Check for convergence and iterate
     
+    # Compute iteration statistics
     diff = sum(abs(n_mat_old - n_mat))
+    diff_s_it = sum(abs(s_it_mat_old - s_it_mat))
+    diff_sigma_in = sum(abs(sigma_in_old - sigma_in))
+    diff_sigma_out = sum(abs(sigma_out_old - sigma_out))
     couple = which(red_mat == (1 - max(max_p_to_red)), arr.ind=T)[1,]
     
-    cat("It", it_algo, ": diff =", diff, ", to_red_max =", 
-        max(max_p_to_red), ", which =", couple,"\n")
+    # Print iteration statistics
+    cat("It", it_algo, ": diff =", diff, ", diff_si =", diff_s_it, 
+        ", diff_in =", diff_sigma_in, ", diff_out =", diff_sigma_out, 
+        ", to_red_max =", max(max_p_to_red), ", which =", couple,"\n")
+    
+    # Check for convergence
     if(diff < conv_thres_algo){
       converge_algo = T
     }
