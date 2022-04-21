@@ -1,0 +1,19 @@
+\frametitle{Context}
+\scriptsize
+\begin{center}
+\begin{verbatim}
+     ##   stop_id  stop_name line_id direction order embarkment disembarkment
+     ## 1 MALAD_N  Maladière       1         A     1     164558             0
+     ## 2 MTOIE_E    Montoie       1         A     2     136236         12705
+     ## 3 BATEL_E  Batelière       1         A     3     203045         13409
+     ## 4 RTCOU_E Riant-Cour       1         A     4     156015         24909
+
+     ##    stop_id  stop_name line_id direction order embarkment disembarkment
+     ## 42 RTCOU_O Riant-Cour       1         R    19      23634        132201
+     ## 43 BATEL_O  Batelière       1         R    20      13707        168884
+     ## 44 MTOIE_O    Montoie       1         R    21       4259        128255
+     ## 45 MALAD_N  Maladière       1         R    22          0        146798
+\end{verbatim}
+
+\includegraphics[width=0.7\textwidth]{img/tl_network.png}
+\end{center}
