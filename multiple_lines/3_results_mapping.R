@@ -127,7 +127,7 @@ line_map = leaflet() %>%
                style = list("font-weight" = "normal", padding = "3px 8px"),
                textsize = "15px",
                direction = "auto"),
-             group = as.character(paste(stops_i_shp$direction_,stops_i_shp$code_ligne)) # groupes séparés par ligne
+             group = as.character(lines_i_shp$code_ligne) # groupes séparés par ligne
   ) %>%
   addPolylines(data=lines_i_shp,
                layerId = lines_i_shp$code_ligne,
