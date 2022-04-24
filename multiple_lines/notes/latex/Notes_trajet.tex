@@ -15,9 +15,9 @@
 
 \subsection{The transportation network with multiple lines}
 
-Let $\mathcal{G} = (\mathcal{V}, \mathcal{E})$ be a simple, oriented, and connected graph representing a transportation network between $|\mathcal{V}| = n$ nodes, having $|\mathcal{E}| = m$ edges, and possessing $p$ different transportation lines. Each node belongs to only one line, i.e. $\mathcal{V} = \bigcup_{k=1}^p \mathcal{V}_k$ and $\mathcal{V}_k \cap \mathcal{V}_l = \emptyset, \, \forall k,l$, where $\mathcal{V}_k$ represents the set of nodes in line $k$. The edge set $\mathcal{E}$, can also be decomposed with
+Let $\mathcal{G} = (\mathcal{V}, \mathcal{E})$ be a simple, oriented, and connected graph representing a transportation network between $|\mathcal{V}| = n$ nodes, having $|\mathcal{E}| = m$ edges, and possessing $p$ different transportation lines. Each node belongs to only one line, i.e. $\mathcal{V} = \bigcup_{k=1}^p \mathcal{V}_k$ and $\mathcal{V}_k \cap \mathcal{V}_l = \emptyset, \, \forall k\neq l$, where $\mathcal{V}_k$ represents the set of nodes in line $k$. The edge set $\mathcal{E}$, can also be decomposed with
 \begin{equation}
-\mathcal{E} = \mathcal{E}_\text{W} \cup \mathcal{E}_\text{B}, \qquad \mathcal{E}_\text{W} := \bigcup_{k=1}^p \mathcal{E}_k, \qquad \mathcal{E}_\text{W} \cap \mathcal{E}_\text{B} = \emptyset, \quad \mathcal{E}_k \cap \mathcal{E}_l = \emptyset, \quad \forall k, l.
+\mathcal{E} = \mathcal{E}_\text{W} \cup \mathcal{E}_\text{B}, \qquad \mathcal{E}_\text{W} := \bigcup_{k=1}^p \mathcal{E}_k, \qquad \mathcal{E}_\text{W} \cap \mathcal{E}_\text{B} = \emptyset, \quad \mathcal{E}_k \cap \mathcal{E}_l = \emptyset, \quad \forall k\neq l.
 \end{equation}
 where $\mathcal{E}_k$ is the set of edges composing line $k$, $\mathcal{E}_\text{W}$ the set containing all edges inside lines, and $\mathcal{E}_\text{B}$ the set of transfer edges, connecting the different lines. \\
 The graph $\mathcal{G}$ can be represented by its adjacency matrix $\mathbf{A} = (a_{ij})$, which can also be decomposed with 
