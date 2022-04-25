@@ -165,15 +165,38 @@
 	%------------------------------------------------------------------
 	
 	\begin{frame}{Formal problem definition}
+		\small
+		It reads:
 		$$
-		 \mathbf{N} = \bordermatrix{
-			   & \sigma^\text{out}_1 & \sigma^\text{out}_2  & \cdots & \sigma^\text{out}_{n-1} & \sigma^\text{out}_n   \cr
+		\mathbf{N} = \bordermatrix{
+			& \sigma^\text{out}_1 & \sigma^\text{out}_2  & \cdots & \sigma^\text{out}_{n-1} & \sigma^\text{out}_n   \cr
 			\sigma^\text{in}_1 & n_{11} & n_{12} & \cdots & n_{1,n-1} & n_{1n} \cr
 			\sigma^\text{in}_2 & n_{21} & n_{22} & \cdots & n_{2,n-1} & n_{2n} \cr
 			\vdots & \vdots & \vdots & \ddots & \vdots & \vdots \cr
 			\sigma^\text{in}_{n-1} & n_{n-1,1} & n_{n-1,2} & \cdots & n_{n-1,n-1} & n_{n-1,n} \cr
 			\sigma^\text{in}_{n} & n_{n,1} & n_{n,2} & \cdots & n_{n,n-1} & n_{n,n}}
 		$$
+		
+		In fact, we already know that some components are null:
+		$$
+		\mathbf{N} = \bordermatrix{
+			& \imp{0} & \sigma^\text{out}_2  & \cdots & \sigma^\text{out}_{n-1} & \sigma^\text{out}_n   \cr
+			\sigma^\text{in}_1 & \imp{0} & n_{12} & \cdots & n_{1,n-1} & n_{1n} \cr
+			\sigma^\text{in}_2 & \imp{0} & \imp{0} & n_{23} & \cdots & n_{2n} \cr
+			\vdots & \vdots & \vdots & \ddots & \ddots & \vdots \cr
+			\sigma^\text{in}_{n-1} & \imp{0} & \imp{0} & \cdots & \imp{0} & n_{n-1,n} \cr
+			\imp{0} & \imp{0} & \imp{0} & \cdots & \imp{0} & \imp{0}}
+		$$
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{Formal problem definition}
+		
+		In this form, the problem is \imp{ill posed}, because it has multiple solutions. An exemple of solution is to make passengers follow a \imp{first in, first out (FIFO)} scheme. \\
+		\vspace{0.4cm}
+		In such a case, a principle of mathematical modeling is to find the solution which makes the \imp{least assumptions about passenger behavior}.
+		
 	\end{frame}
 	
 	%------------------------------------------------------------------
