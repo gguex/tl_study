@@ -2,6 +2,8 @@
 \usetheme[progressbar=frametitle]{metropolis}
 
 \usepackage [autostyle, english = american]{csquotes}
+\usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{bm}
 
 \MakeOuterQuote{"}
@@ -77,7 +79,7 @@
 	\begin{frame}{The multiple lines network}
 		\begin{columns}
 			\begin{column}{0.5\textwidth}
-				Having only lines data, we have a \imp{disconnected oriented graph}. \linebreak
+				Having only lines data, the structure is a \imp{disconnected oriented graph}. \linebreak
 				
 				In addition to \imp{line edges}, it is possible to construct \imp{transfer edges} to make the graph connected, by using, e.g.,
 				\begin{itemize}
@@ -86,7 +88,7 @@
 					\item Distance.
 				\end{itemize} 
 				\vspace{0.4cm}
-				This is what we call a \imp{multiple lines network}.
+				With transfer edges, we have a \imp{unilaterally connected graph}.
 			\end{column}
 			\begin{column}{0.5\textwidth} 
 				\begin{center}
@@ -145,7 +147,33 @@
 	%------------------------------------------------------------------
 	
 	\begin{frame}{Formal problem definition}
-		Let a line (in one direction), which have $n$ stops. Let $\bm{\rho}_\text{in} = (\rho^\text{in}_i)$ and $\bm{\rho}_\text{out} = (\rho^\text{out}_i)$ be two vectors representing, respectively, the passengers entering and leaving the line at each stops.
+		Let a line (in one direction), which have $n$ stops. Let $\bm{\rho}_\text{in} = (\rho^\text{in}_s)$ and $\bm{\rho}_\text{out} = (\rho^\text{out}_t)$ be two vectors representing, respectively, the \imp{passengers entering and leaving lines at each stop}. \\
+		\vspace{0.4cm}
+		We search a $(n \times n)$ \imp{origin-destination matrix} $\mathbf{N} = (n_{st})$ where components represents
+		$$
+			n_{st} = \text{"\imp{the number of passengers entering line at $s$ and leaving at $t$}"}.
+		$$
+		These components must verify
+		\begin{enumerate}
+			\item $n_{st} \geq 0$,
+			\item $n_{s\bullet} = \rho^\text{in}_s$,
+			\item $n_{\bullet t} = \rho^\text{out}_t$.
+		\end{enumerate}
+		\small ($\bullet$ indicates a sum on the replaced index)
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{Formal problem definition}
+		$$
+		 \mathbf{N} = \bordermatrix{
+			   & \sigma^\text{out}_1 & \sigma^\text{out}_2  & \cdots & \sigma^\text{out}_{n-1} & \sigma^\text{out}_n   \cr
+			\sigma^\text{in}_1 & n_{11} & n_{12} & \cdots & n_{1,n-1} & n_{1n} \cr
+			\sigma^\text{in}_2 & n_{21} & n_{22} & \cdots & n_{2,n-1} & n_{2n} \cr
+			\vdots & \vdots & \vdots & \ddots & \vdots & \vdots \cr
+			\sigma^\text{in}_{n-1} & n_{n-1,1} & n_{n-1,2} & \cdots & n_{n-1,n-1} & n_{n-1,n} \cr
+			\sigma^\text{in}_{n} & n_{n,1} & n_{n,2} & \cdots & n_{n,n-1} & n_{n,n}}
+		$$
 	\end{frame}
 	
 	%------------------------------------------------------------------
