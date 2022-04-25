@@ -32,8 +32,30 @@
 \headcommand {\beamer@framepages {13}{13}}
 \headcommand {\slideentry {2}{0}{5}{14/14}{}{0}}
 \headcommand {\beamer@framepages {14}{14}}
-\headcommand {\beamer@partpages {1}{14}}
-\headcommand {\beamer@subsectionpages {10}{14}}
-\headcommand {\beamer@sectionpages {10}{14}}
-\headcommand {\beamer@documentpages {14}}
-\headcommand {\gdef \inserttotalframenumber {11}}
+\headcommand {\slideentry {2}{0}{6}{15/15}{}{0}}
+\headcommand {\beamer@framepages {15}{15}}
+\headcommand {\slideentry {2}{0}{7}{16/16}{}{0}}
+\headcommand {\beamer@framepages {16}{16}}
+\headcommand {\beamer@sectionpages {10}{16}}
+\headcommand {\beamer@subsectionpages {10}{16}}
+\headcommand {\sectionentry {3}{Iterative proportial fitting}{17}{Iterative proportial fitting}{0}}
+\headcommand {\slideentry {3}{0}{1}{17/17}{}{0}}
+\headcommand {\beamer@framepages {17}{17}}
+\headcommand {\slideentry {3}{0}{2}{18/18}{}{0}}
+\headcommand {\beamer@framepages {18}{18}}
+\headcommand {\slideentry {3}{0}{3}{19/19}{}{0}}
+\headcommand {\beamer@framepages {19}{19}}
+\headcommand {\slideentry {3}{0}{4}{20/20}{}{0}}
+\headcommand {\beamer@framepages {20}{20}}
+\headcommand {\beamer@sectionpages {17}{20}}
+\headcommand {\beamer@subsectionpages {17}{20}}
+\headcommand {\sectionentry {4}{The multiple lines problem}{21}{The multiple lines problem}{0}}
+\headcommand {\slideentry {4}{0}{1}{21/21}{}{0}}
+\headcommand {\beamer@framepages {21}{21}}
+\headcommand {\slideentry {4}{0}{2}{22/22}{}{0}}
+\headcommand {\beamer@framepages {22}{22}}
+\headcommand {\beamer@partpages {1}{22}}
+\headcommand {\beamer@subsectionpages {21}{22}}
+\headcommand {\beamer@sectionpages {21}{22}}
+\headcommand {\beamer@documentpages {22}}
+\headcommand {\gdef \inserttotalframenumber {17}}

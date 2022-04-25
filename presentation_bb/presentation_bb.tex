@@ -2,9 +2,10 @@
 \usetheme[progressbar=frametitle]{metropolis}
 
 \usepackage [autostyle, english = american]{csquotes}
+\DeclareFontShape{OT1}{cmss}{b}{n}{<->ssub * cmss/bx/n}{} 
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{bm}
+\usepackage{bm} 
 
 \MakeOuterQuote{"}
 \newcommand{\imp}[1]{\textbf{\color{cyan}#1}}
@@ -130,7 +131,7 @@
 	
 	\begin{frame}{The problematic}
 		
-		Exact trajectories are impossible to know, but with additional hypotheses, we can \imp{estimate} them. \\
+		Exact trajectories are impossible to know, but we can \imp{estimate} them. \\
 		\vspace{0.4cm}
 		We will divide this problematic into two parts:
 		\begin{itemize}
@@ -147,7 +148,7 @@
 	%------------------------------------------------------------------
 	
 	\begin{frame}{Formal problem definition}
-		Let a line (in one direction), which have $n$ stops. Let $\bm{\rho}_\text{in} = (\rho^\text{in}_s)$ and $\bm{\rho}_\text{out} = (\rho^\text{out}_t)$ be two vectors representing, respectively, the \imp{passengers entering and leaving lines at each stop}. \\
+		Let a line (in one direction), which have $n$ stops, indexed by line order. Let $\bm{\rho}_\text{in} = (\rho^\text{in}_s)$ and $\bm{\rho}_\text{out} = (\rho^\text{out}_t)$ be two vectors representing, respectively, the \imp{passengers entering and leaving lines at each stop}. \\
 		\vspace{0.4cm}
 		We search a $(n \times n)$ \imp{origin-destination matrix} $\mathbf{N} = (n_{st})$ where components represents
 		$$
@@ -169,22 +170,22 @@
 		It reads:
 		$$
 		\mathbf{N} = \bordermatrix{
-			& \sigma^\text{out}_1 & \sigma^\text{out}_2  & \cdots & \sigma^\text{out}_{n-1} & \sigma^\text{out}_n   \cr
-			\sigma^\text{in}_1 & n_{11} & n_{12} & \cdots & n_{1,n-1} & n_{1n} \cr
-			\sigma^\text{in}_2 & n_{21} & n_{22} & \cdots & n_{2,n-1} & n_{2n} \cr
+			& \rho^\text{out}_1 & \rho^\text{out}_2  & \cdots & \rho^\text{out}_{n-1} & \rho^\text{out}_n   \cr
+			\rho^\text{in}_1 & n_{11} & n_{12} & \cdots & n_{1,n-1} & n_{1n} \cr
+			\rho^\text{in}_2 & n_{21} & n_{22} & \cdots & n_{2,n-1} & n_{2n} \cr
 			\vdots & \vdots & \vdots & \ddots & \vdots & \vdots \cr
-			\sigma^\text{in}_{n-1} & n_{n-1,1} & n_{n-1,2} & \cdots & n_{n-1,n-1} & n_{n-1,n} \cr
-			\sigma^\text{in}_{n} & n_{n,1} & n_{n,2} & \cdots & n_{n,n-1} & n_{n,n}}
+			\rho^\text{in}_{n-1} & n_{n-1,1} & n_{n-1,2} & \cdots & n_{n-1,n-1} & n_{n-1,n} \cr
+			\rho^\text{in}_{n} & n_{n,1} & n_{n,2} & \cdots & n_{n,n-1} & n_{n,n}}
 		$$
 		
 		In fact, we already know that some components are null:
 		$$
 		\mathbf{N} = \bordermatrix{
-			& \imp{0} & \sigma^\text{out}_2  & \cdots & \sigma^\text{out}_{n-1} & \sigma^\text{out}_n   \cr
-			\sigma^\text{in}_1 & \imp{0} & n_{12} & \cdots & n_{1,n-1} & n_{1n} \cr
-			\sigma^\text{in}_2 & \imp{0} & \imp{0} & n_{23} & \cdots & n_{2n} \cr
+			& \imp{0} & \rho^\text{out}_2  & \cdots & \rho^\text{out}_{n-1} & \rho^\text{out}_n \cr
+			\rho^\text{in}_1 & \imp{0} & n_{12} & \cdots & n_{1,n-1} & n_{1n} \cr
+			\rho^\text{in}_2 & \imp{0} & \imp{0} & n_{23} & \cdots & n_{2n} \cr
 			\vdots & \vdots & \vdots & \ddots & \ddots & \vdots \cr
-			\sigma^\text{in}_{n-1} & \imp{0} & \imp{0} & \cdots & \imp{0} & n_{n-1,n} \cr
+			\rho^\text{in}_{n-1} & \imp{0} & \imp{0} & \cdots & \imp{0} & n_{n-1,n} \cr
 			\imp{0} & \imp{0} & \imp{0} & \cdots & \imp{0} & \imp{0}}
 		$$
 	\end{frame}
@@ -195,9 +196,107 @@
 		
 		In this form, the problem is \imp{ill posed}, because it has multiple solutions. An exemple of solution is to make passengers follow a \imp{first in, first out (FIFO)} scheme. \\
 		\vspace{0.4cm}
-		In such a case, a principle of mathematical modeling is to find the solution which makes the \imp{least assumptions about passenger behavior}.
+		A principle of mathematical modeling is to find the solution which makes the \imp{least assumptions about passenger behavior}, in other words the \imp{maximum entropy solution}. \\
+		\vspace{0.4cm}
+		In this case, it translates by supposing that there is the \imp{same probability of leaving the line for every passenger which have traveled at least one stop}.
 		
 	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{Solution with Markov chain modeling}
+		
+		We can then model passenger flow with a \imp{Markov chain}:
+		
+		\begin{center}
+			\includegraphics[width=0.8\linewidth]{img/line_markov.png} 
+		\end{center}
+		
+		with $p^\text{in}_i = \frac{\rho^\text{in}_i}{\rho^\text{in}_\bullet}$ and $p^\text{out}_i = \frac{\rho^\text{out}_i}{\sum_{1 \leq k \leq (i-1)} (\rho^\text{in}_k - \rho^\text{out}_k)}$.
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{Solution with Markov chain modeling}
+
+		\begin{center}
+			\includegraphics[width=\textwidth]{img/stop_distributions.png} 
+		\end{center}
+	
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{Solution with Markov chain modeling}
+		
+		\begin{center}
+			\includegraphics[width=\textwidth]{img/length_exp.png} 
+		\end{center}
+		
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\section{Iterative proportial fitting}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{Iterative proportional fitting}
+	
+	The same solution can be obtained with the \imp{iterative proportional fitting (IPF)} algorithm. Let 
+	\begin{enumerate}
+		\item $\mathbf{P} = (p_{ij})$ a $(n \times m)$ matrix, 
+		\item $\mathbf{u} = (u_i)$ a n-length vector, and 
+		\item $\mathbf{v} = (v_i)$ a m-length vector,
+	\end{enumerate}
+	all of them with strictly positive components. We can find two vectors $\mathbf{a} = (a_i)$ and $\mathbf{b} = (b_i)$ such that the matrix $\mathbf{Q} = (q_{ij})$, defined with
+	$$
+		q_{ij} = a_i b_j p_{ij},
+	$$
+	verifies
+	\begin{itemize}
+		\item $q_{i\bullet} = u_i$,
+		\item $q_{\bullet j} = v_j$,
+		\item $K(\mathbf{Q}| \mathbf{P}) := \sum_{ij} \frac{q_{ij}}{q_{\bullet \bullet}} \log \left( \frac{q_{ij} / q_{\bullet \bullet}}{p_{ij} / p_{\bullet \bullet}} \right)$ is minimum.
+	\end{itemize}
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{Solution with iterative proportional fitting}
+		
+		In our context, it means that if we define an \imp{origin-destination affinity matrix} $\mathbf{S} = (s_{st})$ with 
+			$$
+				\mathbf{S} = \left( \begin{array}{ccccc}
+				0 & 1 & \cdots & 1 & 1 \\
+				0 & 0 & 1 & \cdots & 1 \\
+				\vdots & \vdots & \ddots & \ddots & \vdots \\
+				0 & 0 & \cdots & 0 & 1 \\
+				0 & 0 & \cdots & 0 & 0 
+				\end{array} \right)
+			$$
+		we can find the \imp{maximum entropy solution with iterative proportional fitting}, i.e we find $\mathbf{a} = (a_s)$ and $\mathbf{b} = (b_t)$, such that $n_{ij} = a_s b_t s_{st}$ verify:
+		\begin{enumerate}
+			\item $n_{s\bullet} = \rho^\text{in}_s$,
+			\item $n_{\bullet t} = \rho^\text{out}_t$,
+			\item $K(\mathbf{N}| \mathbf{S})$ is minimum.
+		\end{enumerate}
+		\small (a small number $\epsilon$ has to be added on null components).
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{Solution with iterative proportional fitting}
+		By \imp{decreasing (resp. increasing) $s_{st}$}, we \imp{reduce (resp. expand)} the resulting number of passengers going from $s$ to $t$ obtained with IPF. \\
+		\vspace{0.4cm}
+		Thus, this approach is more \imp{flexible}, because we could give a \imp{specific affinity matrix $\mathbf{S} = (s_{st})$}, based on other data (additional assumptions).\\
+		\vspace{0.4cm}
+		The relationship $n_{ij} = a_s b_t s_{st}$ can be seen as a \imp{gravity model} (still to investigate).
+	\end{frame}
+		
+	%------------------------------------------------------------------
+	
+	\section{The multiple lines problem}
 	
 	%------------------------------------------------------------------
 	
