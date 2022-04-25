@@ -84,7 +84,7 @@ stops_sel_shp = stops_shp %>%
 
 # --- Creating big shapefiles from results  
 
-id_stop = 50
+id_stop = 160
 
 # Getting the ingoing and outgoing flow for each stops
 init_stop = stop_names[id_stop]
