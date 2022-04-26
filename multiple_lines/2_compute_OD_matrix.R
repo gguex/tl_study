@@ -36,7 +36,7 @@ prop_limit = 0.2
 # epsilon
 epsilon = 1e-40
 # max iteration
-max_it = 200
+max_it = 50
 
 #--------------------------------
 # Process

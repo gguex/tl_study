@@ -14,7 +14,7 @@
 % Title 
 
 \title{Estimation of flow trajectories in a multiple lines network}
-\subtitle{Case studies with \textit{transports publics de la région lausannoise} (tl) data}
+\subtitle{Experiments with \textit{transports publics de la région lausannoise} (tl) data}
 \date{}
 \author{Guillaume Guex \\ Romain Loup \\ François Bavaud}
 \institute{University of Lausanne}
@@ -103,7 +103,7 @@
 	
 	%------------------------------------------------------------------
 
-	\begin{frame}{The problematic}
+	\begin{frame}{Problematic}
 		
 		This dataset offers multiple axes of research. In this presentation, we will focus on one question: \vspace{0.4cm}
 		
@@ -117,7 +117,7 @@
 
 	%------------------------------------------------------------------
 	
-	\begin{frame}{The problematic}
+	\begin{frame}
 
 		\begin{center}
 			\huge Thank you for your attention ! \\
@@ -153,9 +153,9 @@
 	\begin{frame}{Formal problem definition}
 		Let a line (in one direction), which have $n$ stops, indexed by line order. Let $\bm{\rho}_\text{in} = (\rho^\text{in}_s)$ and $\bm{\rho}_\text{out} = (\rho^\text{out}_t)$ be two vectors representing, respectively, the \imp{passengers entering and leaving lines at each stop}. \\
 		\vspace{0.4cm}
-		We search a $(n \times n)$ \imp{origin-destination matrix} $\mathbf{N} = (n_{st})$ where components represents
+		We search a $(n \times n)$ \imp{origin-destination matrix $\mathbf{N} = (n_{st})$} where components represents
 		$$
-			n_{st} = \text{"\imp{the number of passengers entering line at $s$ and leaving at $t$}"}.
+			{\color{cyan} n_{st} = \text{"the number of passengers entering line at $s$ and leaving at $t$"}}.
 		$$
 		These components must verify
 		\begin{enumerate}
@@ -246,7 +246,7 @@
 	
 	\begin{frame}{Iterative proportional fitting}
 	
-	The same solution can be obtained with the \imp{iterative proportional fitting (IPF)} algorithm. Let 
+	The same solution can be obtained with the \imp{iterative proportional fitting (IPF)} algorithm [Bishop et al., 1975]. Let 
 	\begin{enumerate}
 		\item $\mathbf{P} = (p_{ij})$ a $(n \times m)$ matrix, 
 		\item $\mathbf{u} = (u_i)$ a n-length vector, and 
@@ -268,7 +268,7 @@
 	
 	\begin{frame}{Solution with iterative proportional fitting}
 		
-		In our context, it means that if we define an \imp{origin-destination affinity matrix} $\mathbf{S} = (s_{st})$ with 
+		In our context, it means that if we define an \imp{origin-destination affinity matrix $\mathbf{S} = (s_{st})$} with 
 			$$
 				\mathbf{S} = \left( \begin{array}{ccccc}
 				0 & 1 & 1 & \cdots & 1 \\
@@ -278,7 +278,7 @@
 				0 & 0 & \cdots & 0 & 0 
 				\end{array} \right)
 			$$
-		we can find the \imp{maximum entropy solution with iterative proportional fitting}, i.e we find $\mathbf{a} = (a_s)$ and $\mathbf{b} = (b_t)$, such that $n_{ij} = a_s b_t s_{st}$ verify:
+		we can find the \imp{maximum entropy solution with iterative proportional fitting}, i.e., we can find $\mathbf{a} = (a_s)$ and $\mathbf{b} = (b_t)$, such that $n_{ij} = a_s b_t s_{st}$ verifies
 		\begin{enumerate}
 			\item $n_{s\bullet} = \rho^\text{in}_s$,
 			\item $n_{\bullet t} = \rho^\text{out}_t$,
@@ -294,7 +294,7 @@
 		\vspace{0.4cm}
 		Thus, this approach is more \imp{flexible}, because we could give a \imp{specific affinity matrix $\mathbf{S} = (s_{st})$}, based on other data (additional assumptions).\\
 		\vspace{0.4cm}
-		The relationship $n_{ij} = a_s b_t s_{st}$ can be seen as a \imp{gravity model} (still to investigate).
+		The relationship $n_{st} = a_s b_t s_{st}$ can be seen as a \imp{gravity model} (still to investigate).
 	\end{frame}
 		
 	%------------------------------------------------------------------
@@ -308,10 +308,10 @@
 		In this problem, we will have to use the whole multiple lines network, which is composed of \imp{line edges} and \imp{transfer edges}.
 		
 		\begin{center}
-			\includegraphics[width=0.5\textwidth]{img/edge_type2.png}
+			\includegraphics[width=0.45\textwidth]{img/edge_type2.png}
 		\end{center}
 	
-		We cannot use a Markov chain modeling in this case, but the \imp{iterative proportional fitting} approach is still promising. However, there are \imp{additional difficulties}.
+		It is not possible to use a Markov chain modeling in this case, but the \imp{iterative proportional fitting} approach is still valid. However, there are \imp{additional difficulties}.
 		
 	\end{frame}
 	
@@ -328,12 +328,16 @@
 	
 		At each stop $i$, we have 
 		
-		\begin{itemize}
-			\item $\rho^\text{in}_i = \sigma^\text{in}_i + x^\text{B}_{\bullet i}$,
-			\item $\rho^\text{out}_i = \sigma^\text{out}_i + x^\text{B}_{i \bullet}$,
-		\end{itemize}
+		\begin{align*}
+			\rho^\text{in}_i &= \sigma^\text{in}_i + x^\text{B}_{\bullet i}, \\
+			\rho^\text{out}_i &= \sigma^\text{out}_i + x^\text{B}_{i \bullet},
+		\end{align*}
 		
-		where $x^\text{B}_{\bullet i}$ is the \imp{transfer flow entering the node $i$} and $x^\text{B}_{i \bullet}$ the \imp{transfer flow leaving the node $i$}. \\
+		where 
+		\begin{itemize}
+			\item $x^\text{B}_{\bullet i}$ is the \imp{transfer flow entering the node $i$} and
+			\item $x^\text{B}_{i \bullet}$ is the \imp{transfer flow leaving the node $i$}.
+		\end{itemize}
 	\end{frame}
 	
 	%------------------------------------------------------------------
@@ -359,7 +363,7 @@
 		\vspace{0.4cm}
 		If we know \imp{transfer flow on edges}, i.e. $\mathbf{X}_\text{B} = (x^\text{B}_{ij})$, we can \imp{compute the flow entering/leaving the network}, $\bm{\sigma}_\text{in}$ and $\bm{\sigma}_\text{in}$. \\
 		\vspace{0.4cm}
-		The flow entering/leaving the lines, $\rho^\text{in}_i$ and $\rho^\text{out}_i$, can also acts as \imp{constraints on the in/out transfer flow}, $x^\text{B}_{\bullet i}$ and $x^\text{B}_{i \bullet}$.\\
+		The flow entering/leaving the lines, $\rho^\text{in}_i$ and $\rho^\text{out}_i$, acts as \imp{constraints on the in/out transfer flow}, $x^\text{B}_{\bullet i}$ and $x^\text{B}_{i \bullet}$.\\
 		\vspace{0.4cm}
 		When there are no transfers on $i$, we have $\rho^\text{in}_i = \sigma^\text{in}_i$ and  $\rho^\text{out}_i = \sigma^\text{out}_i$. \\
 	\end{frame}
@@ -405,7 +409,7 @@
 	
 	\begin{frame}{Algorithm outline}
 		
-		We now begin to make an outline for an \imp{iterative Algorithm}. There will be 4 steps at each iteration: \\
+		Let us make an outline for the \imp{iterative Algorithm}. There is \imp{4 steps} at each iteration: \\
 		\footnotesize
 		\begin{align}
 			\left. \begin{array}{r} 
@@ -413,22 +417,22 @@
 				{\color{cyan} \text{Flow in the network } \bm{\sigma}_\text{in}} \\
 				{\color{cyan} \text{Flow out the network } \bm{\sigma}_\text{out}}
 			\end{array} \right\}  &\overset{IPF}{\longrightarrow} \text{OD matrix } \mathbf{N} \\
-			\begin{array}{r} ^
+			\begin{array}{r}
 			\text{OD matrix } \mathbf{N}
-			\end{array} &\overset{SP}{\longrightarrow} \text{Edge transfer flow } \mathbf{X}^\text{B} \\
+			\end{array} &\overset{SP}{\longrightarrow} \text{Transfer flow } \mathbf{X}^\text{B} \\
 			\left. \begin{array}{r} 
-			\text{Edge transfer flow } \mathbf{X}^\text{B} \\
+			\text{Transfer flow } \mathbf{X}^\text{B} \\
 			\text{Flow in lines } \bm{\rho}_\text{in} \\
 			\text{Flow out lines } \bm{\rho}_\text{out}
 			\end{array} \right\}  &\overset{\text{Constraints}}{\longrightarrow} 
 			\left\{ \begin{array}{l}
-			\text{Corrected edge transfer flow } \widetilde{\mathbf{X}}^\text{B} \\
+			\text{Allowed transfer flow } \widetilde{\mathbf{X}}^\text{B} \\
 			{\color{cyan} \text{Flow in the network } \bm{\sigma}_\text{in}} \\
 			{\color{cyan} \text{Flow out the network } \bm{\sigma}_\text{out}}
 			\end{array} \right. \\
 			\left. \begin{array}{r} 
-			\text{Edge transfer flow } \mathbf{X}^\text{B} \\
-			 \text{Corrected edge transfer flow } \widetilde{\mathbf{X}}^\text{B}
+			\text{Transfer flow } \mathbf{X}^\text{B} \\
+			 \text{Allowed transfer flow } \widetilde{\mathbf{X}}^\text{B}
 			\end{array} \right\}  &\overset{\text{Affinity update}}{\longrightarrow} {\color{cyan} \text{OD affinity matrix } \mathbf{S}}
 		\end{align}	
 	\end{frame}
@@ -450,7 +454,7 @@
 			\item $s^\text{init}_{st} = 0$ otherwise.
 		\end{itemize}
 		
-		It now possible to obtain origin-destination matrix $\mathbf{N}$ with \imp{iterative proportional fitting}.
+		It now possible to obtain a first origin-destination matrix $\mathbf{N}$ with \imp{iterative proportional fitting}.
 		
 	\end{frame}
 	
@@ -500,29 +504,31 @@
 	
 	%------------------------------------------------------------------
 	
-	\begin{frame}{Step 3: corrected transfer flow}
+	\begin{frame}{Step 3: allowed transfer flow}
 		
-		For each $x^\text{B}_{ij}$, we use $\rho^\text{out}_i$ and $\rho^\text{in}_j$ in order to compute a \imp{corrected transfer flow} $\widetilde{x}_{ij}^\text{B} \leq x_{ij}^\text{B}$. There are multiple choices:
+		For each $x^\text{B}_{ij}$, we use $\rho^\text{out}_i$ and $\rho^\text{in}_j$ in order to compute a \imp{allowed transfer flow} $\widetilde{x}_{ij}^\text{B} \leq x_{ij}^\text{B}$. There are multiple choices:
 		
 		\begin{enumerate}
 			\item \imp{Constraint thresholds} could be reachable.
 			\item We can set a \imp{percentage limit} for the transfer flow among the flow in/out of the lines.
-			\item We can set a \imp{soft limit} to the transfer flow, with, e.g. an exponential law.
+			\item We can set a \imp{soft limit} to the transfer flow, with, e.g., an exponential law.
 		\end{enumerate}
 		
-		When this corrected flow is computed, $\bm{\sigma}_\text{in}$ and $\bm{\sigma}_\text{out}$ can be \imp{updated} with $\sigma^\text{in}_i = \rho^\text{in}_i - \widetilde{x}^\text{B}_{\bullet i}$ and $\sigma^\text{out}_i = \rho^\text{out}_i - \widetilde{x}^\text{B}_{i \bullet}$.
-		
+		When this corrected flow is computed, $\bm{\sigma}_\text{in}$ and $\bm{\sigma}_\text{out}$ can be \imp{updated} with 
+		\begin{align*}
+			\sigma^\text{in}_i &= \rho^\text{in}_i - \widetilde{x}^\text{B}_{\bullet i}, \\	\sigma^\text{out}_i &= \rho^\text{out}_i - \widetilde{x}^\text{B}_{i \bullet}.
+		\end{align*}
 	\end{frame}
 	
 	%------------------------------------------------------------------
 	
 	\begin{frame}{Step 4: Affinity update}
 		
-		What about the \imp{excess flow on transfer edges}, $x^\text{B}_{ij} - \widetilde{x}^\text{B}_{ij}$ ? \\
+		What about the \imp{excess flow on transfer edges}, i.e., $x^\text{B}_{ij} - \widetilde{x}^\text{B}_{ij}$ ? \\
 		\vspace{0.4cm}
-		Note that we only affected \imp{margins distribution}, but we need also need a way to reduce \imp{particular dependencies} between some $s$ and $t$. \\
+		Note that we only updated \imp{margins distribution}, but we need also need a way to reduce \imp{dependencies} between particular $s$ and $t$. \\
 		\vspace{0.4cm}
-		Having a \imp{shortest-path structure}, we know which couples $s, t$ are responsible for the excess flow on edge $(i, j)$.
+		Having flow following \imp{shortest-paths}, we know which couples $s, t$ are "responsible" for the excess flow on edge $(i, j)$.
 		\begin{center}
 			\includegraphics[width=0.6\textwidth]{img/excess_flow.png}
 		\end{center}
@@ -536,26 +542,67 @@
 		$$
 			p^\text{allowed}_{ij} = \frac{\widetilde{x}_{ij}^\text{B}}{x_{ij}^\text{B}}
 		$$
-		Each transfer edge will then "send a signal" to all couples $(s,t)$ using this edge, in order for them to \imp{reduce their affinities $s_{st}$}. \\
+		Each transfer edge will then "send a signal" to all couples $s,t$ using this edge on their shortest-paths, in order to \imp{reduce their affinities $s_{st}$}. \\
 		\vspace{0.4cm}
-		Each couple $(s,t)$, will recieve a \imp{list} of proportion of allowed flow, from all transfer edges on its shortest-path. The \imp{update factor for the affinity $s_{st}$} is constructed by using the minimum allowed flow received.
+		Each couple $s,t$, will recieve a \imp{list of proportion of allowed flow}, from all transfer edges on its shortest-path. The \imp{update factor for the affinity $s_{st}$} is constructed by using the minimum allowed flow received.
 		$$
-			s^\text{new}_{st} = s^\text{old}_{st} \cdot (1 - \min\{p^\text{allowed}_{i_1, j_1}, \ldots, p^\text{allowed}_{i_k, j_k} \})
+			s^\text{new}_{st} = \min\{p^\text{allowed}_{i_1, j_1}, \ldots, p^\text{allowed}_{i_k, j_k} \} \cdot s^\text{old}_{st}
 		$$
 	\end{frame}
 	
 	%------------------------------------------------------------------
 	
-	\section{Results}
+	\begin{frame}{Step 4: Affinity update}
+		\begin{center}
+			\includegraphics[width=0.7\textwidth]{img/allowed_flow.png} \\
+			In this example, $s^\text{new}_{st} = 0.3 \cdot s^\text{old}_{st}$
+		\end{center}
+	\end{frame}
+	
+	%------------------------------------------------------------------
+
+	
+	\section{Results (demo)} 
 	
 	%------------------------------------------------------------------
 	
 	
-	\begin{frame}[allowframebreaks]{References}
+	\section{Conclusion} 
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{Conclusion}
 		
-		\bibliography{demo}
-		\bibliographystyle{abbrv}
+		As it is still a work in progress, the conclusion will take the form of a to-do list:
+		\begin{itemize}
+			\item \imp{Optimizing} speed/memory (almost done).
+			\item Running the algorithm on \imp{all lines}.
+			\item Using carefully crafted \imp{OD affinities}. 
+			\item Finding \imp{applications}.
+			\item Finding a \imp{proof of convergence}. 
+			\item Finding if the solution is \imp{unique} (doubt it).
+			\item Making links with \imp{gravity model}, \imp{transportation problem}, ...
+			\item \imp{Adapting} the algorithm to closely related problems.
+		\end{itemize}
 		
 	\end{frame}
+
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}
+		
+		\begin{center}
+			\huge Thank you for your attention ! \\
+			Questions ? \\
+			\vspace{1cm}
+			\small
+			(for real this time)
+		\end{center}
+		
+		
+	\end{frame}
+	
+	%------------------------------------------------------------------
 	
 \end{document}

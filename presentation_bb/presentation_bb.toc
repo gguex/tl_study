@@ -2,4 +2,5 @@
 \beamer@sectionintoc {2}{The single line problem}{10}{0}{2}
 \beamer@sectionintoc {3}{Iterative proportial fitting}{17}{0}{3}
 \beamer@sectionintoc {4}{The multiple lines problem}{21}{0}{4}
-\beamer@sectionintoc {5}{Results}{36}{0}{5}
+\beamer@sectionintoc {5}{Results (demo)}{37}{0}{5}
+\beamer@sectionintoc {6}{Conclusion}{38}{0}{6}
