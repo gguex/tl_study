@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.4.30)  25 APR 2022 17:16
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.4.30)  26 APR 2022 17:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1056,7 +1056,7 @@ File: ts1cmss.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 
 
 (./presentation_bb.vrb
-<img/tl_network.png, id=65, 1124.2pt x 575.14874pt>
+<img/tl_network.png, id=71, 1124.2pt x 575.14874pt>
 File: img/tl_network.png Graphic file (type png)
 <use img/tl_network.png>
 Package pdftex.def Info: img/tl_network.png  used on input line 18.
@@ -1068,12 +1068,12 @@ Overfull \vbox (8.1685pt too high) detected at line 76
 [5
 
  <./img/tl_network.png>]
-<img/stop_area_c.png, id=74, 685.56125pt x 435.6275pt>
+<img/stop_area_c.png, id=80, 685.56125pt x 435.6275pt>
 File: img/stop_area_c.png Graphic file (type png)
 <use img/stop_area_c.png>
 Package pdftex.def Info: img/stop_area_c.png  used on input line 102.
 (pdftex.def)             Requested size: 122.9164pt x 78.10379pt.
-<img/edge_type2.png, id=75, 741.77126pt x 677.53125pt>
+<img/edge_type2.png, id=81, 741.77126pt x 677.53125pt>
 File: img/edge_type2.png Graphic file (type png)
 <use img/edge_type2.png>
 Package pdftex.def Info: img/edge_type2.png  used on input line 102.
@@ -1083,25 +1083,25 @@ Package pdftex.def Info: img/edge_type2.png  used on input line 102.
  <./img/stop_area_c.png> <./img/edge_type2.png>]
 
 LaTeX Font Warning: Font shape `OT1/cmss/bx/it' undefined
-(Font)              using `OT1/cmss/b/it' instead on input line 115.
+(Font)              using `OT1/cmss/b/it' instead on input line 116.
 
 
 LaTeX Font Warning: Font shape `OT1/cmss/b/it' undefined
-(Font)              using `OT1/cmss/b/n' instead on input line 115.
+(Font)              using `OT1/cmss/b/n' instead on input line 116.
 
 LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <12> not available
-(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 115.
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 116.
 
 
 LaTeX Font Warning: Font shape `OT1/cmss/bx/it' undefined
-(Font)              using `OT1/cmss/b/it' instead on input line 115.
+(Font)              using `OT1/cmss/b/it' instead on input line 116.
 
 LaTeX Font Info:    Font shape `OT1/cmss/b/it' in size <12> not available
-(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 115.
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 116.
 
 
 LaTeX Font Warning: Font shape `OT1/cmss/bx/it' undefined
-(Font)              using `OT1/cmss/b/it' instead on input line 115.
+(Font)              using `OT1/cmss/b/it' instead on input line 116.
 
 [7
 
@@ -1113,53 +1113,58 @@ LaTeX Font Warning: Font shape `OT1/cmss/bx/it' undefined
 
 ]
 LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <10> not available
-(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 164.
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 167.
 
 LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <7> not available
-(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 164.
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 167.
 
 LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <5> not available
-(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 164.
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 167.
 
 
-Overfull \hbox (6.3668pt too wide) detected at line 164
+Overfull \hbox (6.3668pt too wide) detected at line 167
 \OT1/mathkerncmss/m/sl/10 n[] \OT1/cmss/m/n/10 = []\OML/cmm/m/it/10 :
  []
 
 LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <9> not available
-(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 164.
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 167.
 
 LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <6> not available
-(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 164.
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 167.
 
 [11
 
-] [12
+]
+Overfull \vbox (0.15182pt too high) detected at line 194
+ []
+
+[12
 
 ] [13
 
 ]
-<img/line_markov.png, id=133, 1263.72125pt x 787.94376pt>
+<img/line_markov.png, id=139, 1263.72125pt x 787.94376pt>
 File: img/line_markov.png Graphic file (type png)
 <use img/line_markov.png>
-Package pdftex.def Info: img/line_markov.png  used on input line 216.
+Package pdftex.def Info: img/line_markov.png  used on input line 219.
 (pdftex.def)             Requested size: 245.83282pt x 153.26968pt.
  [14
 
  <./img/line_markov.png>]
-<img/stop_distributions.png, id=143, 1156.32pt x 618.81187pt>
+<img/stop_distributions.png, id=149, 1156.32pt x 618.81187pt>
 File: img/stop_distributions.png Graphic file (type png)
 <use img/stop_distributions.png>
-Package pdftex.def Info: img/stop_distributions.png  used on input line 226.
+Package pdftex.def Info: img/stop_distributions.png  used on input line 229.
 (pdftex.def)             Requested size: 307.28987pt x 164.44704pt.
  [15
 
  <./img/stop_distributions.png>]
-<img/length_exp.png, id=150, 1777.64125pt x 929.4725pt>
+<img/length_exp.png, id=156, 1777.64125pt x 929.4725pt>
 File: img/length_exp.png Graphic file (type png)
 <use img/length_exp.png>
-Package pdftex.def Info: img/length_exp.png  used on input line 236.
+Package pdftex.def Info: img/length_exp.png  used on input line 239.
 (pdftex.def)             Requested size: 307.28987pt x 160.66037pt.
+
 [16
 
  <./img/length_exp.png>] [17
@@ -1167,7 +1172,7 @@ Package pdftex.def Info: img/length_exp.png  used on input line 236.
 ] [18
 
 ]
-Overfull \vbox (0.35275pt too high) detected at line 285
+Overfull \vbox (0.35275pt too high) detected at line 288
  []
 
 [19
@@ -1176,11 +1181,119 @@ Overfull \vbox (0.35275pt too high) detected at line 285
 
 ] [21
 
+]
+File: img/edge_type2.png Graphic file (type png)
+<use img/edge_type2.png>
+Package pdftex.def Info: img/edge_type2.png  used on input line 316.
+(pdftex.def)             Requested size: 153.64493pt x 140.33182pt.
+
+Overfull \vbox (12.5118pt too high) detected at line 316
+ []
+
+[22
+
+] [23
+
+]
+<img/flow_balance.png, id=201, 745.78625pt x 613.29124pt>
+File: img/flow_balance.png Graphic file (type png)
+<use img/flow_balance.png>
+Package pdftex.def Info: img/flow_balance.png  used on input line 345.
+(pdftex.def)             Requested size: 245.83282pt x 202.15277pt.
+ [24
+
+ <./img/flow_balance.png>]
+<img/flow_measured.png, id=208, 853.1875pt x 676.5275pt>
+File: img/flow_measured.png Graphic file (type png)
+<use img/flow_measured.png>
+Package pdftex.def Info: img/flow_measured.png  used on input line 353.
+(pdftex.def)             Requested size: 276.559pt x 219.30106pt.
+
+Overfull \vbox (10.53696pt too high) detected at line 353
+ []
+
+[25
+
+ <./img/flow_measured.png>] [26
+
+] [27
+
+]
+Overfull \hbox (6.4235pt too wide) detected at line 402
+ \OT1/cmss/bx/n/9 N \OT1/cmss/m/n/9 = [] \OMS/cmsy/m/n/9 !
+ []
+
+<img/flow_computed.png, id=226, 515.9275pt x 512.91624pt>
+File: img/flow_computed.png Graphic file (type png)
+<use img/flow_computed.png>
+Package pdftex.def Info: img/flow_computed.png  used on input line 402.
+(pdftex.def)             Requested size: 92.1879pt x 91.64786pt.
+
+Overfull \hbox (35.2824pt too wide) detected at line 402
+[][][] $[]$[][][][][][][][] $[]$[][][][][][] 
+ []
+
+[28
+
+ <./img/flow_computed.png>]
+LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <8> not available
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 434.
+
+ [29
+
+] [30
+
+]
+Overfull \hbox (6.4235pt too wide) detected at line 483
+ \OT1/cmss/bx/n/9 N \OT1/cmss/m/n/9 = [] \OMS/cmsy/m/n/9 !
+ []
+
+File: img/flow_computed.png Graphic file (type png)
+<use img/flow_computed.png>
+Package pdftex.def Info: img/flow_computed.png  used on input line 483.
+(pdftex.def)             Requested size: 92.1879pt x 91.64786pt.
+
+Overfull \hbox (35.2824pt too wide) detected at line 483
+[][][] $[]$[][][][][][][][] $[]$[][][][][][] 
+ []
+
+[31
+
+]
+<img/flow_constrained.png, id=252, 758.835pt x 517.935pt>
+File: img/flow_constrained.png Graphic file (type png)
+<use img/flow_constrained.png>
+Package pdftex.def Info: img/flow_constrained.png  used on input line 499.
+(pdftex.def)             Requested size: 215.10196pt x 146.81479pt.
+
+Overfull \vbox (24.99477pt too high) detected at line 499
+ []
+
+[32
+
+ <./img/flow_constrained.png>] [33
+
+]
+<img/excess_flow.png, id=264, 760.8425pt x 514.92375pt>
+File: img/excess_flow.png Graphic file (type png)
+<use img/excess_flow.png>
+Package pdftex.def Info: img/excess_flow.png  used on input line 529.
+(pdftex.def)             Requested size: 184.3758pt x 124.77849pt.
+
+Overfull \vbox (15.27586pt too high) detected at line 529
+ []
+
+[34
+
+ <./img/excess_flow.png>] [35
+
+] [36
+
 ] (./presentation_bb.bbl
 
 LaTeX Warning: Empty `thebibliography' environment on input line 3.
 
-) [22
+) [37
 
 ]
 \tf@nav=\write6
@@ -1192,54 +1305,57 @@ LaTeX Warning: Empty `thebibliography' environment on input line 3.
 \tf@snm=\write8
 \openout8 = `presentation_bb.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 310.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 310.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 561.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 561.
  (./presentation_bb.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 310.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 310.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 561.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 561.
 Package rerunfilecheck Info: File `presentation_bb.out' has not changed.
-(rerunfilecheck)             Checksum: 7E9D0638E195FB9B17A819ACEAD2A4FD;229.
+(rerunfilecheck)             Checksum: 00297BFE69AB738D186DDD2397285B2F;271.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 22215 strings out of 481239
- 443050 string characters out of 5920377
+ 22329 strings out of 481239
+ 444554 string characters out of 5920377
  694553 words of memory out of 5000000
- 36868 multiletter control sequences out of 15000+600000
- 552761 words of font info for 87 fonts, out of 8000000 for 9000
+ 36940 multiletter control sequences out of 15000+600000
+ 556644 words of font info for 99 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 71i,13n,100p,1838b,736s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 71i,19n,100p,1838b,736s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texli
 ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/tex
 mf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb></usr/share/texlive/texmf
--dist/fonts/type1/public/amsfonts/cmextra/cmex9.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmmib10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmss10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cms
-s12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss17.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr
-/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss9.pfb></usr/share/
-texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmssi12.pfb></usr/share/texlive/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmssi8.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmssi9.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cms
-y9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
-</usr/share/texmf/fonts/type1/public/cm-super/sfss1000.pfb>
-Output written on presentation_bb.pdf (22 pages, 3140199 bytes).
+-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/amsfonts/cmextra/cmex9.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmmib10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+extra/cmmib8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmss10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12
+.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss17.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/sh
+are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss9.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmssi12.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmssi8.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmssi9.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.
+pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></u
+sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb></usr/shar
+e/texmf/fonts/type1/public/cm-super/sfss1000.pfb>
+Output written on presentation_bb.pdf (37 pages, 3436255 bytes).
 PDF statistics:
- 284 PDF objects out of 1000 (max. 8388607)
- 214 compressed objects within 3 object streams
- 49 named destinations out of 1000 (max. 500000)
- 105 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 398 PDF objects out of 1000 (max. 8388607)
+ 300 compressed objects within 3 object streams
+ 80 named destinations out of 1000 (max. 500000)
+ 138 words of extra memory for PDF output out of 10000 (max. 10000000)
 

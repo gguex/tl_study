@@ -112,18 +112,21 @@
 			Knowing \imp{(1) the network structure} and \imp{(2) the number of passengers embarking and disembarking at each stop}, can we deduce \imp{trajectories of the passengers} in the network ?
 		\end{quotation}
 		
+		Short answer: {\large \imp{No}}.
 	\end{frame}
 
 	%------------------------------------------------------------------
 	
 	\begin{frame}{The problematic}
-		
-		Short answer: {\large \imp{No}}.
-		
+
 		\begin{center}
 			\huge Thank you for your attention ! \\
-			Questions ?
+			Questions ? \\
+			\vspace{1cm}
+			\small
+			(just kidding)
 		\end{center}
+		
 		
 	\end{frame}
 	
@@ -131,7 +134,7 @@
 	
 	\begin{frame}{The problematic}
 		
-		Exact trajectories are impossible to know, but we can \imp{estimate} them. \\
+		Exact trajectories are impossible to know, but, with additional assumptions, we can \imp{estimate} them. \\
 		\vspace{0.4cm}
 		We will divide this problematic into two parts:
 		\begin{itemize}
@@ -183,7 +186,7 @@
 		\mathbf{N} = \bordermatrix{
 			& \imp{0} & \rho^\text{out}_2  & \cdots & \rho^\text{out}_{n-1} & \rho^\text{out}_n \cr
 			\rho^\text{in}_1 & \imp{0} & n_{12} & \cdots & n_{1,n-1} & n_{1n} \cr
-			\rho^\text{in}_2 & \imp{0} & \imp{0} & n_{23} & \cdots & n_{2n} \cr
+			\rho^\text{in}_2 & \imp{0} & \imp{0} & \ddots & \cdot & n_{2n} \cr
 			\vdots & \vdots & \vdots & \ddots & \ddots & \vdots \cr
 			\rho^\text{in}_{n-1} & \imp{0} & \imp{0} & \cdots & \imp{0} & n_{n-1,n} \cr
 			\imp{0} & \imp{0} & \imp{0} & \cdots & \imp{0} & \imp{0}}
@@ -268,7 +271,7 @@
 		In our context, it means that if we define an \imp{origin-destination affinity matrix} $\mathbf{S} = (s_{st})$ with 
 			$$
 				\mathbf{S} = \left( \begin{array}{ccccc}
-				0 & 1 & \cdots & 1 & 1 \\
+				0 & 1 & 1 & \cdots & 1 \\
 				0 & 0 & 1 & \cdots & 1 \\
 				\vdots & \vdots & \ddots & \ddots & \vdots \\
 				0 & 0 & \cdots & 0 & 1 \\
@@ -299,6 +302,254 @@
 	\section{The multiple lines problem}
 	
 	%------------------------------------------------------------------
+	
+	\begin{frame}{The multiple lines problem}
+		
+		In this problem, we will have to use the whole multiple lines network, which is composed of \imp{line edges} and \imp{transfer edges}.
+		
+		\begin{center}
+			\includegraphics[width=0.5\textwidth]{img/edge_type2.png}
+		\end{center}
+	
+		We cannot use a Markov chain modeling in this case, but the \imp{iterative proportional fitting} approach is still promising. However, there are \imp{additional difficulties}.
+		
+	\end{frame}
+	
+	%-----------------------------------------------^-------------------
+	
+	\begin{frame}{The flow in/out lines/network}
+		
+		To begin with, we have to distinguish between
+		
+		\begin{itemize}
+			\item The passengers \imp{entering and leaving lines} at each stops, represented by vectors \imp{$\bm{\rho}_\text{in}$} and \imp{$\bm{\rho}_\text{out}$} and 
+			\item The passengers \imp{entering and leaving the network} at each stops, represented by vectors \imp{$\bm{\sigma}_\text{in}$} and \imp{$\bm{\sigma}_\text{out}$}, which are \imp{unknown}.
+		\end{itemize}
+	
+		At each stop $i$, we have 
+		
+		\begin{itemize}
+			\item $\rho^\text{in}_i = \sigma^\text{in}_i + x^\text{B}_{\bullet i}$,
+			\item $\rho^\text{out}_i = \sigma^\text{out}_i + x^\text{B}_{i \bullet}$,
+		\end{itemize}
+		
+		where $x^\text{B}_{\bullet i}$ is the \imp{transfer flow entering the node $i$} and $x^\text{B}_{i \bullet}$ the \imp{transfer flow leaving the node $i$}. \\
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{The flow in/out lines/network}
+		\begin{center}
+			\hspace{0.1cm} \includegraphics[width=0.8\textwidth]{img/flow_balance.png}
+		\end{center}
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{The flow in/out lines/network}
+		\begin{center}
+			\includegraphics[width=0.9\textwidth]{img/flow_measured.png}
+		\end{center}
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{The flow in/out lines/network}
+		The flow entering/leaving the lines, $\bm{\rho}_\text{in}$ and $\bm{\rho}_\text{out}$, are \imp{known}. \\
+		\vspace{0.4cm}
+		If we know \imp{transfer flow on edges}, i.e. $\mathbf{X}_\text{B} = (x^\text{B}_{ij})$, we can \imp{compute the flow entering/leaving the network}, $\bm{\sigma}_\text{in}$ and $\bm{\sigma}_\text{in}$. \\
+		\vspace{0.4cm}
+		The flow entering/leaving the lines, $\rho^\text{in}_i$ and $\rho^\text{out}_i$, can also acts as \imp{constraints on the in/out transfer flow}, $x^\text{B}_{\bullet i}$ and $x^\text{B}_{i \bullet}$.\\
+		\vspace{0.4cm}
+		When there are no transfers on $i$, we have $\rho^\text{in}_i = \sigma^\text{in}_i$ and  $\rho^\text{out}_i = \sigma^\text{out}_i$. \\
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{Flow behavior}
+		
+		The second difficulty is that there are generally \imp{multiple routes} to reach node $t$ from node $s$. This can be solved by making a new assumption. \\
+		\vspace{0.4cm}
+		In the multiple lines network, we will suppose that passengers take \imp{shortest-paths} in order to reach node $t$ from node $s$. \\
+		\vspace{0.4cm}
+		If multiple shortest-paths exists between $s$ and $t$, the passenger flow is \imp{divided equally} among them.
+		
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{Flow behavior}
+		
+		This assumption unlocks a very useful property. If we have an \imp{origin-destination matrix} $\mathbf{N} = (n_{st})$, we can compute the $(n \times n)$ \imp{flow matrix on edges} $\mathbf{X} = (x_{ij})$. \\
+		\vspace{0.6cm}
+		\begin{columns}
+			\small
+			\begin{column}{0.7\textwidth}
+				$$
+					\hspace{1cm} \mathbf{N} = \left( \begin{array}{ccccc}
+					0 & 13055 & 243 & \cdots & 144 \\
+					3498 & 0 & 24429 & \cdots & 7523 \\
+					\vdots & \vdots & \ddots & \ddots & \vdots \\
+					1508 &  & \cdots & 0 & 5093 \\
+					8903 & 6343 & \cdots & 53 & 0 
+					\end{array} \right) \rightarrow 
+				$$ 
+			\end{column}
+			\begin{column}{0.6\textwidth}
+				\hspace{0.5cm} \includegraphics[width=0.5\textwidth]{img/flow_computed.png}
+			\end{column}
+		\end{columns}
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{Algorithm outline}
+		
+		We now begin to make an outline for an \imp{iterative Algorithm}. There will be 4 steps at each iteration: \\
+		\footnotesize
+		\begin{align}
+			\left. \begin{array}{r} 
+				{\color{cyan} \text{OD affinity matrix } \mathbf{S}} \\
+				{\color{cyan} \text{Flow in the network } \bm{\sigma}_\text{in}} \\
+				{\color{cyan} \text{Flow out the network } \bm{\sigma}_\text{out}}
+			\end{array} \right\}  &\overset{IPF}{\longrightarrow} \text{OD matrix } \mathbf{N} \\
+			\begin{array}{r} ^
+			\text{OD matrix } \mathbf{N}
+			\end{array} &\overset{SP}{\longrightarrow} \text{Edge transfer flow } \mathbf{X}^\text{B} \\
+			\left. \begin{array}{r} 
+			\text{Edge transfer flow } \mathbf{X}^\text{B} \\
+			\text{Flow in lines } \bm{\rho}_\text{in} \\
+			\text{Flow out lines } \bm{\rho}_\text{out}
+			\end{array} \right\}  &\overset{\text{Constraints}}{\longrightarrow} 
+			\left\{ \begin{array}{l}
+			\text{Corrected edge transfer flow } \widetilde{\mathbf{X}}^\text{B} \\
+			{\color{cyan} \text{Flow in the network } \bm{\sigma}_\text{in}} \\
+			{\color{cyan} \text{Flow out the network } \bm{\sigma}_\text{out}}
+			\end{array} \right. \\
+			\left. \begin{array}{r} 
+			\text{Edge transfer flow } \mathbf{X}^\text{B} \\
+			 \text{Corrected edge transfer flow } \widetilde{\mathbf{X}}^\text{B}
+			\end{array} \right\}  &\overset{\text{Affinity update}}{\longrightarrow} {\color{cyan} \text{OD affinity matrix } \mathbf{S}}
+		\end{align}	
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{Step 1: iterative proportional fitting}
+		
+		At the beginning of the algorithm, we have to set 
+		\begin{itemize}
+			\item An \imp{initial flow in the network }. We can set it to $\bm{\sigma}^\text{init}_\text{in} = \bm{\rho}_\text{in}$,
+			\item An \imp{initial flow out the network }. We can set it to $\bm{\sigma}^\text{init}_\text{out} = \bm{\rho}_\text{out}$,
+			\item An \imp{initial affinity matrix between origin-destination}, $\mathbf{S}^\text{init}$.
+		\end{itemize}  
+	
+		The initial affinity matrix $\mathbf{S}^\text{init} = (s^\text{init}_{st})$ is crafted in order to have:
+		\begin{itemize}
+			\item $s^\text{init}_{st} = 1$ if $s$ is a \imp{valid trajectory} for using the network.
+			\item $s^\text{init}_{st} = 0$ otherwise.
+		\end{itemize}
+		
+		It now possible to obtain origin-destination matrix $\mathbf{N}$ with \imp{iterative proportional fitting}.
+		
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{Step 2: shortest-paths flow}
+		
+		In this step, we use the assumption that passengers use \imp{shortest-paths} in the network to obtain flow on edges, and in particular, \imp{flow on transfer edges}:
+		$$
+			\mathbf{N} \longrightarrow \mathbf{X}^\text{B}
+		$$ 
+		\vspace{0.6cm}
+		\begin{columns}
+			\small
+			\begin{column}{0.7\textwidth}
+				$$
+				\hspace{1cm} \mathbf{N} = \left( \begin{array}{ccccc}
+				0 & 13055 & 243 & \cdots & 144 \\
+				3498 & 0 & 24429 & \cdots & 7523 \\
+				\vdots & \vdots & \ddots & \ddots & \vdots \\
+				1508 &  & \cdots & 0 & 5093 \\
+				8903 & 6343 & \cdots & 53 & 0 
+				\end{array} \right) \rightarrow 
+				$$ 
+			\end{column}
+			\begin{column}{0.6\textwidth}
+				\hspace{0.5cm} \includegraphics[width=0.5\textwidth]{img/flow_computed.png}
+			\end{column}
+		\end{columns}
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{Step 3: corrected transfer flow}
+		
+		This transfer flow $\mathbf{X}^\text{B}$ could be used to update $\bm{\sigma}_\text{in}$ and $\bm{\sigma}_\text{out}$, with 
+		 
+		\begin{itemize}
+			\item $\sigma^\text{in}_i = \rho^\text{in}_i - x^\text{B}_{\bullet i}$,
+			\item $\sigma^\text{out}_i = \rho^\text{out}_i - x^\text{B}_{i \bullet}$,
+		\end{itemize}
+		However, there is \imp{no guarantee that the flow will not exceed limits given by $\bm{\rho}_\text{in}$ and $\bm{\rho}_\text{in}$}.
+		\begin{center}
+			\includegraphics[width=0.7\textwidth]{img/flow_constrained.png}
+		\end{center}
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{Step 3: corrected transfer flow}
+		
+		For each $x^\text{B}_{ij}$, we use $\rho^\text{out}_i$ and $\rho^\text{in}_j$ in order to compute a \imp{corrected transfer flow} $\widetilde{x}_{ij}^\text{B} \leq x_{ij}^\text{B}$. There are multiple choices:
+		
+		\begin{enumerate}
+			\item \imp{Constraint thresholds} could be reachable.
+			\item We can set a \imp{percentage limit} for the transfer flow among the flow in/out of the lines.
+			\item We can set a \imp{soft limit} to the transfer flow, with, e.g. an exponential law.
+		\end{enumerate}
+		
+		When this corrected flow is computed, $\bm{\sigma}_\text{in}$ and $\bm{\sigma}_\text{out}$ can be \imp{updated} with $\sigma^\text{in}_i = \rho^\text{in}_i - \widetilde{x}^\text{B}_{\bullet i}$ and $\sigma^\text{out}_i = \rho^\text{out}_i - \widetilde{x}^\text{B}_{i \bullet}$.
+		
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{Step 4: Affinity update}
+		
+		What about the \imp{excess flow on transfer edges}, $x^\text{B}_{ij} - \widetilde{x}^\text{B}_{ij}$ ? \\
+		\vspace{0.4cm}
+		Note that we only affected \imp{margins distribution}, but we need also need a way to reduce \imp{particular dependencies} between some $s$ and $t$. \\
+		\vspace{0.4cm}
+		Having a \imp{shortest-path structure}, we know which couples $s, t$ are responsible for the excess flow on edge $(i, j)$.
+		\begin{center}
+			\includegraphics[width=0.6\textwidth]{img/excess_flow.png}
+		\end{center}
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\begin{frame}{Step 4: Affinity update}
+		
+		On each transfer edge, we can compute the \imp{proportion of allowed flow}:
+		$$
+			p^\text{allowed}_{ij} = \frac{\widetilde{x}_{ij}^\text{B}}{x_{ij}^\text{B}}
+		$$
+		Each transfer edge will then "send a signal" to all couples $(s,t)$ using this edge, in order for them to \imp{reduce their affinities $s_{st}$}. \\
+		\vspace{0.4cm}
+		Each couple $(s,t)$, will recieve a \imp{list} of proportion of allowed flow, from all transfer edges on its shortest-path. The \imp{update factor for the affinity $s_{st}$} is constructed by using the minimum allowed flow received.
+		$$
+			s^\text{new}_{st} = s^\text{old}_{st} \cdot (1 - \min\{p^\text{allowed}_{i_1, j_1}, \ldots, p^\text{allowed}_{i_k, j_k} \})
+		$$
+	\end{frame}
+	
+	%------------------------------------------------------------------
+	
+	\section{Results}
+	
+	%------------------------------------------------------------------
+	
 	
 	\begin{frame}[allowframebreaks]{References}
 		
