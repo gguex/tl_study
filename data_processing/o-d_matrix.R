@@ -20,7 +20,7 @@ path_otp <- file.path("../../../otp/otp-2.0.0-shaded.jar")
 # Run the server
 log2 <- otp_setup(otp = path_otp, dir = path_data, memory = 30000, wait = FALSE)
 
-# Create a connxion to the router
+# Create a personal connexion to the router (optional)
 otpcon <- otp_connect(hostname =  "localhost",
                       router = "default",
                       port = 8080)
@@ -36,7 +36,7 @@ function_route <- function(j) {
   if (df$lat[i] == df$lat[j] & df$lon[i] == df$lon[j]) {
     res <- 0
   } else {
-    res <- otp_plan(otpcon,
+    res <- otp_plan(otp_connect(),
                     fromPlace = c(df$lon[i], df$lat[i]),
                     toPlace = c(df$lon[j], df$lat[j]),
                     mode = c("WALK"),
