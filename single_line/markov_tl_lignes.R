@@ -21,6 +21,9 @@ and freq_theo.direction_voy_theo = stop_order.direction_voy_theo
 group by stop_order.code_arret_theo, freq_theo.libelle_arret_theo2, stop_order.code_ligne_theo, freq_theo.direction_voy_theo, stop_order.sequence_theo
 order by stop_order.code_ligne_theo, freq_theo.direction_voy_theo, stop_order.sequence_theo;")
 
+# Without database
+stops_frequentation <- read.csv2("../data_processing/stop_frequentation.csv")
+
 
 ############# Petit script de calcul des trajets via une chaîne de Markov
 
