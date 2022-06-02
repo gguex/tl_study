@@ -77,6 +77,13 @@ x_res = compute_x_from_n(n_mat, edge_ref, sp_ref, p_mat)
 node_in_btw = colSums(x_res$x_btw)
 node_out_btw = rowSums(x_res$x_btw)
 
+# Print top transfers 
+top = sort(x_res$x_btw[x_res$x_btw > 0], decreasin=T)
+for(i in 1:10){
+  ind_top = which(x_res$x_btw == top[i], arr.ind=T)
+  cat(line_df["stop_names"][ind_top[1],], "to", line_df["stop_names"][ind_top[2],], "with", top[i] ,"\n")
+}
+
 # Updated dataframe
 line_res = line_df
 line_res["sigma_in"] = round(rowSums(n_mat), 3)
