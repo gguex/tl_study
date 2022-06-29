@@ -351,20 +351,38 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
     
     # --- Iterative fitting 
     
-    n_mat = s_it_mat + epsilon
+    # n_mat = s_it_mat + epsilon
+    # converge_if = F
+    # while(!converge_if){
+    #   # Saving old results
+    #   n_mat_if_old = n_mat 
+    #   # Normalizing by row
+    #   n_mat = n_mat * sigma_in / rowSums(n_mat + epsilon)
+    #   # Normalizing by columns 
+    #   n_mat = t(t(n_mat) * sigma_out / colSums(n_mat + epsilon))
+    #   # Checking for convergence
+    #   if(sum(abs(n_mat_if_old - n_mat)) < conv_thres_if){
+    #     converge_if = T
+    #   }
+    # }
+    
+    # -- NEW VERSION 
+    
+    b = rep(1, ncol(n_mat))
     converge_if = F
     while(!converge_if){
-      # Saving old results
-      n_mat_if_old = n_mat 
-      # Normalizing by row
-      n_mat = n_mat * sigma_in / rowSums(n_mat + epsilon)
-      # Normalizing by columns 
-      n_mat = t(t(n_mat) * sigma_out / colSums(n_mat + epsilon))
+      # Saving old b results
+      b_old = b
+      # Compute new a and b
+      a = (sigma_in + epsilon) / colSums(t(s_it_mat + epsilon) * b)
+      b = (sigma_out + epsilon) / colSums((s_it_mat + epsilon) * a)
       # Checking for convergence
-      if(sum(abs(n_mat_if_old - n_mat)) < conv_thres_if){
+      if(sum(abs(b_old - b)) < conv_thres_if){
         converge_if = T
       }
     }
+    # Building n_mat
+    n_mat = t(b * t(a * (s_it_mat + epsilon)))
     
     # --- Find between flow for edges and nodes
     
