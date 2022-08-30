@@ -1,8 +1,6 @@
 ############################################################### 
 ####### Setting paths
-
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-
 
 ####### Libraries
 library(RPostgreSQL) # Database connection

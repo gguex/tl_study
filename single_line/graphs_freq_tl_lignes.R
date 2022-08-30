@@ -5,6 +5,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 ### Connexion à la base de données
 library('RPostgreSQL')
+library('sf')
 library('config')
 
 # Connexion à la base de données
@@ -20,6 +21,8 @@ and freq_theo.direction_voy_theo = stop_order.direction_voy_theo
 group by stop_order.code_arret_theo, freq_theo.libelle_arret_theo2, stop_order.code_ligne_theo, freq_theo.direction_voy_theo, stop_order.sequence_theo
 order by stop_order.code_ligne_theo, freq_theo.direction_voy_theo, stop_order.sequence_theo;")
 
+# Sans passer par la base de données
+stop_frequentation <- read.csv2("../data_processing/stop_frequentation.csv")
 
 ### Initialisation of the table
 table <- data.frame(matrix(ncol = 7, nrow = 0))
