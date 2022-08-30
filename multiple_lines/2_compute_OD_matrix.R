@@ -24,23 +24,19 @@ data_folder = "multilines_data/preprocessed_data/test_6789"
 out_folder = "results/test_6789"
 
 # Conv threshold for iterative fitting
-<<<<<<< HEAD
-conv_thres_if = 1000
-=======
-conv_thres_if = 0.1
->>>>>>> 65a132f9024e96b6a8cff8c6dedd08d3f7d23303
+conv_thres_if = 0.05
 # Conv threshold
 conv_thres_algo = 0.0001
 # Smooth or strict limit
 smooth_limit = F
 # lambda for exponential law
 exp_lambda = 2
-# prop limit 
-prop_limit = 0.2
+# proportional limit 
+prop_limit = 0.4
 # epsilon
 epsilon = 1e-5
 # max iteration
-max_it = 50
+max_it = 100
 
 #--------------------------------
 # Process

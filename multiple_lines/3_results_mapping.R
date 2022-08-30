@@ -84,11 +84,8 @@ stops_sel_shp = stops_shp %>%
 
 # --- Creating big shapefiles from results  
 
-<<<<<<< HEAD
-id_stop = 3
-=======
+# Id for the starting stop
 id_stop = 1
->>>>>>> 65a132f9024e96b6a8cff8c6dedd08d3f7d23303
 
 # Getting the ingoing and outgoing flow for each stops
 init_stop = stop_names[id_stop]
@@ -116,7 +113,7 @@ line_map = leaflet() %>%
   setView( lat=46.54033, lng=6.63575 , zoom=12) %>%
   addCircles(data = stops_i_shp,
              weight = 0.5,
-             radius = (stops_i_shp$passengers/max(stops_i_shp$passengers)*50000)^0.48, # coefficient de correction avec un minimum de largeur de 1
+             radius = (stops_i_shp$passengers/max(stops_i_shp$passengers)*60000)^0.45, # coefficient de correction avec un minimum de largeur de 1
              fillOpacity = 0.7,
              color = stops_i_shp$color, # couleur de chaque ligne tl
              highlight = highlightOptions(
