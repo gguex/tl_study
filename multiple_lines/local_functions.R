@@ -283,10 +283,10 @@ build_in_out_flow = function(line_mbr, flow_in, flow_out){
 #             this matrix will set to 1 for each pair having an admissible 
 #             shorest-path (default = NULL).
 # - smooth_limit:     An boolean indicating if the algorithm should use the 
-#                     smooth limit for between-line flow (default = T).
+#                     smooth limit for between-line flow (default = F).
 # - exp_lambda:       The exponential law parameter for the smooth limit
 #                     (default = 10).
-# - prop_limit:       The minimum percentage of flow newly entering in lines, 
+# - prop_limit:       The minimum percentage of flow newly entering in network, 
 #                     used only if smooth_limit=F (default = 0.1).
 # - conv_thres_if:    A threshold for the convergence of the iterative fitting 
 #                     algorithm (default = 1e-5).
@@ -301,7 +301,7 @@ build_in_out_flow = function(line_mbr, flow_in, flow_out){
 #-------------------------------------------------------------------------------
 
 compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat, 
-                                      s_mat=NULL, smooth_limit=T, exp_lambda=10,
+                                      s_mat=NULL, smooth_limit=F, exp_lambda=10,
                                       prop_limit=0.1, conv_thres_if=1e-5,
                                       conv_thres_algo=1e-5, epsilon=1e-40,
                                       max_it=200){
