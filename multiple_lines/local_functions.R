@@ -136,7 +136,13 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, dist_mat,
   
   # Make the containers for results
   sp_ref = c()
-  p_mat = c()
+  
+  ##--- MOD
+  #p_mat = c()
+  i_loc = c()
+  j_loc = c()
+  n_admissible_path = 1
+  ##--- MOD
   
   # Loop on pairs of nodes
   for(i in 1:n){
@@ -168,9 +174,15 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, dist_mat,
               
               # Save the shortest path
               sp_ref = rbind(sp_ref, c(i, j))
-              sp_edge_vec = rep(0, n_edges)
-              sp_edge_vec[index_sp_edge] = 1
-              p_mat = rbind(p_mat, sp_edge_vec)
+              
+              ##--- MOD
+              #sp_edge_vec = rep(0, n_edges)
+              #sp_edge_vec[index_sp_edge] = 1
+              #p_mat = rbind(p_mat, sp_edge_vec)
+              i_loc = c(i_loc, rep(n_admissible_path, length(index_sp_edge)))
+              j_loc = c(j_loc, index_sp_edge)
+              n_admissible_path = n_admissible_path + 1
+              ##--- MOD
               
             }
             
@@ -181,6 +193,10 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, dist_mat,
       
     }
   }
+  
+  ##--- MOD
+  p_mat = sparseMatrix(i_loc, j_loc)
+  ##--- MOD
   
   # --- Return the results
   
