@@ -91,8 +91,8 @@ build_network_structure = function(line_mbr, tour_mbr, dist_mat, dist_thres){
 #             node index, and a boolean indicating if this is an transfer edge.
 # - sp_ref:   A (n_sp x 2) matrix, giving the source-target node pair for each 
 #             admissible shortest-path.
-# - p_mat:    A (n_sp x m) shortest-path - edges matrix, with s_{ij} = 1 iff
-#             edge j is in shortest-path i.
+# - p_mat:    A (n_sp x m) sparse shortest-path - edges matrix, 
+#             with s_{ij} = TRUE iff edge j is in shortest-path i.
 #-------------------------------------------------------------------------------
 
 build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, dist_mat, 
