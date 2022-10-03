@@ -106,7 +106,7 @@ lines_i_shp = lines_sel_shp %>%
   mutate(init_stop = init_stop, edge_flow=as.vector(edge_flow))
 
 # --- Mapping
-
+labels = paste0("Arrêt : ",stops_i_shp$libelle_ar, "<br />","Passagers : ", round(stops_i_shp$passengers))
 line_map = leaflet() %>%
   addProviderTiles(providers$CartoDB.Positron) %>%
   setView( lat=46.54033, lng=6.63575 , zoom=12) %>%
@@ -153,3 +153,9 @@ line_map = leaflet() %>%
     options = layersControlOptions(collapsed = FALSE)
   )
 line_map
+
+# --- Transfert table
+line_res_small = line_res[, c("line_nbr", "direction", "label", "transferts_in", "transferts_out")]
+
+# Only not null transferts edges
+line_res_small_NN = line_res_small[rowSums(line_res_small[,4:5]) > 0, ]
