@@ -91,8 +91,8 @@ build_network_structure = function(line_mbr, tour_mbr, dist_mat, dist_thres){
 #             node index, and a boolean indicating if this is an transfer edge.
 # - sp_ref:   A (n_sp x 2) matrix, giving the source-target node pair for each 
 #             admissible shortest-path.
-# - p_mat:    A (n_sp x m) shortest-path - edges matrix, with s_{ij} = 1 iff
-#             edge j is in shortest-path i.
+# - p_mat:    A (n_sp x m) sparse shortest-path - edges matrix, 
+#             with s_{ij} = TRUE iff edge j is in shortest-path i.
 #-------------------------------------------------------------------------------
 
 build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, dist_mat, 
@@ -136,7 +136,13 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, dist_mat,
   
   # Make the containers for results
   sp_ref = c()
-  p_mat = c()
+  
+  ##--- MOD
+  #p_mat = c()
+  i_loc = c()
+  j_loc = c()
+  n_admissible_path = 1
+  ##--- MOD
   
   # Loop on pairs of nodes
   for(i in 1:n){
@@ -168,9 +174,15 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, dist_mat,
               
               # Save the shortest path
               sp_ref = rbind(sp_ref, c(i, j))
-              sp_edge_vec = rep(0, n_edges)
-              sp_edge_vec[index_sp_edge] = 1
-              p_mat = rbind(p_mat, sp_edge_vec)
+              
+              ##--- MOD
+              #sp_edge_vec = rep(0, n_edges)
+              #sp_edge_vec[index_sp_edge] = 1
+              #p_mat = rbind(p_mat, sp_edge_vec)
+              i_loc = c(i_loc, rep(n_admissible_path, length(index_sp_edge)))
+              j_loc = c(j_loc, index_sp_edge)
+              n_admissible_path = n_admissible_path + 1
+              ##--- MOD
               
             }
             
@@ -181,6 +193,10 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, dist_mat,
       
     }
   }
+  
+  ##--- MOD
+  p_mat = sparseMatrix(i_loc, j_loc)
+  ##--- MOD
   
   # --- Return the results
   
@@ -283,10 +299,10 @@ build_in_out_flow = function(line_mbr, flow_in, flow_out){
 #             this matrix will set to 1 for each pair having an admissible 
 #             shorest-path (default = NULL).
 # - smooth_limit:     An boolean indicating if the algorithm should use the 
-#                     smooth limit for between-line flow (default = T).
+#                     smooth limit for between-line flow (default = F).
 # - exp_lambda:       The exponential law parameter for the smooth limit
 #                     (default = 10).
-# - prop_limit:       The minimum percentage of flow newly entering in lines, 
+# - prop_limit:       The minimum percentage of flow newly entering in network, 
 #                     used only if smooth_limit=F (default = 0.1).
 # - conv_thres_if:    A threshold for the convergence of the iterative fitting 
 #                     algorithm (default = 1e-5).
@@ -301,7 +317,7 @@ build_in_out_flow = function(line_mbr, flow_in, flow_out){
 #-------------------------------------------------------------------------------
 
 compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat, 
-                                      s_mat=NULL, smooth_limit=T, exp_lambda=10,
+                                      s_mat=NULL, smooth_limit=F, exp_lambda=10,
                                       prop_limit=0.1, conv_thres_if=1e-5,
                                       conv_thres_algo=1e-5, epsilon=1e-40,
                                       max_it=200){
@@ -351,20 +367,38 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
     
     # --- Iterative fitting 
     
-    n_mat = s_it_mat + epsilon
+    # n_mat = s_it_mat + epsilon
+    # converge_if = F
+    # while(!converge_if){
+    #   # Saving old results
+    #   n_mat_if_old = n_mat 
+    #   # Normalizing by row
+    #   n_mat = n_mat * sigma_in / rowSums(n_mat + epsilon)
+    #   # Normalizing by columns 
+    #   n_mat = t(t(n_mat) * sigma_out / colSums(n_mat + epsilon))
+    #   # Checking for convergence
+    #   if(sum(abs(n_mat_if_old - n_mat)) < conv_thres_if){
+    #     converge_if = T
+    #   }
+    # }
+    
+    # -- NEW VERSION 
+    
+    b = rep(1, ncol(n_mat))
     converge_if = F
     while(!converge_if){
-      # Saving old results
-      n_mat_if_old = n_mat 
-      # Normalizing by row
-      n_mat = n_mat * sigma_in / rowSums(n_mat + epsilon)
-      # Normalizing by columns 
-      n_mat = t(t(n_mat) * sigma_out / colSums(n_mat + epsilon))
+      # Saving old b results
+      b_old = b
+      # Compute new a and b
+      a = (sigma_in + epsilon) / colSums(t(s_it_mat + epsilon) * b)
+      b = (sigma_out + epsilon) / colSums((s_it_mat + epsilon) * a)
       # Checking for convergence
-      if(sum(abs(n_mat_if_old - n_mat)) < conv_thres_if){
+      if(sum(abs(b_old - b)) < conv_thres_if){
         converge_if = T
       }
     }
+    # Building n_mat
+    n_mat = t(b * t(a * (s_it_mat + epsilon)))
     
     # --- Find between flow for edges and nodes
     
