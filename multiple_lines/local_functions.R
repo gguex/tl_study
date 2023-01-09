@@ -422,7 +422,7 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
         (1 - exp(-exp_lambda * node_in_btw / (rho_in + epsilon)))
       allowed_out_btw = rho_out * 
         (1 - exp(-exp_lambda * node_out_btw / (rho_out + epsilon)))
-      # If this is more than identity, set it to indentity  
+      # If this is more than identity, set it to identity  
       allowed_in_btw[allowed_in_btw > node_in_btw] = 
         node_in_btw[allowed_in_btw > node_in_btw]
       allowed_out_btw[allowed_out_btw > node_out_btw] = 
@@ -439,7 +439,7 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
         rho_out[allowed_out_btw > rho_out*(1 - prop_limit)]*(1 - prop_limit)
     }
     
-    # --- Compute the allowed flow on edge
+    # --- Compute the allowed flow on edges
     
     # Compute the proportion of allowed flow
     p_allowed_in = allowed_in_btw / (node_in_btw + epsilon)
