@@ -1,0 +1,20 @@
+\BOOKMARK [1][-]{section.1}{Notations}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Lignes et flux}{section.1}% 2
+\BOOKMARK [1][-]{section.2}{Donn\351es}{}% 3
+\BOOKMARK [2][-]{subsection.2.1}{Proportion de transferts}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.2}{Flux compatibles}{section.2}% 5
+\BOOKMARK [1][-]{section.3}{Inf\351rence}{}% 6
+\BOOKMARK [2][-]{subsection.3.1}{Identit\351 de GG et centralit\351}{section.3}% 7
+\BOOKMARK [3][-]{subsubsection.3.1.1}{\(*\) Cas possiblement d\351viants}{subsection.3.1}% 8
+\BOOKMARK [2][-]{subsection.3.2}{Independence assumption on stops}{section.3}% 9
+\BOOKMARK [3][-]{subsubsection.3.2.1}{*** contre-argument? Mais non***}{subsection.3.2}% 10
+\BOOKMARK [2][-]{subsection.3.3}{Independence assumption on junctions}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.4}{Une seule ligne}{section.3}% 12
+\BOOKMARK [1][-]{section.4}{*** OLD JUNK}{}% 13
+\BOOKMARK [2][-]{subsection.4.1}{Une seule ligne}{section.4}% 14
+\BOOKMARK [3][-]{subsubsection.4.1.1}{Maxent}{subsection.4.1}% 15
+\BOOKMARK [3][-]{subsubsection.4.1.2}{Interpr\351tation markovienne de GG}{subsection.4.1}% 16
+\BOOKMARK [3][-]{subsubsection.4.1.3}{Identit\351 de GG}{subsection.4.1}% 17
+\BOOKMARK [3][-]{subsubsection.4.1.4}{Maxent for multilines}{subsection.4.1}% 18
+\BOOKMARK [2][-]{subsection.4.2}{MaxEnt multilines, revisited}{section.4}% 19
+\BOOKMARK [1][-]{section.5}{EM approach}{}% 20

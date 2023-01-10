@@ -1,0 +1,565 @@
+\documentclass{article}
+
+
+
+\usepackage{arxivMod}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{lipsum}		% Can be removed after putting your text content
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{doi}
+
+
+
+\RequirePackage{amsthm,amsmath,amsfonts,amssymb}
+%\RequirePackage[authoryear]{natbib}
+%\RequirePackage[colorlinks,citecolor=blue,urlcolor=blue]{hyperref}
+%\RequirePackage{graphicx}
+
+
+%\textheight = 615pt
+%\textwidth = 420pt
+
+%% Personal packages
+\RequirePackage{bm}
+\usepackage{xcolor}
+
+
+\theoremstyle{plain}
+%\newtheorem{axiom}{Axiom}  % consignes
+%\newtheorem{claim}[axiom]{Claim} % consignes
+%\newtheorem{theorem}{Theorem}[section]% consignes 
+%\newtheorem{corollary}{Corollary}[section]% consignes 
+%\newtheorem{lemma}[theorem]{Lemma} % consignes 
+\newtheorem{axiom}{Axiom}
+\newtheorem{claim}[axiom]{Claim}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+
+
+
+%% Personal newcommands
+\newcommand{\lo}{\overline{\bm{\phi}\vphantom{\bm{\alpha}}}}
+\newcommand{\ld}{\overline{\bm{\phi}^2}}
+\newcommand{\lt}{\overline{\bm{\phi}^3}}
+\renewcommand{\lq}{\overline{\bm{\phi}^4}}
+
+\newcommand{\mo}{\overline{\bm{\gamma}\vphantom{\bm{\phi}}}}
+\newcommand{\md}{\overline{\bm{\gamma}^2}}
+\newcommand{\mt}{\overline{\bm{\gamma}^3}}
+\newcommand{\mq}{\overline{\bm{\gamma}^4}}
+
+
+\newcommand{\loc}{\overline{\bm{\phi}_c}}
+\newcommand{\ldc}{\overline{\bm{\phi}_c^2}}
+\newcommand{\ltc}{\overline{\bm{\phi}_c^3}}
+\newcommand{\lqc}{\overline{\bm{\phi}_c^4}}
+
+\newcommand{\moc}{\overline{\bm{\gamma}_c\vphantom{\bm{\phi}^\varphi}}}
+\newcommand{\mdc}{\overline{\bm{\gamma}_c^2}}
+\newcommand{\mtc}{\overline{\bm{\gamma}_c^3}}
+\newcommand{\mqc}{\overline{\bm{\gamma}_c^4}}
+
+\newcommand{\bbGamma}{{\mathpalette\makebbGamma\relax}}
+\newcommand{\makebbGamma}[2]{%
+  \raisebox{\depth}{\scalebox{1}[-1]{$\mathsurround=0pt#1\mathbb{L}$}}}
+
+\title{Notes trajets TL, 2023}
+
+%\date{September 9, 1985}	% Here you can change the date presented in the paper title
+%\date{} 					% Or removing it
+
+\author{\rm  F. Bavaud
+}
+% Uncomment to remove the date
+\date{}
+
+% Uncomment to override  the `A preprint' in the header
+%\renewcommand{\headeright}{Technical Report}
+%\renewcommand{\undertitle}{Technical Report}
+\renewcommand{\shorttitle}{Notes trajets TL, 2023}
+
+%%% Add PDF metadata to help others organize their library
+%%% Once the PDF is generated, you can check the metadata with
+%%% $ pdfinfo template.pdf
+\hypersetup{
+pdftitle={Weighted multidimensional scaling from network affinities},
+pdfsubject={q-bio.NC, q-bio.QM},
+pdfauthor={Fran\c{c}ois Bavaud},
+pdfkeywords={First keyword, Second keyword, More},
+}
+
+
+ 
+
+\begin{document}
+\maketitle
+
+ 
+\section{Notations}
+\subsection{Lignes et flux}
+Les arrêts de bus $i=1,\ldots,n$, formant l'ensemble $V$ des noeuds du réseau, sont associés à l'une des lignes TL unidirectionnelles $l=1,\ldots,m$. 
+
+On note par $l[i]$  la ligne sur laquelle est située l'arrêt $i$. 
+
+On note par $\alpha(l)$ l'arrêt de départ de la ligne $l$, et par $\omega(l)$ l'arrêt terminus de la ligne $l$. 
+
+
+ On note par $F(i)$ (forward) l'arrêt suivant. La fonction est bien définie sauf $i=\omega(l[i])$ (i.e si $i$ est le terminus de ligne), auquel cas $F[i]=\emptyset$. 
+ 
+ On note par $B(i)$ (forward) l'arrêt précédent. La fonction est bien définie sauf $i=\alpha(l[i])$ (i.e si $i$ est le départ de ligne),  auquel cas $B[i]=\emptyset$.
+ 
+ 
+ 
+
+Les flux de passagers $x_{ij}$ de $i$ vers  $j$ sont de deux types:  (1) intra-ligne  ssi  $j=F(i)$ (ce qui implique $l[i]=l[j]$), noté alors $y_{ij}$;  (2) inter-ligne (transfert péderstre) ssi $l[i]\neq l[j]$, noté alors $z_{ij}$. Comme un flux est soit de l'un, soit de l'autre type, on a 
+\begin{displaymath}
+x_{ij}=y_{ij}+z_{ij}
+\end{displaymath}
+
+ 
+\section{Données}
+Les données sont constituées 
+\begin{itemize}
+  \item[(a)] des montées $a_i$ à l'arrêt $i$, avec $a_i=0$ si $i=\omega(l[i])$ (i.e si $i$ est un terminus de ligne) 
+  \item[(b)]  des descentes $b_i$ à l'arrêt $i$, avec $b_i=0$ si  $i=\alpha(l[i])$ (i.e si $i$ est un départ de ligne) 
+  \item[(c)]  du {\em tenseur d'intermédiarité} (betweenness tensor) $\chi_{ij}^{st}$, défini comme
+\begin{equation}
+\label{ }
+\begin{cases}
+ \chi_{ij}^{st}=1     & \text{si  le plus court chemin de $s$ vers $t$ (supposé unique) passe par l'arrête $ij$}, \\
+ \chi_{ij}^{st}=0         & \text{sinon}.
+\end{cases}
+\end{equation}
+Il possède $n^4$ composantes. Dans un second temps, on pourra relaxer l'hypothèse d'un chemin le plus court unique de $s$ à $t$, et remplacer $\chi_{ij}^{st}$ par une fonction (fortement) pénalisée par la longueur du chemin.
+\end{itemize}
+Le support $S_Z$ des arrêtes $ij$ de transfert, i.e.  l'ensemble des arrêtes $ij$ pour lesquelles il est possible que $z_{ij}>0$, est tel que
+\begin{displaymath}
+\max_{st} \chi_{ij}^{st}=1 
+\end{displaymath}
+i.e. si l'arrête $ij$ est située sur un plus court chemin d'au moins une entrée $s$ et une sortie $t$ du réseau. 
+
+Les transferts possibles $z_{ij}>0$  impliquent que $i$ et $j$ soient suffisamment proches, i.e. appartiennent à un même {\em super-stop} ou {\em crossing} $c=1,\ldots,r$. On note par $V_c$ ($c=1,\ldots, r)$ l'ensemble des noeuds appartenant au super-stop $c$. Un noeud $i$ ne peut appartenir à deux super-stops, mais il peut n'appartenir à aucun super-stop. On note par $V_0$ l'ensemble des noeuds n'appartenant à aucun super-stop. Par construction, $V$ est partitionnné comme
+ $V=\{V_0,V_1,\ldots, V_r\}$. Aussi, $z_{ij}>0$ n'est possible que si $i$ et $j$ appartiennent au même super-stop (et $i\neq j$)  et ainsi 
+ \begin{displaymath}
+S_Z=\bigcup_{c=1}^r (V_c\times V_c)\quad \setminus\quad  \bigcup_{i=1}^n (\{i\}\times \{i\})
+\end{displaymath}
+
+Le support $S_Y$ des arrêtes $ij$ intra-ligne,  i.e.  l'ensemble des arrêtes $ij$ pour lesquelles il est possible que $y_{ij}>0$, est constitué des paires telles que  $j=F(i)$. 
+
+\subsection{Proportion de transferts}
+On a aussi pour tout $i$ qui n'est ni terminus ni départ. 
+\begin{equation}
+\label{bilan1ligne}
+y_{i,F(i)}=y_{B(i),i}+a_i-b_i
+\end{equation}
+ce qui permet de déterminer les flux intra-ligne $y_{ij}$. 
+
+
+Parmi les passagers montant en $i$, certains viennent d'une autre ligne, d'autres entrent dans le réseau: 
+\begin{equation}
+\label{entrer}
+a_i=z_{\bullet i}+n_{i\bullet}
+\end{equation}
+Parmi les passagers descendant en $i$, certains commutent vers une autre ligne, d'autres sortent du réseau: 
+\begin{equation}
+\label{sortir}
+b_i=z_{i\bullet}+n_{\bullet i}
+\end{equation}
+Naturellement 
+\begin{displaymath}
+a_{\bullet}=b_{\bullet}=z_{\bullet\bullet}+n_{\bullet\bullet}
+\end{displaymath}
+La quantité $n_{\bullet\bullet}$ compte le nombre de personnes utilisant le réseau. La quantité $z_{\bullet\bullet}$ compte le nombre total de transferts (zéro, un, deux, trois...  transferts par personne) effectués par les utilisateurs du réseau. La proportion moyenne de transferts par utilisateur est $z_{\bullet\bullet}/n_{\bullet\bullet}$ . 
+
+\subsection{Flux compatibles}
+Les flux $\mathbf{X}=(\mathbf{Y},\mathbf{Z})$ sont compatibles avec les montées-descentes $(\mathbf{a},\mathbf{b})$ ssi
+\begin{equation}
+\label{compatibilite}
+y_{i,F(i)}=y_{B(i),i}+a_i-b_i
+\qquad\qquad 
+z_{\bullet i}\le a_i 
+\qquad\qquad 
+z_{i\bullet}\le b_i
+\end{equation}
+
+
+
+
+\section{Inférence}
+\subsection{Identité de GG et centralité} 
+On considère toutes les paires possibles $(s,t)\in V^2$, où $s$ est l'arrêt (le noeud)  d'entrée d'un passager dans le réseau, et $t$ est l'arrêt (le noeud)  de sortie de ce  passager dans le réseau. Il suffit de considérer $s\neq t$. 
+On veut estimer $n_{st}$, le nombre de passagers entrant dans le réseau en $s$, et sortant du réseau en $t$. On a l'identité de GG
+\begin{equation}
+\label{identiteGG}
+x_{ij}=y_{ij}+z_{ij}=\sum_{st}\chi_{ij}^{st}\, n_{st}
+\end{equation}
+C'est seulement par la quantité $\chi_{ij}^{st}$ que les trajectoires  $z_{ii}$ ou comme $z_{ii-}$ sont interdites (section \ref{casdev}). 
+
+On a $x_{ij}=y_{ij}+z_{ij}$, où les deux termes ne peuvent être non-nuls simultanément: $y_{ij}$ est possiblement positif ssi $j=F(i)$, et $z_{ij}$ est possiblement positif ssi $i,j\in I$ (même jonction) avec $i\neq j$. 
+
+
+Un chemin (d'utilisation du réseau) $st$ commence toujours par une arrête intra $(s, F(s))$,  et se termine toujours par une arrête intra $(B(t),t)$. Des arrêtes de transferts peuvent être empruntées dans les parties {\em intermédiaires} du chemin.  On définit
+\begin{equation}
+\label{inter}
+\begin{cases}
+ \gamma_i^{st}:= 1     & \text{si  le plus court chemin de $s$ vers $t$  passe par le stop $i$ ($i=s$ et $i=t$ possibles),} \\
+ \gamma_i^{st}=0         & \text{sinon}.
+\end{cases}
+\end{equation}
+Alors 
+\begin{displaymath}
+ \gamma_i^{st}=\chi_{i\bullet}^{st}+\delta_{it}=\chi_{\bullet i}^{st}+\delta_{is}
+\end{displaymath}
+On pose $\Gamma_i:=\sum_{st} \gamma_i^{st}\, n_{st}$, qui est un indice de {\em centralité d'intermédiarité} du stop $i$. 
+En sommant (\ref{identiteGG}), on a 
+\begin{equation}
+\label{SumCol}
+y_{i\bullet}+z_{i\bullet}=\sum_{st} \gamma_i^{st}\, n_{st}-\sum_sn_{si}=\Gamma_i-n_{\bullet i}
+\end{equation}
+De même, 
+\begin{equation}
+\label{SumRow}
+y_{\bullet i}+z_{\bullet i}=\sum_{st} \gamma_i^{st}\, n_{st}-\sum_tn_{it}=\Gamma_i-n_{i\bullet}
+\end{equation}
+Mais $b_i=z_{i\bullet}+n_{\bullet i}$, et donc (\ref{SumCol}) s'écrit 
+\begin{equation}
+\label{Gammab}
+\Gamma_i=y_{i\bullet}+b_i=y_{i,F(i)}+b_i
+\end{equation}
+De même, $a_i=z_{\bullet i}+n_{i\bullet}$,  et donc  (\ref{SumRow}) s'écrit 
+\begin{equation}
+\label{GammaA}
+\Gamma_i=y_{\bullet i}+a_i=y_{B(i),i}+a_i
+\end{equation}
+En particulier, $y_{i,F(i)}=y_{B(i),i}+a_i-b_i$, comme il se doit. 
+
+Si $i$ est le début de ligne, alors $y_{B(i),i}=0$ et $\Gamma_i=a_i$. Si 
+$i$ est le terminus, alors $y_{i,F(i)}=0$ et $\Gamma_i=b_i$.
+
+
+
+\subsubsection{(*) Cas possiblement déviants}
+\label{casdev}
+Pour $z_{ii}$ : on a que $\chi_{ii}^{st}=0$: l'``arrête" $ii$ serait empruntée par  un voyageur descendant en $i$, puis remontant en $i$ (par le/un bus d'après), possible mais certainement pas le plus court chemin: irrationnel. Sauf si on hésite à poursuivre et qu'on décide quand même de poursuivre après réflexion. Ou que, voyageur sans billet, des contrôleurs s'apprêtent à monter en $i$, on y descend précipitamment et attend le prochain bus: finalement très rationnel, possiblement... 
+
+Pour $z_{ii-}$ : passer à l'arrêt opposé (on suppose que $B(i)-=F(i-)$ (i.e. que les lignes étaient parallèles ``avant l'arrêt $i$") ne peut pas être le plus  court chemin: si le voyageur descend à $i$, il a passé au moins par $B(i)$, et s'il monte en $i-$, il passe au moins par $F(i-)$, Or, quel que soient $s$ et $t$, 
+\begin{displaymath}
+d_{sB(i)}+d_{B(i)i}+d_{ii-}+d_{i-F(i-)}+d_{F(i-)t}\; >\; d_{sB(i)}+d_{B(i)B(i)-}+d_{F(i-)t}
+\end{displaymath}
+car 
+\begin{displaymath}
+ d_{B(i)i}+d_{ii-}+d_{i-F(i-)}\; >\;  d_{B(i)B(i)-}
+\end{displaymath}
+où $d_{ii-}$ est le coût de traverser la route en $i$, et $d_{B(i)B(i)-}$ celui de traverser la route l'arrêt d'avant. Mais s'il est épouvantable de traverser la route en $i$ (camions, pas de passage sécurisé), ou s'il est embarrassant de traverser la route en $i$ (par exemple sous les yeux d'une connaissance possiblement dans les parages qui nous croyait à l'étranger, ou en arrêt maladie), alors de nouveau il peut être préférable de descendre un arrêt plus loin puis de rebrousser chemin: de nouveau,  finalement très rationnel, possiblement... 
+
+
+\subsection{Independence assumption on stops}
+Assume $n_{st}^{(r)}=\frac{n^{(r)}_{s\bullet}n^{(r)}_{\bullet t}}{n^{(r)}_{\bullet\bullet}}$. Compute $\mathbf{X}^{(r+1)}=\bm{\chi}\mathbf{N}^{(r)}$, then compute
+\begin{equation}
+\label{IterInd}
+n_{i\bullet}^{(r+1)}=a_i-z_{\bullet i}^{(r+1)}
+\qquad\qquad
+n_{\bullet i}^{(r+1)}=b_i-z_{i\bullet}^{(r+1)}
+\qquad\qquad
+n_{st}^{(r+1)}=\frac{n^{(r+1)}_{s\bullet}n^{(r+1)}_{\bullet t}}{n^{(r+1)}_{\bullet\bullet}}
+\end{equation}
+Start from some $n^{(0)}_{s\bullet}$ and $n^{(0)}_{\bullet t}$ with coinciding totals (such as $n^{(0)}_{s\bullet}=a_s$ and $n^{(0)}_{\bullet t}=b_t$, i.e. no transfers $\mathbf{Z}^{(0)}=\mathbf{0}$), and iterate (\ref{IterInd}) until convergence.
+
+Il faudrait en plus s'assurer de la compatibilité $a_i\ge z_{\bullet i}^{(r+1)}$ et $b_i\ge z_{i\bullet}^{(r+1)}$ à chaque étape. 
+
+\subsubsection{*** contre-argument? Mais non***}
+*** Mais en fait $a_i-z_{\bullet i}^{(r)}=n_{i\bullet}^{(r)}$, et donc la première identité (\ref{IterInd}) s'écrit $n_{i\bullet}^{(r+1)}=n_{i\bullet}^{(r)}$. De même, 
+$b_i-z_{i\bullet}^{(r)}=n_{\bullet i}^{(r)}$ et donc $n_{\bullet i}^{(r+1)}=n_{\bullet i}^{(r)}$. En conséquence, toute solution initiale est déjà un point fixe, il n'y aucune évolution / convergence. Si on part avec une condition initiale sans transferts, toutes les lignes sont de facto déconnectées, avec des flux $n_{st}^{(0)}$ {\em purement mono-lignes},  et ainsi aucun transfert $z_{ij}>0$ ne va jamais émerger de $\mathbf{X}^{(r)}=\bm{\chi}\mathbf{N}^{(r)}$ ... $\frown$. Il faudrait essayer travailler au niveau de {\em jonctions} aux flux indépendants.  
+
+\subsection{Independence assumption on junctions}
+Each stop $i$ belongs to a single line $\ell(i)$, with a successor stop $F(i)$ always defined unless $i$ is the terminus of the line. 
+
+Also, each stop  $i$ belongs to a single super-stop junction $I[i]$, including ``bare junctions" where no transfers take place.  Define the edge-(junction-)path incidence matrix
+\begin{equation}
+\label{ }
+\begin{cases}
+ \chi_{ij}^{ST}=1     & \text{si  le plus court chemin (supposé unique)  de la jonction $S$ vers la jonction $T$ passe par l'arrête $ij$}, \\
+ \chi_{ij}^{ST}=0         & \text{sinon}.
+\end{cases}
+\end{equation}
+Un chemin (d'utilisation du réseau) $ST$ commence toujours par l'arrête intra $(i, F(i))$ avec $i\in S$, et se termine toujours par une arrête intra $(B(j),j)$ avec $j\in T$. Des arrêtes de transferts peuvent être empruntées dans les parties {\em intermédiaires} du chemin. 
+
+
+On indique, systématiquement, des jonctions par des majuscules, dont les indices {\em inférieurs} (i.e. pas comme dans $ \chi_{ij}^{ST}$) dénotent des agrégations (sommations) de stops dans les jonctions. Par exemple: 
+\begin{displaymath}
+n_{ST}=\sum_{s\in S; t\in T}n_{st}\qquad\qquad y_{\bullet S}=\sum_{s\in S} y_{\bullet s}\qquad\qquad\Gamma_S=\sum_{i\in S}\Gamma_i
+\end{displaymath}
+L'identité de GG devient 
+\begin{equation}
+\label{GGalt}
+x_{ij}=y_{ij}+z_{ij}=\sum_{ST}\chi_{ij}^{ST}\, n_{ST}
+\end{equation}
+On a 
+ $ \chi_{ij}^{ST}\neq \sum_{s\in S; t\in T}\chi_{ij}^{st}$. L'identité (\ref{GGalt}) diffère de (\ref{identiteGG}) qui s'écrit
+\begin{displaymath}
+x_{ij}=y_{ij}+z_{ij}=\sum_{st}\chi_{ij}^{st}\, n_{st}=\sum_{ST}\sum_{s\in S; t\in T}\chi_{ij}^{st}\, n_{st}
+\end{displaymath}
+L'itération commence par le calcul de $\mathbf{X}^{(r+1)}=\bm{\chi}\mathbf{N}^{(r)}$ selon  (\ref{GGalt}), puis par le calcul de l'analogue des identités (\ref{IterInd}) qui deviennent 
+\begin{equation}
+\label{IterIndAlt}
+n_{S\bullet}^{(r+1)}=a_S-z_{\bullet S}^{(r+1)}
+\qquad\qquad
+n_{\bullet T}^{(r+1)}=b_T-z_{T\bullet}^{(r+1)}
+\qquad\qquad
+n_{ST}^{(r+1)}=\frac{n^{(r+1)}_{S\bullet}n^{(r+1)}_{\bullet T}}{n^{(r+1)}_{\bullet\bullet}}
+\end{equation}
+A noter que $z_{\bullet S}=z_{S\bullet}$ quel que soit $\mathbf{N}$. Ainsi, on a toujours $n_{S\bullet}-n_{\bullet S}=a_S-b_S$ (les flux  $\mathbf{N}$ sont généralement marginalement inhomogènes), avec $a_{\bullet}=b_{\bullet}$ évidemment. 
+
+\subsection{Une seule ligne}
+On veut trouver $\mathbf{N}=(n_{st})$ (qu'on peut normaliser et considérer comme une distribution de probabilité) qui maximise l'entropie sous les contraintes $n_{s\bullet}=a_s$ et  $n_{\bullet t}=b_t$, i.e. $\sum_{st}n_{st}\delta_{si}=a_i$ et $\sum_{st}n_{st}\delta_{tj}=b_j$, avec le prior théorique $f^M_{st}=\frac{2}{l(l-1)}I(s<t)$. Avec les multiplicateurs de Lagrange (intégrant la normalisation / le total), la solution est de la forme 
+\begin{displaymath}
+n_{st}=I(s<t)\prod_{i}\exp(-\lambda_i \delta_{si})\prod_{j}\exp(-\mu_j \delta_{tj})=I(s<t)\,c_s\, d_t \qquad\qquad \sum_{s<t}c_s\, d_t=n_{\bullet\bullet}=a_{\bullet}=b_\bullet
+\end{displaymath}
+Les contraintes sont que 
+\begin{displaymath}
+a_i=\sum_{st}I(s<t)\,c_s\, d_t \, \delta_{si}=c_i \sum_{t>i}d_t=c_i\, D_i \qquad\qquad D_i :=\sum_{t>i}d_t
+\end{displaymath}
+\begin{displaymath}
+b_j=\sum_{st}I(s<t)\,c_s\, d_t \, \delta_{tj}=d_j\sum_{s<j}c_s=d_j \, C_j \qquad\qquad C_j:=\sum_{s<j}c_s
+\end{displaymath}
+Soit $m_{st}$ le nombre de voyageurs partant de $s$ et toujours présents en $t$, et soit $\rho_j$ la probabilité de descendre en $j$. On a 
+\begin{displaymath}
+n_{st}=m_{st}\rho_t \qquad\qquad n_{s,t+1}=m_{st}(1-\rho_t)\rho_{t+1}\qquad\qquad \frac{n_{s,t+1}}{n_{st}}=\frac{(1-\rho_t)\rho_{t+1}}{\rho_t}=\frac{d_{t+1}}{d_t}
+\end{displaymath}
+Ainsi 
+\begin{displaymath}
+\frac{d_{t+2}}{d_{t+1}}=\frac{(1-\rho_{t+1})\rho_{t+2}}{\rho_{t+1}}
+\qquad\qquad \frac{d_{t+2}}{d_{t}}=\frac{d_{t+2}}{d_{t+1}}\frac{d_{t+1}}{d_{t}}=\frac{(1-\rho_{t+1})\rho_{t+2}}{\rho_{t+1}}\frac{(1-\rho_t)\rho_{t+1}}{\rho_t}=
+\rho_{t+2}(1-\rho_{t+1})(1-\rho_{t})\frac{1}{\rho_{t}}
+\end{displaymath}
+\begin{displaymath}
+\frac{d_{t+q}}{d_{t}}=
+\rho_{t+q}(1-\rho_{t+q-1})(1-\rho_{t+q-2})\ldots(1-\rho_{t+1}) (1-\rho_{t})\frac{1}{\rho_{t}}
+\end{displaymath}
+\begin{displaymath}
+d_l+d_{l-1}=d_2[\rho_l(1-\rho_{l-1})+\rho_{l-1}](1-\rho_{l-2})(1-\rho_{l-3})\ldots(1-\rho_{3}) (1-\rho_{2})\frac{1}{\rho_{2}}
+\end{displaymath}
+\begin{displaymath}
+D_i=\sum_{t>i}d_t
+\end{displaymath}
+Soit $z_{st}$ la proportion de voyageurs présents dans le bus en $s$ et toujours présents en $t>s$. Soit $\tau_s$ la probabilité de monter en $s$. Alors
+$f_{st}=\tau_sz_{st}\rho_t$
+
+
+\newpage
+
+\section{*** OLD JUNK}
+
+\subsection{Une seule ligne}
+On ordonne les arrêts $i=1,\ldots, M$ de façon croissante dans le sens du parcours (i.e. $F(i)=i+1$). 
+Soit $A_i=\sum_{j\le i}a_j$, respectivement $B_i=\sum_{j\le i}b_j$, le nombre cumulé de montées, respectivement de descentes, jusqu'en $i$. Il faut que $A_i\ge B_i$ et 
+$a_{\bullet}=b_{\bullet}$. 
+
+Alors $y_{i,F(i)}=A_i-B_i$, et $y_{B(i),i}=(A_i-a_i)-(B_i-b_i)=y_{i,F(i)}-a_i+b_i$, 	qui satisfait (\ref{bilan1ligne}) comme il se doit. 
+
+On a $\chi_{ij}^{st}=I(j=i+1)\, I(s<t)\, I(s\le i)\, I(j\le t)=I(j=i+1)\,  I(s\le i)\, I(j\le t)$
+
+
+
+
+\
+
+
+
+
+
+
+
+Soit  $n_{st}=c_sd_t I(s<t)$. En substituant dans (\ref{identiteGG}), on a 
+\begin{displaymath}
+y_{ij}=I(j=i+1)\sum_{s\le i}\sum_{t\ge j}c_sd_t 
+\end{displaymath}
+
+
+\subsubsection{Maxent}
+Let $f_{st}^D:=\frac{n_{st}}{n_{\bullet\bullet}}$ be the empirical distribution, incompletely observed: only $n_{s\bullet}=a_s$ and $n_{\bullet}=b_t$ are known (entailing
+$n_{\bullet\bullet}=a_{\bullet}=b_{\bullet}$). Consider the ``semi-uniform" prior $f_{st}^M=\frac{I(s<t)}{\frac12 M(M-1)}$ (where $M$ is the number of stops of the single line), assigning a constant probability to any $st$-trip provided $s<t$. 
+
+\
+
+The MaxEnt solution $\tilde{f}_{st}^D$ minimizing $K(f^D|| f^M)=\sum_{st}f_{st}^D\ln \frac{f_{st}^D}{f_{st}^M}$ under the constraints 
+$\sum_t f_{s't}^D=\sum_{st} f_{st}^DI(s=s')=\frac{a_{s'}}{a_\bullet}$ and $\sum_s f_{st}^D=\sum_{st'} f_{st'}^DI(t=t')=\frac{b_t}{b_\bullet}$ is of the form 
+\begin{displaymath}
+\tilde{f}_{st}^D=\frac{f_{st}^M \exp(\phi_s)\exp(\gamma_t)}{Z}
+\end{displaymath}
+that is 
+\begin{displaymath}
+\tilde{n}_{st}^D=n_{\bullet\bullet} \tilde{f}_{st}^D=c_sd_t I(s<t)\qquad\qquad\mbox{avec}\quad \sum_{st}c_sd_t I(s<t)=n_{\bullet\bullet}
+\end{displaymath}
+with the constraints
+\begin{equation}
+\label{ConstS}
+c_s \sum_{t>s}d_t=a_s\qquad\qquad d_t \sum_{s<t}c_s =b_t
+\end{equation}
+On a $a_M=0$ et $b_1=0$. Aussi, pour tout $t=1,\ldots, M$, 
+\begin{displaymath}
+A_t:=\sum_{s=1}^t a_s\quad \ge \quad B_t:=\sum_{s=1}^t b_s
+\end{displaymath}
+
+
+
+\subsubsection{Interprétation markovienne de GG}
+On peut monter que la  solution MaxEnt est de la forme 
+\begin{equation}
+\label{ }
+\tilde{n}_{st}=I(s<t)\, a_{\bullet}\,  p_s^{\mbox{\tiny in}}c_{s+1}\ldots c_{t-1} p_t^{\mbox{\tiny out}}
+\qquad\qquad \tilde{n}_{s,s+1}=a_{\bullet} p_s^{\mbox{\tiny in}} p_{s+1}^{\mbox{\tiny out}}
+\end{equation}
+avec $p_s^{\mbox{\tiny in}}=\frac{a_s}{a_{\bullet}}$,  \quad $p_t^{\mbox{\tiny out}}=\frac{b_t}{y_{t-1,t}}$ et $c_i=1-p_i^{\mbox{\tiny out}}$. On a $p_M^{\mbox{\tiny out}}=\frac{b_M}{y_{M-1,M}}=1$ (terminus, tout le monde descend). 
+
+*** preuve *** 
+
+\subsubsection{Identité de GG}
+
+
+
+
+\subsubsection{Maxent for multilines}
+A {\em junction $I$} (not "superstop") is a set of disjoint set $I$ of stops "not too far apart", on which transfers can take place. Any transfer $ij$ is allowed for $i,j\in I$, with the exception of $i=j$ (unboarding at $i$ followed by boarding at the same stop) and $j=i_-$, where $i_-$ denotes the stop "opposite to $i$", that is crossing the road to take the line opposite to 
+
+
+\
+
+
+$n_{\bullet\bullet}$ is not known. Its maximal value is reached under no transfers, that is when each boarding is an entrance in the network, and when each unboarding an exit. That is 
+\begin{displaymath}
+n_{\bullet\bullet}\le a_{\bullet}=b_{\bullet}
+\end{displaymath}
+
+
+
+On the other direction, $n_{\bullet\bullet}$ is minimum when transfers are maximal: that is, one would like, for every super-stop $I$  to match each unboarding traveller with a boarding traveller, leaving $I$ traveller-free. Yet  superstop total boardings and unboardings  do not match in general: 
+\begin{displaymath}
+a_I=\sum_{i\in I}a_i\qquad\qquad b_I=\sum_{i\in I}b_i\qquad\qquad a_I\neq b_I\mbox{ in general.}
+\end{displaymath}
+By construction 
+\begin{equation}
+\label{sortir2}
+b_I=z_{I\bullet}+n_{\bullet I}
+\qquad\qquad a_I=z_{\bullet I}+n_{I\bullet}
+\end{equation}
+But $\mathbf{Z}$ is a directed sum of flows concentrated on junctions $I$, and zero outside junctions (denoted $0$), i.e. $\mathbf{Z}=\mathbf{Z}^0\bigoplus_I \mathbf{Z}^I $. Hence 
+\begin{displaymath}
+z_{I\bullet}=z_{\bullet I}\qquad\qquad  n_{I\bullet}-n_{\bullet I}=a_I-b_I
+\end{displaymath}
+Note that 
+\begin{equation}
+\label{ }
+a_{\bullet}=a_{0}+\sum_{I}a_I=b_{\bullet}=b_{0}+\sum_{I}b_I
+\end{equation}
+where $a_{0}$ is the number of travellers boarding outside junctions, and $b_{0}$ is the number of travellers un-boarding outside junctions. 
+
+
+
+\
+
+
+A maximum amount of $\min(a_I,b_I)$ can thus be transferred at (supstop) junction $I$, and 
+\begin{equation}
+\label{333}
+n_{\bullet\bullet}\ge  a_{\bullet}-\sum_I \min(a_I,b_I)=\frac12(a_0+b_0+\sum_I |a_I-b_I|)
+\end{equation}
+Constraints such that no transfers between opposite directions take place are not taken into account, so the lower bound (\ref{333}) is too small in some cases (when the activity on the other lines is too small). 
+
+\ 
+
+Geography defines junctions as disjoint set of stops "not too far apart", and forbids transfers between opposite directions by imposing that transfer $i\to j$ must necessarily take place on shortest $st$ paths, that is edge $ij$ belongs to the $st$ shortest path (symmetric in composition for bidirectional lines), that is iff 
+$\chi_{ij}^{st}=1$. But there is no $z_{st}$ such that  $\chi_{ij}^{st}=1$ : if $i$ and $j$ are "opposite stops": boarding on $s$ "before $i$" (some reference direction) and un-boarding at $t$ "after $j$" is never on the shortest path, unless $s=i$ and $j=t$, in which case there is no transfer.  
+
+
+\
+
+*** pas de transferts possibles: fantaisie de lignes de bus entièrement disconnectées...
+
+
+\
+
+Prior: $f^{M}_{st}=\frac{1}{z} I(t\neq s)I(t\neq s_-)$, where $s_-$ is the bus stop "opposite" to $s$: one assumes twin, bidirectional bus lines). In particuler, one assumes that each stop can be reached 
+
+As a consequence, each bus top $s$  (belonging to a junction of not) possesses an unique  "opposite" bus stop $s_-$. Hence $z=\sum_{st} I(t\neq s)I(t\neq s_-)=M(M-2)$, where $M$ is the total number of bus stops, namely 
+\begin{displaymath}
+M=\sum_{l=1}^L M_l
+\end{displaymath}
+where $M_l$ is the number of bus stops at line $l$, and the number of lines $L$ is even (twin, bidirectional bus lines). 
+
+\subsection{MaxEnt multilines, revisited} 
+L'identité de GG s'écrit 
+\begin{equation}
+\label{identiteGGrev}
+x_{ij}=\sum_{st}\chi_{ij}^{st}\, n_{st}=\sum_{[st]\ni (ij)}n_{st}
+\end{equation}
+où $(ij)$ est une arrête (orientée) du réseau, $[st]$ le plus court chemin (orienté, supposé unique) allant de $s$ à $t$. On note $(ij)\in[st]$ ou $[st]\ni (ij)$ le fait que le chemin $[st]$ passe par l'arrête $(ij)$, i.e. que l'arrête $(ij)$ est sur le chemin $[st]$. L'expression $\sum_{[st]\ni (ij)}\ldots$ est la somme sur tous les chemins $[st]$ passant par $(ij)$ (fixé). 
+
+\
+
+La solution MaxEnt pour $n_{st}$ (convertible en une probabilité jointe) avec un prior uniforme et les contraintes  (\ref{identiteGGrev}) (convertibles en moyennes) est 
+\begin{equation}
+\label{solMaxENT}
+n_{st}=\prod_{(ij)}\exp(-\gamma_{ij}\: \chi_{ij}^{st}) =\prod_{(ij)\in[st]}\phi_{ij}
+\end{equation}
+i.e. un produit de termes consécutifs sur les arrêtes de $[st]$. 
+
+\
+
+En particulier, si $(s,F(s))\in [s,t]$ (i.e. $F(s)$ est sur la ligne amenant vers $t$ depuis $s$), alors \fbox{$n_{st}=\phi_{(s,F(s))}\: n_{F(s),t}$} : vision intra-ligne, on reste dans le bus, on était dans le bus en $s$, on y était soit monté, soit resté depuis $B(s)$. En fait, chaque stop $s$ appartient à une ligne, et donc $F(s)$ est toujours défini. Aussi, 
+si quelqu'en monte en $s$, il reste au moins jusqu'en $F(s)$. S'il descend en $s$, il ne peut pas être entré dans le réseau en $s$. 
+
+
+\
+
+Si en plus on assume l'indépendance $n_{st}=n_{\bullet\bullet}\rho_s\rho_t$, alors de ce qui précède $\rho_{s}=\phi_{(s,F(s))}\: \rho_{F(s)}$, et donc 
+$\phi_{(s,F(s))}=\frac{\rho_{s}}{\rho_{F(s)}}$. Si l'on généralise à (toutes, de deux sortes? ) les arrêtes, on a \fbox{$\phi_{ij}=\frac{c_i}{c_{j}}$} et 
+
+
+\
+
+By the way: on est en fait vraiment intéressé par $n_{ST}$ ($S,T$ = jonctions "vraies" ou stops isolés) plutôt que par $n_{st}$. 
+
+
+\
+
+Let $M$ be the number of edges (within + transfer), and let $N$ be the number of stops (nodes); so $N^2$ is the number of paths. The $M\times N^2$ matrix 
+$\bm{\chi}=(\chi_{(ij)[st]})\equiv(\chi_{ij}^{st})$  is the {\em edge-path incidence matrix}. Identity {\ref{identiteGGrev}) reads $\mathbf{X}=\bm{\chi}\mathbf{N}$. Identity 
+(\ref{solMaxENT}) reads $\log n_{st}=\sum_{(ij)\in[st]}\log \phi_{ij}=\: -\sum_{(ij)} \gamma_{ij}\, \chi_{(ij)[st]} $, that is 
+$\log \mathbf{N}=-\bm{\chi}^\top \log \bm{\Gamma}$
+
+
+
+\section{EM approach}
+Initial: no transfers?  Minimize $n_{\bullet\bullet} K(f^D||f^M)$ ? 
+
+\
+
+If $n_{st}$ is given, then $y_{ij}$ (observed) and $z_{ij}$ (unobserved) follow from $x_{ij}=\sum_{st}\chi_{ij}^{st}\, n_{st}$
+
+\
+
+But $\mathbf{Y}$ must obey $y_{i,F(i)}=y_{B(i),i}+a_i-b_i$
+
+
+\
+
+If $y_{ij}$  and $z_{ij}$ are given, how to infer $n_{st}$? 
+
+
+
+
+
+
+\end{document}
+
