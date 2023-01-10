@@ -77,13 +77,13 @@ conv_thres_if = 0.00001
 # Conv threshold
 conv_thres_algo = 0.00001
 # epsilon
-epsilon = 1e-5
+epsilon = 1e-10
 # max iteration
 max_it = 400
 # print iterations
 display_it = F
 # number of iterations
-n_test = 2
+n_test = 10
 # --- prop_limit
 # hyper_par = c(0.1, 0.3, 0.5, 0.7, 0.9)
 hyper_par = c(1:20)/20
@@ -101,9 +101,10 @@ res_mat = matrix(0, nrow = n_test, ncol = length(hyper_par))
 mean_test = c()
   
 for (i in 1:n_test) {
-  seed_memory = set.seed(i)
+  set.seed(i)
   # passengers_rho = get_passengers(nb_passengers)
-  paths_passengers = n_poisson(paths, lambda)
+  # paths_passengers = n_poisson(paths, lambda)
+  paths_passengers = n_multin(paths, 100)
   paths_passengers = paths_passengers / sum(paths_passengers)
   x_btw = compute_x_from_n(paths_passengers, edge_ref, sp_ref, p_mat)$x_btw
   rho_in = rowSums(paths_passengers) + colSums(x_btw)
@@ -128,7 +129,7 @@ for (i in 1:n_test) {
 
     res_mat[i,j] = stat_out
     
-    cat("Iteration n°:", i,"Parameter n°:", j, "done.\n")
+    cat("Iteration n°:", i, "Parameter n°:", j, "done.\n")
   }
 
 }

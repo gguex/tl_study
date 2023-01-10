@@ -726,12 +726,23 @@ n_poisson = function(paths, lambda){
   return(n_drawn)
 }
 
+#-------------------------------------------------------------------------------
+# Draw n_passagers passengers to non-null positions with a multinomial distrib
+#-------------------------------------------------------------------------------
+
+n_multin = function(paths, n_passagers, p_pos = rep(1/sum(paths), sum(paths))){
+  drawn = as.vector(rmultinom(1, n_passagers, p_pos))
+  n_drawn = paths
+  n_drawn[n_drawn == 1] = drawn
+  return(n_drawn)
+}
 
 #-------------------------------------------------------------------------------
 # - edge_ref
 # - p_mat
 # - sp_ref
 #-------------------------------------------------------------------------------
+
 edge_ref_p_mat_sp_ref = function(adj){
   g = graph_from_adjacency_matrix(
     adj,
