@@ -19,8 +19,8 @@ sp_ref = edge_ref_p_mat_sp_ref(adj)[[3]]
 
 # Testing with a case
 
-set.seed(7)
-n_real = n_poisson(paths, 1)
+set.seed(9)
+n_real = n_multin(paths, 100)
 n_real = n_real / sum(n_real)
 x_btw = compute_x_from_n(n_real, edge_ref, sp_ref, p_mat)$x_btw
 rho_in = rowSums(n_real) + colSums(x_btw)
@@ -129,5 +129,5 @@ s_it_mat = as.matrix(s_it_mat * red_mat)
 # Display the diff
 sum((allowed_in_btw - node_in_btw)^2)
 sum((allowed_out_btw - node_out_btw)^2)
-round(n_mat, 4) / n_real
+round(log(n_mat / n_real), 2)
 round(n_mat, 4)
