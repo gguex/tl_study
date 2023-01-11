@@ -559,6 +559,74 @@ compute_x_from_n = function(n_mat, edge_ref, sp_ref, p_mat){
 }
 
 #-------------------------------------------------------------------------------
+# Function: plot_flow_graph 
+#
+# Description:  Plot a graph with lines and flow
+#
+# In:
+# - adj: the adjacency matrix of the line network (inter and intra)
+# - n_mat: the flow matrix between stops
+# - layout: a given layout for the graph, if NULL, automatic
+# Out:
+# - None, only plotting
+#-------------------------------------------------------------------------------
+
+plot_flow_graph = function(adj, n_mat, layout=NULL){
+  
+  df_line = as_data_frame(graph_from_adjacency_matrix(adj, weighted = TRUE))
+  df_line["type"] = "line"
+  df_flow = as_data_frame(graph_from_adjacency_matrix(n_mat, weighted = TRUE))
+  df_flow["type"] = "flow"
+  df_tot = rbind(df_line, df_flow)
+  
+  if(is.null(layout)){
+    layout = layout_nicely(graph_from_data_frame(df_line))
+  }
+  
+  g_tot = graph_from_data_frame(df_tot)
+  
+  n_vertices = length(V(g_tot))
+  n_edges = length(E(g_tot))
+  
+  std_weights = E(g_tot)$weight[E(g_tot)$type == "flow"]
+  std_weights = std_weights - min(std_weights) 
+  std_weights = std_weights / max(std_weights) * 0.9 + 0.1
+  
+  color_green_fn = colorRamp(c("white", "forestgreen"))
+  color_red_fn = colorRamp(c("white", "red"))
+  color_blue_fn = colorRamp(c("white", "blue"))
+  
+  edge_sizes = (E(g_tot)$type == "line") * 3
+  edge_sizes[E(g_tot)$type == "flow"] = std_weights * 2
+  edge_curves = (E(g_tot)$type == "line") * 0.2
+  edge_colors = rep("black", n_edges)
+  new_colors = apply(cbind(color_green_fn(std_weights), std_weights), 1, 
+                     function(row) rgb(row[1], row[2], row[3], row[4]*255, 
+                                       maxColorValue=255))
+  edge_colors[E(g_tot)$type == "flow"] = new_colors
+  
+  pie_prop = list()
+  in_out_colors = list()
+  in_prop = rowSums(n_mat)
+  in_prop = in_prop / max(in_prop)
+  out_prop = colSums(n_mat)
+  out_prop = out_prop / max(out_prop)
+  for (i in 1:n_vertices){
+    pie_prop[[i]] = c(0.5, 0.5)
+    loc = which(V(g_tot)$name == names(in_prop)[i])
+    in_color = color_red_fn(in_prop[i])
+    out_color = color_blue_fn(out_prop[i])
+    in_out_colors[[loc]] = c(rgb(in_color, maxColorValue=255), 
+                             rgb(out_color, maxColorValue=255))
+  }
+  in_out_colors = setNames(in_out_colors, names(in_prop))
+  
+  plot(g_tot, layout=layout, edge.color=edge_colors, edge.width=edge_sizes,
+       edge.curved=edge_curves, edge.arrow.size=0.5, vertex.shape="pie", 
+       vertex.pie=pie_prop, vertex.pie.color=in_out_colors)
+}
+
+#-------------------------------------------------------------------------------
 # Network building
 #-------------------------------------------------------------------------------
 #--------------------------------

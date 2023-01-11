@@ -131,3 +131,11 @@ sum((allowed_in_btw - node_in_btw)^2)
 sum((allowed_out_btw - node_out_btw)^2)
 round(log(n_mat / n_real), 2)
 round(n_mat, 4)
+
+# Graphics 
+
+df_line = as_data_frame(graph_from_adjacency_matrix(adj, weighted = TRUE))
+layout = layout_nicely(graph_from_data_frame(df_line))
+
+plot_flow_graph(adj, n_real, layout)
+
