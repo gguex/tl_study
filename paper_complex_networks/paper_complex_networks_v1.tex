@@ -177,6 +177,34 @@ f^0_{st}=\frac{1}{Z(\bm{\lambda})}\: g_{st}\exp(-\sum_{r=1}^R \lambda_r o^r_{st}
 \end{equation}
 where the Lagrange multipliers $\bm{\lambda}$ are determined  so as to satisfy the $R$ linear constraints (**see e.g. Bavaud and *** and references therein). 
 
+\subsection{Statement of the problem (version 2, added by GG)}
+Let $f_{st}=n_{st}/n_{\bullet\bullet}$ be the proportion of $st$-trips (empirical distribution) and let $g_{st}$ be some prior guess on its shape (theoretical distribution). Also suppose we know the margins distribution of the real transportation flow $n^\star_{st}$, i.e. $c_s = n^\star_{s \bullet} / n^\star_{\bullet \bullet}$ and $d_t = n^\star_{\bullet t} / n^\star_{\bullet \bullet}$. We are interested in finding
+\begin{align}
+	\label{constr_MaxEnt}
+	\min_{\mathbf{f}\in\mathcal{F}} &\; \sum_{st}f_{st}\log \frac{f_{st}}{g_{st}}, \notag \\
+	s.t. &\; \sum_t f_{st} = c_s, \notag \\
+	&\; \sum_s f_{st} = d_t.
+\end{align}
+The Lagragian is
+\begin{equation}
+	\label{Lag}
+	L = \sum_{st}f_{st}\log \frac{f_{st}}{g_{st}} - \sum_s \lambda_s (c_s - \sum_t f_{st}) - \sum_t \mu_t (d_t - \sum_s f_{st}),
+\end{equation}
+which gives, after deriving,
+\begin{equation}
+	\label{Sol}
+	f_{st} = \alpha_s \beta_t g_{st} \qquad \text{with } \alpha_s := \exp(- 1 - \lambda_s) \text{, } \beta_t := \exp(- \mu_t).
+\end{equation}
+Using constraints in (\ref{constr_MaxEnt}), we find
+\begin{equation}
+	\label{Sol_LagMult}
+	\alpha_s = \frac{c_s}{\sum_t \beta_t g_{st}}, \qquad \beta_t = \frac{d_t}{\sum_s \alpha_s g_{st}}, 
+\end{equation}
+which gives an \emph{iterative fitting algorithm}
+\begin{equation}
+	\label{Iterative fitting}
+	\alpha^{(\iota)}_s = \frac{c_s}{\sum_t \beta^{(\iota)}_t g_{st}}, \qquad \beta^{(\iota + 1)}_t = \frac{d_t}{\sum_s \alpha^{(\iota)}_s g_{st}}, 
+\end{equation}
 
 \section{Single line}
 \label{Single line}
