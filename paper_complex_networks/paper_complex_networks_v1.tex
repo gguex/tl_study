@@ -178,7 +178,15 @@ f^0_{st}=\frac{1}{Z(\bm{\lambda})}\: g_{st}\exp(-\sum_{r=1}^R \lambda_r o^r_{st}
 where the Lagrange multipliers $\bm{\lambda}$ are determined  so as to satisfy the $R$ linear constraints (**see e.g. Bavaud and *** and references therein). 
 
 \subsection{Statement of the problem (version 2, added by GG)}
-Let $f_{st}=n_{st}/n_{\bullet\bullet}$ be the proportion of $st$-trips (empirical distribution) and let $g_{st}$ be some prior guess on its shape (theoretical distribution). Also suppose we know the margins distribution of the real transportation flow $n^\star_{st}$, i.e. $c_s = n^\star_{s \bullet} / n^\star_{\bullet \bullet}$ and $d_t = n^\star_{\bullet t} / n^\star_{\bullet \bullet}$. We are interested in finding
+Let $f_{st}=n_{st}/n_{\bullet\bullet}$ be the proportion of $st$-trips (empirical distribution) and let $g_{st}$ be some prior guess on its shape (theoretical distribution). Also suppose a prior guess of row and margin constraints for $f_{st}$, respectively $c_s$ and $d_t$, which has to verify 
+\begin{equation}
+	\frac{c_i}{c_j} = \frac{a_i}{a_j} \qquad \frac{d_i}{d_j} = \frac{b_i}{b_j}  \qquad \forall i, j \text{ without junction.} \\
+\end{equation}
+Setting these gives us
+\begin{equation}
+	n_{\bullet \bullet} = \frac{c_i}{a_i} = \frac{d_i}{b_i} \qquad \forall i \text{ without junction.}  
+\end{equation}
+We are interested in finding
 \begin{align}
 	\label{constr_MaxEnt}
 	\min_{\mathbf{f}\in\mathcal{F}} &\; \sum_{st}f_{st}\log \frac{f_{st}}{g_{st}}, \notag \\
@@ -187,10 +195,9 @@ Let $f_{st}=n_{st}/n_{\bullet\bullet}$ be the proportion of $st$-trips (empirica
 \end{align}
 The Lagragian is
 \begin{equation}
-	\label{Lag}
-	L = \sum_{st}f_{st}\log \frac{f_{st}}{g_{st}} - \sum_s \lambda_s (c_s - \sum_t f_{st}) - \sum_t \mu_t (d_t - \sum_s f_{st}),
+	L = \sum_{st}f_{st}\log \frac{f_{st}}{g_{st}} - \sum_s \lambda_s (c_s - \sum_t f_{st}) - \sum_t \mu_t (d_t - \sum_s f_{st}), \notag
 \end{equation}
-which gives, after deriving,
+which gives, after deriving and setting to zero,
 \begin{equation}
 	\label{Sol}
 	f_{st} = \alpha_s \beta_t g_{st} \qquad \text{with } \alpha_s := \exp(- 1 - \lambda_s) \text{, } \beta_t := \exp(- \mu_t).
