@@ -571,7 +571,9 @@ compute_x_from_n = function(n_mat, edge_ref, sp_ref, p_mat){
 # - None, only plotting
 #-------------------------------------------------------------------------------
 
-plot_flow_graph = function(adj, n_mat, layout=NULL){
+plot_flow_graph = function(adj, n_mat, layout=NULL, main=NULL){
+  
+  igraph_options(annotate.plot=TRUE)
   
   df_line = as_data_frame(graph_from_adjacency_matrix(adj, weighted = TRUE))
   df_line["type"] = "line"
@@ -589,14 +591,13 @@ plot_flow_graph = function(adj, n_mat, layout=NULL){
   n_edges = length(E(g_tot))
   
   std_weights = E(g_tot)$weight[E(g_tot)$type == "flow"]
-  std_weights = std_weights - min(std_weights) 
-  std_weights = std_weights / max(std_weights) * 0.9 + 0.1
+  std_weights = std_weights / max(std_weights)
   
   color_green_fn = colorRamp(c("white", "forestgreen"))
   color_red_fn = colorRamp(c("white", "red"))
   color_blue_fn = colorRamp(c("white", "blue"))
   
-  edge_sizes = (E(g_tot)$type == "line") * 3
+  edge_sizes = (E(g_tot)$type == "line") * 0.5
   edge_sizes[E(g_tot)$type == "flow"] = std_weights * 2
   edge_curves = (E(g_tot)$type == "line") * 0.2
   edge_colors = rep("black", n_edges)
@@ -622,8 +623,8 @@ plot_flow_graph = function(adj, n_mat, layout=NULL){
   in_out_colors = setNames(in_out_colors, names(in_prop))
   
   plot(g_tot, layout=layout, edge.color=edge_colors, edge.width=edge_sizes,
-       edge.curved=edge_curves, edge.arrow.size=0.5, vertex.shape="pie", 
-       vertex.pie=pie_prop, vertex.pie.color=in_out_colors)
+       edge.curved=edge_curves, edge.arrow.size=0.1, vertex.shape="pie", 
+       vertex.pie=pie_prop, vertex.pie.color=in_out_colors, main=main)
 }
 
 #-------------------------------------------------------------------------------
