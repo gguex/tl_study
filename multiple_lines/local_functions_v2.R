@@ -427,7 +427,188 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
         node_in_btw[allowed_in_btw > node_in_btw]
       allowed_out_btw[allowed_out_btw > node_out_btw] = 
         node_out_btw[allowed_out_btw > node_out_btw]
-    # Else, set the limit to a crisp limit 
+      # Else, set the limit to a crisp limit 
+    } else {
+      # Copy the vector
+      allowed_in_btw = node_in_btw
+      allowed_out_btw = node_out_btw
+      # Replace the overflowing value with the limit
+      allowed_in_btw[allowed_in_btw > rho_in*(1 - prop_limit)] =
+        rho_in[allowed_in_btw > rho_in*(1 - prop_limit)]*(1 - prop_limit)
+      allowed_out_btw[allowed_out_btw > rho_out*(1 - prop_limit)] =
+        rho_out[allowed_out_btw > rho_out*(1 - prop_limit)]*(1 - prop_limit)
+    }
+    
+    # --- Compute the allowed flow on edge
+    
+    # Compute the proportion of allowed flow
+    p_allowed_in = allowed_in_btw / (node_in_btw + epsilon)
+    p_allowed_out = allowed_out_btw / (node_out_btw + epsilon)
+    p_allowed_in[p_allowed_in == 0] = 1
+    p_allowed_out[p_allowed_out == 0] = 1
+    # Compute the allowed flow on edges
+    p_allowed_min = mapply(
+      function(i, j) min(p_allowed_out[i], p_allowed_in[j]), 
+      edge_btw_ref[ ,1], edge_btw_ref[,2])
+    allowed_edge_flow = p_allowed_min * btw_edge_flow
+    
+    # --- Update the flow entering and leaving the network
+    
+    # Set the allowed flow in a matrix
+    allowed_flow_mat = sparseMatrix(i=edge_btw_ref[, 1], j=edge_btw_ref[, 2],
+                                    x=allowed_edge_flow, dims=c(n, n))
+    # Update with margins
+    sigma_in = rho_in - colSums(allowed_flow_mat)
+    sigma_out = rho_out - rowSums(allowed_flow_mat)
+    
+    # --- Compute the reducing factor and update the affinity matrix
+    
+    # Compute the excess proportion of flow
+    p_to_red = (btw_edge_flow - allowed_edge_flow) / (btw_edge_flow + epsilon)
+    # Compute the maximum reduction needed on the shortest-path list
+    max_p_to_red = apply(t(p_btw_mat) * p_to_red, 2, max)
+    # Convert it to a reduction factor and transform it in a s,t matrix
+    red_mat = sparseMatrix(i=sp_ref[, 1], j=sp_ref[, 2], 
+                           x=(1-max_p_to_red), dims=c(n, n))
+    # Compute the updated version of origin-destination affinity matrix
+    s_it_mat = as.matrix(s_it_mat * red_mat)
+    
+    # --- Check for convergence and iterate
+    
+    # Compute iteration statistics
+    diff = sum(abs(n_mat_old - n_mat))
+    diff_s_it = sum(abs(s_it_mat_old - s_it_mat))
+    diff_sigma_in = sum(abs(sigma_in_old - sigma_in))
+    diff_sigma_out = sum(abs(sigma_out_old - sigma_out))
+    couple = which(red_mat == (1 - max(max_p_to_red)), arr.ind=T)[1,]
+    
+    # Print iteration statistics
+    if (display_it) {
+      cat("It", it_algo, ": diff =", diff, ", diff_si =", diff_s_it, 
+          ", diff_in =", diff_sigma_in, ", diff_out =", diff_sigma_out, 
+          ", to_red_max =", max(max_p_to_red), ", which =", couple,"\n")
+    }
+    
+    
+    # Check for convergence
+    if(diff < conv_thres_algo){
+      converge_algo = T
+    }
+    
+    # Iteration
+    it_algo = it_algo + 1
+  }
+  
+  # --- Return results
+  
+  return(n_mat)
+  
+}
+
+#-----------------
+#--- NEW VERSION
+#-----------------
+
+compute_origin_destination2 = function(rho_in, rho_out, edge_ref, sp_ref, p_mat, 
+                                       s_mat=NULL, smooth_limit=F, exp_lambda=10,
+                                       prop_limit=0.1, conv_thres_if=1e-5,
+                                       conv_thres_algo=1e-5, epsilon=1e-40,
+                                       max_it=200){
+  
+  # --- Get the network structure 
+  
+  # The number of stops 
+  n = length(rho_in)
+  # The reference of transfer edges
+  where_edge_btw = as.logical(edge_ref[, 3])
+  # The list of in-out nodes for transfer edges 
+  edge_btw_ref = edge_ref[where_edge_btw, 1:2]
+  # The shortest-path - edge matrix retrained on transfer edges
+  p_btw_mat = p_mat[, where_edge_btw]
+  # The shortest-path order reference
+  sp_order_ref = mapply(function(i, j) i+n*(j-1), sp_ref[, 1], sp_ref[, 2])
+  
+  # If s_mat is not given, build it
+  if(is.null(s_mat)){
+    # The matrix of admissible sp 
+    s_mat = 1*as.matrix(sparseMatrix(i=sp_ref[, 1], j=sp_ref[, 2], 
+                                     dims=c(n, n)))
+  }
+  # A stop without transfer edges
+  trans_edge = edge_ref[edge_ref[,3] == 1, ]
+  node_ref = setdiff(1:n, unique(c(trans_edge[,1], trans_edge[,2])))[1]
+  
+  # --- Algorithm 
+  
+  # The st-distribution reference matrix
+  g_ref_mat = s_mat / sum(s_mat)
+  # The initial value for n_mat (has no effect, only to create variable)
+  f_mat = matrix(1e5, n, n)
+  # The evolving in and out distribution
+  sigma_in = rho_in / sum(rho_in)
+  sigma_out = rho_out / sum(rho_out)
+  # A boolean for convergence
+  converge_algo = F
+  # Iteration counter
+  it_algo = 1
+  
+  while(!converge_algo & it_algo <= max_it){
+    
+    # --- Save old values
+    
+    f_mat_old = f_mat
+    g_ref_mat_old = g_ref_mat
+    sigma_in_old = sigma_in
+    sigma_out_old = sigma_out
+    
+    # 1 --- Iterative fitting 
+    
+    psi = rep(1, ncol(g_ref_mat))
+    converge_if = F
+    while(!converge_if){
+      # Saving old b results
+      psi_old = psi
+      # Compute new a and b
+      phi = (sigma_in + epsilon) / colSums(t(g_ref_mat + epsilon) * psi)
+      psi = (sigma_out + epsilon) / colSums((g_ref_mat + epsilon) * phi)
+      # Checking for convergence
+      if(sum(abs(psi_old - psi)) < conv_thres_if){
+        converge_if = T
+      }
+    }
+    # Building f_mat
+    f_mat = t(psi * t(phi * (g_ref_mat + epsilon)))
+    # Building the n_mat
+    n_mat = f_mat * rho_in[node_ref] / sigma_in[node_ref]
+    
+    # --- Find between flow for edges and nodes
+    
+    # Get the flow as vector in the admissible shortest-path order
+    sp_flow_vec = as.vector(n_mat)[sp_order_ref]
+    # Compute the flow on edges
+    btw_edge_flow = as.vector(t(p_btw_mat) %*% sp_flow_vec)
+    
+    # Compute the in-out between flow on nodes 
+    x_btw = sparseMatrix(i=edge_btw_ref[, 1], j=edge_btw_ref[, 2], 
+                         x=btw_edge_flow, dims=c(n, n))
+    node_in_btw = colSums(x_btw)
+    node_out_btw = rowSums(x_btw)
+    
+    # --- Compute the allowed flow on nodes
+    
+    # If smooth limit
+    if(smooth_limit){
+      # Compute the exponential law
+      allowed_in_btw = rho_in * 
+        (1 - exp(-exp_lambda * node_in_btw / (rho_in + epsilon)))
+      allowed_out_btw = rho_out * 
+        (1 - exp(-exp_lambda * node_out_btw / (rho_out + epsilon)))
+      # If this is more than identity, set it to indentity  
+      allowed_in_btw[allowed_in_btw > node_in_btw] = 
+        node_in_btw[allowed_in_btw > node_in_btw]
+      allowed_out_btw[allowed_out_btw > node_out_btw] = 
+        node_out_btw[allowed_out_btw > node_out_btw]
+      # Else, set the limit to a crisp limit 
     } else {
       # Copy the vector
       allowed_in_btw = node_in_btw
