@@ -73,9 +73,9 @@ sp_ref = edge_ref_p_mat_sp_ref(adj)[[3]]
 #--------------------------------
 
 # Conv threshold for iterative fitting
-conv_thres_if = 0.00001
+conv_thres_if = 0.0001
 # Conv threshold
-conv_thres_algo = 0.00001
+conv_thres_algo = 0.0001
 # epsilon
 epsilon = 1e-10
 # max iteration
@@ -87,7 +87,7 @@ n_test = 10
 # --- prop_limit
 # hyper_par = c(0.1, 0.3, 0.5, 0.7, 0.9)
 hyper_par = c(1:20)/20
-hyper_par[20] = 0.99
+hyper_par[20] = 0.90
 # lambda
 lambda = 12
 
@@ -113,7 +113,7 @@ for (i in 1:n_test) {
   for (j in 1:length(hyper_par)) {
 
     # --- Run the algorithm
-    n_mat = compute_origin_destination(rho_in,
+    n_mat = compute_origin_destination2(rho_in,
                                        rho_out,
                                        edge_ref,
                                        sp_ref, 
