@@ -113,7 +113,7 @@ for (i in 1:n_test) {
   for (j in 1:length(hyper_par)) {
 
     # --- Run the algorithm
-    n_mat = compute_origin_destination2(rho_in,
+    n_mat = compute_origin_destination(rho_in,
                                        rho_out,
                                        edge_ref,
                                        sp_ref, 
