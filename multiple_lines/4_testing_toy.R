@@ -1,7 +1,11 @@
+#------ Set working directory path
+
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
 #------ Testing the 2 lines
 
 library(igraph)
-source("local_functions_v2.R")
+source("local_functions.R")
 
 nb_lines = 2
 nb_stops = 3
