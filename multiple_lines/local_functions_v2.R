@@ -320,7 +320,7 @@ compute_origin_destination = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
                                       s_mat=NULL, smooth_limit=F, exp_lambda=10,
                                       prop_limit=0.1, conv_thres_if=1e-5,
                                       conv_thres_algo=1e-5, epsilon=1e-40,
-                                      max_it=200){
+                                      max_it=200, display_it=T){
   
   # --- Get the network structure 
   
@@ -608,11 +608,11 @@ compute_origin_destination2 = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
     # 3 --- Update g_ref
     
     # Compute the ratio of flow
-    ratio_in = node_in_btw / (prop_limit*rho_in + epsilon)
-    ratio_out = node_out_btw / (prop_limit*rho_out + epsilon)
+    ratio_in = node_in_btw / ((1-prop_limit)*rho_in + epsilon)
+    ratio_out = node_out_btw / ((1-prop_limit)*rho_out + epsilon)
     # Compute the ratio of flow on edges
     ratio_edge_btw = mapply(
-      function(i, j) min(ratio_in[i], ratio_out[j]), 
+      function(i, j) max(ratio_in[i], ratio_out[j]), 
       edge_btw_ref[ ,1], edge_btw_ref[,2])
     
     # Compute the path max ratio
@@ -730,9 +730,9 @@ plot_flow_graph = function(adj, n_mat, layout=NULL, main=NULL){
   
   igraph_options(annotate.plot=TRUE)
   
-  df_line = as_data_frame(graph_from_adjacency_matrix(adj, weighted = TRUE))
+  df_line = igraph::as_data_frame(graph_from_adjacency_matrix(adj, weighted = TRUE))
   df_line["type"] = "line"
-  df_flow = as_data_frame(graph_from_adjacency_matrix(n_mat, weighted = TRUE))
+  df_flow = igraph::as_data_frame(graph_from_adjacency_matrix(n_mat, weighted = TRUE))
   df_flow["type"] = "flow"
   df_tot = rbind(df_line, df_flow)
   

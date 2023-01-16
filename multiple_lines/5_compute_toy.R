@@ -176,7 +176,7 @@ ggplot(mdf, aes(x=variable, y=value, color=par)) +
   # geom_smooth(show.legend = FALSE, fullrange=TRUE) +
   geom_point(show.legend = FALSE) +
   labs(x ="Parameter", y = "% of error") +
-  stat_summary(aes(y = value,group=1), fun.y=mean, colour="blue", geom="line",group=1)
+  stat_summary(aes(y = value,group=1), fun=mean, colour="blue", geom="line",group=1)
 
 # Save data
 # write.csv(df, "100_iterations_lambda_12.csv")

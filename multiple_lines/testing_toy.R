@@ -19,7 +19,7 @@ sp_ref = edge_ref_p_mat_sp_ref(adj)[[3]]
 
 # Testing with a case
 
-#set.seed(2)
+set.seed(3)
 n_real = n_multin(paths, 100)
 n_real = n_real / sum(n_real)
 x_btw = compute_x_from_n(n_real, edge_ref, sp_ref, p_mat)$x_btw
@@ -40,11 +40,11 @@ sigma_out = rho_out
 
 # ------- ALGO (to iterate)
 
-n_it = 15
+n_it = 30
 
 # Graphics 
 
-df_line = as_data_frame(graph_from_adjacency_matrix(adj, weighted = TRUE))
+df_line = igraph::as_data_frame(graph_from_adjacency_matrix(adj, weighted = TRUE))
 layout = layout_nicely(graph_from_data_frame(df_line))
 
 par(mfrow=c(3,3))
