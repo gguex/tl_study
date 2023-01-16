@@ -30,7 +30,7 @@ rho_out = colSums(n_real) + rowSums(x_btw)
 
 epsilon = 1e-10
 conv_thres_if = 0.00001
-prop_limit = 0.3
+prop_limit = 0.285
 
 # INIT
 
@@ -48,7 +48,7 @@ df_line = igraph::as_data_frame(graph_from_adjacency_matrix(adj, weighted = TRUE
 layout = layout_nicely(graph_from_data_frame(df_line))
 
 par(mfrow=c(3,3))
-plot_flow_graph(adj, n_real, layout, main="Real")
+plot_flow_graph(adj, paths_passengers, layout, main="Real")
 disp_it = ceiling(n_it / 8)
 
 for(it in 1:n_it){

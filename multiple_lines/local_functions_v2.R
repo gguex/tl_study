@@ -608,8 +608,8 @@ compute_origin_destination2 = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
     # 3 --- Update g_ref
     
     # Compute the ratio of flow
-    ratio_in = node_in_btw / ((1-prop_limit)*rho_in + epsilon)
-    ratio_out = node_out_btw / ((1-prop_limit)*rho_out + epsilon)
+    ratio_in = (node_in_btw / ((1-prop_limit)*rho_in + epsilon))
+    ratio_out = (node_out_btw / ((1-prop_limit)*rho_out + epsilon))
     # Compute the ratio of flow on edges
     ratio_edge_btw = mapply(
       function(i, j) max(ratio_in[i], ratio_out[j]), 

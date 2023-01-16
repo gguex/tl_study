@@ -19,7 +19,7 @@ sp_ref = edge_ref_p_mat_sp_ref(adj)[[3]]
 
 # Testing with a case
 
-#set.seed(3)
+set.seed(3)
 n_real = n_multin(paths, 100)
 n_real = n_real / sum(n_real)
 x_btw = compute_x_from_n(n_real, edge_ref, sp_ref, p_mat)$x_btw
@@ -30,7 +30,7 @@ rho_out = colSums(n_real) + rowSums(x_btw)
 
 epsilon = 1e-10
 conv_thres_if = 0.00001
-prop_limit = 0.3
+prop_limit = 0.285
 
 # INIT
 
@@ -133,8 +133,8 @@ for(it in 1:n_it){
   # 3 --- Update g_ref
   
   # Compute the ratio of flow
-  ratio_in = node_in_btw / ((1-prop_limit)*rho_in + epsilon)
-  ratio_out = node_out_btw / ((1-prop_limit)*rho_out + epsilon)
+  ratio_in = (node_in_btw / ((1-prop_limit)*rho_in + epsilon))
+  ratio_out = (node_out_btw / ((1-prop_limit)*rho_out + epsilon))
   # Compute the ratio of flow on edges
   ratio_edge_btw = mapply(
     function(i, j) max(ratio_in[i], ratio_out[j]), 
@@ -142,7 +142,6 @@ for(it in 1:n_it){
   # Compute the path max ratio
   path_max_ratio = apply(t(p_btw_mat) * ratio_edge_btw, 2, max)
   path_max_ratio[path_max_ratio < 1] = 1
-  cat(path_max_ratio)
   # Compute the phi, psi scaling factor
   scaling_phi_psi = mapply(function(i, j) phi[i]*psi[j], 
                            sp_ref[,1], sp_ref[,2])
