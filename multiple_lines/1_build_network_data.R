@@ -77,7 +77,8 @@ write.table(res_sp_list$edge_ref, paste0(out_folder, "/edge_ref.csv"), sep=",",
             row.names=F)
 write.table(res_sp_list$sp_ref, paste0(out_folder, "/sp_ref.csv"), sep=",",
             row.names=F)
-write.table(as.matrix(res_sp_list$p_mat), paste0(out_folder, "/p_mat.csv"), sep=",",
+write.table(as.matrix(res_sp_list$sp_edge_mat), 
+            paste0(out_folder, "/sp_edge_mat.csv"), sep=",", 
             row.names=F, col.names=F)
 write.table(line_df, paste0(out_folder, "/line_df.csv"), sep=",",
             row.names=F)

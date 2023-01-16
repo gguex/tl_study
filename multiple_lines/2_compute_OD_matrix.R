@@ -52,8 +52,8 @@ rho_out = line_df$rho_out
 edge_ref = as.matrix(read.csv(paste0(data_folder, "/edge_ref.csv")))
 # Load sp_ref
 sp_ref = as.matrix(read.csv(paste0(data_folder, "/sp_ref.csv")))
-# Load p_mat
-p_mat = as.matrix(read.csv(paste0(data_folder, "/p_mat.csv"), header=F))
+# Load sp_edge_mat
+sp_edge_mat = as.matrix(read.csv(paste0(data_folder, "/sp_edge_mat.csv"), header=F))
 
 # --- Run the algorithm 
 
@@ -61,7 +61,7 @@ n_mat = compute_origin_destination(rho_in,
                                    rho_out,
                                    edge_ref,
                                    sp_ref, 
-                                   p_mat, 
+                                   sp_edge_mat, 
                                    smooth_limit=smooth_limit,
                                    prop_limit=prop_limit,
                                    exp_lambda=exp_lambda,
@@ -73,7 +73,7 @@ n_mat = compute_origin_destination(rho_in,
 # --- Save the results
 
 # Compute the between lines flow on node 
-x_res = compute_x_from_n(n_mat, edge_ref, sp_ref, p_mat)
+x_res = compute_x_from_n(n_mat, edge_ref, sp_ref, sp_edge_mat)
 node_in_btw = colSums(x_res$x_btw)
 node_out_btw = rowSums(x_res$x_btw)
 
