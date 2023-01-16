@@ -20,8 +20,8 @@ library(Matrix)
 #               connected.
 #
 # In:
-# - line_mbr: A n-length vector containing line memberships of stops.
-# - tour_mbr: A n-length vector containing tour memberships of stops.
+# - line_mbrshps: A n-length vector containing line memberships of stops.
+# - tour_mbrshps: A n-length vector containing tour memberships of stops.
 # - dist_mat: A (n x n) pedestrian time matrix between stops.
 # - dist_thres: A scalar threshold on the pedestrian time for considering stops 
 #             linked.
@@ -30,16 +30,17 @@ library(Matrix)
 # - adj_b:    A (n x n) adjacency matrix between transportation lines.
 #-------------------------------------------------------------------------------
 
-build_network_structure = function(line_mbr, tour_mbr, dist_mat, dist_thres){
+build_network_structure = 
+  function(line_mbrshps, tour_mbrshps, dist_mat, dist_thres){
   
   # --- Get number of stops and make levels for line_mbr and tour_mbr
   
   # Get the number of stops 
-  n = length(line_mbr)
+  n = length(line_mbrshps)
   # Get levels of lines
-  lines_lvl = as.factor(line_mbr)
+  lines_lvl = as.factor(line_mbrshps)
   # Get levels of tour
-  tour_lvl = as.factor(tour_mbr)
+  tour_lvl = as.factor(tour_mbrshps)
   
   # --- Build A_W
   
@@ -77,8 +78,8 @@ build_network_structure = function(line_mbr, tour_mbr, dist_mat, dist_thres){
 #               network structure.
 #
 # In:  
-# - line_mbr: A n-length vector containing line memberships of stops.
-# - tour_mbr  A n-length vector containing tour memberships of stops.
+# - line_mbrshps: A n-length vector containing line memberships of stops.
+# - tour_mbrshps: A n-length vector containing tour memberships of stops.
 # - travel_t: A n-length vector giving time needed to reach next stop.
 # - wait_t:   A n-length vector giving time needed to enter a line at each stop.
 # - dist_mat: A (n x n) pedestrian time matrix between stops.
@@ -93,17 +94,17 @@ build_network_structure = function(line_mbr, tour_mbr, dist_mat, dist_thres){
 #             with s_{ij} = TRUE iff edge j is in shortest-path i.
 #-------------------------------------------------------------------------------
 
-build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, dist_mat, 
+build_sp_data = function(line_mbrshps, tour_mbrshps, travel_t, wait_t, dist_mat, 
                          adj_w, adj_b){
   
   # --- Get number of stops and make levels for line_mbr and tour_mbr
   
   # Get the number of stops 
-  n = length(line_mbr)
+  n = length(line_mbrshps)
   # Get levels of lines
-  lines_lvl = as.factor(line_mbr)
+  lines_lvl = as.factor(line_mbrshps)
   # Get levels of tour
-  tour_lvl = as.factor(tour_mbr)
+  tour_lvl = as.factor(tour_mbrshps)
   
   # --- Compute the traveling time with the line network 
   
@@ -196,73 +197,73 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, dist_mat,
 
 
 #-------------------------------------------------------------------------------
-# Function: balance_lflow_inout 
+# Function: balance_flow_l_inout 
 #
 # Description:  This function compute a corrected version of ingoing and 
 #               outgoing flow inside the different lines, in order that the 
 #               balance is correct.
 #
 # In:
-# - line_mbr: A n-length vector containing line memberships for stops.
-# - measured_lflow_in:  A n-length vector with measured flow entering lines.
-# - measured_lflow_out: A n-length vector with measured flow leaving lines.
+# - line_mbrshps: A n-length vector containing line memberships for stops.
+# - unblced_flow_l_in:  A n-length vector with unbalanced flow in lines.
+# - unblced_flow_l_out: A n-length vector with unbalanced flow out lines.
 # Out:
-# - lflow_in:  A n-length vector with the corrected flow entering lines.
-# - lflow_out:  A n-length vector wiht the corrected flow leaving lines.
+# - flow_l_in:  A n-length vector of corrected flow entering lines.
+# - flow_l_out:  A n-length vector of corrected flow leaving lines.
 #-------------------------------------------------------------------------------
 
-balance_lflow_inout = function(line_mbr, measured_lflow_in, measured_lflow_out){
+balance_flow_l_inout = 
+  function(line_mbrshps, unblced_flow_l_in, unblced_flow_l_out){
   
   # Get the number of stops 
-  n = length(line_mbr)
+  n = length(line_mbrshps)
   # Get levels of lines
-  lines_lvl = as.factor(line_mbr)
+  lines_lvl = as.factor(line_mbrshps)
   
   # Vectors to store the corrected flow values 
-  lflow_in = rep(0, n)
-  lflow_out = rep(0, n)
+  flow_l_in = rep(0, n)
+  flow_l_out = rep(0, n)
   
   # Loop on lines
   for(l_lvl in levels(lines_lvl)){
   
     # Compute the flow balance and the cumulative sum
-    measured_line_lflow_in = measured_lflow_in[lines_lvl == l_lvl]
-    measured_line_lflow_out = measured_lflow_out[lines_lvl == l_lvl]
-    line_balance = measured_line_lflow_in - measured_line_lflow_out
-    measured_line_lflow = cumsum(line_balance)
+    unblced_line_flow_in = unblced_flow_l_in[lines_lvl == l_lvl]
+    unblced_line_flow_out = unblced_flow_l_out[lines_lvl == l_lvl]
+    line_balance = unblced_line_flow_in - unblced_line_flow_out
+    line_flow = cumsum(line_balance)
     
     # The quantity to correct
-    correction = measured_line_lflow[length(measured_line_lflow)]
+    correction = line_flow[length(line_flow)]
     # We reduce (or raise, if negative correction) the flow in
-    line_lflow_in = measured_line_lflow_in
-    line_lflow_in[-length(line_lflow_in)] = 
-      line_lflow_in[-length(line_lflow_in)] - 
-      correction/(2*(length(line_lflow_in) - 1))
+    line_flow_in = unblced_line_flow_in
+    line_flow_in[-length(line_flow_in)] = line_flow_in[-length(line_flow_in)] - 
+      correction / (2*(length(line_flow_in) - 1))
     # We raise (or reduce, if negative correction) the flow out
-    line_lflow_out = measured_line_lflow_out 
-    line_lflow_out[-1] = line_lflow_out[-1] + 
-      correction / (2*(length(line_lflow_out) - 1))
+    line_flow_out = unblced_line_flow_out 
+    line_flow_out[-1] = line_flow_out[-1] + 
+      correction / (2*(length(line_flow_out) - 1))
     
     # Check if there is any negative value, and correct it if it's the case
-    if(any(line_lflow_in < 0)){
-      line_lflow_out[line_lflow_in < 0] = line_lflow_out[line_lflow_in < 0] - 
-        line_lflow_in[line_lflow_in < 0]
-      line_lflow_in[line_lflow_in < 0] = 0
+    if(any(line_flow_in < 0)){
+      line_flow_out[line_flow_in < 0] = line_flow_out[line_flow_in < 0] - 
+        line_flow_in[line_flow_in < 0]
+      line_flow_in[line_flow_in < 0] = 0
     }
-    if(any(line_lflow_out < 0)){
-      line_lflow_in[line_lflow_out < 0] = line_lflow_in[line_lflow_out < 0] - 
-        line_lflow_out[line_lflow_out < 0]
-      line_lflow_out[line_lflow_out < 0] = 0
+    if(any(line_flow_out < 0)){
+      line_flow_in[line_flow_out < 0] = line_flow_in[line_flow_out < 0] - 
+        line_flow_out[line_flow_out < 0]
+      line_flow_out[line_flow_out < 0] = 0
     }
     
     # Add the corrected flow for line to the vector of global corrected flow 
-    lflow_in[lines_lvl == l_lvl] = line_lflow_in
-    lflow_out[lines_lvl == l_lvl] = line_lflow_out
+    flow_l_in[lines_lvl == l_lvl] = line_flow_in
+    flow_l_out[lines_lvl == l_lvl] = line_flow_out
   }
   
   # --- Return the results
   
-  return(list(lflow_in=lflow_in, lflow_out=lflow_out))
+  return(list(flow_l_in=flow_l_in, flow_l_out=flow_l_out))
   
 }
 
@@ -270,13 +271,13 @@ balance_lflow_inout = function(line_mbr, measured_lflow_in, measured_lflow_out){
 #-------------------------------------------------------------------------------
 # Function: compute_origin_destination
 #
-# Description:  This function compute the origin-destination matrix from a 
+# Description:  This function compute the source-destination matrix from a 
 #               graph with multiple lines structure, an affinity matrix between 
 #               stops, and the flow going in and out at each line stops.
 #
 # In:
-# - lflow_in:   A n-length vector of flow entering lines.
-# - lflow_out:  A n-length vector of flow leaving lines.
+# - flow_l_in:   A n-length vector of flow entering lines.
+# - flow_l_out:  A n-length vector of flow leaving lines.
 # - edge_ref: A (m x 3) matrix, giving the edge starting node index, ending 
 #             node index, and a boolean indicating if this is an transfer edge.
 # - sp_ref:   A (n_sp x 2) matrix, giving the source-target node pair for each 
@@ -286,8 +287,8 @@ balance_lflow_inout = function(line_mbr, measured_lflow_in, measured_lflow_out){
 # - s_mat:    A (n x n) optional affinity matrix between stops. If None is given
 #             this matrix will set to 1 for each pair having an admissible 
 #             shorest-path (default = NULL).
-# - min_p_nflow:  The minimum percentage of the in/out line flow entering the
-#                 network (default = 0.1).
+# - min_p_ntwk:  The min percentage of the in/out line flow entering/leaving
+#                the network (default = 0.1).
 # - conv_thres_if:    A threshold for the convergence of the iterative fitting 
 #                     algorithm (default = 1e-5).
 # - conv_thres_algo:  A threshold for the convergence of the whole algorithm 
@@ -301,15 +302,15 @@ balance_lflow_inout = function(line_mbr, measured_lflow_in, measured_lflow_out){
 #-------------------------------------------------------------------------------
 
 compute_origin_destination = 
-  function(flow_in, flow_out, edge_ref, sp_ref, p_mat, 
-           s_mat=NULL, prop_limit=0.1, conv_thres_if=1e-5,
+  function(flow_l_in, flow_l_out, edge_ref, sp_ref, p_mat, 
+           s_mat=NULL, min_p_ntwk=0.1, conv_thres_if=1e-5,
            conv_thres_algo=1e-5, epsilon=1e-40,
            max_it=200, display_it=T){
   
   # --- Get the network structure 
   
   # The number of stops 
-  n = length(flow_in)
+  n = length(flow_l_in)
   # The reference of transfer edges
   where_edge_btw = as.logical(edge_ref[, 3])
   # The list of in-out nodes for transfer edges 
@@ -336,8 +337,8 @@ compute_origin_destination =
   # The initial value for n_mat (has no effect, only to create variable)
   f_mat = matrix(1e5, n, n)
   # The evolving in and out distribution
-  sigma_in = flow_in / sum(flow_in)
-  sigma_out = flow_out / sum(flow_out)
+  sigma_in = flow_l_in / sum(flow_l_in)
+  sigma_out = flow_l_out / sum(flow_l_out)
   # A boolean for convergence
   converge_algo = F
   # Iteration counter
@@ -354,7 +355,7 @@ compute_origin_destination =
     
     # --- Get the distribution to flow constant
     
-    distrib2flow_const = flow_in[node_ref] / sigma_in[node_ref]
+    distrib2flow_const = flow_l_in[node_ref] / sigma_in[node_ref]
     
     # --- STEP 1: Iterative fitting 
     
@@ -391,12 +392,12 @@ compute_origin_destination =
     node_out_btw = rowSums(x_btw)
   
     # Compute unscaled sigmas
-    unscaled_sigma_in = flow_in - node_in_btw
-    unscaled_sigma_out = flow_out - node_out_btw
-    unscaled_sigma_in[unscaled_sigma_in < prop_limit*flow_in] = 
-      prop_limit*flow_in[unscaled_sigma_in < prop_limit*flow_in]
-    unscaled_sigma_out[unscaled_sigma_out < prop_limit*flow_out] = 
-      prop_limit*flow_out[unscaled_sigma_out < prop_limit*flow_out]
+    unscaled_sigma_in = flow_l_in - node_in_btw
+    unscaled_sigma_out = flow_l_out - node_out_btw
+    unscaled_sigma_in[unscaled_sigma_in < min_p_ntwk*flow_l_in] = 
+      min_p_ntwk*flow_l_in[unscaled_sigma_in < min_p_ntwk*flow_l_in]
+    unscaled_sigma_out[unscaled_sigma_out < min_p_ntwk*flow_l_out] = 
+      min_p_ntwk*flow_l_out[unscaled_sigma_out < min_p_ntwk*flow_l_out]
     
     # Scale them
     sigma_in = unscaled_sigma_in / sum(unscaled_sigma_in)
@@ -405,8 +406,8 @@ compute_origin_destination =
     # --- STEP 3: Update g_ref
     
     # Compute the ratio of flow
-    ratio_in = (node_in_btw / ((1-prop_limit)*flow_in + epsilon))
-    ratio_out = (node_out_btw / ((1-prop_limit)*flow_out + epsilon))
+    ratio_in = (node_in_btw / ((1-min_p_ntwk)*flow_l_in + epsilon))
+    ratio_out = (node_out_btw / ((1-min_p_ntwk)*flow_l_out + epsilon))
     # Compute the ratio of flow on edges
     ratio_edge_btw = mapply(
       function(i, j) max(ratio_in[i], ratio_out[j]), 
