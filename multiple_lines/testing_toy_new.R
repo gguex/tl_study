@@ -139,17 +139,18 @@ for(it in 1:n_it){
   ratio_edge_btw = mapply(
     function(i, j) max(ratio_in[i], ratio_out[j]), 
     edge_btw_ref[ ,1], edge_btw_ref[,2])
-  
   # Compute the path max ratio
   path_max_ratio = apply(t(p_btw_mat) * ratio_edge_btw, 2, max)
   path_max_ratio[path_max_ratio < 1] = 1
-  # Compute the updated n_mat
-  updated_n_vec = sp_flow_vec / path_max_ratio
-  updated_n_mat = sparseMatrix(i=sp_ref[, 1], j=sp_ref[, 2], 
-                               x=updated_n_vec, dims=c(n, n))
-  # Update g_ref
-  unscaled_g_ref = t(t(updated_n_mat / (phi + epsilon)) / (psi + epsilon))
-  g_ref = unscaled_g_ref / sum(unscaled_g_ref)
+  # Compute the phi, psi scaling factor
+  scaling_phi_psi = mapply(function(i, j) phi[i]*psi[j], 
+                           sp_ref[,1], sp_ref[,2])
+  # Compute the updated g_vec
+  g_ref_vec = sp_flow_vec / path_max_ratio / scaling_phi_psi
+  g_ref_vec = g_ref_vec / sum(g_ref_vec)
+  # Back to g_ref
+  g_ref = as.matrix(sparseMatrix(i=sp_ref[, 1], j=sp_ref[, 2], 
+                                 x=g_ref_vec, dims=c(n, n)))
   
   # --- Compute indices and display graph
   
@@ -163,7 +164,10 @@ for(it in 1:n_it){
   mean_err_out = mean(err_out[!is.na(err_out)])
 
   if(it %% disp_it == 0 || it == n_it){
-    plot_flow_graph(adj, as.matrix(n_mat), layout, 
+    graph_mat = as.matrix(n_mat)
+    rownames(graph_mat) = rownames(adj)
+    colnames(graph_mat) = colnames(adj)
+    plot_flow_graph(adj, graph_mat, layout, 
                     main=paste0("it=", it, 
                                " | err_in_out=", round(mean_err_in, 3),
                                "/", round(mean_err_out, 3),

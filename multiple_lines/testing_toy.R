@@ -153,7 +153,10 @@ for(it in 1:n_it){
   mean_err_out = mean(err_out[!is.na(err_out)])
 
   if(it %% disp_it == 0 || it == n_it){
-    plot_flow_graph(adj, n_mat, layout, 
+    graph_mat = as.matrix(n_mat)
+    rownames(graph_mat) = rownames(adj)
+    colnames(graph_mat) = colnames(adj)
+    plot_flow_graph(adj, graph_mat, layout, 
                     main=paste0("it=", it, 
                                " | err_in_out=", round(mean_err_in, 3),
                                "/", round(mean_err_out, 3),

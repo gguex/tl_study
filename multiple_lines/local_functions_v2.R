@@ -614,19 +614,18 @@ compute_origin_destination2 = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
     ratio_edge_btw = mapply(
       function(i, j) max(ratio_in[i], ratio_out[j]), 
       edge_btw_ref[ ,1], edge_btw_ref[,2])
-    
     # Compute the path max ratio
     path_max_ratio = apply(t(p_btw_mat) * ratio_edge_btw, 2, max)
     path_max_ratio[path_max_ratio < 1] = 1
-    # Convert it to a st-matrix
-    st_ratio = sparseMatrix(i=sp_ref[, 1], j=sp_ref[, 2], 
-                            x=path_max_ratio, dims=c(n, n))
-    # Compute the updated n_mat
-    updated_n_mat = n_mat / st_ratio
-    updated_n_mat[is.infinite(updated_n_mat)] = 0
-    # Update g_ref
-    unscaled_g_ref = t(t(updated_n_mat / (phi + epsilon)) / (psi + epsilon))
-    g_ref = unscaled_g_ref / sum(unscaled_g_ref)
+    # Compute the phi, psi scaling factor
+    scaling_phi_psi = mapply(function(i, j) phi[i]*psi[j], 
+                             sp_ref[,1], sp_ref[,2])
+    # Compute the updated g_vec
+    g_ref_vec = sp_flow_vec / path_max_ratio / scaling_phi_psi
+    g_ref_vec = g_ref_vec / sum(g_ref_vec)
+    # Back to g_ref
+    g_ref = as.matrix(sparseMatrix(i=sp_ref[, 1], j=sp_ref[, 2], 
+                                   x=g_ref_vec, dims=c(n, n)))
     
     # --- Check for convergence and iterate
     
