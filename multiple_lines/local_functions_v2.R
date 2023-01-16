@@ -596,8 +596,10 @@ compute_origin_destination2 = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
     # Compute unscaled sigmas
     unscaled_sigma_in = rho_in - node_in_btw
     unscaled_sigma_out = rho_out - node_out_btw
-    unscaled_sigma_in[unscaled_sigma_in < prop_limit*rho_in] = prop_limit*rho_in
-    unscaled_sigma_out[unscaled_sigma_out < prop_limit*rho_out] = prop_limit*rho_out
+    unscaled_sigma_in[unscaled_sigma_in < prop_limit*rho_in] = 
+      prop_limit*rho_in[unscaled_sigma_in < prop_limit*rho_in]
+    unscaled_sigma_out[unscaled_sigma_out < prop_limit*rho_out] = 
+      prop_limit*rho_out[unscaled_sigma_out < prop_limit*rho_out]
     
     # Scale them
     sigma_in = unscaled_sigma_in / sum(unscaled_sigma_in)
@@ -606,8 +608,8 @@ compute_origin_destination2 = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
     # 3 --- Update g_ref
     
     # Compute the ratio of flow
-    ratio_in = node_in_btw / (min_prop*rho_in + epsilon)
-    ratio_out = node_out_btw / (min_prop*rho_out + epsilon)
+    ratio_in = node_in_btw / (prop_limit*rho_in + epsilon)
+    ratio_out = node_out_btw / (prop_limit*rho_out + epsilon)
     # Compute the ratio of flow on edges
     ratio_edge_btw = mapply(
       function(i, j) min(ratio_in[i], ratio_out[j]), 
@@ -623,7 +625,7 @@ compute_origin_destination2 = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
     updated_n_mat = n_mat / st_ratio
     updated_n_mat[is.infinite(updated_n_mat)] = 0
     # Update g_ref
-    unscaled_g_ref = t(t(updated_n_mat / psi) / phi)
+    unscaled_g_ref = t(t(updated_n_mat / (phi + epsilon)) / (psi + epsilon))
     g_ref = unscaled_g_ref / sum(unscaled_g_ref)
     
     # --- Check for convergence and iterate

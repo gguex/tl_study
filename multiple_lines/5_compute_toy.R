@@ -87,7 +87,7 @@ n_test = 10
 # --- prop_limit
 # hyper_par = c(0.1, 0.3, 0.5, 0.7, 0.9)
 hyper_par = c(1:20)/20
-hyper_par[20] = 0.90
+hyper_par[20] = 0.99
 # lambda
 lambda = 12
 
@@ -122,7 +122,8 @@ for (i in 1:n_test) {
                                        conv_thres_algo=conv_thres_algo,
                                        conv_thres_if=conv_thres_if,
                                        epsilon=epsilon,
-                                       max_it=max_it)
+                                       max_it=max_it, 
+                                       display_it=display_it)
     stat_out = abs(n_mat - paths_passengers) / paths_passengers
     stat_out = stat_out[!is.infinite(stat_out)]
     stat_out = mean(stat_out)
