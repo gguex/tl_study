@@ -90,7 +90,7 @@ build_network_structure =
 #             node index, and a boolean indicating if this is an transfer edge.
 # - sp_ref:   A (n_sp x 2) matrix, giving the source-target node pair for each 
 #             admissible shortest-path.
-# - sp_edge_mat:    A (n_sp x m) sparse shortest-path - edges matrix, 
+# - sp_edge_link:    A (n_sp x m) sparse shortest-path - edges matrix, 
 #             with s_{ij} = TRUE iff edge j is in shortest-path i.
 #-------------------------------------------------------------------------------
 
@@ -187,11 +187,11 @@ build_sp_data = function(line_mbrshps, tour_mbrshps, travel_t, wait_t, dist_mat,
   }
   
   # Sparse matrix
-  sp_edge_mat = sparseMatrix(i_loc, j_loc)
+  sp_edge_link = sparseMatrix(i_loc, j_loc)
   
   # --- Return the results
   
-  return(list(edge_ref=edge_ref, sp_ref=sp_ref, sp_edge_mat=sp_edge_mat))
+  return(list(edge_ref=edge_ref, sp_ref=sp_ref, sp_edge_link=sp_edge_link))
   
 }
 
@@ -282,7 +282,7 @@ balance_flow_l_inout =
 #             node index, and a boolean indicating if this is an transfer edge.
 # - sp_ref:   A (n_sp x 2) matrix, giving the source-target node pair for each 
 #             admissible shortest-path.
-# - sp_edge_mat:    A (n_sp x m) shortest-path - edges matrix, with p_{ij} = 1 iff
+# - sp_edge_link:    A (n_sp x m) shortest-path - edges matrix, with p_{ij} = 1 iff
 #             edge j is in shortest-path i, 0 otherwise.
 # - s_mat:    A (n x n) optional affinity matrix between stops. If None is given
 #             this matrix will set to 1 for each pair having an admissible 
@@ -302,7 +302,7 @@ balance_flow_l_inout =
 #-------------------------------------------------------------------------------
 
 compute_origin_destination = 
-  function(flow_l_in, flow_l_out, edge_ref, sp_ref, sp_edge_mat, 
+  function(flow_l_in, flow_l_out, edge_ref, sp_ref, sp_edge_link, 
            s_mat=NULL, min_p_ntwk=0.1, conv_thres_if=1e-5,
            conv_thres_algo=1e-5, epsilon=1e-40,
            max_it=200, display_it=T){
@@ -316,7 +316,7 @@ compute_origin_destination =
   # The list of in-out nodes for transfer edges 
   edge_btw_ref = edge_ref[where_edge_btw, 1:2]
   # The shortest-path - edge matrix retrained on transfer edges
-  p_btw_mat = sp_edge_mat[, where_edge_btw]
+  sp_edge_btw_link = sp_edge_link[, where_edge_btw]
   # The shortest-path order reference
   sp_order_ref = mapply(function(i, j) i+n*(j-1), sp_ref[, 1], sp_ref[, 2])
   
@@ -334,7 +334,7 @@ compute_origin_destination =
   
   # The st-distribution reference matrix
   g_ref = s_mat / sum(s_mat)
-  # The initial value for n_mat (has no effect, only to create variable)
+  # The initial value for f_mat (has no effect, only to create variable)
   f_mat = matrix(1e5, n, n)
   # The evolving in and out distribution
   sigma_in = flow_l_in / sum(flow_l_in)
@@ -383,7 +383,7 @@ compute_origin_destination =
     # Get the flow as vector in the admissible shortest-path order
     sp_flow_vec = as.vector(n_mat)[sp_order_ref]
     # Compute the flow on edges
-    btw_edge_flow = as.vector(t(p_btw_mat) %*% sp_flow_vec)
+    btw_edge_flow = as.vector(t(sp_edge_btw_link) %*% sp_flow_vec)
     
     # Compute the in-out between flow on nodes 
     x_btw = sparseMatrix(i=edge_btw_ref[, 1], j=edge_btw_ref[, 2], 
@@ -410,10 +410,10 @@ compute_origin_destination =
     ratio_out = (node_out_btw / ((1-min_p_ntwk)*flow_l_out + epsilon))
     # Compute the ratio of flow on edges
     ratio_edge_btw = mapply(
-      function(i, j) max(ratio_in[i], ratio_out[j]), 
+      function(i, j) max(ratio_in[j], ratio_out[i]), 
       edge_btw_ref[ ,1], edge_btw_ref[,2])
     # Compute the path max ratio
-    path_max_ratio = apply(t(p_btw_mat) * ratio_edge_btw, 2, max)
+    path_max_ratio = apply(t(sp_edge_btw_link) * ratio_edge_btw, 2, max)
     path_max_ratio[path_max_ratio < 1] = 1
     # Compute the phi, psi scaling factor
     scaling_phi_psi = mapply(function(i, j) phi[i]*psi[j], 
@@ -467,7 +467,7 @@ compute_origin_destination =
 #             node index, and a boolean indicating if this is an transfer edge.
 # - sp_ref:   A (n_sp x 2) matrix, giving the source-target node pair for each 
 #             admissible shortest-path.
-# - sp_edge_mat:    A (n_sp x m) shortest-path - edges matrix, with p_{ij} = 1 iff
+# - sp_edge_link:    A (n_sp x m) shortest-path - edges matrix, with p_{ij} = 1 iff
 #             edge j is in shortest-path i, 0 otherwise.
 # Out:
 # - x_mat:    A (n x n) matrix of flow on each edge, with x_mat = x_wit + x_btw.
@@ -475,7 +475,7 @@ compute_origin_destination =
 # - x_btw:    A (n x n) matrix of flow on each transfer edge between lines.
 #-------------------------------------------------------------------------------
 
-compute_x_from_n = function(n_mat, edge_ref, sp_ref, sp_edge_mat){
+compute_x_from_n = function(n_mat, edge_ref, sp_ref, sp_edge_link){
   
   # --- Get the network structure
   
@@ -491,7 +491,7 @@ compute_x_from_n = function(n_mat, edge_ref, sp_ref, sp_edge_mat){
   # Get the flow as vector in the admissible shortest-path order
   sp_flow_vec = as.vector(n_mat)[sp_order_ref]
   # Compute the flow on edges
-  edge_flow = as.vector(t(sp_edge_mat) %*% sp_flow_vec)
+  edge_flow = as.vector(t(sp_edge_link) %*% sp_flow_vec)
   # Compute the matrix of edge flow
   x_mat = as.matrix(sparseMatrix(i=edge_ref[, 1], j=edge_ref[, 2], 
                                  x=edge_flow, dims=c(n, n)))
@@ -525,9 +525,11 @@ plot_flow_graph = function(adj, n_mat, layout=NULL, main=NULL){
   
   igraph_options(annotate.plot=TRUE)
   
-  df_line = igraph::as_data_frame(graph_from_adjacency_matrix(adj, weighted = TRUE))
+  df_line = igraph::as_data_frame(graph_from_adjacency_matrix(adj, 
+                                                              weighted = TRUE))
   df_line["type"] = "line"
-  df_flow = igraph::as_data_frame(graph_from_adjacency_matrix(n_mat, weighted = TRUE))
+  df_flow = igraph::as_data_frame(graph_from_adjacency_matrix(n_mat, 
+                                                              weighted = TRUE))
   df_flow["type"] = "flow"
   df_tot = rbind(df_line, df_flow)
   
@@ -694,7 +696,7 @@ n_multin = function(paths, n_passagers, p_pos = rep(1/sum(paths), sum(paths))){
 
 #-------------------------------------------------------------------------------
 # - edge_ref
-# - sp_edge_mat
+# - sp_edge_link
 # - sp_ref
 #-------------------------------------------------------------------------------
 
@@ -723,10 +725,10 @@ edge_ref_p_mat_sp_ref = function(adj){
   edge_ref$B = between_line
   
   # make the containers for results
-  sp_edge_mat = c()
+  sp_edge_link = c()
   sp_ref = c()
   
-  # compute sp_edge_mat
+  # compute sp_edge_link
   for (i in 1:dim(paths)[1]) {
     for (j in 1:dim(paths)[1]) {
       if (paths[i,j] == 1) {
@@ -740,7 +742,7 @@ edge_ref_p_mat_sp_ref = function(adj){
         
         sp_edge_vec = rep(0, n_edges)
         sp_edge_vec[index_sp_edge] = 1
-        sp_edge_mat = rbind(sp_edge_mat, sp_edge_vec)
+        sp_edge_link = rbind(sp_edge_link, sp_edge_vec)
       }
     }
   }
@@ -750,10 +752,10 @@ edge_ref_p_mat_sp_ref = function(adj){
   edge_ref$col = as.integer(edge_ref$col)
   edge_ref$is_transfer_edge = as.integer(edge_ref$is_transfer_edge)
   
-  # sp_edge_mat sparse format
-  sp_edge_mat <- as(sp_edge_mat, "ngTMatrix")
+  # sp_edge_link sparse format
+  sp_edge_link <- as(sp_edge_link, "TsparseMatrix")
   
   # list output
-  output = list(edge_ref,sp_edge_mat,sp_ref)
+  output = list(edge_ref,sp_edge_link,sp_ref)
   return(output)
 }
