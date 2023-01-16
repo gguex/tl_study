@@ -83,14 +83,15 @@ max_it = 1000
 # print iterations
 display_it = F
 # number of iterations
-n_test = 10
+n_test = 50
 # --- prop_limit
 # hyper_par = c(0.1, 0.3, 0.5, 0.7, 0.9)
-hyper_par = c(1:20)/20
-hyper_par[20] = 0.99
+hyper_par = c(1:15)/20
+#hyper_par[20] = 0.99
 # lambda
 lambda = 12
-
+# n passengers
+n_passengers = 100
 
 #--------------------------------
 # Process
@@ -104,7 +105,7 @@ for (i in 1:n_test) {
   set.seed(i)
   # passengers_rho = get_passengers(nb_passengers)
   # paths_passengers = n_poisson(paths, lambda)
-  paths_passengers = n_multin(paths, 100)
+  paths_passengers = n_multin(paths, n_passengers, epsilon=1e-2)
   paths_passengers = paths_passengers / sum(paths_passengers)
   x_btw = compute_x_from_n(paths_passengers, edge_ref, sp_ref, p_mat)$x_btw
   rho_in = rowSums(paths_passengers) + colSums(x_btw)
@@ -124,9 +125,9 @@ for (i in 1:n_test) {
                                        epsilon=epsilon,
                                        max_it=max_it, 
                                        display_it=display_it)
-    stat_out = abs(n_mat - paths_passengers) / paths_passengers
+    stat_out = abs(n_mat - paths_passengers)
     stat_out = stat_out[!is.infinite(stat_out)]
-    stat_out = mean(stat_out)
+    stat_out = sum(stat_out)
 
     res_mat[i,j] = stat_out
     

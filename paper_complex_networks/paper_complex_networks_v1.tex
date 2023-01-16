@@ -215,27 +215,32 @@ which gives an \emph{iterative fitting algorithm}. Starting with any $\psi^{(0)}
 	\phi^{(\iota)}_s = \frac{\alpha_s}{\sum_t \psi^{(\iota)}_t g_{st}}, \qquad \psi^{(\iota + 1)}_t = \frac{\beta_t}{\sum_s \phi^{(\iota)}_s g_{st}}, 
 \end{equation}
 
-\subsection{Margin distributions update (added by GG)}
-
 With equation (\ref{flow_sum}), we can obtain the flow associated to $f_{st}$
 \begin{equation}
 	\label{flow_from_distrib}
 	n_{st} = n_{\bullet \bullet} f_{st}, 
 \end{equation}
-and with the edge-trip incidence matrix $\bm{\chi}$ (\ref{edgetrip}), we obtain the intra-line edge flows $\mathbf{Y}=(y_{ij})$ and the transfer edge flows $\mathbf{Z}=(z_{ij})$. \\
+and with the edge-trip incidence matrix $\bm{\chi}$ (\ref{edgetrip}), we obtain the intra-line edge flows $\mathbf{Y}=(y_{ij})$ and the transfer edge flows $\mathbf{Z}=(z_{ij})$.
 
-We now have to make sure constraints (\ref{entrer}) and (\ref{sortir}) are verified. The new margins distribution are set to 
+\subsection{Margin distributions update (added by GG)}
+
+Let us define the hyperparameter $0 \geq \theta > 1$ as the \emph{minimum proportion of passengers (among $a_i$ and $b_i$) entering/leaving the network at each stop}. Note that we could set a different hyperparmeter for each node, and for embarkations and disembarkations, but without addition information, we will restrain to this simpler case. This hyperparamter means that
 \begin{align}
-	\widetilde{\alpha}_s &= \frac{\min(0, a_s - z_{\bullet s})}{\sum_{s'} \min(0, a_{s'} - z_{\bullet {s'}})} \label{alpha_update} \\
-	\widetilde{\beta}_t &= \frac{\min(0, b_t - z_{t \bullet})}{\sum_{t'} \min(0, b_{t'} - z_{{t'} \bullet})} \label{beta_update}
+	z_{\bullet s} &< (1 - \theta) a_s \\
+	z_{t \bullet} &< (1 - \theta) b_t
+\end{align}
+and with constraints (\ref{entrer}) and (\ref{sortir}), the update of margins distribution must be
+\begin{align}
+	\widetilde{\alpha}_s &= \frac{\min(\theta a_s, a_s - z_{\bullet s})}{\sum_{s'} \min(\theta a_s, a_{s'} - z_{\bullet {s'}})} \label{alpha_update} \\
+	\widetilde{\beta}_t &= \frac{\min(\theta b_t, b_t - z_{t \bullet})}{\sum_{t'} \min(\theta b_t, b_{t'} - z_{{t'} \bullet})} \label{beta_update}
 \end{align}
 
 \subsection{Prior distribution update (added by GG)}
 
-Transfer edges $(i, j)$ where $z_{i \bullet} > b_i$ or $z_{\bullet j} > a_j$ typically denote an overflowing tansfer flow regarding the $g_{st}$ prior distribution.  The latter must be adjusted in order to have $\mathbf{Z}$ comptible with constraints. For any edge $(i, j)$, let us compute the \emph{flow ratio} $r_{ij}$, with 
+Transfer edges $(i, j)$ where $z_{i \bullet} > (1 - \theta)b_i$ or $z_{\bullet j} > (1 - \theta)a_j$ typically denote an overflowing tansfer flow regarding the $g_{st}$ prior distribution.  The latter must be adjusted in order to have $\mathbf{Z}$ comptible with constraints. For any edge $(i, j)$, let us compute the \emph{flow ratio} $r_{ij}$, with 
 \begin{equation}
 	\label{flow_ratio}
-	r_{ij} = \max \left(1, \frac{z_{i \bullet}}{b_i}, \frac{z_{\bullet j}}{a_j} \right),
+	r_{ij} = \max \left(1, \frac{z_{i \bullet}}{(1 - \theta)b_i}, \frac{z_{\bullet j}}{(1 - \theta)a_j} \right),
 \end{equation}
 where $r_{ij} > 1$ typically denotes an overflow through edge $(i, j)$. This flow ratio can be traced back to origin-destination couples $s, t$ in order to compute the \emph{orgin-destination flow ratio} $\bar{r}_{st}$ 
 \begin{equation}

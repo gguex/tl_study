@@ -24,13 +24,13 @@ data_folder = "multilines_data/preprocessed_data/test_6789"
 out_folder = "results/test_6789"
 
 # Conv threshold for iterative fitting
-conv_thres_if = 1e-10
+conv_thres_if = 1e-5
 # Conv threshold
-conv_thres_algo = 1e-10
+conv_thres_algo = 1e-5
 # proportional limit 
 min_p_ntwk = 0.3
 # epsilon
-epsilon = 1e-40
+epsilon = 1e-20
 # max iteration
 max_it = 200
 
