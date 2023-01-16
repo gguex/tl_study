@@ -118,7 +118,7 @@ for (i in 1:n_test) {
                                        edge_ref,
                                        sp_ref, 
                                        p_mat,
-                                       prop_limit=hyper_par[j],
+                                       min_p_ntwk=hyper_par[j],
                                        conv_thres_algo=conv_thres_algo,
                                        conv_thres_if=conv_thres_if,
                                        epsilon=epsilon,
