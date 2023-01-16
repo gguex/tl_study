@@ -634,13 +634,13 @@ compute_origin_destination2 = function(rho_in, rho_out, edge_ref, sp_ref, p_mat,
     diff_g = sum(abs(g_ref_old - g_ref))
     diff_in = sum(abs(sigma_in_old - sigma_in))
     diff_out = sum(abs(sigma_out_old - sigma_out))
-    couple = which(st_ratio == max(st_ratio), arr.ind=T)[1,]
+    couple = sp_ref[which(path_max_ratio == max(path_max_ratio)), ][1, ]
     
     # Print iteration statistics
     if (display_it) {
       cat("It", it_algo, ": diff_f =", diff_f, ", diff_g =", diff_g, 
           ", diff_in =", diff_in, ", diff_out =", diff_out, 
-          ", to_red_max =", max(st_ratio), ", where =", couple,"\n")
+          ", to_red_max =", max(path_max_ratio), ", where =", couple,"\n")
     }
     
     

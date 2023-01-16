@@ -81,7 +81,7 @@ epsilon = 1e-10
 # max iteration
 max_it = 400
 # print iterations
-display_it = F
+display_it = T
 # number of iterations
 n_test = 10
 # --- prop_limit
@@ -101,7 +101,7 @@ res_mat = matrix(0, nrow = n_test, ncol = length(hyper_par))
 mean_test = c()
   
 for (i in 1:n_test) {
-  set.seed(i)
+  #set.seed(i)
   # passengers_rho = get_passengers(nb_passengers)
   # paths_passengers = n_poisson(paths, lambda)
   paths_passengers = n_multin(paths, 100)
