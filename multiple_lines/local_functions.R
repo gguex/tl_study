@@ -196,7 +196,7 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, dist_mat,
 
 
 #-------------------------------------------------------------------------------
-# Function: balance_flow_inout 
+# Function: balance_lflow_inout 
 #
 # Description:  This function compute a corrected version of ingoing and 
 #               outgoing flow inside the different lines, in order that the 
@@ -204,14 +204,14 @@ build_sp_data = function(line_mbr, tour_mbr, travel_t, wait_t, dist_mat,
 #
 # In:
 # - line_mbr: A n-length vector containing line memberships for stops.
-# - measured_flow_in:  A n-length vector containing measured flow entering lines.
-# - measured_flow_out: A n-length vector containing measured flow leaving lines.
+# - measured_lflow_in:  A n-length vector with measured flow entering lines.
+# - measured_lflow_out: A n-length vector with measured flow leaving lines.
 # Out:
-# - flow_in:  A n-length vector of corrected flow entering lines.
-# - flow_out:  A n-length vector of corrected flow leaving lines.
+# - lflow_in:  A n-length vector with the corrected flow entering lines.
+# - lflow_out:  A n-length vector wiht the corrected flow leaving lines.
 #-------------------------------------------------------------------------------
 
-balance_flow_inout = function(line_mbr, measured_flow_in, measured_flow_out){
+balance_lflow_inout = function(line_mbr, measured_lflow_in, measured_lflow_out){
   
   # Get the number of stops 
   n = length(line_mbr)
@@ -219,49 +219,50 @@ balance_flow_inout = function(line_mbr, measured_flow_in, measured_flow_out){
   lines_lvl = as.factor(line_mbr)
   
   # Vectors to store the corrected flow values 
-  flow_in = rep(0, n)
-  flow_out = rep(0, n)
+  lflow_in = rep(0, n)
+  lflow_out = rep(0, n)
   
   # Loop on lines
   for(l_lvl in levels(lines_lvl)){
   
     # Compute the flow balance and the cumulative sum
-    measured_line_flow_in = measured_flow_in[lines_lvl == l_lvl]
-    measured_line_flow_out = measured_flow_out[lines_lvl == l_lvl]
-    line_balance = measured_line_flow_in - measured_line_flow_out
-    measured_line_flow = cumsum(line_balance)
+    measured_line_lflow_in = measured_lflow_in[lines_lvl == l_lvl]
+    measured_line_lflow_out = measured_lflow_out[lines_lvl == l_lvl]
+    line_balance = measured_line_lflow_in - measured_line_lflow_out
+    measured_line_lflow = cumsum(line_balance)
     
     # The quantity to correct
-    correction = measured_line_flow[length(measured_line_flow)]
+    correction = measured_line_lflow[length(measured_line_lflow)]
     # We reduce (or raise, if negative correction) the flow in
-    line_flow_in = measured_line_flow_in
-    line_flow_in[-length(line_flow_in)] = line_flow_in[-length(line_flow_in)] - 
-      correction / (2*(length(line_flow_in) - 1))
+    line_lflow_in = measured_line_lflow_in
+    line_lflow_in[-length(line_lflow_in)] = 
+      line_lflow_in[-length(line_lflow_in)] - 
+      correction/(2*(length(line_lflow_in) - 1))
     # We raise (or reduce, if negative correction) the flow out
-    line_flow_out = measured_line_flow_out 
-    line_flow_out[-1] = line_flow_out[-1] + 
-      correction / (2*(length(line_flow_out) - 1))
+    line_lflow_out = measured_line_lflow_out 
+    line_lflow_out[-1] = line_lflow_out[-1] + 
+      correction / (2*(length(line_lflow_out) - 1))
     
     # Check if there is any negative value, and correct it if it's the case
-    if(any(line_flow_in < 0)){
-      line_flow_out[line_flow_in < 0] = line_flow_out[line_flow_in < 0] - 
-        line_flow_in[line_flow_in < 0]
-      line_flow_in[line_flow_in < 0] = 0
+    if(any(line_lflow_in < 0)){
+      line_lflow_out[line_lflow_in < 0] = line_lflow_out[line_lflow_in < 0] - 
+        line_lflow_in[line_lflow_in < 0]
+      line_lflow_in[line_lflow_in < 0] = 0
     }
-    if(any(line_flow_out < 0)){
-      line_flow_in[line_flow_out < 0] = line_flow_in[line_flow_out < 0] - 
-        line_flow_out[line_flow_out < 0]
-      line_flow_out[line_flow_out < 0] = 0
+    if(any(line_lflow_out < 0)){
+      line_lflow_in[line_lflow_out < 0] = line_lflow_in[line_lflow_out < 0] - 
+        line_lflow_out[line_lflow_out < 0]
+      line_lflow_out[line_lflow_out < 0] = 0
     }
     
     # Add the corrected flow for line to the vector of global corrected flow 
-    flow_in[lines_lvl == l_lvl] = line_flow_in
-    flow_out[lines_lvl == l_lvl] = line_flow_out
+    lflow_in[lines_lvl == l_lvl] = line_lflow_in
+    lflow_out[lines_lvl == l_lvl] = line_lflow_out
   }
   
   # --- Return the results
   
-  return(list(flow_in=flow_in, flow_out=flow_out))
+  return(list(lflow_in=lflow_in, lflow_out=lflow_out))
   
 }
 
@@ -274,8 +275,8 @@ balance_flow_inout = function(line_mbr, measured_flow_in, measured_flow_out){
 #               stops, and the flow going in and out at each line stops.
 #
 # In:
-# - flow_in:   A n-length vector of flow entering lines.
-# - flow_out:  A n-length vector of flow leaving lines.
+# - lflow_in:   A n-length vector of flow entering lines.
+# - lflow_out:  A n-length vector of flow leaving lines.
 # - edge_ref: A (m x 3) matrix, giving the edge starting node index, ending 
 #             node index, and a boolean indicating if this is an transfer edge.
 # - sp_ref:   A (n_sp x 2) matrix, giving the source-target node pair for each 
@@ -285,12 +286,8 @@ balance_flow_inout = function(line_mbr, measured_flow_in, measured_flow_out){
 # - s_mat:    A (n x n) optional affinity matrix between stops. If None is given
 #             this matrix will set to 1 for each pair having an admissible 
 #             shorest-path (default = NULL).
-# - smooth_limit:     An boolean indicating if the algorithm should use the 
-#                     smooth limit for between-line flow (default = F).
-# - exp_lambda:       The exponential law parameter for the smooth limit
-#                     (default = 10).
-# - prop_limit:       The minimum percentage of flow newly entering in network, 
-#                     used only if smooth_limit=F (default = 0.1).
+# - min_p_nflow:  The minimum percentage of the in/out line flow entering the
+#                 network (default = 0.1).
 # - conv_thres_if:    A threshold for the convergence of the iterative fitting 
 #                     algorithm (default = 1e-5).
 # - conv_thres_algo:  A threshold for the convergence of the whole algorithm 
