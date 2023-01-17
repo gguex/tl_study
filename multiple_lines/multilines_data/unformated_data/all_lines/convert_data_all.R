@@ -4,6 +4,8 @@
 #
 #-------------------------------------------------------------------------------
 
+library(stringr)
+
 #---------------------------
 # Set working directory path
 #---------------------------
@@ -16,50 +18,22 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # --- Passengers in and out df
 
-# Loading in/out data
-inout_data = read.csv("stops_frequentation_6789.csv", sep=",", row.names = 1)
-stop_names = trimws(paste(paste0("S", inout_data$code_ligne_theo), 
-                          inout_data$direction_voy_theo, 
-                          inout_data$code_arret_theo, sep="_"))
-
-# --- Mean stopping time df
-
-# Mean stop time at bus stops
-stop_time_df = read.csv("waiting_time_s_tp.csv", sep=",")
-# Get the name of stop
-stop_time_rownames = trimws(paste(paste0("S", stop_time_df$code_ligne_theo), 
-                                  stop_time_df$direction_voy_theo, 
-                                  stop_time_df$code_arret_theo, sep="_"))
-# Get the mean stopping time 
-stop_time_vec = c()
-for (i in 1:length(stop_names)){
-  stop_time = stop_time_df[which(stop_time_rownames == stop_names[i]),
-                           ]$mean_waiting_time
-  stop_time_vec = c(stop_time_vec, stop_time)
-}
-
-# --- Mean travelling time df
-
-# Bus time between stops
-travel_time_df = read.csv("mean_time_i-j_s_tp.csv", sep=",")
-# Get the name of starting stop
-travel_time_rownames = trimws(paste(paste0("S", travel_time_df$code_ligne_theo), 
-                                    travel_time_df$direction_voy_theo, 
-                                    travel_time_df$code_arret_prec_theo, sep="_"))
-# Get the mean travel time 
-travel_time_vec = c()
-for (i in 1:length(stop_names)){
-  travel_time = travel_time_df[which(travel_time_rownames == stop_names[i])[1],
-                               ]$mean_time
-  if(length(travel_time) == 0) travel_time = NA
-  travel_time_vec = c(travel_time_vec, travel_time)
-}
+# Loading line data
+line_data = read.csv("stop_travel_waiting_time_all.csv", sep=",")
 
 # --- Pedestrian time matrix
 
 # Pedestrian time martix 
-ped_time_mat = read.csv("time_mat_s_6789_names.csv", sep=",")
-ped_time_mat = as.matrix(ped_time_mat[, -1])
+ped_time_mat = read.csv("ped_time_tot.csv", sep=",")
+ped_time_names = names(ped_time_mat)
+formatted_names = c()
+for(name in ped_time_names){
+  f_name = str_replace_all(name, "[\\.]+$", "")
+  f_name = str_replace_all(f_name, "\\.", "-")
+  f_name = paste0("S", str_sub(f_name, 2))
+  formatted_names = c(fromatted_names, f_name)
+}
+
 colnames(ped_time_mat) = stop_names
 
 #---------------------------
@@ -93,5 +67,7 @@ new_bus_df = new_bus_df[-ind_to_merge[1], ]
 new_bus_df$direction[50:58] = "A"
 new_ped_time_mat = new_ped_time_mat[-ind_to_merge[1], -ind_to_merge[1]]
 
-write.table(new_bus_df, "../bus_df.csv", sep=",", row.names = F)
-write.table(new_ped_time_mat, "../ped_time.csv", sep=",", row.names=F, col.names=F)
+write.table(new_bus_df, "../../formatted_data/all_lines/bus_df.csv", 
+            sep=",", row.names = F)
+write.table(new_ped_time_mat, "../../formatted_data/all_lines/ped_time.csv", 
+            sep=",", row.names=F, col.names=F)
