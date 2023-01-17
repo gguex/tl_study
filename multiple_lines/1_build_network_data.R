@@ -59,14 +59,14 @@ res_sp_list = build_sp_data(interaction(line_df$line_nbr,
                             res_net_list$adj_b)
 
 # Build the corrected balance 
-res_inout_list = build_in_out_flow(interaction(line_df$line_nbr, 
-                                               line_df$direction), 
-                                   line_df$passengers_in, 
-                                   line_df$passengers_out)
+res_inout_list = balance_flow_l_inout(interaction(line_df$line_nbr, 
+                                                  line_df$direction), 
+                                      line_df$passengers_in, 
+                                      line_df$passengers_out)
 
 # Add corrected in/out data to dataframe
-line_df["rho_in"] = res_inout_list$rho_in
-line_df["rho_out"] = res_inout_list$rho_out
+line_df["flow_l_in"] = res_inout_list$flow_l_in
+line_df["flow_l_out"] = res_inout_list$flow_l_out
 
 # Save data 
 write.table(res_net_list$adj_w, paste0(out_folder, "/adj_w.csv"), sep=",",
@@ -77,7 +77,8 @@ write.table(res_sp_list$edge_ref, paste0(out_folder, "/edge_ref.csv"), sep=",",
             row.names=F)
 write.table(res_sp_list$sp_ref, paste0(out_folder, "/sp_ref.csv"), sep=",",
             row.names=F)
-write.table(res_sp_list$p_mat, paste0(out_folder, "/p_mat.csv"), sep=",",
+write.table(as.matrix(res_sp_list$sp_edge_link), 
+            paste0(out_folder, "/sp_edge_link.csv"), sep=",", 
             row.names=F, col.names=F)
 write.table(line_df, paste0(out_folder, "/line_df.csv"), sep=",",
             row.names=F)

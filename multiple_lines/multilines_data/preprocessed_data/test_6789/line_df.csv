@@ -1,4 +1,4 @@
-"stop_names","label","line_nbr","direction","passengers_in","passengers_out","travel_time","stopping_time","rho_in","rho_out"
+"stop_names","label","line_nbr","direction","passengers_in","passengers_out","travel_time","stopping_time","flow_l_in","flow_l_out"
 "S6_A_MALAD_N","Maladière",6,"A",175278.17,0,91.1304035973406,477.864014137007,175450.31595,0
 "S6_A_MTOIE_E","Montoie",6,"A",107241.63,9345.035,82.4553480288024,35.0166073546856,107413.77595,9172.88905
 "S6_A_FIGUI_E","Figuiers",6,"A",122778,7629.7812,49.5205589153067,34.1861671310729,122950.14595,7457.63525

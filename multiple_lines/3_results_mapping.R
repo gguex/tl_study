@@ -44,7 +44,7 @@ edge_ref = as.matrix(read.csv(paste0(data_folder, "/edge_ref.csv")))
 # Load sp_ref
 sp_ref = as.matrix(read.csv(paste0(data_folder, "/sp_ref.csv")))
 # Load p_mat
-p_mat = as.matrix(read.csv(paste0(data_folder, "/p_mat.csv"), header=F))
+p_mat = as.matrix(read.csv(paste0(data_folder, "/sp_edge_link.csv"), header=F))
 # Reading shapefiles
 lines_shp = st_read("multilines_data/shapefiles/frequentation_lignes_tot.shp")
 stops_shp = st_read("multilines_data/shapefiles/frequentation_arrets_tot.shp")

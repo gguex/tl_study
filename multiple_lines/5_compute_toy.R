@@ -73,24 +73,25 @@ sp_ref = edge_ref_p_mat_sp_ref(adj)[[3]]
 #--------------------------------
 
 # Conv threshold for iterative fitting
-conv_thres_if = 0.00001
+conv_thres_if = 0.0001
 # Conv threshold
-conv_thres_algo = 0.00001
+conv_thres_algo = 0.0001
 # epsilon
-epsilon = 1e-5
+epsilon = 1e-10
 # max iteration
-max_it = 400
+max_it = 1000
 # print iterations
 display_it = F
 # number of iterations
-n_test = 2
+n_test = 50
 # --- prop_limit
 # hyper_par = c(0.1, 0.3, 0.5, 0.7, 0.9)
-hyper_par = c(1:20)/20
-hyper_par[20] = 0.99
+hyper_par = c(1:15)/20
+#hyper_par[20] = 0.99
 # lambda
 lambda = 12
-
+# n passengers
+n_passengers = 100
 
 #--------------------------------
 # Process
@@ -101,9 +102,10 @@ res_mat = matrix(0, nrow = n_test, ncol = length(hyper_par))
 mean_test = c()
   
 for (i in 1:n_test) {
-  seed_memory = set.seed(i)
+  set.seed(i)
   # passengers_rho = get_passengers(nb_passengers)
-  paths_passengers = n_poisson(paths, lambda)
+  # paths_passengers = n_poisson(paths, lambda)
+  paths_passengers = n_multin(paths, n_passengers, epsilon=1e-2)
   paths_passengers = paths_passengers / sum(paths_passengers)
   x_btw = compute_x_from_n(paths_passengers, edge_ref, sp_ref, p_mat)$x_btw
   rho_in = rowSums(paths_passengers) + colSums(x_btw)
@@ -117,18 +119,19 @@ for (i in 1:n_test) {
                                        edge_ref,
                                        sp_ref, 
                                        p_mat,
-                                       prop_limit=hyper_par[j],
+                                       min_p_ntwk=hyper_par[j],
                                        conv_thres_algo=conv_thres_algo,
                                        conv_thres_if=conv_thres_if,
                                        epsilon=epsilon,
-                                       max_it=max_it)
-    stat_out = abs(n_mat - paths_passengers) / paths_passengers
+                                       max_it=max_it, 
+                                       display_it=display_it)
+    stat_out = abs(n_mat - paths_passengers)
     stat_out = stat_out[!is.infinite(stat_out)]
-    stat_out = mean(stat_out)
+    stat_out = sum(stat_out)
 
     res_mat[i,j] = stat_out
     
-    cat("Iteration n°:", i,"Parameter n°:", j, "done.\n")
+    cat("Iteration n°:", i, "Parameter n°:", j, "done.\n")
   }
 
 }
@@ -174,7 +177,7 @@ ggplot(mdf, aes(x=variable, y=value, color=par)) +
   # geom_smooth(show.legend = FALSE, fullrange=TRUE) +
   geom_point(show.legend = FALSE) +
   labs(x ="Parameter", y = "% of error") +
-  stat_summary(aes(y = value,group=1), fun.y=mean, colour="blue", geom="line",group=1)
+  stat_summary(aes(y = value,group=1), fun=mean, colour="blue", geom="line",group=1)
 
 # Save data
 # write.csv(df, "100_iterations_lambda_12.csv")
