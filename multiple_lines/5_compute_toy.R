@@ -25,7 +25,7 @@ library(gridExtra)
 library(reshape2)
 
 # Load functions
-source("local_functions_v2.R")
+source("local_functions.R")
 
 # The folder containing pre-processed data
 data_folder = "multilines_data/preprocessed_data/loop_toy_example"
