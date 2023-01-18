@@ -19,9 +19,10 @@
 
 ## set your user name and email:
 usethis::use_git_config(user.name = "YourName", user.email = "your@mail.com")
+usethis::use_git_config(user.name = "gguex", user.email = "guillaume.guex@gmail.com")
 
 ## create a personal access token for authentication:
-usethis::create_github_token() 
+usethis::create_github_token()
 ## in case usethis version < 2.0.0: usethis::browse_github_token() (or even better: update usethis!)
 
 ## set personal access token:
