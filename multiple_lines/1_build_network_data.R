@@ -18,12 +18,23 @@ source("local_functions.R")
 # Parameters
 #--------------------------------
 
+# --- TEST 6789
+
+# # The file containing the dataset
+# line_data_file = "multilines_data/formatted_data/test_6789/bus_df.csv"
+# # The file containing the pedestrian distance between stops
+# d_file = "multilines_data/formatted_data/test_6789/ped_time.csv"
+# # Out folder
+# out_folder = "multilines_data/preprocessed_data/test_6789"
+
+# --- ALL LINES
+
 # The file containing the dataset
-line_data_file = "multilines_data/formatted_data/test_6789/bus_df.csv"
+line_data_file = "multilines_data/formatted_data/all_lines/bus_df.csv"
 # The file containing the pedestrian distance between stops
-d_file = "multilines_data/formatted/test_6789/ped_time.csv"
+d_file = "multilines_data/formatted_data/all_lines/ped_time.csv"
 # Out folder
-out_folder = "multilines_data/preprocessed_data/test_6789"
+out_folder = "multilines_data/preprocessed_data/all_lines"
 
 # Pedestrian threshold for connecting stops
 d_ped_threshold = 120
