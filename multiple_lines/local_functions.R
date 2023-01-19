@@ -195,6 +195,112 @@ build_sp_data = function(line_mbrshps, tour_mbrshps, travel_t, wait_t, dist_mat,
   
 }
 
+#---------------------------------------------------------------------------
+# MULTICORE VERSION
+#---------------------------------------------------------------------------
+
+compute_sp_edges = function(s, t, adj_w, adj_b, ped_t_mat, travel_t_mat, 
+                            full_g, edge_ref){
+  
+  # Test if i, j are not valid
+  if((s == t) | 
+     ((adj_w[s, t] == 0) & (travel_t_mat[s, t] > ped_t_mat[s, t]))){
+    return(NULL)
+  }
+  
+  # Get the shortest path
+  sp = get.shortest.paths(full_g, s, t)$vpath[[1]]
+  
+  # Test if sp does not exit or if if does start or end with a transfer edge
+  if((length(sp) < 1) | 
+     (adj_b[sp[length(sp) - 1], sp[length(sp)]] | adj_b[sp[1], sp[2]])){
+    return(NULL)
+  }
+  
+  # Get the index of edges in sp
+  index_sp_edge = mapply(
+    function(i, j) which((edge_ref[,1] == i) & (edge_ref[,2] == j)), 
+    sp[-length(sp)], sp[-1])
+  
+  # Test if there are consecutive transfer edges
+  if(any(head(edge_ref[index_sp_edge, 3], -1) & 
+         tail(edge_ref[index_sp_edge, 3], -1))){
+    return(NULL)
+  }
+  
+  return(index_sp_edge)
+}
+
+build_sp_data_mc = function(line_mbrshps, tour_mbrshps, travel_t_vec, 
+                            wait_t_vec, ped_t_mat, adj_w, adj_b, mc.cores=1){
+  
+  # --- Get number of stops and make levels for line_mbr and tour_mbr
+  
+  # Get the number of stops 
+  n = length(line_mbrshps)
+  # Get levels of lines
+  lines_lvl = as.factor(line_mbrshps)
+  # Get levels of tour
+  tour_lvl = as.factor(tour_mbrshps)
+  
+  # --- Compute the traveling time with the line network 
+  
+  # Replace potential NA with large values
+  travel_t_vec[is.na(travel_t_vec)] = 1e10
+  # Adjacency matrix for traveling time
+  adj_travel_t = adj_w * travel_t_vec + t(t(adj_b) * wait_t_vec)
+  # The graph for traveling
+  travel_t_g = graph_from_adjacency_matrix(adj_travel_t, mode="directed", 
+                                           weighted=T)
+  # Travel time between stops
+  travel_t_mat = distances(travel_t_g, mode="out")
+  
+  # --- Compute the edge reference matrix
+  
+  # The edge reference 
+  edge_ref = which((adj_w + adj_b) == 1, arr.ind=T)
+  is_transfer_edge = as.logical(mapply(function(i, j) adj_b[i, j], 
+                                       edge_ref[,1], edge_ref[,2]))
+  edge_ref = cbind(edge_ref, is_transfer_edge)
+  n_edges = dim(edge_ref)[1]
+  
+  # --- Compute shortest-path data
+  
+  # Create the graph 
+  full_g = graph_from_adjacency_matrix(adj_w + adj_b, mode="directed")
+  
+  # s and t vec 
+  s_vec = rep(1:n, n)
+  t_vec = rep(1:n, each=n)
+  
+  # Compute shortest_path edges with multiple cores
+  sp_edges = mcmapply(function(s, t) 
+    compute_sp_edges(s, t, adj_w, adj_b, ped_t_mat, travel_t_mat, 
+                     full_g, edge_ref), s_vec, t_vec, mc.cores=mc.cores)
+  
+  # Admissible sp indices
+  admissible_sp_ind = which(!sapply(sp_edges, is.null))
+  
+  # Build sp_ref 
+  sp_ref = cbind(s_vec[admissible_sp_ind], t_vec[admissible_sp_ind])
+  
+  # Build sp_edge_link
+  i_loc = c()
+  j_loc = c()
+  n_paths = 1
+  for(sp_ind in admissible_sp_ind){
+    index_sp_edge = sp_edges[[sp_ind]]
+    i_loc = c(i_loc, rep(n_paths, length(index_sp_edge)))
+    j_loc = c(j_loc, index_sp_edge)
+    n_paths = n_paths + 1
+  }
+  sp_edge_link = sparseMatrix(i_loc, j_loc)
+  
+  # --- Return the results
+  
+  return(list(edge_ref=edge_ref, sp_ref=sp_ref, sp_edge_link=sp_edge_link))
+  
+}
 
 #-------------------------------------------------------------------------------
 # Function: balance_flow_l_inout 
