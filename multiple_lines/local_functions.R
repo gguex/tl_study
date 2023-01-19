@@ -166,7 +166,7 @@ build_sp_data = function(line_mbrshps, tour_mbrshps, travel_t, wait_t, dist_mat,
               sp[-length(sp)], sp[-1])
             
             # Check if there are no consecutive transfer edge
-            if(!any(head(is_transfer_edge[index_sp_edge],-1) & 
+            if(!any(head(is_transfer_edge[index_sp_edge], -1) & 
                     tail(is_transfer_edge[index_sp_edge], -1))){
               
               # Save the shortest path
