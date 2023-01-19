@@ -10,6 +10,7 @@
 
 library(igraph)
 library(Matrix)
+library(parallel)
 
 #-------------------------------------------------------------------------------
 # Function: build_network_structure()
@@ -22,16 +23,16 @@ library(Matrix)
 # In:
 # - line_mbrshps: A n-length vector containing line memberships of stops.
 # - tour_mbrshps: A n-length vector containing tour memberships of stops.
-# - dist_mat: A (n x n) pedestrian time matrix between stops.
-# - dist_thres: A scalar threshold on the pedestrian time for considering stops 
-#             linked.
+# - ped_t_mat: A (n x n) pedestrian time matrix between stops.
+# - ped_t_thres: A scalar threshold on the pedestrian time for considering 
+#                stops linked.
 # Out:
 # - adj_w:    A (n x n) adjacency matrix within transportation lines.
 # - adj_b:    A (n x n) adjacency matrix between transportation lines.
 #-------------------------------------------------------------------------------
 
 build_network_structure = 
-  function(line_mbrshps, tour_mbrshps, dist_mat, dist_thres){
+  function(line_mbrshps, tour_mbrshps, ped_t_mat, ped_t_thres){
   
   # --- Get number of stops and make levels for line_mbr and tour_mbr
   
@@ -53,7 +54,7 @@ build_network_structure =
   # --- Build A_B
   
   # With distance threshold
-  adj_b = 1*(dist_mat < dist_thres)
+  adj_b = 1*(ped_t_mat < ped_t_thres)
   # Removing diagonal
   diag(adj_b) = 0
   # Removing same tour links
