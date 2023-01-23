@@ -71,7 +71,7 @@ adj_w = res_net_list$adj_w
 # Adjacency between
 adj_b = res_net_list$adj_b
 # Number of cores
-mc.cores = detectCores() - 2
+mc.cores = 16
 
 
 
