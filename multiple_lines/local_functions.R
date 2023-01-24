@@ -737,6 +737,7 @@ name_stops_function = function(stops){
 #--------------------------------
 # Create Adjency matrix
 #--------------------------------
+# Crossing all on one stop
 adj_function = function(stops, name_stops){
   adj = matrix(0, nrow = nb_stops_tot, ncol = nb_stops_tot)
   colnames(adj) = rownames(adj) = stops
@@ -753,6 +754,52 @@ adj_function = function(stops, name_stops){
       }
     }
   }
+  return(adj)
+}
+
+# Crossing on different stops
+adj_function2 = function(stops, name_stops){
+  adj = matrix(0, nrow = nb_stops_tot, ncol = nb_stops_tot)
+  colnames(adj) = rownames(adj) = stops
+  a = 0
+  s = 0
+  l = 1
+  m = nb_stops*2
+  for (k in 1:nb_lines) {
+    for (i in l:m) {
+      for (j in 1:dim(name_stops)[1]) {
+        # next stop
+        if ((name_stops[i,1] == name_stops[j,1]) & (name_stops[i,2] == name_stops[j,2]) & (name_stops[i,3]+1 == name_stops[j,3])) {
+          adj[i,j] = 1
+        }
+        # Crossing stops "A"
+        if ((name_stops[i,1] + 1 + s == name_stops[j,1])
+            & (name_stops[i,3] + a == name_stops[j,3])
+            & (name_stops[i,1] < name_stops[j,3])
+            & (name_stops[i,1] < name_stops[j,1])
+        ) {
+          adj[i,j] = 1
+          
+          # Symmetry, change i or j
+          adj[i,j + 2*(nb_stops - j %% nb_stops) + 1] = 1
+          adj[i + 2*(nb_stops - i %% nb_stops) + 1,j] = 1
+          
+          # Symmetry, change i and j
+          adj[i + 2*(nb_stops - i %% nb_stops) + 1,j + 2*(nb_stops - j %% nb_stops) + 1] = 1
+          
+          a = a - 1
+          s = s + 1
+        }
+      }
+    }
+    l = k*nb_stops*2+1
+    m = m+nb_stops*2
+    a = 0
+    s = 0
+  }
+  upper_tri <- t(adj)
+  lower_tri <- lower.tri(adj)
+  adj[lower_tri] <- upper_tri[lower_tri]
   return(adj)
 }
 

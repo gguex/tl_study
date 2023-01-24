@@ -7,8 +7,8 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 library(igraph)
 source("local_functions.R")
 
-nb_lines = 2
-nb_stops = 3
+nb_lines = 4
+nb_stops = nb_lines + 1
 cross_stop = 2
 nb_stops_tot = nb_lines*nb_stops*2
 
