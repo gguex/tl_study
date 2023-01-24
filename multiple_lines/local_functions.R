@@ -538,8 +538,10 @@ compute_origin_destination =
     diff_g = sum(abs(g_ref_old - g_ref))
     diff_in = sum(abs(sigma_in_old - sigma_in))
     diff_out = sum(abs(sigma_out_old - sigma_out))
-    couple = sp_ref[which(path_max_ratio == max(path_max_ratio)), ][1, ]
-    
+    couple = sp_ref[which(path_max_ratio == max(path_max_ratio)), ]
+    if(!is.null(dim(couple))){
+      couple = couple[1, ]
+    }
     # Print iteration statistics
     if (display_it) {
       cat("It", it_algo, ": diff_f =", diff_f, ", diff_g =", diff_g, 
