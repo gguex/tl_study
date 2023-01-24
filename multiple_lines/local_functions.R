@@ -410,8 +410,8 @@ balance_flow_l_inout =
 
 compute_origin_destination = 
   function(flow_l_in, flow_l_out, edge_ref, sp_ref, sp_edge_link, 
-           s_mat=NULL, min_p_ntwk=0.1, conv_thres_if=1e-5,
-           conv_thres_algo=1e-5, epsilon=1e-40,
+           s_mat=NULL, min_p_ntwk=0.1, conv_thres_if=1e-4,
+           conv_thres_algo=1e-4, epsilon=1e-40,
            max_it=200, display_it=T){
   
   # --- Get the network structure 
@@ -436,6 +436,10 @@ compute_origin_destination =
   # A stop without transfer edges
   trans_edge = edge_ref[edge_ref[,3] == 1, ]
   node_ref = setdiff(1:n, unique(c(trans_edge[,1], trans_edge[,2])))[1]
+  
+  # Scale the convergence thresholds
+  conv_thres_if = conv_thres_if / sum(s_mat)
+  conv_thres_algo = conv_thres_algo / sum(s_mat)
   
   # --- Algorithm 
   

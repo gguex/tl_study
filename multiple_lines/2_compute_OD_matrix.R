@@ -18,10 +18,19 @@ source("local_functions.R")
 # Parameters
 #--------------------------------
 
+# --- Test 6789
+
 # The folder containing pre-processed data
 data_folder = "multilines_data/preprocessed_data/test_6789"
 # Output folder for results
 out_folder = "results/test_6789"
+
+# --- all lines
+
+# The folder containing pre-processed data
+# data_folder = "multilines_data/preprocessed_data/all_lines"
+# Output folder for results
+# out_folder = "results/all_lines"
 
 # Conv threshold for iterative fitting
 conv_thres_if = 1e-5
@@ -109,7 +118,13 @@ line_res["transferts_out%"] = round(line_res["transferts_out"] / line_res["flow_
 line_res["diff_out"] = round(line_res["sigma_out"] + line_res["transferts_out"] - line_res["flow_l_out"], 3)
 line_res["err_out%"] = round(line_res["diff_out"] / line_res["flow_l_out"] * 100, 3)
 
-# Save data 
+# --- Save data 
+
+# Create dir if it do not exist
+if(!dir.exists(out_folder)){
+  dir.create(out_folder)
+}
+
 write.table(line_res, paste0(out_folder, "/line_res.csv"), sep=",",
             row.names=F)
 write.table(n_mat, paste0(out_folder, "/n_mat.csv"), sep=",",
