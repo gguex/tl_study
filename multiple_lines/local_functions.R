@@ -783,7 +783,6 @@ adj_function2 = function(stops, name_stops){
         ) {
           adj[i,j] = 1
           
-          # Back an fort on the same line
           # Symmetry, change i or j
           adj[i,j + 2*(nb_stops - j %% nb_stops) + 1] = 1
           adj[i + 2*(nb_stops - i %% nb_stops) + 1,j] = 1
@@ -800,6 +799,7 @@ adj_function2 = function(stops, name_stops){
     a = 0
     s = 0
   }
+  # Back an fort on the same line
   upper_tri <- t(adj)
   lower_tri <- lower.tri(adj)
   adj[lower_tri] <- upper_tri[lower_tri]
