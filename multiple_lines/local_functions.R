@@ -17,7 +17,7 @@ library(parallel)
 #
 # Description:  This function compute the network structure of a multiple line
 #               transportation network. It uses a matrix of pedestrian time to 
-#               build transfer edges, and make sure lines from same tour are not 
+#               build transfer edges, and make sure lines from same tour aren't 
 #               connected.
 #
 # In:
