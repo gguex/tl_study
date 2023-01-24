@@ -410,8 +410,8 @@ balance_flow_l_inout =
 
 compute_origin_destination = 
   function(flow_l_in, flow_l_out, edge_ref, sp_ref, sp_edge_link, 
-           s_mat=NULL, min_p_ntwk=0.1, conv_thres_if=1e-4,
-           conv_thres_algo=1e-4, epsilon=1e-40,
+           s_mat=NULL, min_p_ntwk=0.1, conv_thres_if=1e-5,
+           conv_thres_algo=1e-5, epsilon=1e-40,
            max_it=200, display_it=T){
   
   # --- Get the network structure 
