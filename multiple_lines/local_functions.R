@@ -112,9 +112,9 @@ build_sp_data = function(line_mbrshps, tour_mbrshps, adj_w, adj_b,
   
   # If one is null
   if(is.null(travel_t_vec) | is.null(wait_t_vec) | is.null(ped_t_mat)){
-    travel_t_vec = rep(0, n)
-    wait_t_vec = rep(0, n)
-    ped_t_mat = matrix(1e10, n, n)
+    travel_t_vec = rep(1, n)
+    wait_t_vec = rep(1, n)
+    ped_t_mat = matrix(1e40, n, n)
   }
   
   # Replace potential NA with large values
@@ -257,9 +257,9 @@ build_sp_data_mc = function(line_mbrshps, tour_mbrshps, adj_w, adj_b,
   
   # If one is null
   if(is.null(travel_t_vec) | is.null(wait_t_vec) | is.null(ped_t_mat)){
-    travel_t_vec = rep(0, n)
-    wait_t_vec = rep(0, n)
-    ped_t_mat = matrix(1e10, n, n)
+    travel_t_vec = rep(1, n)
+    wait_t_vec = rep(1, n)
+    ped_t_mat = matrix(1e30, n, n)
   }
   
   # Replace potential NA with large values
