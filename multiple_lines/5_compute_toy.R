@@ -37,9 +37,9 @@ out_folder = "results/loop_toy_example"
 # Network parameters
 #--------------------------------
 # Choose number of lines
-nb_lines = 4
+nb_lines = 3
 # Choose number of stops
-nb_stops = 5
+nb_stops = 4
 # Choose number of crossing stops
 cross_stop = 2
 # Choose number of passengers in the network (with normal distribution)
@@ -60,15 +60,21 @@ adj_list = adj_function2(stops, name_stops)
 adj = adj_list$adj_w + adj_list$adj_b
 ########## 3. ##########
 # paths = paths_function(nb_stops_tot, name_stops, cross_stop)
-paths = paths_function2(nb_stops_tot, name_stops)
+line_mbrshps = interaction(name_stops$V1, name_stops$V2)
+tour_mbrshps = name_stops$V1
+sp_data = build_sp_data(line_mbrshps, tour_mbrshps, adj_list$adj_w, 
+                        adj_list$adj_b)
+edge_ref = sp_data$edge_ref
+sp_edge_link = sp_data$sp_edge_link
+sp_ref = sp_data$sp_ref
+paths = 1*as.matrix(sparseMatrix(i=sp_ref[, 1], j=sp_ref[, 2], 
+                                 dims=c(nb_stops_tot, nb_stops_tot)))
 ########## 4. ##########
 # go_in_out = get_passengers(nb_passengers)[[1]]
 # paths_passengers = get_passengers(nb_passengers)[[2]]
 # n_poisson(nb_stops_tot, name_stops, cross_stop, lambda)
 ########## 5. ##########
-edge_ref = edge_ref_p_mat_sp_ref(adj)[[1]]
-sp_edge_link = edge_ref_p_mat_sp_ref(adj)[[2]]
-sp_ref = edge_ref_p_mat_sp_ref(adj)[[3]]
+
 
 
 #--------------------------------
