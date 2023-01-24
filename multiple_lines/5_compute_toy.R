@@ -39,7 +39,7 @@ out_folder = "results/loop_toy_example"
 # Choose number of lines
 nb_lines = 3
 # Choose number of stops
-nb_stops = 4
+nb_stops = nb_lines + 1
 # Choose number of crossing stops
 cross_stop = 2
 # Choose number of passengers in the network (with normal distribution)
