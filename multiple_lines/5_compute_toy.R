@@ -191,3 +191,8 @@ ggplot(mdf, aes(x=variable, y=value, color=par)) +
 
 # Save data
 # write.csv(df, "100_iterations_lambda_12.csv")
+
+set.seed(1)
+paths_passengers = n_multin(paths, n_passengers, epsilon=1e-2)
+paths_passengers = paths_passengers / sum(paths_passengers)
+plot_flow_graph(adj, paths_passengers)
