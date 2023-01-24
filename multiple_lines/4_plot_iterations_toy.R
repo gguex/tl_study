@@ -14,8 +14,11 @@ nb_stops_tot = nb_lines*nb_stops*2
 
 stops = stops_list(nb_lines, nb_stops)
 name_stops = name_stops_function(stops)
-adj = adj_function(stops, name_stops)
-paths = paths_function(nb_stops_tot, name_stops, cross_stop)
+# 2 possibilities of crossing stops
+# adj = adj_function(stops, name_stops)
+adj = adj_function2(stops, name_stops)
+# paths = paths_function(nb_stops_tot, name_stops, cross_stop)
+paths = paths_function2(nb_stops_tot, name_stops, cross_stop)
 edge_ref = edge_ref_p_mat_sp_ref(adj)[[1]]
 p_mat = edge_ref_p_mat_sp_ref(adj)[[2]]
 sp_ref = edge_ref_p_mat_sp_ref(adj)[[3]]

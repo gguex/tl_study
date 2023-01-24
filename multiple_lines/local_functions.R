@@ -799,6 +799,15 @@ adj_function2 = function(stops, name_stops){
   upper_tri <- t(adj)
   lower_tri <- lower.tri(adj)
   adj[lower_tri] <- upper_tri[lower_tri]
+  
+  ### comment to keep way back
+  # Find indices of row and columns including "R" 
+  row_indices_to_remove <- grep("R", rownames(adj))
+  col_indices_to_remove <- grep("R", colnames(adj))
+  # Delete row and lines
+  adj <- adj[-row_indices_to_remove, -col_indices_to_remove]
+  ###
+  
   return(adj)
 }
 
@@ -817,13 +826,68 @@ paths_function = function(nb_stops_tot, name_stops, cross_stop){
         paths[i,j] = 1
       }
       
-      if ((name_stops[i,1] != name_stops[j,1]) & (name_stops[i,3] < name_stops[j,3]) & (name_stops[j,3] != cross_stop) & (name_stops[i,3] != cross_stop)) {
+      # if ((name_stops[i,1] != name_stops[j,1]) & (name_stops[i,3] < name_stops[j,3]) & (name_stops[j,3] != cross_stop) & (name_stops[i,3] != cross_stop)) {
+      if ((name_stops[i,1] != name_stops[j,1]) & (name_stops[i,3] < name_stops[j,3]) & (name_stops[j,3] != name_stops[i,3])) {
+          
         paths[i,j] = 1
       }
     }
   }
   return(paths)
 }
+
+paths_function2 = function(nb_stops_tot, name_stops, cross_stop){
+  
+  ### Comment for back and forth
+  # Find indices of row including "R"
+  row_indices_to_remove <- grep("R", rownames(name_stops))
+  # Delete rows
+  name_stops <- name_stops[-row_indices_to_remove,]
+  
+  nb_stops_tot <- nb_stops_tot/2
+  stops_to_remove <- grep("R", stops)
+  stops <- stops[-stops_to_remove]
+  ###
+  
+  paths = matrix(0, nrow = nb_stops_tot, ncol = nb_stops_tot)
+  colnames(paths) = rownames(paths) = stops
+  
+  
+  for (i in 1:(dim(name_stops)[1])) {
+    for (j in 1:dim(name_stops)[1]) {
+      # Conditions to stay on the same line
+      if ((name_stops[i,1] == name_stops[j,1]) & (name_stops[i,2] == name_stops[j,2]) & (name_stops[i,3] < name_stops[j,3])) {
+        paths[i,j] = 1
+      }
+      
+      if ((name_stops[i,1] != name_stops[j,1])
+          & (name_stops[i,3] + 1 < name_stops[j,3]) 
+          & (name_stops[i,1] + 1 < name_stops[j,3]) 
+          & (name_stops[i,3] < name_stops[j,1])) {
+        paths[i,j] = 1
+      }
+      # lower matrix
+      if (i > j
+          & name_stops[i,1] > name_stops[j,1]
+          & name_stops[i,1] < name_stops[j,3]
+          & name_stops[i,3] <= name_stops[j,1]) {
+        paths[i,j] = 1
+      }
+    }
+  }
+  # complete with new informations
+  for (k in 1:(nb_lines-2)) {
+    for (i in 2:(dim(name_stops)[1])) {
+      for (j in 1:(dim(name_stops)[1]-1)) {
+        if (paths[(i-1),j] == 1 & paths[i,j+1] == 1 & name_stops[i,1] != name_stops[j,1]) {
+          paths[i,j] = 1
+        }
+      }
+    }
+  }
+  return(paths)
+}
+
 
 #-------------------------------------------------------------------------------
 # Passengers into the network, Poisson distribution version
