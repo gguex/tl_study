@@ -800,16 +800,16 @@ adj_function2 = function(stops, name_stops){
     s = 0
   }
   # Back an fort on the same line
-  upper_tri <- t(adj)
-  lower_tri <- lower.tri(adj)
-  adj[lower_tri] <- upper_tri[lower_tri]
+  # upper_tri <- t(adj)
+  # lower_tri <- lower.tri(adj)
+  # adj[lower_tri] <- upper_tri[lower_tri]
   
   ### comment to keep way back
-  # Find indices of row and columns including "R" 
-  row_indices_to_remove <- grep("R", rownames(adj))
-  col_indices_to_remove <- grep("R", colnames(adj))
-  # Delete row and lines
-  adj <- adj[-row_indices_to_remove, -col_indices_to_remove]
+  # # Find indices of row and columns including "R" 
+  # row_indices_to_remove <- grep("R", rownames(adj))
+  # col_indices_to_remove <- grep("R", colnames(adj))
+  # # Delete row and lines
+  # adj <- adj[-row_indices_to_remove, -col_indices_to_remove]
   ###
   
   return(adj)
