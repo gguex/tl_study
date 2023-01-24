@@ -786,12 +786,12 @@ adj_function2 = function(stops, name_stops){
   for (k in 1:nb_lines) {
     for (i in l:m) {
       for (j in 1:dim(name_stops)[1]) {
-        # next stop on the same line
-        if ((name_stops[i,1] == name_stops[j,1])
-            & (name_stops[i,2] == name_stops[j,2])
-            & (name_stops[i,3]+1 == name_stops[j,3])) {
-          adj[i,j] = 1
-        }
+        # # next stop on the same line
+        # if ((name_stops[i,1] == name_stops[j,1])
+        #     & (name_stops[i,2] == name_stops[j,2])
+        #     & (name_stops[i,3]+1 == name_stops[j,3])) {
+        #   adj[i,j] = 1
+        # }
         # Crossing stops "A"
         if ((name_stops[i,1] + 1 + s == name_stops[j,1])
             & (name_stops[i,3] + a == name_stops[j,3])
@@ -816,10 +816,7 @@ adj_function2 = function(stops, name_stops){
     a = 0
     s = 0
   }
-  # Back an fort on the same line
-  # upper_tri <- t(adj)
-  # lower_tri <- lower.tri(adj)
-  # adj[lower_tri] <- upper_tri[lower_tri]
+
   
   ### comment to keep way back
   # # Find indices of row and columns including "R" 
@@ -838,6 +835,26 @@ adj_function2 = function(stops, name_stops){
   adj_w[!is_w] = 0
   adj_b = adj
   adj_b[is_w] = 0
+  
+  # Back an forth on the same line
+  upper_tri <- t(adj_w)
+  lower_tri <- lower.tri(adj_w)
+  adj_w[lower_tri] <- upper_tri[lower_tri]
+  
+  upper_tri <- t(adj_b)
+  lower_tri <- lower.tri(adj_b)
+  adj_b[lower_tri] <- upper_tri[lower_tri]
+  
+  for (i in 1:dim(name_stops)[1]) {
+    for (j in 1:dim(name_stops)[1]) {
+      # next stop on the same line
+      if ((name_stops[i,1] == name_stops[j,1])
+          & (name_stops[i,2] == name_stops[j,2])
+          & (name_stops[i,3]+1 == name_stops[j,3])) {
+        adj_w[i,j] = 1
+      }
+    }
+  }
   
   return(list(adj_w=adj_w, adj_b=adj_b))
 }
