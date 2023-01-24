@@ -37,7 +37,7 @@ out_folder = "results/loop_toy_example"
 # Network parameters
 #--------------------------------
 # Choose number of lines
-nb_lines = 2
+nb_lines = 4
 # Choose number of stops
 nb_stops = nb_lines + 1
 # Choose number of crossing stops
@@ -47,8 +47,7 @@ cross_stop = 2
 # Total number of stops *2 (back and forth)
 nb_stops_tot = nb_lines*nb_stops*2
 
-
-# intermediate outputs
+# Intermediate outputs
 ########## 1. ##########
 # Stops' list
 stops = stops_list(nb_lines, nb_stops)
@@ -92,7 +91,7 @@ max_it = 1000
 # print iterations
 display_it = F
 # number of iterations
-n_test = 50
+n_test = 5
 # --- prop_limit
 # hyper_par = c(0.1, 0.3, 0.5, 0.7, 0.9)
 hyper_par = c(1:15)/20
@@ -194,5 +193,4 @@ ggplot(mdf, aes(x=variable, y=value, color=par)) +
 
 set.seed(1)
 paths_passengers = n_multin(paths, n_passengers, epsilon=1e-2)
-paths_passengers = paths_passengers / sum(paths_passengers)
 plot_flow_graph(adj, paths_passengers)

@@ -649,6 +649,25 @@ plot_flow_graph = function(adj, n_mat, layout=NULL, main=NULL){
   
   igraph_options(annotate.plot=TRUE)
   
+  n = dim(adj)[1]
+  
+  # Names management
+  if(!is.null(colnames(adj))){
+    v_names = colnames(adj)
+  } else if (!is.null(rownames(adj))){
+    v_names = rownames(adj)
+  } else if (!is.null(colnames(n_mat))){
+    v_names = colnames(n_mat)
+  } else if (!is.null(rownames(n_mat))){
+    v_names = rownames(n_mat)
+  } else {
+    v_names = paste0("S", 1:n)
+  }
+  rownames(adj) = v_names
+  colnames(adj) = v_names
+  rownames(n_mat) = v_names
+  colnames(n_mat) = v_names
+  
   df_line = igraph::as_data_frame(graph_from_adjacency_matrix(adj, 
                                                               weighted = TRUE))
   df_line["type"] = "line"
@@ -699,7 +718,7 @@ plot_flow_graph = function(adj, n_mat, layout=NULL, main=NULL){
   in_out_colors = setNames(in_out_colors, names(in_prop))
   
   plot(g_tot, layout=layout, edge.color=edge_colors, edge.width=edge_sizes,
-       edge.curved=edge_curves, edge.arrow.size=0.1, vertex.shape="pie", 
+       edge.curved=edge_curves, edge.arrow.size=0.3, vertex.shape="pie", 
        vertex.pie=pie_prop, vertex.pie.color=in_out_colors, main=main)
 }
 
@@ -777,6 +796,7 @@ adj_function = function(stops, name_stops){
 # Crossing on different stops
 adj_function2 = function(stops, name_stops){
   nb_stops_tot = length(stops)
+  nb_stops = dim(name_stops[name_stops[, 1] == name_stops[1, 1], ])[1] / 2
   adj = matrix(0, nrow = nb_stops_tot, ncol = nb_stops_tot)
   colnames(adj) = rownames(adj) = stops
   a = 0
