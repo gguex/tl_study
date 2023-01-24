@@ -59,7 +59,7 @@ name_stops = name_stops_function(stops)
 adj = adj_function2(stops, name_stops)
 ########## 3. ##########
 # paths = paths_function(nb_stops_tot, name_stops, cross_stop)
-paths = paths_function2(nb_stops_tot, name_stops, cross_stop)
+paths = paths_function2(nb_stops_tot, name_stops)
 ########## 4. ##########
 # go_in_out = get_passengers(nb_passengers)[[1]]
 # paths_passengers = get_passengers(nb_passengers)[[2]]

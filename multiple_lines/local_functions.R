@@ -838,7 +838,7 @@ paths_function = function(nb_stops_tot, name_stops, cross_stop){
   return(paths)
 }
 
-paths_function2 = function(nb_stops_tot, name_stops, cross_stop){
+paths_function2 = function(nb_stops_tot, name_stops){
   
   ### Comment for back and forth
   # Find indices of row including "R"
