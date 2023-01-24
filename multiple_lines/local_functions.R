@@ -769,8 +769,10 @@ adj_function2 = function(stops, name_stops){
   for (k in 1:nb_lines) {
     for (i in l:m) {
       for (j in 1:dim(name_stops)[1]) {
-        # next stop
-        if ((name_stops[i,1] == name_stops[j,1]) & (name_stops[i,2] == name_stops[j,2]) & (name_stops[i,3]+1 == name_stops[j,3])) {
+        # next stop on the same line
+        if ((name_stops[i,1] == name_stops[j,1])
+            & (name_stops[i,2] == name_stops[j,2])
+            & (name_stops[i,3]+1 == name_stops[j,3])) {
           adj[i,j] = 1
         }
         # Crossing stops "A"
@@ -781,10 +783,10 @@ adj_function2 = function(stops, name_stops){
         ) {
           adj[i,j] = 1
           
+          # Back an fort on the same line
           # Symmetry, change i or j
           adj[i,j + 2*(nb_stops - j %% nb_stops) + 1] = 1
           adj[i + 2*(nb_stops - i %% nb_stops) + 1,j] = 1
-          
           # Symmetry, change i and j
           adj[i + 2*(nb_stops - i %% nb_stops) + 1,j + 2*(nb_stops - j %% nb_stops) + 1] = 1
           
@@ -824,13 +826,14 @@ paths_function = function(nb_stops_tot, name_stops, cross_stop){
   for (i in 1:(dim(name_stops)[1])) {
     for (j in 1:dim(name_stops)[1]) {
       # Conditions to stay on the same line
-      if ((name_stops[i,1] == name_stops[j,1]) & (name_stops[i,2] == name_stops[j,2]) & (name_stops[i,3] < name_stops[j,3])) {
+      if ((name_stops[i,1] == name_stops[j,1])
+          & (name_stops[i,2] == name_stops[j,2])
+          & (name_stops[i,3] < name_stops[j,3])) {
         paths[i,j] = 1
       }
-      
-      # if ((name_stops[i,1] != name_stops[j,1]) & (name_stops[i,3] < name_stops[j,3]) & (name_stops[j,3] != cross_stop) & (name_stops[i,3] != cross_stop)) {
-      if ((name_stops[i,1] != name_stops[j,1]) & (name_stops[i,3] < name_stops[j,3]) & (name_stops[j,3] != name_stops[i,3])) {
-          
+      if ((name_stops[i,1] != name_stops[j,1])
+          & (name_stops[i,3] < name_stops[j,3])
+          & (name_stops[j,3] != name_stops[i,3])) {
         paths[i,j] = 1
       }
     }
@@ -845,7 +848,6 @@ paths_function2 = function(nb_stops_tot, name_stops){
   row_indices_to_remove <- grep("R", rownames(name_stops))
   # Delete rows
   name_stops <- name_stops[-row_indices_to_remove,]
-  
   nb_stops_tot <- nb_stops_tot/2
   stops_to_remove <- grep("R", stops)
   stops <- stops[-stops_to_remove]
@@ -853,7 +855,6 @@ paths_function2 = function(nb_stops_tot, name_stops){
   
   paths = matrix(0, nrow = nb_stops_tot, ncol = nb_stops_tot)
   colnames(paths) = rownames(paths) = stops
-  
   
   for (i in 1:(dim(name_stops)[1])) {
     for (j in 1:dim(name_stops)[1]) {
@@ -881,7 +882,9 @@ paths_function2 = function(nb_stops_tot, name_stops){
   for (k in 1:(nb_lines-2)) {
     for (i in 2:(dim(name_stops)[1])) {
       for (j in 1:(dim(name_stops)[1]-1)) {
-        if (paths[(i-1),j] == 1 & paths[i,j+1] == 1 & name_stops[i,1] != name_stops[j,1]) {
+        if (paths[(i-1),j] == 1
+            & paths[i,j+1] == 1
+            & name_stops[i,1] != name_stops[j,1]) {
           paths[i,j] = 1
         }
       }
@@ -889,7 +892,6 @@ paths_function2 = function(nb_stops_tot, name_stops){
   }
   return(paths)
 }
-
 
 #-------------------------------------------------------------------------------
 # Passengers into the network, Poisson distribution version
