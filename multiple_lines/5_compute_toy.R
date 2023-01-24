@@ -64,7 +64,7 @@ paths = paths_function(nb_stops_tot, name_stops, cross_stop)
 # n_poisson(nb_stops_tot, name_stops, cross_stop, lambda)
 ########## 5. ##########
 edge_ref = edge_ref_p_mat_sp_ref(adj)[[1]]
-p_mat = edge_ref_p_mat_sp_ref(adj)[[2]]
+sp_edge_link = edge_ref_p_mat_sp_ref(adj)[[2]]
 sp_ref = edge_ref_p_mat_sp_ref(adj)[[3]]
 
 
@@ -81,7 +81,7 @@ epsilon = 1e-10
 # max iteration
 max_it = 1000
 # print iterations
-display_it = T
+display_it = F
 # number of iterations
 n_test = 50
 # --- prop_limit
@@ -107,18 +107,19 @@ for (i in 1:n_test) {
   # paths_passengers = n_poisson(paths, lambda)
   paths_passengers = n_multin(paths, n_passengers, epsilon=1e-2)
   paths_passengers = paths_passengers / sum(paths_passengers)
-  x_btw = compute_x_from_n(paths_passengers, edge_ref, sp_ref, p_mat)$x_btw
-  rho_in = rowSums(paths_passengers) + colSums(x_btw)
-  rho_out = colSums(paths_passengers) + rowSums(x_btw)
+  x_btw = compute_x_from_n(paths_passengers, edge_ref, sp_ref, 
+                           sp_edge_link)$x_btw
+  flow_l_in = rowSums(paths_passengers) + colSums(x_btw)
+  flow_l_out = colSums(paths_passengers) + rowSums(x_btw)
   
   for (j in 1:length(hyper_par)) {
 
     # --- Run the algorithm
-    n_mat = compute_origin_destination(rho_in,
-                                       rho_out,
+    n_mat = compute_origin_destination(flow_l_in,
+                                       flow_l_out,
                                        edge_ref,
                                        sp_ref, 
-                                       p_mat,
+                                       sp_edge_link,
                                        min_p_ntwk=hyper_par[j],
                                        conv_thres_algo=conv_thres_algo,
                                        conv_thres_if=conv_thres_if,
