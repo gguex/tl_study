@@ -776,6 +776,7 @@ adj_function = function(stops, name_stops){
 
 # Crossing on different stops
 adj_function2 = function(stops, name_stops){
+  nb_stops_tot = length(stops)
   adj = matrix(0, nrow = nb_stops_tot, ncol = nb_stops_tot)
   colnames(adj) = rownames(adj) = stops
   a = 0
@@ -828,7 +829,17 @@ adj_function2 = function(stops, name_stops){
   # adj <- adj[-row_indices_to_remove, -col_indices_to_remove]
   ###
   
-  return(adj)
+  # Decompose in adj_b and adj_w
+  is_w = matrix(mapply(function(i, j) i + 1 == j, 
+                       rep(1:nb_stops_tot, nb_stops_tot),
+                       rep(1:nb_stops_tot, each=nb_stops_tot)),
+                nb_stops_tot, nb_stops_tot)
+  adj_w = adj
+  adj_w[!is_w] = 0
+  adj_b = adj
+  adj_b[is_w] = 0
+  
+  return(list(adj_w=adj_w, adj_b=adj_b))
 }
 
 #--------------------------------
