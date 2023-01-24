@@ -21,20 +21,20 @@ source("local_functions.R")
 # --- TEST 6789
 
 # # The file containing the dataset
-# line_data_file = "multilines_data/formatted_data/test_6789/bus_df.csv"
+line_data_file = "multilines_data/formatted_data/test_6789/bus_df.csv"
 # # The file containing the pedestrian distance between stops
-# d_ped_file = "multilines_data/formatted_data/test_6789/ped_time.csv"
+d_ped_file = "multilines_data/formatted_data/test_6789/ped_time.csv"
 # # Out folder
-# out_folder = "multilines_data/preprocessed_data/test_mc_6789"
+out_folder = "multilines_data/preprocessed_data/test_mc_6789"
 
 # --- ALL LINES
 
 # The file containing the dataset
-line_data_file = "multilines_data/formatted_data/all_lines/bus_df.csv"
+# line_data_file = "multilines_data/formatted_data/all_lines/bus_df.csv"
 # The file containing the pedestrian distance between stops
-d_file = "multilines_data/formatted_data/all_lines/ped_time.csv"
+# d_ped_file = "multilines_data/formatted_data/all_lines/ped_time.csv"
 # Out folder
-out_folder = "multilines_data/preprocessed_data/all_lines"
+# out_folder = "multilines_data/preprocessed_data/all_lines"
 
 # Pedestrian threshold for connecting stops
 ped_t_thres = 120
@@ -48,7 +48,7 @@ waiting_time = 120
 # Load the line file
 line_df = read.csv(line_data_file)
 # Load the distance file
-ped_t_mat = as.matrix(read.csv(d_file, header=F))
+ped_t_mat = as.matrix(read.csv(d_ped_file, header=F))
 # Save n
 n = dim(line_df)[1]
 # Line memberships 
@@ -71,7 +71,7 @@ adj_w = res_net_list$adj_w
 # Adjacency between
 adj_b = res_net_list$adj_b
 # Number of cores
-mc.cores = 16
+mc.cores = detectCores() - 2
 
 
 
