@@ -37,9 +37,9 @@ out_folder = "results/loop_toy_example"
 # Network parameters
 #--------------------------------
 # Choose number of lines
-nb_lines = 2
+nb_lines = 4
 # Choose number of stops
-nb_stops = 3
+nb_stops = 5
 # Choose number of crossing stops
 cross_stop = 2
 # Choose number of passengers in the network (with normal distribution)
@@ -55,9 +55,11 @@ stops = stops_list(nb_lines, nb_stops)
 ########## 2. ##########
 name_stops = name_stops_function(stops)
 ########## 3. ##########
-adj = adj_function(stops, name_stops)
+# adj = adj_function(stops, name_stops)
+adj = adj_function2(stops, name_stops)
 ########## 3. ##########
-paths = paths_function(nb_stops_tot, name_stops, cross_stop)
+# paths = paths_function(nb_stops_tot, name_stops, cross_stop)
+paths = paths_function2(nb_stops_tot, name_stops, cross_stop)
 ########## 4. ##########
 # go_in_out = get_passengers(nb_passengers)[[1]]
 # paths_passengers = get_passengers(nb_passengers)[[2]]
