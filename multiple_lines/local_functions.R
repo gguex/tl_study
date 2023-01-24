@@ -437,10 +437,6 @@ compute_origin_destination =
   trans_edge = edge_ref[edge_ref[,3] == 1, ]
   node_ref = setdiff(1:n, unique(c(trans_edge[,1], trans_edge[,2])))[1]
   
-  # Scale the convergence thresholds
-  conv_thres_if = conv_thres_if / sum(s_mat)
-  conv_thres_algo = conv_thres_algo / sum(s_mat)
-  
   # --- Algorithm 
   
   # The st-distribution reference matrix

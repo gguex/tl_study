@@ -20,22 +20,22 @@ source("local_functions.R")
 
 # --- Test 6789
 
-# The folder containing pre-processed data
-data_folder = "multilines_data/preprocessed_data/test_mc_6789"
-# Output folder for results
-out_folder = "results/test_mc_6789"
+# # The folder containing pre-processed data
+# data_folder = "multilines_data/preprocessed_data/test_mc_6789"
+# # Output folder for results
+# out_folder = "results/test_mc_6789"
 
 # --- all lines
 
 # The folder containing pre-processed data
-# data_folder = "multilines_data/preprocessed_data/all_lines"
+data_folder = "multilines_data/preprocessed_data/all_lines"
 # Output folder for results
-# out_folder = "results/all_lines"
+out_folder = "results/all_lines"
 
 # Conv threshold for iterative fitting
-conv_thres_if = 1e-3
+conv_thres_if = 1e-5
 # Conv threshold
-conv_thres_algo = 1e-3
+conv_thres_algo = 1e-5
 # proportional limit 
 min_p_ntwk = 0.3
 # epsilon
