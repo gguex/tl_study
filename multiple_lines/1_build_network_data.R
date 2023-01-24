@@ -76,11 +76,11 @@ mc.cores = detectCores() - 2
 # Build the shortest path data
 res_sp_list = build_sp_data_mc(line_mbrshps, 
                                tour_mbrshps,
+                               adj_w,
+                               adj_b, 
                                travel_t_vec,
                                waiting_t_vec,
                                ped_t_mat, 
-                               adj_w,
-                               adj_b, 
                                mc.cores=mc.cores)
 
 # Build the corrected balance 

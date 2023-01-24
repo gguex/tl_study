@@ -5,7 +5,7 @@
 #-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
-# Needed libraries gskln
+# Needed libraries
 #-------------------------------------------------------------------------------
 
 library(igraph)
@@ -81,11 +81,12 @@ build_network_structure =
 # In:  
 # - line_mbrshps: A n-length vector containing line memberships of stops.
 # - tour_mbrshps: A n-length vector containing tour memberships of stops.
-# - travel_t: A n-length vector giving time needed to reach next stop.
-# - wait_t:   A n-length vector giving time needed to enter a line at each stop.
-# - dist_mat: A (n x n) pedestrian time matrix between stops.
 # - adj_w:    A (n x n) adjacency matrix within transportation lines.
 # - adj_b:    A (n x n) adjacency matrix between transportation lines. 
+# - travel_t_vec: A n-length vector giving time needed to reach next stop.
+# - wait_t_vec:   A n-length vector giving time needed to enter a line at 
+#                 each stop.
+# - ped_t_mat: A (n x n) pedestrian time matrix between stops.
 # Out:
 # - edge_ref: A (m x 3) matrix, giving the edge starting node index, ending 
 #             node index, and a boolean indicating if this is an transfer edge.
@@ -95,8 +96,8 @@ build_network_structure =
 #             with s_{ij} = TRUE iff edge j is in shortest-path i.
 #-------------------------------------------------------------------------------
 
-build_sp_data = function(line_mbrshps, tour_mbrshps, travel_t, wait_t, dist_mat, 
-                         adj_w, adj_b){
+build_sp_data = function(line_mbrshps, tour_mbrshps, adj_w, adj_b, 
+                         travel_t_vec=NULL, wait_t_vec=NULL, ped_t_mat=NULL){
   
   # --- Get number of stops and make levels for line_mbr and tour_mbr
   
@@ -109,10 +110,17 @@ build_sp_data = function(line_mbrshps, tour_mbrshps, travel_t, wait_t, dist_mat,
   
   # --- Compute the traveling time with the line network 
   
+  # If one is null
+  if(is.null(travel_t_vec) | is.null(wait_t_vec) | is.null(ped_t_mat)){
+    travel_t_vec = rep(0, n)
+    wait_t_vec = rep(0, n)
+    ped_t_mat = matrix(1e1000, n, n)
+  }
+  
   # Replace potential NA with large values
-  travel_t[is.na(travel_t)] = 1e10
+  travel_t_vec[is.na(travel_t_vec)] = 1e10
   # Adjacency matrix for traveling time
-  adj_travel_time = adj_w * travel_t + t(t(adj_b) * wait_t)
+  adj_travel_time = adj_w * travel_t_vec + t(t(adj_b) * wait_t_vec)
   # The graph for traveling
   travel_time_g = graph_from_adjacency_matrix(adj_travel_time, 
                                               mode="directed", 
@@ -149,7 +157,7 @@ build_sp_data = function(line_mbrshps, tour_mbrshps, travel_t, wait_t, dist_mat,
       
       # Check if the path is shorter with transport line (except line travel), 
       # and if i not j
-      if( ((travel_time_mat[i, j] < dist_mat[i, j]) | (adj_w[i, j] == 1)) & 
+      if( ((travel_time_mat[i, j] < ped_t_mat[i, j]) | (adj_w[i, j] == 1)) & 
           (i!=j) ){
         
         # Get the shortest path
@@ -232,8 +240,9 @@ compute_sp_edges = function(s, t, adj_w, adj_b, ped_t_mat, travel_t_mat,
   return(index_sp_edge)
 }
 
-build_sp_data_mc = function(line_mbrshps, tour_mbrshps, travel_t_vec, 
-                            wait_t_vec, ped_t_mat, adj_w, adj_b, mc.cores=1){
+build_sp_data_mc = function(line_mbrshps, tour_mbrshps, adj_w, adj_b, 
+                            travel_t_vec=NULL, wait_t_vec=NULL, ped_t_mat=NULL, 
+                            mc.cores=1){
   
   # --- Get number of stops and make levels for line_mbr and tour_mbr
   
@@ -245,6 +254,13 @@ build_sp_data_mc = function(line_mbrshps, tour_mbrshps, travel_t_vec,
   tour_lvl = as.factor(tour_mbrshps)
   
   # --- Compute the traveling time with the line network 
+  
+  # If one is null
+  if(is.null(travel_t_vec) | is.null(wait_t_vec) | is.null(ped_t_mat)){
+    travel_t_vec = rep(0, n)
+    wait_t_vec = rep(0, n)
+    ped_t_mat = matrix(1e1000, n, n)
+  }
   
   # Replace potential NA with large values
   travel_t_vec[is.na(travel_t_vec)] = 1e10
