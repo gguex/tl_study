@@ -26,7 +26,7 @@ source("local_functions.R")
 # The folder containing pre-processed data
 data_folder = "multilines_data/preprocessed_data/test_6789"
 # The folder containing results
-results_folder = "results/test_6789"
+results_folder = "results/test_mc_6789"
 
 #--------------------------------
 # Process

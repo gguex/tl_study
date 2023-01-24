@@ -419,7 +419,7 @@ compute_origin_destination =
   # The number of stops 
   n = length(flow_l_in)
   # The reference of transfer edges
-  where_edge_btw = as.logical(edge_ref[, 3])
+  where_edge_btw = which(as.logical(edge_ref[, 3]))
   # The list of in-out nodes for transfer edges 
   edge_btw_ref = edge_ref[where_edge_btw, 1:2]
   # The shortest-path - edge matrix retrained on transfer edges
@@ -490,13 +490,12 @@ compute_origin_destination =
     # Get the flow as vector in the admissible shortest-path order
     sp_flow_vec = as.vector(n_mat)[sp_order_ref]
     # Compute the flow on edges
-    btw_edge_flow = as.vector(t(sp_edge_btw_link) %*% sp_flow_vec)
-    
+    btw_edge_flow = colSums(sp_edge_btw_link * sp_flow_vec)
     # Compute the in-out between flow on nodes 
-    x_btw = sparseMatrix(i=edge_btw_ref[, 1], j=edge_btw_ref[, 2], 
-                         x=btw_edge_flow, dims=c(n, n))
-    node_in_btw = colSums(x_btw)
-    node_out_btw = rowSums(x_btw)
+    node_in_btw = sapply(1:n, function(i) 
+      sum(btw_edge_flow[edge_btw_ref[, 2] == i]))
+    node_out_btw = sapply(1:n, function(i) 
+      sum(btw_edge_flow[edge_btw_ref[, 1] == i]))
   
     # Compute unscaled sigmas
     unscaled_sigma_in = flow_l_in - node_in_btw

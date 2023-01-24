@@ -81,7 +81,7 @@ epsilon = 1e-10
 # max iteration
 max_it = 1000
 # print iterations
-display_it = F
+display_it = T
 # number of iterations
 n_test = 50
 # --- prop_limit
