@@ -73,8 +73,6 @@ adj_b = res_net_list$adj_b
 # Number of cores
 mc.cores = detectCores() - 2
 
-
-
 # Build the shortest path data
 res_sp_list = build_sp_data_mc(line_mbrshps, 
                                tour_mbrshps,
@@ -110,11 +108,6 @@ write.table(res_sp_list$edge_ref, paste0(out_folder, "/edge_ref.csv"), sep=",",
             row.names=F)
 write.table(res_sp_list$sp_ref, paste0(out_folder, "/sp_ref.csv"), sep=",",
             row.names=F)
-write.table(as.matrix(res_sp_list$sp_edge_link), 
-            paste0(out_folder, "/sp_edge_link.csv"), sep=",", 
-            row.names=F, col.names=F)
+writeMM(res_sp_list$sp_edge_link, paste0(out_folder, "/sp_edge_link.mtx"))
 write.table(line_df, paste0(out_folder, "/line_df.csv"), sep=",",
             row.names=F)
-
-
-
