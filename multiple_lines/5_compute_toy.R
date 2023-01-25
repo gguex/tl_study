@@ -37,7 +37,7 @@ out_folder = "results/loop_toy_example"
 # Network parameters
 #--------------------------------
 # Choose number of lines
-nb_lines = 4
+nb_lines = 3
 # Choose number of stops
 nb_stops = nb_lines + 1
 # Choose number of crossing stops
@@ -85,17 +85,17 @@ conv_thres_if = 0.0001
 # Conv threshold
 conv_thres_algo = 0.0001
 # epsilon
-epsilon = 1e-40
+epsilon = 1e-50
 # max iteration
 max_it = 1000
 # print iterations
 display_it = F
 # number of iterations
-n_test = 50
+n_test = 10
 # --- prop_limit
-# hyper_par = c(0.1, 0.3, 0.5, 0.7, 0.9)
+hyper_par = c(0.1, 0.3, 0.5, 0.7, 0.9)
 # hyper_par = c(1:15)/20
-hyper_par = c(0.1, 0.3)
+# hyper_par = 0.3
 # lambda
 lambda = 12
 # n passengers
@@ -208,19 +208,20 @@ res_mat = compute_toy(hyper_par, n_test, paths, n_passengers, edge_ref, sp_ref,
 
 # Create a data frame with all different number of passengers into the network
 res_mat_passengers = c()
-for (i in seq(from = 200, to = 10000, by = 200)) {
-  res_mat = compute_toy(0.3, n_test, paths, i, edge_ref, sp_ref,
+hyper_par = c(0.1,0.3)
+for (i in seq(from = 200, to = 4000, by = 200)) {
+  res_mat = compute_toy(hyper_par, n_test, paths, i, edge_ref, sp_ref,
                         sp_edge_link, conv_thres_algo, conv_thres_if, max_it,
                         display_it)
   colnames(res_mat)[1] <- paste("Nb:", i)
-  res_mat_passengers = cbind(res_mat_passengers, res_mat)
+  res_mat_passengers3 = cbind(res_mat_passengers, res_mat)
 }
 
 # Add the mean and the standard deviation
 mean_pass = as.data.frame(colMeans(res_mat_passengers))
 sd_pass = apply(res_mat_passengers, 2, sd)
 sd_pass = sd_pass/sqrt(n_test)
-mean_pass = cbind(seq(from = 200, to = 10000, by = 200), mean_pass, sd_pass)
+mean_pass = cbind(seq(from = 200, to = 4000, by = 200), mean_pass, sd_pass)
 colnames(mean_pass) <- c("Passengers","mean_error", "sd_error")
 
 
@@ -245,7 +246,7 @@ ggplot() +
   #            aes(x = Passengers, y = mean_error)) +
   geom_errorbar(data=mean_pass[seq(1, nrow(mean_pass), by = 3),],
                 aes(x=Passengers, ymin=mean_error-sd_error, ymax=mean_error+sd_error), width=0.1) +
-  labs(title = paste(n_test, "iterations"), x = "Passengers into the network", y = "Mean error")
+  labs(title = paste(n_test, "iterations, parameter:", hyper_par), x = "Passengers into the network", y = "Mean error")
 
 
 
