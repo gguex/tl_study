@@ -85,17 +85,17 @@ conv_thres_if = 0.0001
 # Conv threshold
 conv_thres_algo = 0.0001
 # epsilon
-epsilon = 1e-10
+epsilon = 1e-40
 # max iteration
 max_it = 1000
 # print iterations
 display_it = F
 # number of iterations
-n_test = 5
+n_test = 50
 # --- prop_limit
 # hyper_par = c(0.1, 0.3, 0.5, 0.7, 0.9)
-hyper_par = c(1:15)/20
-#hyper_par[20] = 0.99
+# hyper_par = c(1:15)/20
+hyper_par = c(0.1, 0.3)
 # lambda
 lambda = 12
 # n passengers
@@ -106,45 +106,49 @@ n_passengers = 100
 #--------------------------------
 # initialization
 # res_chi2 = matrix(0, nrow = n_test, ncol = length(hyper_par))
-res_mat = matrix(0, nrow = n_test, ncol = length(hyper_par))
-mean_test = c()
-  
-for (i in 1:n_test) {
-  set.seed(i)
-  # passengers_rho = get_passengers(nb_passengers)
-  # paths_passengers = n_poisson(paths, lambda)
-  paths_passengers = n_multin(paths, n_passengers, epsilon=1e-2)
-  paths_passengers = paths_passengers / sum(paths_passengers)
-  x_btw = compute_x_from_n(paths_passengers, edge_ref, sp_ref, 
-                           sp_edge_link)$x_btw
-  flow_l_in = rowSums(paths_passengers) + colSums(x_btw)
-  flow_l_out = colSums(paths_passengers) + rowSums(x_btw)
-  
-  for (j in 1:length(hyper_par)) {
 
-    # --- Run the algorithm
-    n_mat = compute_origin_destination(flow_l_in,
-                                       flow_l_out,
-                                       edge_ref,
-                                       sp_ref, 
-                                       sp_edge_link,
-                                       min_p_ntwk=hyper_par[j],
-                                       conv_thres_algo=conv_thres_algo,
-                                       conv_thres_if=conv_thres_if,
-                                       epsilon=epsilon,
-                                       max_it=max_it, 
-                                       display_it=display_it)
-    stat_out = abs(n_mat - paths_passengers)
-    stat_out = stat_out[!is.infinite(stat_out)]
-    stat_out = sum(stat_out)
-
-    res_mat[i,j] = stat_out
+compute_toy = function(hyper_par, n_test, paths, n_passengers, edge_ref, sp_ref,
+                       sp_edge_link, conv_thres_algo, conv_thres_if, max_it,
+                       display_it){
+  res_mat = matrix(0, nrow = n_test, ncol = length(hyper_par))
+  mean_test = c()
     
-    cat("Iteration n°:", i, "Parameter n°:", j, "done.\n")
+  for (i in 1:n_test) {
+    set.seed(i)
+    # passengers_rho = get_passengers(nb_passengers)
+    # paths_passengers = n_poisson(paths, lambda)
+    paths_passengers = n_multin(paths, n_passengers, epsilon=epsilon)
+    paths_passengers = paths_passengers / sum(paths_passengers)
+    x_btw = compute_x_from_n(paths_passengers, edge_ref, sp_ref, 
+                             sp_edge_link)$x_btw
+    flow_l_in = rowSums(paths_passengers) + colSums(x_btw)
+    flow_l_out = colSums(paths_passengers) + rowSums(x_btw)
+    
+    for (j in 1:length(hyper_par)) {
+  
+      # --- Run the algorithm
+      n_mat = compute_origin_destination(flow_l_in,
+                                         flow_l_out,
+                                         edge_ref,
+                                         sp_ref, 
+                                         sp_edge_link,
+                                         min_p_ntwk=hyper_par[j],
+                                         conv_thres_algo=conv_thres_algo,
+                                         conv_thres_if=conv_thres_if,
+                                         epsilon=epsilon,
+                                         max_it=max_it, 
+                                         display_it=display_it)
+      stat_out = abs(n_mat - paths_passengers)
+      stat_out = stat_out[!is.infinite(stat_out)]
+      stat_out = sum(stat_out)
+  
+      res_mat[i,j] = stat_out
+      
+      cat("Iteration n°:", i, "Parameter n°:", j, "done.\n")
+    }
   }
-
+  return(res_mat)
 }
-
 #--------------------------------
 # Outputs and visualizations
 #--------------------------------
@@ -188,9 +192,61 @@ ggplot(mdf, aes(x=variable, y=value, color=par)) +
   labs(x ="Parameter", y = "% of error") +
   stat_summary(aes(y = value,group=1), fun=mean, colour="blue", geom="line",group=1)
 
-# Save data
+ # Save data
 # write.csv(df, "100_iterations_lambda_12.csv")
 
+# Network drawing
 set.seed(1)
 paths_passengers = n_multin(paths, n_passengers, epsilon=1e-2)
 plot_flow_graph(adj, paths_passengers)
+
+### Graph based on decreasing passengers
+# Fixed parameter
+res_mat = compute_toy(hyper_par, n_test, paths, n_passengers, edge_ref, sp_ref,
+                      sp_edge_link, conv_thres_algo, conv_thres_if, max_it,
+                      display_it)
+
+# Create a data frame with all different number of passengers into the network
+res_mat_passengers = c()
+for (i in seq(from = 100, to = 4000, by = 100)) {
+  res_mat = compute_toy(0.3, n_test, paths, i, edge_ref, sp_ref,
+                        sp_edge_link, conv_thres_algo, conv_thres_if, max_it,
+                        display_it)
+  colnames(res_mat)[1] <- paste("Nb:", i)
+  res_mat_passengers = cbind(res_mat_passengers, res_mat)
+}
+
+# Add the mean and the standard deviation
+mean_pass = as.data.frame(colMeans(res_mat_passengers))
+sd_pass = apply(res_mat_passengers, 2, sd)
+sd_pass = sd_pass/sqrt(n_test)
+mean_pass = cbind(seq(from = 100, to = 4000, by = 100), mean_pass, sd_pass)
+colnames(mean_pass) <- c("Passengers","mean_error", "sd_error")
+
+
+ggplot(mean_pass, aes(x = Passengers, y = mean_error)) + 
+  geom_point()
+
+ggplot(mean_pass, aes(x = Passengers, y = mean_error)) + 
+  geom_point() + 
+  geom_errorbar(aes(ymin = mean_error - 2*sd_error,
+                    ymax = mean_error + 2*sd_error), width = 0.1)
+
+
+
+# 1 of 3
+mean_pass[seq(1, nrow(mean_pass), by = 3),]
+
+### Best graph according to the number of passengers into the network
+# only 1/3 errorbar
+ggplot() +
+  geom_line(data = mean_pass, aes(x = Passengers, y = mean_error), color = "red") +
+  # geom_point(data = mean_pass[seq(1, nrow(mean_pass), by = 3),],
+  #            aes(x = Passengers, y = mean_error)) +
+  geom_errorbar(data=mean_pass[seq(1, nrow(mean_pass), by = 3),],
+                aes(x=Passengers, ymin=mean_error-sd_error, ymax=mean_error+sd_error), width=0.1) +
+  labs(title = paste(n_test, "iterations"), x = "Passengers into the network", y = "Mean error")
+
+
+
+
