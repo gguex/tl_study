@@ -99,7 +99,7 @@ hyper_par = c(0.1, 0.3)
 # lambda
 lambda = 12
 # n passengers
-n_passengers = 100
+n_passengers = 1000
 
 #--------------------------------
 # Process
@@ -208,7 +208,7 @@ res_mat = compute_toy(hyper_par, n_test, paths, n_passengers, edge_ref, sp_ref,
 
 # Create a data frame with all different number of passengers into the network
 res_mat_passengers = c()
-for (i in seq(from = 100, to = 4000, by = 100)) {
+for (i in seq(from = 200, to = 10000, by = 200)) {
   res_mat = compute_toy(0.3, n_test, paths, i, edge_ref, sp_ref,
                         sp_edge_link, conv_thres_algo, conv_thres_if, max_it,
                         display_it)
@@ -220,7 +220,7 @@ for (i in seq(from = 100, to = 4000, by = 100)) {
 mean_pass = as.data.frame(colMeans(res_mat_passengers))
 sd_pass = apply(res_mat_passengers, 2, sd)
 sd_pass = sd_pass/sqrt(n_test)
-mean_pass = cbind(seq(from = 100, to = 4000, by = 100), mean_pass, sd_pass)
+mean_pass = cbind(seq(from = 200, to = 10000, by = 200), mean_pass, sd_pass)
 colnames(mean_pass) <- c("Passengers","mean_error", "sd_error")
 
 
