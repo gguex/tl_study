@@ -91,15 +91,15 @@ max_it = 1000
 # print iterations
 display_it = F
 # number of iterations
-n_test = 10
+n_test = 50
 # --- prop_limit
-hyper_par = c(0.1, 0.3, 0.5, 0.7, 0.9)
+hyper_par = c(0.05, 0.1, 0.3, 0.5, 0.7, 0.9, 0.99)
 # hyper_par = c(1:15)/20
 # hyper_par = 0.3
 # lambda
-lambda = 12
+lambda = 4
 # n passengers
-n_passengers = 1000
+n_passengers = 2000
 
 #--------------------------------
 # Process
@@ -208,13 +208,13 @@ res_mat = compute_toy(hyper_par, n_test, paths, n_passengers, edge_ref, sp_ref,
 
 # Create a data frame with all different number of passengers into the network
 res_mat_passengers = c()
-hyper_par = c(0.1,0.3)
+hyper_par = 0.3
 for (i in seq(from = 200, to = 4000, by = 200)) {
   res_mat = compute_toy(hyper_par, n_test, paths, i, edge_ref, sp_ref,
                         sp_edge_link, conv_thres_algo, conv_thres_if, max_it,
                         display_it)
   colnames(res_mat)[1] <- paste("Nb:", i)
-  res_mat_passengers3 = cbind(res_mat_passengers, res_mat)
+  res_mat_passengers = cbind(res_mat_passengers, res_mat)
 }
 
 # Add the mean and the standard deviation
@@ -244,6 +244,8 @@ ggplot() +
   geom_line(data = mean_pass, aes(x = Passengers, y = mean_error), color = "red") +
   # geom_point(data = mean_pass[seq(1, nrow(mean_pass), by = 3),],
   #            aes(x = Passengers, y = mean_error)) +
+  # geom_line(data = mean_pass2, aes(x = Passengers, y = mean_error)) +
+  
   geom_errorbar(data=mean_pass[seq(1, nrow(mean_pass), by = 3),],
                 aes(x=Passengers, ymin=mean_error-sd_error, ymax=mean_error+sd_error), width=0.1) +
   labs(title = paste(n_test, "iterations, parameter:", hyper_par), x = "Passengers into the network", y = "Mean error")
