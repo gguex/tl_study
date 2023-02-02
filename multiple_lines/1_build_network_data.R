@@ -9,7 +9,7 @@
 #--------------------------------
 
 # Set working directory path
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+# setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load functions
 source("local_functions.R")
@@ -21,20 +21,20 @@ source("local_functions.R")
 # --- TEST 6789
 
 # # The file containing the dataset
-line_data_file = "multilines_data/formatted_data/test_6789/bus_df.csv"
+# line_data_file = "multilines_data/formatted_data/test_6789/bus_df.csv"
 # # The file containing the pedestrian distance between stops
-d_ped_file = "multilines_data/formatted_data/test_6789/ped_time.csv"
+# d_ped_file = "multilines_data/formatted_data/test_6789/ped_time.csv"
 # # Out folder
-out_folder = "multilines_data/preprocessed_data/test_mc_6789"
+# out_folder = "multilines_data/preprocessed_data/test_mc_6789"
 
 # --- ALL LINES
 
 # The file containing the dataset
-# line_data_file = "multilines_data/formatted_data/all_lines/bus_df.csv"
+line_data_file = "multilines_data/formatted_data/all_lines/bus_df.csv"
 # The file containing the pedestrian distance between stops
-# d_ped_file = "multilines_data/formatted_data/all_lines/ped_time.csv"
+d_ped_file = "multilines_data/formatted_data/all_lines/ped_time.csv"
 # Out folder
-# out_folder = "multilines_data/preprocessed_data/all_lines"
+out_folder = "multilines_data/preprocessed_data/all_lines"
 
 # Pedestrian threshold for connecting stops
 ped_t_thres = 120
@@ -71,7 +71,8 @@ adj_w = res_net_list$adj_w
 # Adjacency between
 adj_b = res_net_list$adj_b
 # Number of cores
-mc.cores = detectCores() - 2
+#mc.cores = detectCores() - 2
+mc.cores = 32
 
 # Build the shortest path data
 res_sp_list = build_sp_data_mc(line_mbrshps, 
