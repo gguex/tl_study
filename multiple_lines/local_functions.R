@@ -1033,6 +1033,7 @@ network_prop = function(nb_lines, nb_stops){
               sp_edge_link=sp_edge_link, sp_ref=sp_ref, paths=paths))
 }
 
+
 # Compute the toy network according to following parameters
 # - conv threshold for iterative fitting      - conv_thres_if
 # - conv threshold                            - conv_thres_algo
