@@ -20,17 +20,17 @@ source("local_functions.R")
 
 # --- Test 6789
 
-# The folder containing pre-processed data
-data_folder = "multilines_data/preprocessed_data/test_mc_6789"
-# Output folder for results
-out_folder = "results/test_mc_6789"
+# # The folder containing pre-processed data
+# data_folder = "multilines_data/preprocessed_data/test_mc_6789"
+# # Output folder for results
+# out_folder = "results/test_mc_6789"
 
 # --- all lines
 
-# # The folder containing pre-processed data
-# data_folder = "multilines_data/preprocessed_data/all_lines"
-# # Output folder for results
-# out_folder = "results/all_lines"
+# The folder containing pre-processed data
+data_folder = "multilines_data/preprocessed_data/all_lines"
+# Output folder for results
+out_folder = "results/all_lines"
 
 # Conv threshold for iterative fitting
 conv_thres_if = 1e-8
@@ -82,16 +82,24 @@ node_out_btw = rowSums(x_res$x_btw)
 
 # Updated dataframe
 line_res = line_df
-line_res["sigma_in"] = round(rowSums(n_mat), 3)
-line_res["transferts_in"] = round(node_in_btw, 3)
-line_res["transferts_in%"] = round(line_res["transferts_in"] / line_res["flow_l_in"] * 100, 3)
-line_res["diff_in"] = round(line_res["sigma_in"] + line_res["transferts_in"] - line_res["flow_l_in"], 3)
-line_res["err_in%"] = round(line_res["diff_in"] / line_res["flow_l_in"] * 100, 3)
-line_res["sigma_out"] = round(colSums(n_mat), 3)
-line_res["transferts_out"] = round(node_out_btw, 3)
-line_res["transferts_out%"] = round(line_res["transferts_out"] / line_res["flow_l_out"] * 100, 3)
-line_res["diff_out"] = round(line_res["sigma_out"] + line_res["transferts_out"] - line_res["flow_l_out"], 3)
-line_res["err_out%"] = round(line_res["diff_out"] / line_res["flow_l_out"] * 100, 3)
+line_res["flow_n_in"] = round(rowSums(n_mat), 3)
+line_res["transfers_in"] = round(node_in_btw, 3)
+line_res["transfers_in%"] = round(line_res["transfers_in"] / 
+                                     line_res["flow_l_in"] * 100, 3)
+line_res["diff_in"] = round(line_res["flow_n_in"] + 
+                              line_res["transfers_in"] - 
+                              line_res["flow_l_in"], 3)
+line_res["err_in%"] = round(line_res["diff_in"] / 
+                              line_res["flow_l_in"] * 100, 3)
+line_res["flow_n_out"] = round(colSums(n_mat), 3)
+line_res["transfers_out"] = round(node_out_btw, 3)
+line_res["transfers_out%"] = round(line_res["transfers_out"] / 
+                                      line_res["flow_l_out"] * 100, 3)
+line_res["diff_out"] = round(line_res["flow_n_out"] + 
+                               line_res["transfers_out"] - 
+                               line_res["flow_l_out"], 3)
+line_res["err_out%"] = round(line_res["diff_out"] / 
+                               line_res["flow_l_out"] * 100, 3)
 
 # Create dir if it do not exist
 if(!dir.exists(out_folder)){
