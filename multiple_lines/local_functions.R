@@ -544,7 +544,8 @@ compute_origin_destination =
     scaling_phi_psi = mapply(function(i, j) phi[i]*psi[j], 
                              sp_ref[,1], sp_ref[,2])
     # Compute the updated g_vec
-    g_ref_vec = sp_flow_vec / path_max_ratio / scaling_phi_psi
+    reduced_flow = sp_flow_vec / path_max_ratio
+    g_ref_vec = reduced_flow / scaling_phi_psi
     g_ref_vec = g_ref_vec / sum(g_ref_vec)
     # Back to g_ref
     g_ref = as.matrix(sparseMatrix(i=sp_ref[, 1], j=sp_ref[, 2], 
@@ -560,7 +561,9 @@ compute_origin_destination =
       sum_flow_l_in
     error_out = sum(abs(flow_l_out - sigma_out*d2f_new - node_out_btw)) / 
       sum_flow_l_out
-    couple = sp_ref[which(path_max_ratio == max(path_max_ratio)), ]
+    diff_flow = sp_flow_vec - reduced_flow
+    max_diff_flow = max(diff_flow)
+    couple = sp_ref[which(diff_flow ==max_diff_flow), ]
     if(!is.null(dim(couple))){
       couple = couple[1, ]
     }
@@ -568,15 +571,12 @@ compute_origin_destination =
     if (display_it) {
       cat("It", it_algo, ": diff_f =", diff_f, ", diff_g =", diff_g, 
           ", error_in =", error_in, ", error_out =", error_out, 
-          ", to_red_max =", max(path_max_ratio), ", where =", couple,"\n")
+          ", max_diff_flow =", max_diff_flow, ", where =", couple,"\n")
     }
-    
-    
     # Check for convergence
     if(diff_f < conv_thres_algo){
       converge_algo = T
     }
-    
     # Iteration
     it_algo = it_algo + 1
   }
