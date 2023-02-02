@@ -994,3 +994,92 @@ n_multin = function(paths, n_passagers, p_pos = rep(1/sum(paths), sum(paths)),
   n_drawn[n_drawn == 1] = drawn
   return(n_drawn)
 }
+
+#-------------------------------------------------------------------------------
+# Build and compute toy example
+#-------------------------------------------------------------------------------
+# Each line crosses all other lines
+
+
+
+# Build the toy network according to th number of lines
+# - choose number of lines                    - nb_lines
+# - choose number of stops                    - nb_stops = nb_lines + 1
+
+network_prop = function(nb_lines, nb_stops){
+  # Intermediate outputs
+  ########## 1. ##########
+  # Stops' list
+  stops = stops_list(nb_lines, nb_stops)
+  ########## 2. ##########
+  name_stops = name_stops_function(stops)
+  ########## 3. ##########
+  # adj = adj_function(stops, name_stops)
+  adj_list = adj_function2(stops, name_stops)
+  adj = adj_list$adj_w + adj_list$adj_b
+  ########## 3. ##########
+  # paths = paths_function(nb_lines*nb_stops*2, name_stops, cross_stop)
+  line_mbrshps = interaction(name_stops$V1, name_stops$V2)
+  tour_mbrshps = name_stops$V1
+  sp_data = build_sp_data(line_mbrshps, tour_mbrshps, adj_list$adj_w, 
+                          adj_list$adj_b)
+  edge_ref = sp_data$edge_ref
+  sp_edge_link = sp_data$sp_edge_link
+  sp_ref = sp_data$sp_ref
+  paths = 1*as.matrix(sparseMatrix(i=sp_ref[, 1], j=sp_ref[, 2], 
+                                   dims=c(nb_lines*nb_stops*2, nb_lines*nb_stops*2)))
+  
+  return(list(stops=stops, name_stops=name_stops, adj=adj, edge_ref=edge_ref,
+              sp_edge_link=sp_edge_link, sp_ref=sp_ref, paths=paths))
+}
+
+# Compute the toy network according to following parameters
+# - conv threshold for iterative fitting      - conv_thres_if
+# - conv threshold                            - conv_thres_algo
+# - epsilon                                   - epsilon
+# - max nb of iterations                      - max_it
+# - print iterations                          - display_it = F
+# - number of iterations                      - n_test = 50
+# - prop_limit betw. 0 and 1 (can be a list)  - hyper_par
+# nb passengers into the network              - n_passengers
+
+compute_toy = function(hyper_par, n_test, paths, n_passengers, edge_ref, sp_ref,
+                       sp_edge_link, conv_thres_algo, conv_thres_if, max_it,
+                       display_it){
+  res_mat = matrix(0, nrow = n_test, ncol = length(hyper_par))
+  mean_test = c()
+  
+  for (i in 1:n_test) {
+    set.seed(i)
+    paths_passengers = n_multin(paths, n_passengers, epsilon=epsilon)
+    paths_passengers = paths_passengers / sum(paths_passengers)
+    x_btw = compute_x_from_n(paths_passengers, edge_ref, sp_ref, 
+                             sp_edge_link)$x_btw
+    flow_l_in = rowSums(paths_passengers) + colSums(x_btw)
+    flow_l_out = colSums(paths_passengers) + rowSums(x_btw)
+    
+    for (j in 1:length(hyper_par)) {
+      
+      # --- Run the algorithm
+      n_mat = compute_origin_destination(flow_l_in,
+                                         flow_l_out,
+                                         edge_ref,
+                                         sp_ref, 
+                                         sp_edge_link,
+                                         min_p_ntwk=hyper_par[j],
+                                         conv_thres_algo=conv_thres_algo,
+                                         conv_thres_if=conv_thres_if,
+                                         epsilon=epsilon,
+                                         max_it=max_it, 
+                                         display_it=display_it)
+      stat_out = abs(n_mat - paths_passengers)
+      stat_out = stat_out[!is.infinite(stat_out)]
+      stat_out = sum(stat_out)
+      
+      res_mat[i,j] = stat_out
+      
+      cat("Iteration n°:", i, "Parameter n°:", j, "done.\n")
+    }
+  }
+  return(res_mat)
+}
