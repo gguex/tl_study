@@ -1006,7 +1006,7 @@ n_multin = function(paths, n_passagers, p_pos = rep(1/sum(paths), sum(paths)),
 # - choose number of lines                    - nb_lines
 # - choose number of stops                    - nb_stops = nb_lines + 1
 
-network_prop = function(nb_lines, nb_stops){
+network_prop = function(nb_lines, nb_stops, mc.cores=NULL){
   # Intermediate outputs
   ########## 1. ##########
   # Stops' list
@@ -1021,8 +1021,14 @@ network_prop = function(nb_lines, nb_stops){
   # paths = paths_function(nb_lines*nb_stops*2, name_stops, cross_stop)
   line_mbrshps = interaction(name_stops$V1, name_stops$V2)
   tour_mbrshps = name_stops$V1
-  sp_data = build_sp_data(line_mbrshps, tour_mbrshps, adj_list$adj_w, 
-                          adj_list$adj_b)
+  if(is.null(mc.cores)){
+    sp_data = build_sp_data(line_mbrshps, tour_mbrshps, adj_list$adj_w, 
+                            adj_list$adj_b)
+  } else {
+    sp_data = build_sp_data_mc(line_mbrshps, tour_mbrshps, adj_list$adj_w, 
+                            adj_list$adj_b, mc.cores=mc.cores)
+  }
+  
   edge_ref = sp_data$edge_ref
   sp_edge_link = sp_data$sp_edge_link
   sp_ref = sp_data$sp_ref
