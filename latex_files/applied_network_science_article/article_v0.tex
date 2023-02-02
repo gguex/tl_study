@@ -1,0 +1,287 @@
+%% BioMed_Central_Tex_Template_v1.06
+%%                                      %
+%  bmc_article.tex            ver: 1.06 %
+%                                       %
+
+%%IMPORTANT: do not delete the first line of this template
+%%It must be present to enable the BMC Submission system to
+%%recognise this template!!
+
+%%% loading packages, author definitions
+
+%\documentclass[twocolumn]{bmcart}% uncomment this for twocolumn layout and comment line below
+\documentclass{bmcart}
+
+\usepackage{mathptmx}       % selects Times Roman as basic font
+\usepackage{helvet}         % selects Helvetica as sans-serif font
+\usepackage{courier}        % selects Courier as typewriter font
+\usepackage{type1cm}        % activate if the above 3 fonts are not available on your system
+\usepackage{makeidx}         % allows index generation
+\usepackage{graphicx}        % standard LaTeX graphics tool when including figure files
+\usepackage{multicol}        % used for the two-column index
+\usepackage[bottom]{footmisc} % places footnotes at page bottom
+\usepackage{subfig}
+\usepackage{amsfonts}
+\usepackage[cmex10]{amsmath}
+\usepackage{float}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bm} 
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage{caption}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                             %%
+%%  If you wish to display your graphics for   %%
+%%  your own use using includegraphic or       %%
+%%  includegraphics, then comment out the      %%
+%%  following two lines of code.               %%
+%%  NB: These line *must* be included when     %%
+%%  submitting to BMC.                         %%
+%%  All figure files must be submitted as      %%
+%%  separate graphics through the BMC          %%
+%%  submission process, not included in the    %%
+%%  submitted article.                         %%
+%%                                             %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\includegraphic{}
+\def\includegraphics{}
+
+%%% Put your definitions there:
+\startlocaldefs
+\endlocaldefs
+
+%%% Begin ...
+\begin{document}
+
+%%% Start of article front matter
+\begin{frontmatter}
+
+\begin{fmbox}
+\dochead{Research}
+
+% Document information
+
+\title{Estimation of flow trajectories in a multi-lines network}
+
+\author[
+  addressref={aff1},                   
+  corref={aff1},                       
+  email={gguex@unil.ch}
+]{\inits{G.G.}\fnm{Guillaume} \snm{Guex}}
+\author[
+  addressref={aff2},
+  email={rloup@unil.ch}
+]{\inits{R.L.}\fnm{Romain} \snm{Loup}}
+\author[
+addressref={aff1, aff2},
+email={fbavaud@unil.ch}
+]{\inits{F.B.}\fnm{François} \snm{Bavaud}}
+
+\address[id=aff1]{%                           
+  \orgdiv{Departement of Language and Information Sciences},             
+  \orgname{University of Lausanne},          
+  \city{Lausanne},                              
+  \cny{Switzerland}                                   
+}
+\address[id=aff2]{%
+  \orgdiv{Institute of Geography and Sustainability},
+  \orgname{University of Lausanne},          
+  \city{Lausanne},                       
+  \cny{Switzerland} 
+}
+
+\end{fmbox}
+
+% The Abstract begins here                  
+
+\begin{abstractbox}
+
+\begin{abstract} % abstract
+Blabla
+\end{abstract}
+
+% Keywords begin here  
+
+\begin{keyword}
+\kwd{sample}
+\kwd{article}
+\kwd{author}
+\end{keyword}
+
+% MSC classifications codes, if any
+%\begin{keyword}[class=AMS]
+%\kwd[Primary ]{}
+%\kwd{}
+%\kwd[; secondary ]{}
+%\end{keyword}
+
+\end{abstractbox}
+
+\end{frontmatter}
+
+% Main Body
+
+%% --------------------------------- INTRODUCTION
+
+\section{Introduction}
+
+\subsection{Context}
+
+\subsection{Statement of the problem}
+
+\subsection{Related Works}
+
+%% --------------------------------- FORMALISM
+
+\section{Formalism}
+
+\subsection{Notations}
+
+\subsection{Problem}
+
+\subsection{Solution}
+
+%% --------------------------------- CASE STUDIES
+
+\section{Case Studies}
+
+\subsection{Toy Examples}
+
+\subsection{Real Example}
+
+%% --------------------------------- CONCLUSION
+
+\section{Conclusion}
+
+
+\section*{Appendix}
+Text for this section\ldots
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% Backmatter begins here                   %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{backmatter}
+
+\section*{Acknowledgements}%% if any
+Text for this section\ldots
+
+\section*{Funding}%% if any
+Text for this section\ldots
+
+\section*{Abbreviations}%% if any
+Text for this section\ldots
+
+\section*{Availability of data and materials}%% if any
+Text for this section\ldots
+
+\section*{Ethics approval and consent to participate}%% if any
+Text for this section\ldots
+
+\section*{Competing interests}
+The authors declare that they have no competing interests.
+
+\section*{Consent for publication}%% if any
+Text for this section\ldots
+
+\section*{Authors' contributions}
+Text for this section \ldots
+
+\section*{Authors' information}%% if any
+Text for this section\ldots
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                  The Bibliography                       %%
+%%                                                         %%
+%%  Bmc_mathpys.bst  will be used to                       %%
+%%  create a .BBL file for submission.                     %%
+%%  After submission of the .TEX file,                     %%
+%%  you will be prompted to submit your .BBL file.         %%
+%%                                                         %%
+%%                                                         %%
+%%  Note that the displayed Bibliography will not          %%
+%%  necessarily be rendered by Latex exactly as specified  %%
+%%  in the online Instructions for Authors.                %%
+%%                                                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% if your bibliography is in bibtex format, use those commands:
+\bibliographystyle{bmc-mathphys} % Style BST file (bmc-mathphys, vancouver, spbasic).
+\bibliography{bmc_article}      % Bibliography file (usually '*.bib' )
+% for author-year bibliography (bmc-mathphys or spbasic)
+% a) write to bib file (bmc-mathphys only)
+% @settings{label, options="nameyear"}
+% b) uncomment next line
+%\nocite{label}
+
+% or include bibliography directly:
+% \begin{thebibliography}
+% \bibitem{b1}
+% \end{thebibliography}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                               %%
+%% Figures                       %%
+%%                               %%
+%% NB: this is for captions and  %%
+%% Titles. All graphics must be  %%
+%% submitted separately and NOT  %%
+%% included in the Tex document  %%
+%%                               %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%
+%% Do not use \listoffigures as most will included as separate files
+
+\section*{Figures}
+  \begin{figure}[h!]
+  \caption{Sample figure title}
+\end{figure}
+
+\begin{figure}[h!]
+  \caption{Sample figure title}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                               %%
+%% Tables                        %%
+%%                               %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Use of \listoftables is discouraged.
+%%
+\section*{Tables}
+\begin{table}[h!]
+\caption{Sample table title. This is where the description of the table should go}
+  \begin{tabular}{cccc}
+    \hline
+    & B1  &B2   & B3\\ \hline
+    A1 & 0.1 & 0.2 & 0.3\\
+    A2 & ... & ..  & .\\
+    A3 & ..  & .   & .\\ \hline
+  \end{tabular}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                               %%
+%% Additional Files              %%
+%%                               %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Additional Files}
+  \subsection*{Additional file 1 --- Sample additional file title}
+    Additional file descriptions text (including details of how to
+    view the file, if it is in a non-standard format or the file extension).  This might
+    refer to a multi-page table or a figure.
+
+  \subsection*{Additional file 2 --- Sample additional file title}
+    Additional file descriptions text.
+
+\end{backmatter}
+\end{document}
