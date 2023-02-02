@@ -1,9 +1,12 @@
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
 # COMPUTE TOY EXAMPLE
-# Visualisation outputs
+# Visualisation outputs (3)
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
+# - Histogram according to several prop limit parameter
+# - Scatter plot according to several prop limit parameter
+# - Network drawing
 
 #--------------------------------
 # Head
@@ -75,3 +78,43 @@ res_mat = compute_toy(hyper_par, n_test, paths, n_passengers, edge_ref, sp_ref,
 
 # Results according to the prop limit parameter
 mean_test = apply(res_mat, 2, mean)
+mean_test = as.data.frame(mean_test)
+rownames(mean_test) = as.character(hyper_par)
+
+# Best hyperparameter
+paste0("Best parameter: ",rownames(mean_test)[which.min(mean_test$mean_test)])
+
+
+# Histograms
+df = as.data.frame(res_mat)
+rownames(df) = as.character(paste("it",1:n_test))
+colnames(df) = as.character(paste("par",hyper_par))
+dfcolnames = colnames(df)
+
+out = list()
+for (i in 1:length(hyper_par)){
+  x = df[,i]
+  if (i == which.min(mean_test$mean_test)) {
+    out[[i]] <- ggplot(data.frame(x), aes(x)) + geom_histogram(bins = 20, color="black", fill="#addd8e") + xlim(min(df), max(df)) + labs(x = paste0("Best: ", dfcolnames[i], " Mean = ", round(mean_test$mean_test[i]*100)/100))
+  }
+  else {
+    out[[i]] <- ggplot(data.frame(x), aes(x)) + geom_histogram(bins = 20, color="black") + xlim(min(df), max(df)) + labs(x = paste0(dfcolnames[i], " Mean = ", round(mean_test$mean_test[i]*100)/100))
+  }
+}
+do.call(grid.arrange, out)
+
+# Scatter plot
+mdf = df
+mdf$par = row.names(mdf)
+mdf = melt(mdf, id=c("par"))
+
+ggplot(mdf, aes(x=variable, y=value, color=par)) +
+  # geom_smooth(show.legend = FALSE, fullrange=TRUE) +
+  geom_point(show.legend = FALSE) +
+  labs(x ="Parameter", y = "% of error") +
+  stat_summary(aes(y = value,group=1), fun=mean, colour="blue", geom="line",group=1)
+
+# Network drawing
+set.seed(1)
+paths_passengers = n_multin(paths, n_passengers, epsilon=1e-2)
+plot_flow_graph(adj, paths_passengers)
