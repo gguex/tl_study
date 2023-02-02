@@ -23,16 +23,16 @@ source("local_functions.R")
 # Parameters
 #--------------------------------
 
-# The folder containing pre-processed data
-data_folder = "multilines_data/preprocessed_data/test_6789"
 # The folder containing results
-results_folder = "results/test_6789"
+results_folder = "results/all_lines"
 
 #--------------------------------
 # Process
 #--------------------------------
 
-# ---- SAVED FROM OLD FILE (OPEN)
+# Load files 
+line_res = read.csv(paste0(results_folder, "/line_res.csv"))
+
 
 # Compute transfer edges 
 agr_passengers = aggregate(line_df$passengers_in, list(line_df$line_nbr), 

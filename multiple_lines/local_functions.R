@@ -459,9 +459,12 @@ compute_origin_destination =
   g_ref = s_mat / sum(s_mat)
   # The initial value for f_mat (has no effect, only to create variable)
   f_mat = matrix(1e5, n, n)
+  # The sum in and out
+  sum_flow_l_in = sum(flow_l_in)
+  sum_flow_l_out = sum(flow_l_out)
   # The evolving in and out distribution
-  sigma_in = flow_l_in / sum(flow_l_in)
-  sigma_out = flow_l_out / sum(flow_l_out)
+  sigma_in = flow_l_in / sum_flow_l_in
+  sigma_out = flow_l_out / sum_flow_l_out
   # A boolean for convergence
   converge_algo = F
   # Iteration counter
@@ -552,8 +555,9 @@ compute_origin_destination =
     # Compute iteration statistics
     diff_f = sum(abs(f_mat_old - f_mat))
     diff_g = sum(abs(g_ref_old - g_ref))
-    diff_in = sum(abs(sigma_in_old - sigma_in))
-    diff_out = sum(abs(sigma_out_old - sigma_out))
+    d2f_new = flow_l_in[node_ref] / sigma_in[node_ref]
+    error_in = sum(abs(flow_l_in - sigma_in*d2f_new)) / sum_flow_l_in
+    error_out = sum(abs(flow_l_out - sigma_out*d2f_new)) / sum_flow_out
     couple = sp_ref[which(path_max_ratio == max(path_max_ratio)), ]
     if(!is.null(dim(couple))){
       couple = couple[1, ]
@@ -561,7 +565,7 @@ compute_origin_destination =
     # Print iteration statistics
     if (display_it) {
       cat("It", it_algo, ": diff_f =", diff_f, ", diff_g =", diff_g, 
-          ", diff_in =", diff_in, ", diff_out =", diff_out, 
+          ", error_in =", error_in, ", error_out =", error_out, 
           ", to_red_max =", max(path_max_ratio), ", where =", couple,"\n")
     }
     
