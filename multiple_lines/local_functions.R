@@ -405,8 +405,8 @@ balance_flow_l_inout =
 #             node index, and a boolean indicating if this is an transfer edge.
 # - sp_ref:   A (n_sp x 2) matrix, giving the source-target node pair for each 
 #             admissible shortest-path.
-# - sp_edge_link:    A (n_sp x m) shortest-path - edges matrix, with p_{ij} = 1 iff
-#             edge j is in shortest-path i, 0 otherwise.
+# - sp_edge_link:    A (n_sp x m) shortest-path - edges matrix, with p_{ij} = 1 
+#             iff edge j is in shortest-path i, 0 otherwise.
 # - s_mat:    A (n x n) optional affinity matrix between stops. If None is given
 #             this matrix will set to 1 for each pair having an admissible 
 #             shorest-path (default = NULL).
@@ -597,8 +597,8 @@ compute_origin_destination =
 #             node index, and a boolean indicating if this is an transfer edge.
 # - sp_ref:   A (n_sp x 2) matrix, giving the source-target node pair for each 
 #             admissible shortest-path.
-# - sp_edge_link:    A (n_sp x m) shortest-path - edges matrix, with p_{ij} = 1 iff
-#             edge j is in shortest-path i, 0 otherwise.
+# - sp_edge_link: A (n_sp x m) shortest-path - edges matrix, with p_{ij} = 1 iff
+#                 edge j is in shortest-path i, 0 otherwise.
 # Out:
 # - x_mat:    A (n x n) matrix of flow on each edge, with x_mat = x_wit + x_btw.
 # - x_wit:    A (n x n) matrix of flow on each edge inside lines.
@@ -760,7 +760,9 @@ stops_list = function(nb_lines, nb_stops){
 #--------------------------------
 
 name_stops_function = function(stops){
-  name_stops = strsplit(gsub("([A-Z]*)([0-9]*)([A-Z]*)", "\\1 \\2 \\3", stops), " ")
+  name_stops = strsplit(
+    gsub("([A-Z]*)([0-9]*)([A-Z]*)", "\\1 \\2 \\3", stops), " "
+    )
   name_stops = as.data.frame(name_stops)
   name_stops = t(name_stops)
   rownames(name_stops) = stops
@@ -787,11 +789,15 @@ adj_function = function(stops, name_stops){
   for (i in 1:(dim(name_stops)[1])) {
     for (j in 1:dim(name_stops)[1]) {
       # next stop
-      if ((name_stops[i,1] == name_stops[j,1]) & (name_stops[i,2] == name_stops[j,2]) & (name_stops[i,3]+1 == name_stops[j,3])) {
+      if ((name_stops[i,1] == name_stops[j,1]) & 
+          (name_stops[i,2] == name_stops[j,2]) & 
+          (name_stops[i,3]+1 == name_stops[j,3])) {
         adj[i,j] = 1
       }
       # Crossing stops
-      if ((name_stops[i,1] != name_stops[j,1]) & (name_stops[i,3] == cross_stop) & (name_stops[j,3] == cross_stop)) {
+      if ((name_stops[i,1] != name_stops[j,1]) & 
+          (name_stops[i,3] == cross_stop) & 
+          (name_stops[j,3] == cross_stop)) {
         adj[i,j] = 1
       }
     }
@@ -830,7 +836,8 @@ adj_function2 = function(stops, name_stops){
           adj[i,j + 2*(nb_stops - j %% nb_stops) + 1] = 1
           adj[i + 2*(nb_stops - i %% nb_stops) + 1,j] = 1
           # Symmetry, change i and j
-          adj[i + 2*(nb_stops - i %% nb_stops) + 1,j + 2*(nb_stops - j %% nb_stops) + 1] = 1
+          adj[i + 2*(nb_stops - i %% nb_stops) + 1,j + 
+                2*(nb_stops - j %% nb_stops) + 1] = 1
           
           a = a - 1
           s = s + 1
@@ -929,7 +936,9 @@ paths_function2 = function(nb_stops_tot, name_stops){
   for (i in 1:(dim(name_stops)[1])) {
     for (j in 1:dim(name_stops)[1]) {
       # Conditions to stay on the same line
-      if ((name_stops[i,1] == name_stops[j,1]) & (name_stops[i,2] == name_stops[j,2]) & (name_stops[i,3] < name_stops[j,3])) {
+      if ((name_stops[i,1] == name_stops[j,1]) & 
+          (name_stops[i,2] == name_stops[j,2]) & 
+          (name_stops[i,3] < name_stops[j,3])) {
         paths[i,j] = 1
       }
       
