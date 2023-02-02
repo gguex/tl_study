@@ -68,7 +68,7 @@ new_bus_df = new_bus_df[-ind_to_merge[1], ]
 new_bus_df$direction[211:219] = "A"
 new_ped_time_mat = new_ped_time_mat[-ind_to_merge[1], -ind_to_merge[1]]
 
-write.table(new_bus_df, "../../formatted_data/all_lines/bus_df.csv", 
+write.table(new_bus_df, "../../formatted_data/all_lines_old/bus_df.csv", 
             sep=",", row.names = F)
-write.table(new_ped_time_mat, "../../formatted_data/all_lines/ped_time.csv", 
+write.table(new_ped_time_mat, "../../formatted_data/all_lines_old/ped_time.csv", 
             sep=",", row.names=F, col.names=F)
