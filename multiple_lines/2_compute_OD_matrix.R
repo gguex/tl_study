@@ -21,9 +21,9 @@ source("local_functions.R")
 # --- Test 6789
 
 # The folder containing pre-processed data
-data_folder = "multilines_data/preprocessed_data/all_lines"
+data_folder = "multilines_data/preprocessed_data/test_mc_6789"
 # Output folder for results
-out_folder = "results/all_lines"
+out_folder = "results/test_mc_6789"
 
 # --- all lines
 
@@ -33,13 +33,13 @@ out_folder = "results/all_lines"
 # out_folder = "results/all_lines"
 
 # Conv threshold for iterative fitting
-conv_thres_if = 1e-5
+conv_thres_if = 1e-10
 # Conv threshold
-conv_thres_algo = 1e-5
+conv_thres_algo = 1e-10
 # proportional limit 
 min_p_ntwk = 0.3
 # epsilon
-epsilon = 1e-20
+epsilon = 1e-80
 # max iteration
 max_it = 200
 

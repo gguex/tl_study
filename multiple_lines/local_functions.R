@@ -556,8 +556,10 @@ compute_origin_destination =
     diff_f = sum(abs(f_mat_old - f_mat))
     diff_g = sum(abs(g_ref_old - g_ref))
     d2f_new = flow_l_in[node_ref] / sigma_in[node_ref]
-    error_in = sum(abs(flow_l_in - sigma_in*d2f_new)) / sum_flow_l_in
-    error_out = sum(abs(flow_l_out - sigma_out*d2f_new)) / sum_flow_out
+    error_in = sum(abs(flow_l_in - sigma_in*d2f_new - node_in_btw)) / 
+      sum_flow_l_in
+    error_out = sum(abs(flow_l_out - sigma_out*d2f_new - node_out_btw)) / 
+      sum_flow_l_out
     couple = sp_ref[which(path_max_ratio == max(path_max_ratio)), ]
     if(!is.null(dim(couple))){
       couple = couple[1, ]
