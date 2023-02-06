@@ -492,8 +492,8 @@ compute_origin_destination =
       # Saving old b results
       psi_old = psi
       # Compute new a and b
-      phi = (sigma_in + epsilon) / colSums(t(g_ref + epsilon) * psi)
-      psi = (sigma_out + epsilon) / colSums((g_ref + epsilon) * phi)
+      phi = sigma_in / colSums(t(g_ref + epsilon) * psi)
+      psi = sigma_out / colSums((g_ref + epsilon) * phi)
       # Checking for convergence
       if(sum(abs(psi_old - psi)) < conv_thres_if){
         converge_if = T
@@ -502,7 +502,7 @@ compute_origin_destination =
     }
     
     # Building f_mat
-    f_mat = t(psi * t(phi * (g_ref + epsilon)))
+    f_mat = t(psi * t(phi * g_ref))
     # Building the n_mat
     n_mat = distrib2flow_const * f_mat
     
