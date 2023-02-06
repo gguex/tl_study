@@ -79,9 +79,9 @@ for (j in 1:length(hyper_par)) {
     # Unlist and save variables
     list2env(network_prop_res, .GlobalEnv)
     
-    res_mat = compute_toy(hyper_par[j], n_test, paths, n_passengers, edge_ref, sp_ref,
-                          sp_edge_link, conv_thres_algo, conv_thres_if, max_it,
-                          display_it)
+    res_mat = compute_toy(hyper_par[j], n_test, paths, n_passengers, edge_ref,
+                          sp_ref, sp_edge_link, conv_thres_algo, conv_thres_if, 
+                          max_it, display_it)
     colnames(res_mat) = paste0("L",i,"P",hyper_par[j])
     
     res_mat_line = cbind(res_mat_line, res_mat)
@@ -99,8 +99,10 @@ for (j in 1:length(hyper_par)) {
 
 # Plot the results
 ggplot() +
-  geom_line(data=mean_line, aes(x=Lines, y=mean_error, group=param, color=param)) +
+  geom_line(data=mean_line,
+            aes(x=Lines, y=mean_error, group=param, color=param)) +
   # labs(title=paste(n_test, "iterations, parameter:", paste(hyper_par,collapse = ', ')), x = "Nb of lines into the network", y = "Mean error")
-  labs(title=paste(n_test, "iterations,",n_passengers, "passengers"), x = "Nb of lines into the network", y = "Mean error") +
+  labs(title=paste(n_test, "iterations,", n_passengers, "passengers"), 
+       x = "Nb of lines into the network", y = "Mean error") +
   scale_x_continuous(limits = c(min(mean_line$Lines), max(mean_line$Lines)),
                      breaks = pretty(mean_line$Lines))
