@@ -35,13 +35,15 @@ out_folder = "results/all_lines"
 # Conv threshold for iterative fitting
 conv_thres_if = 1e-5
 # Conv threshold
-conv_thres_algo = 1e-5
+conv_thres_algo = 1e-8
 # proportional limit 
 min_p_ntwk = 0.1
 # epsilon
 epsilon = 1e-40
-# max iteration
-max_it = 400
+# max iterations
+max_it = 500
+# max iterations for iterative fitting
+max_it_if = 400
 
 #--------------------------------
 # Process
@@ -71,7 +73,8 @@ n_mat = compute_origin_destination(flow_l_in,
                                    conv_thres_algo=conv_thres_algo,
                                    conv_thres_if=conv_thres_if,
                                    epsilon=epsilon,
-                                   max_it=max_it)
+                                   max_it=max_it,
+                                   max_it_if=max_it_if)
 
 # --- Save the results
 

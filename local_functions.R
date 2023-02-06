@@ -428,7 +428,7 @@ compute_origin_destination =
   function(flow_l_in, flow_l_out, edge_ref, sp_ref, sp_edge_link, 
            s_mat=NULL, min_p_ntwk=0.1, conv_thres_if=1e-5,
            conv_thres_algo=1e-5, epsilon=1e-40,
-           max_it=200, max_it_if=200, display_it=T){
+           max_it=200, max_it_if=400, display_it=T){
   
   # --- Get the network structure 
   
@@ -492,16 +492,17 @@ compute_origin_destination =
       # Saving old b results
       psi_old = psi
       # Compute new a and b
-      phi = (sigma_in + epsilon) / colSums(t(g_ref + epsilon) * psi)
-      psi = (sigma_out + epsilon) / colSums((g_ref + epsilon) * phi)
+      phi = sigma_in / (colSums(t(g_ref) * psi) + epsilon)
+      psi = sigma_out / (colSums(g_ref * phi) + epsilon)
       # Checking for convergence
       if(sum(abs(psi_old - psi)) < conv_thres_if){
         converge_if = T
       }
+      it_if = it_if + 1
     }
     
     # Building f_mat
-    f_mat = t(psi * t(phi * (g_ref + epsilon)))
+    f_mat = t(psi * t(phi * g_ref))
     # Building the n_mat
     n_mat = distrib2flow_const * f_mat
     
@@ -546,7 +547,7 @@ compute_origin_destination =
                              sp_ref[,1], sp_ref[,2])
     # Compute the updated g_vec
     reduced_flow = sp_flow_vec / path_max_ratio
-    g_ref_vec = reduced_flow / scaling_phi_psi
+    g_ref_vec = reduced_flow / (scaling_phi_psi + epsilon)
     g_ref_vec = g_ref_vec / sum(g_ref_vec)
     # Back to g_ref
     g_ref = as.matrix(sparseMatrix(i=sp_ref[, 1], j=sp_ref[, 2], 
