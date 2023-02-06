@@ -47,8 +47,8 @@
 %%                                             %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\def\includegraphic{}
-\def\includegraphics{}
+%\def\includegraphic{}
+%\def\includegraphics{}
 
 %%% Put your definitions there:
 \startlocaldefs
@@ -125,7 +125,378 @@ Blabla
 
 % Main Body
 
+
+
+%% --------------------------------- OLD IMPORT
+
+\section{Notations and formalism}
+\subsection{Lines and junctions}
+\label{Lines and junctions}
+Consider a transportation network made of bus lines numbered $\ell=1,\ldots, q$, of respective lengths (number of stops) $l_\ell$.  Opposite lines, that is parallel lines running in the back and forth directions are considered as distinct. 
+
+The $l=\sum_{\ell=1}^ql_\ell$ bus stops constitute the nodes of the transportation network. Each stop $i=1,\ldots,l$ belongs to a single bus line, and defines a unique next or forward stop $F(i)$ (unless $i$ is the line terminus) and a unique backward stop $B(i)$ (unless $i$ is the line start), both on the same line.  
+
+Junctions (super-stops), denoted $S=1,\ldots, L$, are defined as cliques (equivalence classes) of stops which can be mutually reached from one another within walking distance. True junctions 
+involve at least two lines, while pseudo-junctions comprise isolated stops $i$, possibly together with their opposite stop (noted $i\text{-}$) on the parallel line running in the opposite direction. 
+
+
+In summary, each stop $i$ belongs to a single line $\ell(i)$ and a single junction $S(i)$. Lines and junctions define two partitions of the network nodes, with $q$, respectively $L$ blocks.
+
+\subsection{Line edges, transfer edges and trips}
+\label{Line edges, transfer edges and trips}
+Two sorts of oriented edges are involved in the transportation network: 
+\begin{enumerate}
+  \item[$\bullet$] intra-line edges $(i,j)=(i,F(i))$ belonging to a single line  $\ell(i)=\ell(j)$
+  \item[$\bullet$] inter-line or transfer edges $(i,j)$ connecting different lines $\ell(i)\neq \ell(j)$, taking place at some junction $S(i)=S(j)$. 
+  \end{enumerate}
+A $st$-trip, noted $[s,t]$, consists of entering into the network at stop $s$, and leaving the network at $t$, by following the shortest-path (i.e. achieving the minimum distance,  minimum time, or  minimum cost), supposed unique, leading to $s$ from $t$. 
+
+The succession of edges $(ij)$ belonging to the $st$-trip, noted $(ij)\in [s,t]$, is unique. Define the edge-trip incidence matrix as
+\begin{equation}
+\label{edgetrip}
+\chi_{ij}^{st} = \begin{cases}
+  1    & \text{if $(ij)\in [s,t]$}, \\
+  0    & \text{otherwise}.
+\end{cases}
+\end{equation}
+A $st$-trip always starts with the edge $(s,F(s))$, and finishes with $(B(t),t)$. Transfers can occur in-between, but never at the beginning nor at the end of the trip. 
+
+\vspace*{0.1cm}
+
+Similarly, $ST$-trips between junctions, noted $[S,T]$, consist of the supposedly unique shortest $st$-trip $[s,t]$ among all  $s\in S$ and $t\in T$, followed by a traveller entering the network as junction $S$, and leaving it at junction $T$. The corresponding edge-trip incidence matrix is 
+\begin{equation}
+\label{edgetripjunction}
+\tilde{\chi}_{ij}^{ST} = \begin{cases}
+  1    & \text{if $(ij)\in [S,T]$}, \\
+  0    & \text{otherwise}.
+\end{cases}
+\end{equation}
+Unicity of the shortest-path implies that a passenger wishing to travel from $S$ to $T$ chooses the unique stop $\sigma(S,T)\in S$  as initial node (on line $\ell(\sigma)$), and the unique node $\tau(S,T)\in T$ as final node (on line $\ell(\tau)$). 
+
+\subsection{Transportation flows}
+\label{Transportation flows}
+Let  $x_{ij}$ count the number of travelers using edge $(ij)$ in a given period, such as a given hour, day, week or  year.  The edge flow $x_{ij}$ is denoted by $y_{ij}$ for an intra-line edge $(i,j)$, and 
+by $z_{ij}$ for a transfer edge $(i,j)$. By construction, $x_{ij}=y_{ij}+z_{ij}$, where $y_{ij}\,  z_{ij}=0$. 
+
+\vspace*{0.1cm}
+
+
+Let $a_i$, respectively $b_i$, the number of passengers embarking, respectively disembarking at stop $i$. By construction, 
+\begin{equation}
+\label{bilan1ligne}
+\begin{cases}
+ y_{i,F(i)}=a_i \text{\,  and } b_i=0   & \text{if $i$ is a line start}, \\
+y_{B(i),i}=b_i \text{\,  and } a_i=0   & \text{if $i$ is a line terminus}, \\
+ y_{i,F(i)}=y_{B(i),i}+a_i-b_i     & \text{otherwise}.
+\end{cases}
+\end{equation}
+Also, $\mathbf{a}$ and $\mathbf{b}$ must be consistent, in the sense that $A_i\ge B_i$, where $A_i$ (respectively $B_i$) is the cumulated number of embarked 
+(resp. disembarked) passengers on the line under consideration, recursively defined as $A_{F(i)}=A_i+a_i$ (resp. $B_{F(i)}=B_i+b_i$). Moreover,  $A_i=B_i$ at a terminal line stop $i$. This common value yields  the total number of passengers transported by the line. 
+
+
+
+\vspace*{0.1cm}
+
+Let the transportation flow $n_{st}$ denote the number of passengers following an $st$-trip, that is entering the network at $s$ and leaving the network at $t$ by using the shortest path. 
+
+Also, 
+at the junction level, let $\tilde{n}_{ST}$ denote the number of passengers following an $ST$-trip. As implied by the end of section (\ref{Line edges, transfer edges and trips}), 
+\begin{equation}
+\label{equivnntilde}
+\tilde{n}_{ST}=\sum_{s\in S}\sum_{t\in T}n_{st} \qquad\qquad\qquad n_{st}=\sum_{ST}\tilde{n}_{ST}\: \delta_{s,\sigma(S,T)}\: \delta_{t,\tau(S,T)}
+\end{equation}
+Definitions (\ref{edgetrip}) and (\ref{edgetripjunction}) yield
+\begin{equation}
+\label{equationGG}
+x_{ij}=\sum_{st}\chi_{ij}^{st}\:  n_{st}=\sum_{ST}\tilde{\chi}_{ij}^{ST}\:  \tilde{n}_{ST}
+\end{equation}
+Among the passengers embarking in $i$, some transfer from another line, and some others enter into the network: 
+\begin{equation}
+\label{entrer}
+a_i=z_{\bullet i}+n_{i\bullet}
+\end{equation}
+where  ``$\bullet$" denotes the summation over the replaced index, as in $n_{i\bullet}=\sum_{j=1}^l n_{ij}$. Similarly, among the passengers disembarking in $i$, some transfer to another line, and some others leave the network: 
+\begin{equation}
+\label{sortir}
+b_i=z_{i\bullet}+n_{\bullet i}
+\end{equation}
+By construction
+\begin{displaymath}
+a_{\bullet}=b_{\bullet}=z_{\bullet\bullet}+n_{\bullet\bullet}
+\end{displaymath}
+where $n_{\bullet\bullet}$ counts the number of passengers, and $z_{\bullet\bullet}$ counts the number of transfers. $z_{\bullet\bullet}/n_{\bullet\bullet}$  is the average number of transfers per passenger. 
+
+\vspace*{0.1cm}
+
+
+
+As explained in section \ref{Lines and junctions}, transfers can only occur at junctions, that is $z_{ij}>0$ implies $S(i)=S(j)$. As $z_{ii}=0$ (no traveller is supposed to disembark and re-embark later at the same stop), and $z_{ii\text{-}}=0$ (where $i\text{-}$ is the stop opposite to $i$, when existing), transfers can occur at true junctions only. 
+
+\vspace*{0.1cm}
+
+At the junction level, let 
+\begin{displaymath}
+\tilde{a}_I=\sum_{i\in I} a_i\enspace,\enspace\tilde{b}_I=\sum_{i\in I} b_i\enspace,\enspace\tilde{z}_{\bullet I}=\sum_{i\in I} z_{\bullet i}\enspace,\enspace\tilde{z}_{I\bullet}=\sum_{i\in I} z_{i\bullet}\enspace,\enspace\tilde{n}_{I\bullet}=\sum_{i\in I} n_{i\bullet}\enspace,\enspace\tilde{n}_{\bullet I}=\sum_{i\in I} n_{\bullet i}
+\end{displaymath}
+ respectively denote the number of embarking (disembarking)  passengers at junction~$I$; of embarking passengers after a transfer and of disembarking passengers before a transfer at  $I$; of passengers starting (ending) their trip at $I$. Then 
+\begin{equation}
+\label{junctionLevel}
+\tilde{a}_I=\tilde{z}_{\bullet I}+\tilde{n}_{I\bullet}\qquad\qquad \tilde{b}_I=\tilde{z}_{I\bullet}+\tilde{n}_{\bullet I}\qquad\qquad \tilde{z}_{\bullet I}=\tilde{z}_{I\bullet}\le \min(\tilde{a}_I,\tilde{b}_I)\enspace. 
+\end{equation}
+
+ 
+\subsection{Statement of the problem}
+Automatic passenger counters measure the number of passengers entering and leaving buses at each stop [Boyle, 1998], that is $\mathbf{a}$ and $\mathbf{b}$. Also, the geometry of the network permits to derive the edge-trip incidence matrix $\bm{\chi}$ (\ref{edgetrip}), as well as the partition $\mathcal{S}$  of stops nested within junctions. 
+
+Intra-line edge flows $\mathbf{Y}=(y_{ij})$ can be determined by (\ref{bilan1ligne}), but transfer edge flows $\mathbf{Z}=(z_{ij})$ are, here and typically, unknown. The objective is to estimate the $l\times l$ transportation flow $\mathbf{N}=(n_{st})$ at the stop level, or equivalently  the $L\times L$  transportation flow  $\tilde{\mathbf{N}}=(\tilde{n}_{ST})$ at the junction level. Many consistent solutions coexist in general, even for a single line with no transferts (section \ref{Single line}).
+
+This issue of incompletely observed data can be tackled by the maximum entropy formalism: let $f_{st}=n_{st}/n_{\bullet\bullet}$ be the proportion of $st$-trips (empirical distribution) and let $g_{st}$ be some prior guess on its shape (theoretical distribution). Let $\mathcal{F}$ consist of the empirical distributions $\mathbf{f}$ satisfying $R$ linear constraints of the form $\sum_{st}f_{st}\, o^r_{st}=\bar{o}^r$ for $r=1,\ldots, R$. Then the minimum Kullback-Leibler divergence 
+\begin{displaymath}
+\min_{\mathbf{f}\in\mathcal{F}}\;  \sum_{st}f_{st}\log \frac{f_{st}}{g_{st}}
+\end{displaymath}
+is reached for the maximum entropy solution  
+\begin{equation}
+\label{MaxEnt}
+f^0_{st}=\frac{1}{Z(\bm{\lambda})}\: g_{st}\exp(-\sum_{r=1}^R \lambda_r o^r_{st})\qquad\qquad Z(\bm{\lambda})=\sum_{st}g_{st}\exp(-\sum_{r=1}^R \lambda_r o^r_{st})
+\end{equation}
+where the Lagrange multipliers $\bm{\lambda}$ are determined  so as to satisfy the $R$ linear constraints (**see e.g. Bavaud and *** and references therein). 
+
+\subsection{Statement of the problem (version 2, added by GG)}
+Let $f_{st}=n_{st}/n_{\bullet\bullet}$ be the proportion of $st$-trips (empirical distribution) and let $g_{st}$ be some prior guess on its shape (theoretical distribution). Also suppose a prior guess of row and margin constraints for $f_{st}$, respectively $\alpha_s$ and $\beta_t$, which has to verify 
+\begin{equation}
+	\label{init_margin}
+	\frac{\alpha_i}{\alpha_j} = \frac{a_i}{a_j} \qquad \frac{\beta_i}{\beta_j} = \frac{b_i}{b_j}  \qquad \forall i, j \text{ which are not true junctions.} \\
+\end{equation}
+Setting these gives us
+\begin{equation}
+	\label{flow_sum}
+	n_{\bullet \bullet} = \frac{a_i}{\alpha_i} = \frac{b_i}{\beta_i} \qquad \forall i \text{ which are not true junctions.}  
+\end{equation}
+We are interested in finding
+\begin{align}
+	\label{constr_MaxEnt}
+	\min_{\mathbf{f}\in\mathcal{F}} &\; \sum_{st}f_{st}\log \frac{f_{st}}{g_{st}}, \notag \\
+	s.t. &\; \sum_t f_{st} = \alpha_s, \notag \\
+	&\; \sum_s f_{st} = \beta_t.
+\end{align}
+The Lagragian is
+\begin{equation}
+	L = \sum_{st}f_{st}\log \frac{f_{st}}{g_{st}} - \sum_s \lambda_s (\alpha_s - \sum_t f_{st}) - \sum_t \mu_t (\beta_t - \sum_s f_{st}), \notag
+\end{equation}
+which gives, after deriving and setting to zero,
+\begin{equation}
+	\label{Sol}
+	f_{st} = \phi_s \psi_t g_{st} \qquad \text{with } \phi_s := \exp(- 1 - \lambda_s) \text{, } \psi_t := \exp(- \mu_t).
+\end{equation}
+Using constraints in (\ref{constr_MaxEnt}), we find
+\begin{equation}
+	\label{Sol_LagMult}
+	\phi_s = \frac{\alpha_s}{\sum_t \psi_t g_{st}}, \qquad \psi_t = \frac{\beta_t}{\sum_s \phi_s g_{st}}, 
+\end{equation}
+which gives an \emph{iterative fitting algorithm}. Starting with any $\psi^{(0)}_t > 0$, we do
+\begin{equation}
+	\label{Iterative fitting}
+	\phi^{(\iota)}_s = \frac{\alpha_s}{\sum_t \psi^{(\iota)}_t g_{st}}, \qquad \psi^{(\iota + 1)}_t = \frac{\beta_t}{\sum_s \phi^{(\iota)}_s g_{st}}, 
+\end{equation}
+
+With equation (\ref{flow_sum}), we can obtain the flow associated to $f_{st}$
+\begin{equation}
+	\label{flow_from_distrib}
+	n_{st} = n_{\bullet \bullet} f_{st}, 
+\end{equation}
+and with the edge-trip incidence matrix $\bm{\chi}$ (\ref{edgetrip}), we obtain the intra-line edge flows $\mathbf{Y}=(y_{ij})$ and the transfer edge flows $\mathbf{Z}=(z_{ij})$.
+
+\subsection{Margin distributions update (added by GG)}
+
+Let us define the hyperparameter $0 \geq \theta > 1$ as the \emph{minimum proportion of passengers (among $a_i$ and $b_i$) entering/leaving the network at each stop}. Note that we could set a different hyperparmeter for each node, and for embarkations and disembarkations, but without addition information, we will restrain to this simpler case. This hyperparamter means that
+\begin{align}
+	z_{\bullet s} &< (1 - \theta) a_s \\
+	z_{t \bullet} &< (1 - \theta) b_t
+\end{align}
+and with constraints (\ref{entrer}) and (\ref{sortir}), the update of margins distribution must be
+\begin{align}
+	\widetilde{\alpha}_s &= \frac{\min(\theta a_s, a_s - z_{\bullet s})}{\sum_{s'} \min(\theta a_s, a_{s'} - z_{\bullet {s'}})} \label{alpha_update} \\
+	\widetilde{\beta}_t &= \frac{\min(\theta b_t, b_t - z_{t \bullet})}{\sum_{t'} \min(\theta b_t, b_{t'} - z_{{t'} \bullet})} \label{beta_update}
+\end{align}
+
+\subsection{Prior distribution update (added by GG)}
+
+Transfer edges $(i, j)$ where $z_{i \bullet} > (1 - \theta)b_i$ or $z_{\bullet j} > (1 - \theta)a_j$ typically denote an overflowing tansfer flow regarding the $g_{st}$ prior distribution.  The latter must be adjusted in order to have $\mathbf{Z}$ comptible with constraints. For any edge $(i, j)$, let us compute the \emph{flow ratio} $r_{ij}$, with 
+\begin{equation}
+	\label{flow_ratio}
+	r_{ij} = \max \left(1, \frac{z_{i \bullet}}{(1 - \theta)b_i}, \frac{z_{\bullet j}}{(1 - \theta)a_j} \right),
+\end{equation}
+where $r_{ij} > 1$ typically denotes an overflow through edge $(i, j)$. This flow ratio can be traced back to origin-destination couples $s, t$ in order to compute the \emph{orgin-destination flow ratio} $\bar{r}_{st}$ 
+\begin{equation}
+	\label{st_flow_ratio}
+	\bar{r}_{st} = \max_{ij} \chi_{ij}^{st} r_{ij},
+\end{equation}
+where again $\bar{r}_{st} > 1$ denotes an overflow between $s$ and $t$. To ajdust the flow, we can devide the previous flow by this ratio
+\begin{equation}
+	\label{update_flow}
+	\widetilde{n}_{st} =\frac{n_{st}}{\bar{r}_{st}}
+\end{equation}
+And the new prior distribution should follow 
+\begin{equation}
+	\label{update_distrib}
+	\widetilde{g}_{st} = \frac{\left( \frac{\widetilde{n}_{st}}{\phi_s \psi_t} \right)}{\sum_{s',t'} \left( \frac{\widetilde{n}_{s',t'}}{\phi_{s'} \psi_{t'}} \right)}
+\end{equation}
+
+With the new prior distribution $\widetilde{g}_{st}$ and the new margin distributions $\widetilde{\alpha}_s$, $\widetilde{\beta}_t$, we can begin a new iteration step by going through 2.5 -2.7 again.
+
+\section{Single line}
+\label{Single line}
+Let  $i=1,\ldots, l$ enumerate the bus stops in increasing order,  i.e. $F(i)=i+1$. Define $g_{st}=\frac{1}{(l-1)(l-2)}\chi(s<t)$ (where $\chi(.)$ denotes the 0/1  indicator function) as the maximally uniform prior, reflecting only the unidirectional nature of trips. 
+Constraints $n_{r\bullet}=a_r$ (resp. $n_{\bullet r}=b_r$), correspond to $o^r_{st}=
+\delta_{sr}$ (resp. $o^r_{st}=\delta_{tr}$) in (\ref{MaxEnt}), which finally yields, after reparametrization, the maximum entropy flow reads
+\begin{equation}
+\label{nosignle}
+n^0_{st}=I(s<t)\, c_s\, d_t \qquad\qquad\mbox{where}\quad \sum_{s<t}c_s\, d_t=n_{\bullet\bullet}=a_{\bullet}=b_\bullet
+\end{equation}
+In addition, the (dis-)embarking constraints  yield
+\begin{equation}
+\label{(dis embarking constraints}
+a_i=c_i \sum_{t>i}d_t=c_i\, D_i 
+\qquad\qquad\qquad
+b_j=d_j\sum_{s<j}c_s=d_j \, C_j  
+\end{equation}
+where $D_i=\sum_{t>i}d_t$ and $C_j=\sum_{s<j}c_s$. This maximum entropy solution constitutes one possible consistent transportation flow among many others, such as the ``first in, first out" (FIFO) flow. Interestingly enough, (\ref{nosignle}) is reminiscent of the so-called gravity flows of quantitative Geography (**ref**) $n_{st}=h_{st}\, c_s\, d_t $, but with a purely asymmetric ``distance deterrence function" $h_{st}=I(s<t)$.  Also, 
+(\ref{nosignle}) shows that  the conditional probability to exit on $t$, given an entrance on $s$, is $w_{st}=n^0_{st}/n^0_{s\bullet}=I(s<t)\, d_t/D_s$. 
+
+
+\
+
+*** ici la (les) figure de l'exemple  ``starting from Maladière, Riant-Cour, Dapples"... ? ***
+
+\
+
+
+*** ici l'équivalence avec l'approche chaîne de Markov de Guillaume ? ***
+ 
+
+
+\section{Multiple lines} 
+
+*** $a_{\bullet}=b_{\bullet}$ (where ``$\bullet$" denotes summation over the replaced index). 
+ 
+\newpage
+
+\section*{Previous submission to complex networks 2022}
+
+%
+\section*{Statement of the problem}
+%
+
+Automatic passenger counters measure the number of passengers entering and leaving buses at each stop \cite{boyle_passenger_1998}. Given this information, can we estimate the complete trajectories of passengers within the entire multi-line network? This communication attempts to propose an estimation of all passenger trajectories in the multi-line network with an algorithm based on iterative proportional fitting (IPF) \cite{bishop_discrete_2007}.
+
+The exploited dataset is provided by the Lausanne Transportation Agency (tl) in Switzerland. The dataset includes 42 lines of buses (or subways) and more than 1361 stops, including 497 clusters of stops (Fig. \ref{fig:map-lausanne}),  carrying around 115 million passengers in 2019. Each stop refers to a single directed line, and return lines are considered as distinct.  In addition to  \emph{line edges},  it is possible to construct pedestrian \emph{transfer edges} (Fig. \ref{fig:network-lausanne}) to make the graph unilaterally connected by considering, e.g., clusters of stops connected.
+
+\noindent \begin{minipage}[c]{0.5\textwidth}
+   \begin{figure}[H]
+      \centering
+      \includegraphics[width=6cm]{img/stop_area_c.png}
+      \caption{Cluster of stops} 
+      \label{fig:map-lausanne}
+   \end{figure}
+\end{minipage}%
+\begin{minipage}[c]{0.5\textwidth}
+   \begin{figure}[H]
+      \centering
+      \includegraphics[width=4cm]{img/edge_type3.png}
+      \caption{The multi-line network structure} 
+      \label{fig:network-lausanne}
+   \end{figure}
+\end{minipage}
+
+
+$\mbox{}$
+
+Knowing only the network structure and the number of passengers embarking and disembarking at each stop, how can we infer the most probable passenger trajectories in the network? Before examining the general multi-line network problem,  we address the estimation of trajectories on a single line.
+
+%
+\section{Single line}
+%
+
+Consider a one-directional line with $n$ stops indexed regarding the order found in the line.  Let $\mathbf{a}_\text{in} = (a_{s}^\text{in})$ and $\mathbf{a}_\text{out} = (a_{t}^\text{out})$ be two vectors representing, respectively, the passengers entering and leaving the line at each stop. The goal is to estimate the $(n \times n)$ origin-destination matrix $\mathbf{N} = (n_{st})$, where $n_{st}$ represents the number of passengers entering the line at $s$ and leaving at $t$, subject to constraints $n_{s\bullet} = a^\text{in}_s$ and $n_{\bullet t} = a^\text{out}_t$.  Among many feasible solutions, arguably the most elegant one is the maximum entropy solution, which can be derived  from different means:  (i) passenger flows can be modelled using a Markovian assumption, which translates by assuming that every passenger has the same probability to continue the trip after having travelled at last one stop ; (ii) an iterative proportional fitting algorithm can be performed, starting with an initial origin-destination affinity matrix $\mathbf{S} = (s_{st})$, defined as the upper triangular $n\times n$ matrix filled with $1$, and then iterated to satisfy the margin constraints given by $\mathbf{a}_\text{in}$ and $\mathbf{a}_\text{out}$. Both approaches give the same solution, but only the latter remains pertinent in the multi-line problem.
+
+%
+\section{Multi-lines}
+%
+
+In the multi-line problem, a passenger can transfer from a line to another. The problem cannot be tackled with Markov chain modelling anymore, which generate unrealistic random trajectories. Instead, we will assume that passengers follow shortest paths. Starting from an origin-destination matrix $\mathbf{N} = (n_{st})$, where $s$ denotes the stop at which a passenger \emph{enters into the network} (and not simply enters a particular line), and $t$ denotes the stop where the passenger \emph{leaves definitively the network}, this shortest paths assumption allows us to compute the flow matrix on edges $\mathbf{X} = (x_{ij})$. The latter decomposes into the within-line flow and the transfer flow, i.e., $\mathbf{X}=\mathbf{X}_\text{W}+\mathbf{X}_\text{B}$. 
+Moreover, in the multi-line problem, we also have to distinguish between:
+\begin{itemize}
+	\item[$\bullet$]  passengers who enter and leave bus lines at each stop, represented by vectors $\mathbf{a}_\text{in}$ and $\mathbf{a}_\text{out}$, which are \emph{measured},
+	\item[$\bullet$] and passengers who enter and leave the network at each stop $i$, represented by the \emph{unknown} quantities $n_{\bullet i}$ and $n_{i \bullet}$.
+\end{itemize}
+By construction, 
+\begin{align}
+		a^\text{in}_i &=n_{i\bullet} + x^\text{B}_{i\bullet},  &
+		a^\text{out}_i &= n_{\bullet i} + x^\text{B}_{\bullet i},
+\end{align}
+
+Using these two constraints, along with the shortest paths assumption and iterative proportional fitting, we propose the following iterative algorithm in order to find $\mathbf{N}$ from measured $\mathbf{a}_\text{in}$ and $\mathbf{a}_\text{out}$. \\
+
+\noindent \fbox{\begin{minipage}{\textwidth}
+
+\textbf{Initialisation:} $\mathbf{S}^{(0)}$ is filled with 1 excepted for aberrant origin-destination pairs (such as $t$ beeing a previous stop of the same line as $s$). The margins of $\mathbf{N}$ are fixed as $\mathbf{n}^{(0)}_{\mbox{\scriptsize in}} = \mathbf{a}_\text{in}$ and $\mathbf{n}^{(0)}_{\mbox{\scriptsize out}} = \mathbf{a}_\text{out}$.
+
+\textbf{Step 1, Iterative proportional fitting:}
+We use IPF to compute $\mathbf{N}^{(r)}$ starting from $\mathbf{S}^{(r)}$, such that margin constraints, defined by $\mathbf{n}^{(r)}_\text{in}$ and $\mathbf{n}^{(r)}_\text{out}$ are satisfied.
+
+\textbf{Step 2, Shortest paths flow:}
+Using shortest paths information, we compute $\mathbf{X}^{(r)}_\text{B}$ from $\mathbf{N}^{(r)}$.
+
+\textbf{Step 3, Affinity and margin update:}
+$\mathbf{S}^{(r+1)}$, $\mathbf{n}^{(r+1)}_\text{in}$ and $\mathbf{n}^{(r+1)}_\text{out}$ are updated in order to respect constraints defined by (1).
+\end{minipage}}
+
+Step 1, 2, and 3 are iterated until convergence, giving an admissible solution to the problem.
+%
+\section{A small example}
+%
+
+As an illustration, an estimated solution proposed by the algorithm on a restricted network made of four lines only is depicted on Fig. \ref{fig:example-map}. A total of $n_{\bullet \bullet} = 16,837,494$ passengers using this network is estimated by the algorithm. The red circle on the bottom left represents the start of the trip $s$ and the size of the circles at stops $t$ represents the estimated number of passengers terminating their trip at $t$. In this example, the majority of passengers exit the network on the same initial embarkment line. A small fraction of them takes another line. 
+
+Table \ref{fig:example-edges} represents the estimated ten most frequented transfer edges. The code of the stop represents the number of the line, the direction and a condensed name of its stop cluster. The third column gives the number (in thousands) of passengers transferring through this edge.
+
+\noindent \begin{minipage}[c]{0.6\textwidth}
+   \begin{figure}[H]
+      \includegraphics[width=7cm]{img/example_map.png}
+      \caption{Example map} 
+      \label{fig:example-map}
+   \end{figure}
+\end{minipage}%
+\begin{minipage}[c]{0.43\textwidth}
+      %\centering
+      \begin{table}[H]
+		\begin{tabular}{l|l|r}
+		\multicolumn{1}{c|}{\textbf{From stop}} & \multicolumn{1}{c|}{\textbf{To stop}} & \multicolumn{1}{c}{\textbf{Count}} \\ \hline
+		{\scriptsize S7\_A\_SF\_O}			& {\scriptsize S9\_A\_SF\_O}			& 192k		\\ \hline
+		{\scriptsize S9\_R\_CH\_E}			& {\scriptsize S6\_A\_CH\_E}			& 187k		\\ \hline
+		{\scriptsize S7\_A\_SF\_O}		& {\scriptsize S8\_R\_SF\_S}				& 135k			\\ \hline
+		{\scriptsize S6\_R\_CH\_O}			& {\scriptsize S9\_A\_CH\_O}			& 135k			\\ \hline
+		{\scriptsize S8\_A\_GTE\_N}		& {\scriptsize S9\_R\_GTE\_E}			& 103k		\\ \hline
+		{\scriptsize S9\_R\_B-AIR\_C}		& {\scriptsize S8\_A\_B-AIR\_N}		& 99k			\\ \hline
+		{\scriptsize S9\_A\_SF\_O}			& {\scriptsize S7\_A\_SF\_O}			& 88k			\\ \hline
+		{\scriptsize S8\_R\_B-AIR\_D}		& {\scriptsize S6\_A\_B-AIR\_C}		& 87k			\\ \hline
+		{\scriptsize S6\_R\_SF\_O}			& {\scriptsize S8\_A\_SF\_O}			& 86k			\\ \hline
+		{\scriptsize S9\_A\_GTE\_O}		& {\scriptsize S8\_R\_GTE\_S}		& 84k                                        
+		\end{tabular}
+\vspace*{0.2cm}	\caption{List of the ten most\\ frequented transfer edges} 
+	\label{fig:example-edges}
+	\end{table}
+\end{minipage}
+
+\vspace*{0.2cm}
+
+The current work performs computer-intensive simulations of flow over the entire network (1361 stops), permitting to extract usual network indices (centrality, betweenness...) characterizing both the stops \emph{and} the lines. In parallel, the computational effects of various fine tuning calibration parameters used in the algorithm are investigated. 
+
+
+
 %% --------------------------------- INTRODUCTION
+
+ 
 
 \section{Introduction}
 
@@ -282,6 +653,9 @@ Text for this section\ldots
 
   \subsection*{Additional file 2 --- Sample additional file title}
     Additional file descriptions text.
+
+
+
 
 \end{backmatter}
 \end{document}
