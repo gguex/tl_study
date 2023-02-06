@@ -54,7 +54,7 @@ max_it = 1000
 # print iterations
 display_it = F
 # number of iterations
-n_test = 10
+n_test = 50
 # prop limit
 hyper_par = c(0.01, 0.1, 0.3, 0.5, 0.7, 0.9, 0.99)
 # number of passengers
@@ -111,7 +111,7 @@ mdf = melt(mdf, id=c("par"))
 ggplot(mdf, aes(x=variable, y=value, color=par)) +
   # geom_smooth(show.legend = FALSE, fullrange=TRUE) +
   geom_point(show.legend = FALSE) +
-  labs(x ="Parameter", y = "% of error") +
+  labs(title = paste(nb_lines, "lines network", n_test, "iterations"), x ="Parameter", y = "% of error") +
   stat_summary(aes(y = value,group=1), fun=mean, colour="blue", geom="line",group=1)
 
 # Network drawing
