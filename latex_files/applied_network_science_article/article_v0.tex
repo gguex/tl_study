@@ -130,24 +130,21 @@ Blabla
 %% --------------------------------- OLD IMPORT
 
 \section{Notations and formalism}
-\subsection{Lines and junctions}
+\subsection{Lines, stops  and junctions}
 \label{Lines and junctions}
 Consider a transportation network made of bus lines numbered $\ell=1,\ldots, q$, of respective lengths (number of stops) $l_\ell$.  Opposite lines, that is parallel lines running in the back and forth directions are considered as distinct. 
 
-The $l=\sum_{\ell=1}^ql_\ell$ bus stops constitute the nodes of the transportation network. Each stop $i=1,\ldots,l$ belongs to a single bus line, and defines a unique next or forward stop $F(i)$ (unless $i$ is the line terminus) and a unique backward stop $B(i)$ (unless $i$ is the line start), both on the same line.  
+The $l=\sum_{\ell=1}^ql_\ell$ bus stops constitute the nodes of the transportation network. Each stop $i=1,\ldots,l$ belongs to {\em  a single bus line}, and defines a unique next or forward stop $F(i)$ (unless $i$ is the line terminus) and a unique backward stop $B(i)$ (unless $i$ is the line start), both on the same line.  
 
-Junctions (super-stops), denoted $S=1,\ldots, L$, are defined as cliques (equivalence classes) of stops which can be mutually reached from one another within walking distance. True junctions 
-involve at least two lines, while pseudo-junctions comprise isolated stops $i$, possibly together with their opposite stop (noted $i\text{-}$) on the parallel line running in the opposite direction. 
+Let $S_i$ denote the set of stops which can be reached from stop $i$ within walking distance, excluding $i$ itself. A stop $i$ is referred to as an {\em isolated stop} if $S_i=\emptyset$, and to as a {\em junction} otherwise. 
 
-
-In summary, each stop $i$ belongs to a single line $\ell(i)$ and a single junction $S(i)$. Lines and junctions define two partitions of the network nodes, with $q$, respectively $L$ blocks.
 
 \subsection{Line edges, transfer edges and trips}
 \label{Line edges, transfer edges and trips}
 Two sorts of oriented edges are involved in the transportation network: 
 \begin{enumerate}
   \item[$\bullet$] intra-line edges $(i,j)=(i,F(i))$ belonging to a single line  $\ell(i)=\ell(j)$
-  \item[$\bullet$] inter-line or transfer edges $(i,j)$ connecting different lines $\ell(i)\neq \ell(j)$, taking place at some junction $S(i)=S(j)$. 
+  \item[$\bullet$] inter-line or transfer edges $(i,j)$ connecting different lines $\ell(i)\neq \ell(j)$, involving walks from junction $i$ to $j\in S_i$.
   \end{enumerate}
 A $st$-trip, noted $[s,t]$, consists of entering into the network at stop $s$, and leaving the network at $t$, by following the shortest-path (i.e. achieving the minimum distance,  minimum time, or  minimum cost), supposed unique, leading to $s$ from $t$. 
 
@@ -162,16 +159,6 @@ The succession of edges $(ij)$ belonging to the $st$-trip, noted $(ij)\in [s,t]$
 A $st$-trip always starts with the edge $(s,F(s))$, and finishes with $(B(t),t)$. Transfers can occur in-between, but never at the beginning nor at the end of the trip. 
 
 \vspace*{0.1cm}
-
-Similarly, $ST$-trips between junctions, noted $[S,T]$, consist of the supposedly unique shortest $st$-trip $[s,t]$ among all  $s\in S$ and $t\in T$, followed by a traveller entering the network as junction $S$, and leaving it at junction $T$. The corresponding edge-trip incidence matrix is 
-\begin{equation}
-\label{edgetripjunction}
-\tilde{\chi}_{ij}^{ST} = \begin{cases}
-  1    & \text{if $(ij)\in [S,T]$}, \\
-  0    & \text{otherwise}.
-\end{cases}
-\end{equation}
-Unicity of the shortest-path implies that a passenger wishing to travel from $S$ to $T$ chooses the unique stop $\sigma(S,T)\in S$  as initial node (on line $\ell(\sigma)$), and the unique node $\tau(S,T)\in T$ as final node (on line $\ell(\tau)$). 
 
 \subsection{Transportation flows}
 \label{Transportation flows}
