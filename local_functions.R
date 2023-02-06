@@ -428,7 +428,7 @@ compute_origin_destination =
   function(flow_l_in, flow_l_out, edge_ref, sp_ref, sp_edge_link, 
            s_mat=NULL, min_p_ntwk=0.1, conv_thres_if=1e-5,
            conv_thres_algo=1e-5, epsilon=1e-40,
-           max_it=200, display_it=T){
+           max_it=200, max_it_if=200, display_it=T){
   
   # --- Get the network structure 
   
@@ -487,7 +487,8 @@ compute_origin_destination =
     
     psi = rep(1, ncol(g_ref))
     converge_if = F
-    while(!converge_if){
+    it_if = 1
+    while(!converge_if & it_if <= max_it_if){
       # Saving old b results
       psi_old = psi
       # Compute new a and b
@@ -497,6 +498,7 @@ compute_origin_destination =
       if(sum(abs(psi_old - psi)) < conv_thres_if){
         converge_if = T
       }
+      it_if = it_if + 1
     }
     
     # Building f_mat

@@ -9,7 +9,7 @@
 #--------------------------------
 
 # Set working directory path
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+# setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load functions
 source("local_functions.R")
@@ -33,7 +33,7 @@ data_folder = "multilines_data/preprocessed_data/all_lines"
 out_folder = "results/all_lines"
 
 # Conv threshold for iterative fitting
-conv_thres_if = 1e-8
+conv_thres_if = 1e-5
 # Conv threshold
 conv_thres_algo = 1e-5
 # proportional limit 
