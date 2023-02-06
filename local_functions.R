@@ -498,6 +498,7 @@ compute_origin_destination =
       if(sum(abs(psi_old - psi)) < conv_thres_if){
         converge_if = T
       }
+      it_if = it_if + 1
     }
     
     # Building f_mat
