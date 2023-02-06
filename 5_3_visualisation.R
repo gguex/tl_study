@@ -5,7 +5,7 @@
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
 # - Histogram of mean error, according to the number of lines into the network
-#   (only 1 hyper parameter)
+#   (possible to have more than 1 hyper parameter)
 
 #--------------------------------
 # Head
@@ -54,11 +54,14 @@ display_it = F
 # number of iterations
 n_test = 5
 # prop limit
-hyper_par = 0.3
+hyper_par = c(0.1, 0.3, 0.5, 0.7)
+# hyper_par = 0.1
 # number of passengers
 n_passengers = 2000
 # number of cores
 mc.cores = detectCores() - 2
+# lines
+seq_lines = 2:8
 
 #--------------------------------
 # Output and visualizations
@@ -66,33 +69,40 @@ mc.cores = detectCores() - 2
 
 # Create a data frame with different number of line into the network
 res_mat_line = c()
-seq_lines = 2:8
 
-for (i in seq_lines) {
-  nb_lines = i
-  nb_stops = i + 1
-  # Network properties output
-  network_prop_res = network_prop(nb_lines, nb_stops, mc.cores)
-  # Unlist and save variables
-  list2env(network_prop_res, .GlobalEnv)
+for (j in 1:length(hyper_par)) {
+  for (i in seq_lines) {
+    nb_lines = i
+    nb_stops = i + 1
+    # Network properties output
+    network_prop_res = network_prop(nb_lines, nb_stops, mc.cores)
+    # Unlist and save variables
+    list2env(network_prop_res, .GlobalEnv)
+    
+    res_mat = compute_toy(hyper_par[j], n_test, paths, n_passengers, edge_ref,
+                          sp_ref, sp_edge_link, conv_thres_algo, conv_thres_if, 
+                          max_it, display_it)
+    colnames(res_mat) = paste0("L",i,"P",hyper_par[j])
+    
+    res_mat_line = cbind(res_mat_line, res_mat)
+  }
   
-  res_mat = compute_toy(hyper_par, n_test, paths, n_passengers, edge_ref, sp_ref,
-                        sp_edge_link, conv_thres_algo, conv_thres_if, max_it,
-                        display_it)
-  
-  colnames(res_mat)[1] <- paste("Lines:", i)
-  res_mat_line = cbind(res_mat_line, res_mat)
+  # Add the mean and the standard deviation
+  mean_line = as.data.frame(colMeans(res_mat_line))
+  sd_line = apply(res_mat_line, 2, sd)
+  sd_line = sd_line/sqrt(n_test)
+  mean_line = cbind(seq_lines, mean_line, sd_line)
+  mean_line$param = row.names(mean_line)
+  colnames(mean_line) <- c("Lines", "mean_error", "sd_error","param")
+  mean_line$param = substr(mean_line$param, 4, 7)
 }
 
-# Add the mean and the standard deviation
-mean_line = as.data.frame(colMeans(res_mat_line))
-sd_line = apply(res_mat_line, 2, sd)
-sd_line = sd_line/sqrt(n_test)
-mean_line = cbind(seq_lines, mean_line, sd_line)
-colnames(mean_line) <- c("Lines","mean_error", "sd_error")
-
-
-### Best graph according to the number of passengers into the network
+# Plot the results
 ggplot() +
-  geom_line(data = mean_line, aes(x = Lines, y = mean_error), color = "red") +
-  labs(title = paste(n_test, "iterations, parameter:", hyper_par), x = "Nb of lines into the network", y = "Mean error")
+  geom_line(data=mean_line,
+            aes(x=Lines, y=mean_error, group=param, color=param)) +
+  # labs(title=paste(n_test, "iterations, parameter:", paste(hyper_par,collapse = ', ')), x = "Nb of lines into the network", y = "Mean error")
+  labs(title=paste(n_test, "iterations,", n_passengers, "passengers"), 
+       x = "Nb of lines into the network", y = "Mean error") +
+  scale_x_continuous(limits = c(min(mean_line$Lines), max(mean_line$Lines)),
+                     breaks = pretty(mean_line$Lines))
