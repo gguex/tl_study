@@ -492,8 +492,8 @@ compute_origin_destination =
       # Saving old b results
       psi_old = psi
       # Compute new a and b
-      phi = sigma_in / colSums(t(g_ref + epsilon) * psi)
-      psi = sigma_out / colSums((g_ref + epsilon) * phi)
+      phi = sigma_in / (colSums(t(g_ref) * psi) + epsilon)
+      psi = sigma_out / (colSums(g_ref * phi) + epsilon)
       # Checking for convergence
       if(sum(abs(psi_old - psi)) < conv_thres_if){
         converge_if = T
