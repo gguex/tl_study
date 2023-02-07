@@ -1,8 +1,7 @@
-This is BibTeX, Version 0.99d (TeX Live 2022/dev/Debian)
+This is BibTeX, Version 0.99d (TeX Live 2020)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: article_v0.aux
 The style file: bmc-mathphys.bst
-I found no \citation commands---while reading file article_v0.aux
 Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
 Reallocated global_strs (elt_size=200001) to 20 items from 10.
 Reallocated glb_str_end (elt_size=4) to 20 items from 10.
@@ -20,51 +19,65 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
-Database file #1: bmc_article.bib
+Database file #1: article_tl.bib
 Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
+Too many commas in name 1 of "Boyle, Douglas, Mark C, Daniel" for entry boyle_passenger_1998
+while executing---line 2585 of file bmc-mathphys.bst
+Too many commas in name 1 of "Boyle, Douglas, Mark C, Daniel" for entry boyle_passenger_1998
+while executing---line 2585 of file bmc-mathphys.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Too many commas in name 1 of "Boyle, Douglas, Mark C, Daniel" for entry boyle_passenger_1998
+while executing---line 2686 of file bmc-mathphys.bst
+Too many commas in name 1 of "Boyle, Douglas, Mark C, Daniel" for entry boyle_passenger_1998
+while executing---line 2686 of file bmc-mathphys.bst
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
-Reallocated singl_function (elt_size=4) to 100 items from 50.
-You've used 0 entries,
+Too many commas in name 1 of "Boyle, Douglas, Mark C, Daniel" for entry boyle_passenger_1998
+while executing---line 3019 of file bmc-mathphys.bst
+Too many commas in name 1 of "Boyle, Douglas, Mark C, Daniel" for entry boyle_passenger_1998
+while executing---line 3019 of file bmc-mathphys.bst
+Too many commas in name 1 of "Boyle, Douglas, Mark C, Daniel" for entry boyle_passenger_1998
+while executing---line 3019 of file bmc-mathphys.bst
+You've used 2 entries,
             7128 wiz_defined-function locations,
-            1121 strings with 9055 characters,
-and the built_in function-call counts, 124 in all, are:
-= -- 0
-> -- 0
-< -- 0
-+ -- 0
-- -- 0
-* -- 2
-:= -- 14
-add.period$ -- 0
-call.type$ -- 0
-change.case$ -- 0
-chr.to.int$ -- 0
-cite$ -- 0
-duplicate$ -- 0
-empty$ -- 1
-format.name$ -- 0
-if$ -- 1
+            1135 strings with 9394 characters,
+and the built_in function-call counts, 69330 in all, are:
+= -- 13488
+> -- 32
+< -- 11
++ -- 8802
+- -- 21
+* -- 1284
+:= -- 11778
+add.period$ -- 3
+call.type$ -- 2
+change.case$ -- 38
+chr.to.int$ -- 2
+cite$ -- 2
+duplicate$ -- 150
+empty$ -- 444
+format.name$ -- 44
+if$ -- 18044
 int.to.chr$ -- 1
-int.to.str$ -- 1
-missing$ -- 0
-newline$ -- 54
-num.names$ -- 0
-pop$ -- 0
+int.to.str$ -- 7
+missing$ -- 65
+newline$ -- 100
+num.names$ -- 10
+pop$ -- 84
 preamble$ -- 1
-purify$ -- 0
-quote$ -- 0
-skip$ -- 1
+purify$ -- 10
+quote$ -- 4
+skip$ -- 8289
 stack$ -- 0
-substring$ -- 0
-swap$ -- 0
-text.length$ -- 0
+substring$ -- 6297
+swap$ -- 27
+text.length$ -- 37
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 0
+type$ -- 88
 warning$ -- 0
-while$ -- 0
+while$ -- 57
 width$ -- 0
-write$ -- 48
-(There was 1 error message)
+write$ -- 108
+(There were 7 error messages)
