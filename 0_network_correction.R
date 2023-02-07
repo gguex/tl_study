@@ -9,7 +9,7 @@
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Read data
-line_df = read.csv("/multilines_data/preprocessed_data/all_lines/line_df.csv")
+line_df = read.csv("multilines_data/preprocessed_data/all_lines/line_df.csv")
 
 # Sum passengers by line A and R
 sum_table = data.frame(line=numeric(), a_in=numeric(), r_in=numeric(),
