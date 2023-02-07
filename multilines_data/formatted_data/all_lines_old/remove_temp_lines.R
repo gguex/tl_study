@@ -8,11 +8,11 @@ to_remove_ids = 1338:1360
 
 # Load data
 bus_df = read.csv("bus_df.csv")
-ped_time_mat = read.csv("ped_time.csv")
+ped_time_mat = read.csv("ped_time.csv", header=F)
 
 # Remove idx
 new_bus_df = bus_df[-to_remove_ids, ]
-new_ped_time_mat = ped_time[-to_remove_ids, -to_remove_ids]
+new_ped_time_mat = ped_time_mat[-to_remove_ids, -to_remove_ids]
 
 # Write new results
 write.table(new_bus_df, "../all_lines/bus_df.csv", 
