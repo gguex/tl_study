@@ -32,6 +32,7 @@ results_folder = "results/all_lines"
 
 # Load files 
 line_res = read.csv(paste0(results_folder, "/line_res.csv"))
+n_mat = as.matrix(read.csv(paste0(results_folder, "/n_mat.csv"), header=F))
 
 
 # Compute transfer edges 

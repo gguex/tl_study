@@ -544,7 +544,7 @@ compute_origin_destination =
     path_max_ratio[path_max_ratio < 1] = 1
     # Compute the phi, psi scaling factor
     scaling_phi_psi = mapply(function(i, j) phi[i]*psi[j], 
-                             sp_ref[,1], sp_ref[,2])
+                             sp_ref[, 1], sp_ref[, 2])
     # Compute the updated g_vec
     reduced_flow = sp_flow_vec / path_max_ratio
     g_ref_vec = reduced_flow / (scaling_phi_psi + epsilon)
