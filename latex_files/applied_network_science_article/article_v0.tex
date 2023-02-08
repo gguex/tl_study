@@ -214,7 +214,14 @@ As explained in section \ref{Lines and junctions}, transfers can only occur at j
 
  
 \subsection{Statement of the problem and solution method}
-Automatic passenger counters measure the number of passengers entering and leaving buses at each stop [Boyle, 1998], that is $\mathbf{a}$ and $\mathbf{b}$. Also, the geometry of the network permits to derive the edge-trip incidence matrix $\bm{\chi}$ defined in (\ref{edgetrip}). 
+Automatic passenger counters measure the number of passengers entering and leaving buses at each stop [Boyle, 1998], that is $\mathbf{a}$ and $\mathbf{b}$, which provide the basic raw data of the present study, kindly provided by the Lausanne Transportation Agency (tl), after some preliminary, undocumented corrections (i.e. the components of $\mathbf{a}$ and $\mathbf{b}$ can be non-integer). It may also happen that raw data do not obey the necessary consistency condition  $a_\bullet=b_\bullet$, in which case we did rescale the embarking and disembarking counts as 
+\begin{displaymath}
+\hat{a}_i=\varepsilon a_i \qquad\qquad \hat{b}_i=\frac{1}{\varepsilon} b_i \qquad\qquad\mbox{with}\quad \varepsilon=\sqrt{\frac{b_\bullet}{a_\bullet}}
+\end{displaymath}
+ensuring $\hat{\mathbf{a}}_\bullet=\hat{\mathbf{b}}_\bullet$, unless $\varepsilon> 2$ or $\varepsilon<\frac{1}{2}$ ***@R, @G : c'est à peu près cela??*** , in which case the corresponding line (which always turned out to be a temporary line with tiny counts) was simply disregarded and removed from the network. 
+
+
+Also, the geometry of the network permits to derive the edge-trip incidence matrix $\bm{\chi}$ defined in (\ref{edgetrip}). 
 
 
 Intra-line edge flows $\mathbf{Y}=(y_{ij})$ can be determined by (\ref{bilan1ligne}), but transfer edge flows $\mathbf{Z}=(z_{ij})$ are, here and typically, unknown. The objective is to estimate the $l\times l$ transportation flow $\mathbf{N}=(n_{st})$. Many consistent solutions coexist in general, even for a single line with no transferts (section \ref{Single line}). This issue of incompletely observed data can be tackled by the maximum entropy formalism (*** ref***). 
@@ -226,39 +233,19 @@ Assuming some reasonable initial prior $g_{st}$,
 \item[(1)] we shall first suppose that the empirical margins $\alpha_s=f_{s\bullet}$ and $\beta_t=f_{\bullet t}$ are known.  
 Then $f_{st}$ can be determined as the maximum entropy solution (section \ref{maxenso}), i.e. as the distribution closest to $g_{st}$ in the Kullback-Leibler divergence sense under the margin constraints
 \item[(2)] then (section \ref{marginup}), the margins will be updated to $\tilde{\alpha}_s$ and $\tilde{\beta}_t$   by requiring a minimum proportion $\theta\in (0,1)$ of passengers entering/leaving the network at each stop, as well as avoiding transfer overflow exceeding the embarking and disembarking counts at each stop
- \item[(3)] finally (section \ref{priorup}), the prior will be updated to $\tilde{g}_{st}$ by contracting, if necessary, the priors $g_{st}$ associated to overflows. 
+ \item[(3)] finally (section \ref{priorup}), the prior will be updated to $\tilde{g}_{st}$ by shrinking, if necessary, the priors $g_{st}$ associated to overflows. 
 \end{itemize}
 With the new prior distribution $\widetilde{g}_{st}$ and the new margin distributions $\widetilde{\alpha}_s$, $\widetilde{\beta}_t$, we can iterate the 
- the above steps, until convergence. The only free parameter is $\theta$, which will be discussed in section *** . This solution method is reminiscent, but quite distinct of the ME algorithm ...***
+ the above steps, until convergence. The only free parameter is $\theta$, which will be discussed in section *** . *** This solution method is reminiscent, but quite distinct of the ME algorithm ...***
 
 
 
-\subsubsection{***Maximum entropy solution} 
-Let $\mathcal{F}$ consist of the empirical distributions $\mathbf{f}$ satisfying $R$ linear constraints of the form $\sum_{st}f_{st}\, o^r_{st}=\bar{o}^r$ for $r=1,\ldots, R$. Then the minimum Kullback-Leibler divergence 
-\begin{displaymath}
-\min_{\mathbf{f}\in\mathcal{F}}\;  \sum_{st}f_{st}\log \frac{f_{st}}{g_{st}}
-\end{displaymath}
-is reached for the maximum entropy solution  
-\begin{equation}
-\label{MaxEnt}
-f^0_{st}=\frac{1}{Z(\bm{\lambda})}\: g_{st}\exp(-\sum_{r=1}^R \lambda_r o^r_{st})\qquad\qquad Z(\bm{\lambda})=\sum_{st}g_{st}\exp(-\sum_{r=1}^R \lambda_r o^r_{st})
-\end{equation}
-where the Lagrange multipliers $\bm{\lambda}$ are determined  so as to satisfy the $R$ linear constraints (**see e.g. Bavaud and *** and references therein). 
 
-\subsubsection{Maximum entropy solution ***Statement of the problem (version 2, added by GG)}
+\subsubsection{Maximum entropy estimate of $st$-trips}
 \label{maxenso}
-Let $f_{st}=n_{st}/n_{\bullet\bullet}$ be the proportion of $st$-trips (empirical distribution) and let $g_{st}$ be some prior guess on its shape (theoretical distribution). 
-Also suppose a prior guess of row and margin constraints for $f_{st}$, respectively $\alpha_s$ and $\beta_t$, which has to verify 
-\begin{equation}
-	\label{init_margin}
-	\frac{\alpha_i}{\alpha_j} = \frac{a_i}{a_j} \qquad \frac{\beta_i}{\beta_j} = \frac{b_i}{b_j}  \qquad \forall i, j \text{ which are not true junctions.} \\
-\end{equation}
-Setting these gives us
-\begin{equation}
-	\label{flow_sum}
-	n_{\bullet \bullet} = \frac{a_i}{\alpha_i} = \frac{b_i}{\beta_i} \qquad \forall i \text{ which are not true junctions.}  
-\end{equation}
-We are interested in finding
+As announced,  the proportion of $st$-trips $f_{st}=n_{st}/n_{\bullet\bullet}$ (empirical distribution) will be estimated from some prior guess $g_{st}$ (theoretical distribution) and 
+margin constraints $\alpha_s$ and $\beta_t$ for $f_{st}$ by maximum entropy, i.e. by 
+solving the problem 
 \begin{align}
 	\label{constr_MaxEnt}
 	\min_{\mathbf{f}\in\mathcal{F}} &\; \sum_{st}f_{st}\log \frac{f_{st}}{g_{st}}, \notag \\
@@ -279,35 +266,54 @@ Using constraints in (\ref{constr_MaxEnt}), we find
 	\label{Sol_LagMult}
 	\phi_s = \frac{\alpha_s}{\sum_t \psi_t g_{st}}, \qquad \psi_t = \frac{\beta_t}{\sum_s \phi_s g_{st}}, 
 \end{equation}
-which gives an \emph{iterative fitting algorithm}. Starting with any $\psi^{(0)}_t > 0$, we do
+which yields the following \emph{iterative fitting algorithm}: starting with some $\psi^{(0)}_t > 0$, one performs the iteration
 \begin{equation}
 	\label{Iterative fitting}
 	\phi^{(\iota)}_s = \frac{\alpha_s}{\sum_t \psi^{(\iota)}_t g_{st}}, \qquad \psi^{(\iota + 1)}_t = \frac{\beta_t}{\sum_s \phi^{(\iota)}_s g_{st}}, 
 \end{equation}
+until convergence to $\phi_s$ and $\psi_t$ obeying (\ref{Sol_LagMult}). 
 
-With equation (\ref{flow_sum}), we can obtain the flow associated to $f_{st}$
+In view of (\ref{entrer}) and {\ref{sortir}), the postulated margins must satisfy, for each isolated stop $i$
+\begin{equation}
+\label{ }
+\alpha_i=\frac{a_i}{n_{\bullet \bullet}}\qquad\qquad \beta_i=\frac{b_i}{n_{\bullet \bullet}}
+\end{equation}
+permitting to determine the total flow as $n_{\bullet \bullet}=\frac{a_i}{\alpha_i}$, or  $n_{\bullet \bullet}=\frac{b_i}{\beta_i}$ for any isolated stop $i$, and thus 
+the $st$-flow itself as 
 \begin{equation}
 	\label{flow_from_distrib}
-	n_{st} = n_{\bullet \bullet} f_{st}, 
+	n_{st} = n_{\bullet \bullet} f_{st}= n_{\bullet \bullet}\phi_s \psi_t g_{st} 
 \end{equation}
-and with the edge-trip incidence matrix $\bm{\chi}$ (\ref{edgetrip}), we obtain the intra-line edge flows $\mathbf{Y}=(y_{ij})$ and the transfer edge flows $\mathbf{Z}=(z_{ij})$.
+whose plugging into (\ref{equationGG}) yields the intra-line edge flows $\mathbf{Y}=(y_{ij})$ and the transfer edge flows $\mathbf{Z}=(z_{ij})$.
 
 
-\subsubsection{Margin distributions update}
+\subsubsection{Initialization of the prior and the margins}
+The geometry of the network permits to rule out forbidden $st$-paths, i.e. obeying  $\chi^{st}_{\bullet\bullet}=0$. Such forbidden $st$-paths consist of *** @G? donner une liste exhaustive de critères d'exclusion ici ? ***  The initial prior was chosen as the uniform distribution on the remaining $c<l^2$ admissible $st$-paths, *** @G: que vaut $l$? que vaut $c$? ***,  that is as
+\begin{equation*}
+g_{ij} = \begin{cases}
+  \frac{1}{c}    & \text{if $\chi^{st}_{\bullet\bullet}>0$}, \\
+  0    & \text{otherwise}.
+\end{cases}
+\end{equation*}
+The initial margins were chosen as  those of the flow without transfer, namely $\alpha_i=\frac{a_i}{a_{\bullet}}$ and $\beta_i=\frac{b_i}{b_\bullet}$ for all stops. 
+
+
+
+\subsubsection{Updating  the margin distributions}
 \label{marginup}
-
-Let us define the hyperparameter $0 \geq \theta > 1$ as the \emph{minimum proportion of passengers (among $a_i$ and $b_i$) entering/leaving the network at each stop}. Note that we could set a different hyperparmeter for each node, and for embarkations and disembarkations, but without addition information, we will restrain to this simpler case. This hyperparamter means that
+Let us define the hyperparameter $ \theta\in [0, 1)$ as the \emph{minimum proportion of passengers (among $a_i$ and $b_i$) entering/leaving the network at each stop}. Note that we could set a different hyperparameter for each node, and differing for embarkations and disembarkations, but without addition information, we will restrain to this simpler case. Fixing this hyperparameter requires that
 \begin{align}
+\label{constz}
 	z_{\bullet s} &< (1 - \theta) a_s \\
 	z_{t \bullet} &< (1 - \theta) b_t
 \end{align}
-and with constraints (\ref{entrer}) and (\ref{sortir}), the update of margins distribution must be
+the violation of which constitutes transfer overflow. Hence requiring a minimal transfer yet avoiding overflow can be satisfied with the updating of margins ***
 \begin{align}
-	\widetilde{\alpha}_s &= \frac{\min(\theta a_s, a_s - z_{\bullet s})}{\sum_{s'} \min(\theta a_s, a_{s'} - z_{\bullet {s'}})} \label{alpha_update} \\
-	\widetilde{\beta}_t &= \frac{\min(\theta b_t, b_t - z_{t \bullet})}{\sum_{t'} \min(\theta b_t, b_{t'} - z_{{t'} \bullet})} \label{beta_update}
+	\widetilde{\alpha}_s &= \frac{\min(\theta a_s, a_s - z_{\bullet s})}{\sum_{s'} \min(\theta a_{s'}, a_{s'} - z_{\bullet {s'}})} \label{alpha_update} \\
+	\widetilde{\beta}_t &= \frac{\min(\theta b_t, b_t - z_{t \bullet})}{\sum_{t'} \min(\theta b_{t'}, b_{t'} - z_{{t'} \bullet})} \label{beta_update}\enspace. 
 \end{align}
 
-\subsubsection{Prior distribution update (added by GG)}
+\subsubsection{Updating the prior distribution}
 \label{priorup}
 Transfer edges $(i, j)$ where $z_{i \bullet} > (1 - \theta)b_i$ or $z_{\bullet j} > (1 - \theta)a_j$ typically denote an overflowing tansfer flow regarding the $g_{st}$ prior distribution.  The latter must be adjusted in order to have $\mathbf{Z}$ comptible with constraints. For any edge $(i, j)$, let us compute the \emph{flow ratio} $r_{ij}$, with 
 \begin{equation}
