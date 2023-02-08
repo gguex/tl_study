@@ -90,7 +90,7 @@ for (j in 1:length(hyper_par)) {
   # Add the mean and the standard deviation
   mean_line = as.data.frame(colMeans(res_mat_line))
   sd_line = apply(res_mat_line, 2, sd)
-  sd_line = sd_line/sqrt(n_test)
+  # sd_line = sd_line/sqrt(n_test)
   mean_line = cbind(seq_lines, mean_line, sd_line)
   mean_line$param = row.names(mean_line)
   colnames(mean_line) <- c("Lines", "mean_error", "sd_error","param")
@@ -102,7 +102,10 @@ ggplot() +
   geom_line(data=mean_line,
             aes(x=Lines, y=mean_error, group=param, color=param)) +
   # labs(title=paste(n_test, "iterations, parameter:", paste(hyper_par,collapse = ', ')), x = "Nb of lines into the network", y = "Mean error")
-  labs(title=paste(n_test, "iterations,", n_passengers, "passengers"), 
+  labs(title=paste(n_test, "tests,", n_passengers, "passengers"), 
        x = "Nb of lines into the network", y = "Mean error") +
-  scale_x_continuous(limits = c(min(mean_line$Lines), max(mean_line$Lines)),
-                     breaks = pretty(mean_line$Lines))
+  geom_errorbar(data=mean_line,
+                aes(x=Lines, ymin=mean_error-sd_error, ymax=mean_error+sd_error), width=0.1) +
+  scale_x_continuous(limits = c(min(mean_line$Lines)-1, max(mean_line$Lines))+0.5,
+                     breaks = pretty(mean_line$Lines)) +
+  labs(color=expression(theta)) 

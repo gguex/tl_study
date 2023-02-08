@@ -97,6 +97,6 @@ ggplot() +
   #            aes(x = Passengers, y = mean_error)) +
   # geom_line(data = mean_pass2, aes(x = Passengers, y = mean_error)) +
   geom_errorbar(data=mean_pass[seq(1, nrow(mean_pass), by = 3),],
-                aes(x=Passengers, ymin=mean_error-sd_error, ymax=mean_error+sd_error), width=0.1) +
-  labs(title = paste(n_test, "iterations, parameter:", hyper_par), x = "Passengers into the network", y = "Mean error")
+                aes(x=Passengers, ymin=mean_error-sd_error, ymax=mean_error+sd_error), width=100) +
+  labs(title = paste0(n_test, " iterations, ", expression(theta), ": ", hyper_par), x = "Passengers into the network", y = "Mean error")
 
