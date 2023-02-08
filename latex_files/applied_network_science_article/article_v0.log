@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.7)  7 FEB 2023 14:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.7)  8 FEB 2023 17:35
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -476,12 +476,8 @@ LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <8> not available
 (Font)              Font shape `OT1/phv/m/sl' tried instead on input line 179.
  [1{/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
-]
-
-LaTeX Warning: Reference `edgetripjunction' on page 2 undefined on input line 1
-95.
-
-[2] [3] [4] [5] [6]
+] [2] [3] [4]
+[5] [6]
 
 LaTeX Warning: Reference `fig:map-lausanne' on page 7 undefined on input line 3
 79.
@@ -538,10 +534,10 @@ LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 5388 strings out of 480608
- 77536 string characters out of 5903630
- 326053 words of memory out of 5000000
- 21169 multiletter control sequences out of 15000+600000
+ 5389 strings out of 480608
+ 77537 string characters out of 5903630
+ 326071 words of memory out of 5000000
+ 21170 multiletter control sequences out of 15000+600000
  607538 words of font info for 172 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  50i,14n,48p,1389b,402s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -558,7 +554,7 @@ s/type1/urw/helvetic/uhvro8a.pfb></usr/local/texlive/2020/texmf-dist/fonts/type
 l/usyr.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/urw/times/utmb8a.pfb
 ></usr/local/texlive/2020/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/loc
 al/texlive/2020/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on article_v0.pdf (10 pages, 141654 bytes).
+Output written on article_v0.pdf (10 pages, 141697 bytes).
 PDF statistics:
  94 PDF objects out of 1000 (max. 8388607)
  64 compressed objects within 1 object stream
