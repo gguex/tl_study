@@ -348,47 +348,55 @@ balance_flow_l_inout =
   flow_l_out = rep(0, n)
   
   # Loop on lines
-  for(l_lvl in levels(lines_lvl)){
+  for(l_lvl in unique(lines_lvl)){
   
-    # Compute the flow balance and the cumulative sum
+    # Get the line flow in and out
     line_flow_in = unblced_flow_l_in[lines_lvl == l_lvl]
     line_flow_out = unblced_flow_l_out[lines_lvl == l_lvl]
     
-    line_flow_in = a
-    line_flow_out = b
+    # Get the length of line
     line_length = length(line_flow_in)
+  
+    # Make sure the starting and the ending of the line are coherent
+    line_flow_in[line_length] = 0
+    line_flow_out[1] = 0
     
-    # Loop on not ok balance
+    # Loop while the balance is not ok
     balance_ok = F
+    # From where it must be corrected
     correct_from = 1
     while(!balance_ok){
       
-      sum_l_flow_in = cumsum(line_flow_in)
-      sum_l_flow_out = cumsum(line_flow_out)
+      # The sum of in and out, shifted
+      sum_l_flow_in = cumsum(line_flow_in)[-line_length]
+      sum_l_flow_out = cumsum(line_flow_out)[-1]
+      # The balance of in and out
       balance = sum_l_flow_in - sum_l_flow_out
+      # Remove already treated values
+      balance[0:(correct_from-1)] = 0
       
+      # Where there are more passengers exiting than entering
       where_neg = which(balance < 0)
       
+      # Where to correct
       if(length(where_neg) == 0){
-        correct_to = line_length
+        correct_to = line_length - 1
       } else {
         correct_to = where_neg[1]
       }
       
       # Correcting
       quantity_to_correct = balance[correct_to]
-      cat("iteration \n")
-      cat(correct_from, correct_to, "\n")
-      cat(quantity_to_correct, "\n")
-      percent = (sum_l_flow_in[correct_to] - sum_l_flow_out[correct_to])/
-        (sum_l_flow_in[correct_to] + sum_l_flow_out[correct_to])
+      percent = (quantity_to_correct)/
+        (sum(line_flow_in[correct_from:correct_to]) +
+           sum(line_flow_out[(correct_from + 1):(correct_to + 1)]))
       line_flow_in[correct_from:correct_to] = (1 - percent)*
         line_flow_in[correct_from:correct_to]
-      line_flow_out[correct_from:correct_to] = (1 + percent)*
-        line_flow_out[correct_from:correct_to]
+      line_flow_out[(correct_from + 1):(correct_to + 1)] = (1 + percent)*
+        line_flow_out[(correct_from + 1):(correct_to + 1)]
       
       # Check if finished
-      if(correct_to == line_length){
+      if(correct_to == line_length - 1){
         balance_ok = T
       } else {
         correct_from = correct_to + 1
@@ -402,9 +410,7 @@ balance_flow_l_inout =
   }
   
   # --- Return the results
-  
   return(list(flow_l_in=flow_l_in, flow_l_out=flow_l_out))
-  
 }
 
 
