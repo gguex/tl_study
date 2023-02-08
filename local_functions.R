@@ -348,35 +348,60 @@ balance_flow_l_inout =
   flow_l_out = rep(0, n)
   
   # Loop on lines
-  for(l_lvl in levels(lines_lvl)){
+  for(l_lvl in unique(lines_lvl)){
   
-    # Compute the flow balance and the cumulative sum
-    unblced_line_flow_in = unblced_flow_l_in[lines_lvl == l_lvl]
-    unblced_line_flow_out = unblced_flow_l_out[lines_lvl == l_lvl]
-    line_balance = unblced_line_flow_in - unblced_line_flow_out
-    line_flow = cumsum(line_balance)
+    # Get the line flow in and out
+    line_flow_in = unblced_flow_l_in[lines_lvl == l_lvl]
+    line_flow_out = unblced_flow_l_out[lines_lvl == l_lvl]
     
-    # The quantity to correct
-    correction = line_flow[length(line_flow)]
-    # We reduce (or raise, if negative correction) the flow in
-    line_flow_in = unblced_line_flow_in
-    line_flow_in[-length(line_flow_in)] = line_flow_in[-length(line_flow_in)] - 
-      correction / (2*(length(line_flow_in) - 1))
-    # We raise (or reduce, if negative correction) the flow out
-    line_flow_out = unblced_line_flow_out 
-    line_flow_out[-1] = line_flow_out[-1] + 
-      correction / (2*(length(line_flow_out) - 1))
+    # Get the length of line
+    line_length = length(line_flow_in)
+  
+    # Make sure the starting and the ending of the line are coherent
+    line_flow_in[line_length] = 0
+    line_flow_out[1] = 0
     
-    # Check if there is any negative value, and correct it if it's the case
-    if(any(line_flow_in < 0)){
-      line_flow_out[line_flow_in < 0] = line_flow_out[line_flow_in < 0] - 
-        line_flow_in[line_flow_in < 0]
-      line_flow_in[line_flow_in < 0] = 0
-    }
-    if(any(line_flow_out < 0)){
-      line_flow_in[line_flow_out < 0] = line_flow_in[line_flow_out < 0] - 
-        line_flow_out[line_flow_out < 0]
-      line_flow_out[line_flow_out < 0] = 0
+    # Loop while the balance is not ok
+    balance_ok = F
+    # From where it must be corrected
+    correct_from = 1
+    while(!balance_ok){
+      
+      # The sum of in and out, shifted
+      sum_l_flow_in = cumsum(line_flow_in)[-line_length]
+      sum_l_flow_out = cumsum(line_flow_out)[-1]
+      # The balance of in and out
+      balance = sum_l_flow_in - sum_l_flow_out
+      # Remove already treated values
+      balance[0:(correct_from-1)] = 0
+      
+      # Where there are more passengers exiting than entering
+      where_neg = which(balance < 0)
+      
+      # Where to correct
+      if(length(where_neg) == 0){
+        correct_to = line_length - 1
+      } else {
+        correct_to = where_neg[1]
+      }
+      
+      # Correcting
+      quantity_to_correct = balance[correct_to]
+      percent = (quantity_to_correct)/
+        (sum(line_flow_in[correct_from:correct_to]) +
+           sum(line_flow_out[(correct_from + 1):(correct_to + 1)]))
+      line_flow_in[correct_from:correct_to] = (1 - percent)*
+        line_flow_in[correct_from:correct_to]
+      line_flow_out[(correct_from + 1):(correct_to + 1)] = (1 + percent)*
+        line_flow_out[(correct_from + 1):(correct_to + 1)]
+      
+      # Check if finished
+      if(correct_to == line_length - 1){
+        balance_ok = T
+      } else {
+        correct_from = correct_to + 1
+      }
+      
     }
     
     # Add the corrected flow for line to the vector of global corrected flow 
@@ -385,9 +410,7 @@ balance_flow_l_inout =
   }
   
   # --- Return the results
-  
   return(list(flow_l_in=flow_l_in, flow_l_out=flow_l_out))
-  
 }
 
 
@@ -457,7 +480,7 @@ compute_origin_destination =
   
   # The st-distribution reference matrix
   g_ref = s_mat / sum(s_mat)
-  # The initial value for f_mat (has no effect, only to create variable)
+  # The initial value for f_mat (has no effect, only to create old variable)
   f_mat = matrix(1e5, n, n)
   # The sum in and out
   sum_flow_l_in = sum(flow_l_in)
