@@ -1,6 +1,6 @@
 %% BioMed_Central_Bib_Style_v1.01
 
-\begin{thebibliography}{2}
+\begin{thebibliography}{7}
 % BibTex style file: bmc-mathphys.bst (version 2.1), 2014-07-24
 \ifx \bisbn   \undefined \def \bisbn  #1{ISBN #1}\fi
 \ifx \binits  \undefined \def \binits#1{#1}\fi
@@ -43,6 +43,74 @@
 \csname PreBibitemsHook\endcsname
 
 %%% 1
+\bibitem{jaynes1957information}
+\begin{barticle}
+\bauthor{\bsnm{Jaynes}, \binits{E.T.}}:
+\batitle{Information theory and statistical mechanics}.
+\bjtitle{Physical review}
+\bvolume{106}(\bissue{4}),
+\bfpage{620}
+(\byear{1957})
+\end{barticle}
+\endbibitem
+
+%%% 2
+\bibitem{wilson1967statistical}
+\begin{barticle}
+\bauthor{\bsnm{Wilson}, \binits{A.}}:
+\batitle{A statistical theory of spatial distribution models}.
+\bjtitle{Transportation Research}
+\bvolume{1}(\bissue{3}),
+\bfpage{253}--\blpage{269}
+(\byear{1967})
+\end{barticle}
+\endbibitem
+
+%%% 3
+\bibitem{erlander1990gravity}
+\begin{bbook}
+\bauthor{\bsnm{Erlander}, \binits{S.}},
+\bauthor{\bsnm{Stewart}, \binits{N.F.}}:
+\bbtitle{The Gravity Model in Transportation Analysis: Theory and Extensions}
+vol. \bseriesno{3}.
+\bpublisher{VSP},
+\blocation{Leiden}
+(\byear{1990})
+\end{bbook}
+\endbibitem
+
+%%% 4
+\bibitem{dempster1977maximum}
+\begin{barticle}
+\bauthor{\bsnm{Dempster}, \binits{A.P.}},
+\bauthor{\bsnm{Laird}, \binits{N.M.}},
+\bauthor{\bsnm{Rubin}, \binits{D.B.}}:
+\batitle{Maximum likelihood from incomplete data via the em algorithm}.
+\bjtitle{Journal of the royal statistical society: series B (methodological)}
+\bvolume{39}(\bissue{1}),
+\bfpage{1}--\blpage{22}
+(\byear{1977})
+\end{barticle}
+\endbibitem
+
+%%% 5
+\bibitem{bavaud2009information}
+\begin{bchapter}
+\bauthor{\bsnm{Bavaud}, \binits{F.}}:
+\bctitle{Information theory, relative entropy and statistics}.
+In: \beditor{\bsnm{Sommaruga}, \binits{G.}} (ed.)
+\bbtitle{Formal Theories of Information: From Shannon to Semantic Information
+  Theory and General Concepts of Information}.
+\bsertitle{LNCS},
+vol. \bseriesno{5363},
+pp. \bfpage{54}--\blpage{78}.
+\bpublisher{Springer},
+\blocation{Berlin}
+(\byear{2009})
+\end{bchapter}
+\endbibitem
+
+%%% 6
 \bibitem{boyle_passenger_1998}
 \begin{bbook}
 \bauthor{\bsnm{Boyle}, \binits{D.}},
@@ -55,7 +123,7 @@
 \end{bbook}
 \endbibitem
 
-%%% 2
+%%% 7
 \bibitem{bishop_discrete_2007}
 \begin{bbook}
 \bauthor{\bsnm{Bishop}, \binits{Y.M.}},
@@ -77,6 +145,79 @@
 <refgrp>
 
 <bibl id="B1">
+  <title><p>Information theory and statistical mechanics</p></title>
+  <aug>
+    <au><snm>Jaynes</snm><fnm>ET</fnm></au>
+  </aug>
+  <source>Physical review</source>
+  <publisher>APS</publisher>
+  <pubdate>1957</pubdate>
+  <volume>106</volume>
+  <issue>4</issue>
+  <fpage>620</fpage>
+</bibl>
+
+<bibl id="B2">
+  <title><p>A statistical theory of spatial distribution models</p></title>
+  <aug>
+    <au><snm>Wilson</snm><fnm>AG</fnm></au>
+  </aug>
+  <source>Transportation Research</source>
+  <publisher>Elsevier</publisher>
+  <pubdate>1967</pubdate>
+  <volume>1</volume>
+  <issue>3</issue>
+  <fpage>253</fpage>
+  <lpage>-269</lpage>
+</bibl>
+
+<bibl id="B3">
+  <title><p>The gravity model in transportation analysis: theory and
+  extensions</p></title>
+  <aug>
+    <au><snm>Erlander</snm><fnm>S</fnm></au>
+    <au><snm>Stewart</snm><fnm>NF</fnm></au>
+  </aug>
+  <publisher>Leiden: VSP</publisher>
+  <pubdate>1990</pubdate>
+  <volume>3</volume>
+</bibl>
+
+<bibl id="B4">
+  <title><p>Maximum likelihood from incomplete data via the EM
+  algorithm</p></title>
+  <aug>
+    <au><snm>Dempster</snm><fnm>AP</fnm></au>
+    <au><snm>Laird</snm><fnm>NM</fnm></au>
+    <au><snm>Rubin</snm><fnm>DB</fnm></au>
+  </aug>
+  <source>Journal of the royal statistical society: series B
+  (methodological)</source>
+  <publisher>Wiley Online Library</publisher>
+  <pubdate>1977</pubdate>
+  <volume>39</volume>
+  <issue>1</issue>
+  <fpage>1</fpage>
+  <lpage>-22</lpage>
+</bibl>
+
+<bibl id="B5">
+  <title><p>Information theory, relative entropy and statistics</p></title>
+  <aug>
+    <au><snm>Bavaud</snm><fnm>F</fnm></au>
+  </aug>
+  <source>Formal Theories of Information: From Shannon to Semantic Information
+  Theory and General Concepts of Information</source>
+  <publisher>Berlin: Springer</publisher>
+  <editor>Sommaruga, Giovanni</editor>
+  <series><title><p>LNCS</p></title></series>
+  <pubdate>2009</pubdate>
+  <volume>5363</volume>
+  <fpage>54</fpage>
+  <lpage>78</lpage>
+</bibl>
+
+<bibl id="B6">
   <title><p>Passenger counting technologies and procedures</p></title>
   <aug>
     <au><snm>Boyle</snm><fnm>D</fnm></au>
@@ -87,7 +228,7 @@
   <note>OCLC: 632725908</note>
 </bibl>
 
-<bibl id="B2">
+<bibl id="B7">
   <title><p>Discrete {Multivariate} {Analysis}: {Theory} and
   {Practice}</p></title>
   <aug>

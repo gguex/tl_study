@@ -218,13 +218,15 @@ Automatic passenger counters measure the number of passengers entering and leavi
 \begin{displaymath}
 \hat{a}_i=\varepsilon a_i \qquad\qquad \hat{b}_i=\frac{1}{\varepsilon} b_i \qquad\qquad\mbox{with}\quad \varepsilon=\sqrt{\frac{b_\bullet}{a_\bullet}}
 \end{displaymath}
-ensuring $\hat{\mathbf{a}}_\bullet=\hat{\mathbf{b}}_\bullet$, unless $\varepsilon> 2$ or $\varepsilon<\frac{1}{2}$ ***@R, @G : c'est à peu près cela??*** , in which case the corresponding line (which always turned out to be a temporary line with tiny counts) was simply disregarded and removed from the network. 
+ensuring $\hat{a}_\bullet=\hat{b}_\bullet$, unless $\varepsilon> 2$ or $\varepsilon<\frac{1}{2}$ ***@R, @G : c'est à peu près cela??*** , in which case the corresponding line (which always turned out to be a temporary line with small  counts) was simply disregarded and removed from the network. 
 
 
 Also, the geometry of the network permits to derive the edge-trip incidence matrix $\bm{\chi}$ defined in (\ref{edgetrip}). 
 
 
-Intra-line edge flows $\mathbf{Y}=(y_{ij})$ can be determined by (\ref{bilan1ligne}), but transfer edge flows $\mathbf{Z}=(z_{ij})$ are, here and typically, unknown. The objective is to estimate the $l\times l$ transportation flow $\mathbf{N}=(n_{st})$. Many consistent solutions coexist in general, even for a single line with no transferts (section \ref{Single line}). This issue of incompletely observed data can be tackled by the maximum entropy formalism (*** ref***). 
+Intra-line edge flows $\mathbf{Y}=(y_{ij})$ can be determined by (\ref{bilan1ligne}), but transfer edge flows $\mathbf{Z}=(z_{ij})$ are, here and typically, unknown. The objective is to estimate the $l\times l$ transportation flow $\mathbf{N}=(n_{st})$. Many consistent solutions coexist in general, even for a single line with no transferts (section \ref{Single line}). This issue of incompletely observed data can be tackled by the maximum entropy formalism \cite{jaynes1957information}, and has been often  in transportation modelling \cite{wilson1967statistical}  \cite{erlander1990gravity}. Its contemporary justification corresponds to the ``expectation step" of the EM algorithm \cite{dempster1977maximum}  \cite{bavaud2009information}. 
+
+
 
 
 Let $f_{st}=n_{st}/n_{\bullet\bullet}$ be the proportion of $st$-trips (empirical distribution) and let $g_{st}$ be some prior guess on its shape (theoretical distribution). 
@@ -273,7 +275,7 @@ which yields the following \emph{iterative fitting algorithm}: starting with som
 \end{equation}
 until convergence to $\phi_s$ and $\psi_t$ obeying (\ref{Sol_LagMult}). 
 
-In view of (\ref{entrer}) and {\ref{sortir}), the postulated margins must satisfy, for each isolated stop $i$
+In view of (\ref{entrer}) and (\ref{sortir}), the postulated margins must satisfy, for each isolated stop $i$
 \begin{equation}
 \label{ }
 \alpha_i=\frac{a_i}{n_{\bullet \bullet}}\qquad\qquad \beta_i=\frac{b_i}{n_{\bullet \bullet}}
@@ -301,41 +303,46 @@ The initial margins were chosen as  those of the flow without transfer, namely $
 
 \subsubsection{Updating  the margin distributions}
 \label{marginup}
-Let us define the hyperparameter $ \theta\in [0, 1)$ as the \emph{minimum proportion of passengers (among $a_i$ and $b_i$) entering/leaving the network at each stop}. Note that we could set a different hyperparameter for each node, and differing for embarkations and disembarkations, but without addition information, we will restrain to this simpler case. Fixing this hyperparameter requires that
-\begin{align}
-\label{constz}
-	z_{\bullet s} &< (1 - \theta) a_s \\
-	z_{t \bullet} &< (1 - \theta) b_t
-\end{align}
-the violation of which constitutes transfer overflow. Hence requiring a minimal transfer yet avoiding overflow can be satisfied with the updating of margins ***
-\begin{align}
-	\widetilde{\alpha}_s &= \frac{\min(\theta a_s, a_s - z_{\bullet s})}{\sum_{s'} \min(\theta a_{s'}, a_{s'} - z_{\bullet {s'}})} \label{alpha_update} \\
-	\widetilde{\beta}_t &= \frac{\min(\theta b_t, b_t - z_{t \bullet})}{\sum_{t'} \min(\theta b_{t'}, b_{t'} - z_{{t'} \bullet})} \label{beta_update}\enspace. 
-\end{align}
+Let us define the hyperparameter $ \theta\in [0, 1)$ as the \emph{minimum proportion of passengers (among $a_i$ and $b_i$) entering/leaving the network at each stop}, that is $n_{s\bullet}\ge \theta a_s$ and $n_{\bullet t}\ge \theta b_t$. Note that we could set a different hyperparameter for each node, and differing for embarkments and disembarkments, but without addition information, we will restrain to this simpler case. Identities (\ref{entrer}) and  (\ref{sortir}) then imply the inequalities
+\begin{displaymath}
+z_{\bullet s} \le (1 - \theta) a_s\qquad\qquad \qquad z_{t \bullet} \le  (1 - \theta) b_t
+\end{displaymath}
+the violation of which constitutes transfer overflow. Hence requiring a minimal transfer yet avoiding overflow can be granted with the following updating of margins
+\begin{equation}
+\label{alpha_beta_update}
+\widetilde{\alpha}_s = \frac{\min(\theta a_s, a_s - z_{\bullet s})}{\sum_{s'} \min(\theta a_{s'}, a_{s'} - z_{\bullet {s'}})}   \qquad \qquad \qquad
+	\widetilde{\beta}_t = \frac{\min(\theta b_t, b_t - z_{t \bullet})}{\sum_{t'} \min(\theta b_{t'}, b_{t'} - z_{{t'} \bullet})}  \enspace. 
+\end{equation}
+ 
 
 \subsubsection{Updating the prior distribution}
 \label{priorup}
-Transfer edges $(i, j)$ where $z_{i \bullet} > (1 - \theta)b_i$ or $z_{\bullet j} > (1 - \theta)a_j$ typically denote an overflowing tansfer flow regarding the $g_{st}$ prior distribution.  The latter must be adjusted in order to have $\mathbf{Z}$ comptible with constraints. For any edge $(i, j)$, let us compute the \emph{flow ratio} $r_{ij}$, with 
+Overflow occurs in transfer edge $(i, j)$ if  $z_{i \bullet} > (1 - \theta)b_i$ or $z_{\bullet j} > (1 - \theta)a_j$. To avoid it, components $g_{st}$ of the prior distribution 
+will be shrinked by a suitable ratio whenever edge flows $(i,j)\in [s,t]$ exhibit overflow. 
+
+
+ For any edge $(i, j)$, let us compute the \emph{flow ratio} $r_{ij}$ as
 \begin{equation}
 	\label{flow_ratio}
-	r_{ij} = \max \left(1, \frac{z_{i \bullet}}{(1 - \theta)b_i}, \frac{z_{\bullet j}}{(1 - \theta)a_j} \right),
+	r_{ij} = \max \left(1, \frac{z_{i \bullet}}{(1 - \theta)b_i}, \frac{z_{\bullet j}}{(1 - \theta)a_j} \right)\: \ge\: 1\enspace ,
 \end{equation}
-where $r_{ij} > 1$ typically denotes an overflow through edge $(i, j)$. This flow ratio can be traced back to origin-destination couples $s, t$ in order to compute the \emph{orgin-destination flow ratio} $\bar{r}_{st}$ 
+where $r_{ij} > 1$ denotes an overflow through edge $(i, j)$. For a given origin-destination $[s,t]$, define the \emph{orgin-destination flow ratio} $\bar{r}_{st}$ 
+as the largest $r_{ij}$ among edge flows $(i,j)\in [s,t]$, that is as 
 \begin{equation}
 	\label{st_flow_ratio}
-	\bar{r}_{st} = \max_{ij} \chi_{ij}^{st} r_{ij},
+	\bar{r}_{st} = \max_{ij} \chi_{ij}^{st} r_{ij}\: \ge\: 1\enspace ,
 \end{equation}
-where again $\bar{r}_{st} > 1$ denotes an overflow between $s$ and $t$. To ajdust the flow, we can devide the previous flow by this ratio
+where again $\bar{r}_{st} > 1$ denotes an overflow between $s$ and $t$. To adjust the flow, we shall divide the previous flow by this ratio
 \begin{equation}
 	\label{update_flow}
 	\widetilde{n}_{st} =\frac{n_{st}}{\bar{r}_{st}}
 \end{equation}
-And the new prior distribution should follow 
+and define the new prior distribution  as
 \begin{equation}
 	\label{update_distrib}
-	\widetilde{g}_{st} = \frac{\left( \frac{\widetilde{n}_{st}}{\phi_s \psi_t} \right)}{\sum_{s',t'} \left( \frac{\widetilde{n}_{s',t'}}{\phi_{s'} \psi_{t'}} \right)}
+	\widetilde{g}_{st} = \frac{\left( \frac{\widetilde{n}_{st}}{\phi_s \psi_t} \right)}{\sum_{s',t'} \left( \frac{\widetilde{n}_{s',t'}}{\phi_{s'} \psi_{t'}} \right)}\enspace. 
 \end{equation}
-
+where $\phi_s$ and $\psi_t$ are the values (\ref{Sol_LagMult}) obtained in the previous maximum entropy step. 
 
 \section{Single line}
 \label{Single line}
