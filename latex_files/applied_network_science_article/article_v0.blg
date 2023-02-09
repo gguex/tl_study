@@ -22,62 +22,47 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: article_tl.bib
 Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
-Too many commas in name 1 of "Boyle, Douglas, Mark C, Daniel" for entry boyle_passenger_1998
-while executing---line 2585 of file bmc-mathphys.bst
-Too many commas in name 1 of "Boyle, Douglas, Mark C, Daniel" for entry boyle_passenger_1998
-while executing---line 2585 of file bmc-mathphys.bst
-Reallocated singl_function (elt_size=4) to 100 items from 50.
-Too many commas in name 1 of "Boyle, Douglas, Mark C, Daniel" for entry boyle_passenger_1998
-while executing---line 2686 of file bmc-mathphys.bst
-Too many commas in name 1 of "Boyle, Douglas, Mark C, Daniel" for entry boyle_passenger_1998
-while executing---line 2686 of file bmc-mathphys.bst
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
-Too many commas in name 1 of "Boyle, Douglas, Mark C, Daniel" for entry boyle_passenger_1998
-while executing---line 3019 of file bmc-mathphys.bst
-Too many commas in name 1 of "Boyle, Douglas, Mark C, Daniel" for entry boyle_passenger_1998
-while executing---line 3019 of file bmc-mathphys.bst
-Too many commas in name 1 of "Boyle, Douglas, Mark C, Daniel" for entry boyle_passenger_1998
-while executing---line 3019 of file bmc-mathphys.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
 You've used 2 entries,
             7128 wiz_defined-function locations,
-            1135 strings with 9394 characters,
-and the built_in function-call counts, 69330 in all, are:
-= -- 13488
-> -- 32
-< -- 11
-+ -- 8802
-- -- 21
-* -- 1284
-:= -- 11778
+            1135 strings with 9397 characters,
+and the built_in function-call counts, 69827 in all, are:
+= -- 13555
+> -- 38
+< -- 13
++ -- 8827
+- -- 24
+* -- 1323
+:= -- 11887
 add.period$ -- 3
 call.type$ -- 2
-change.case$ -- 38
+change.case$ -- 40
 chr.to.int$ -- 2
 cite$ -- 2
-duplicate$ -- 150
-empty$ -- 444
-format.name$ -- 44
-if$ -- 18044
+duplicate$ -- 158
+empty$ -- 464
+format.name$ -- 56
+if$ -- 18153
 int.to.chr$ -- 1
-int.to.str$ -- 7
-missing$ -- 65
-newline$ -- 100
+int.to.str$ -- 8
+missing$ -- 67
+newline$ -- 102
 num.names$ -- 10
-pop$ -- 84
+pop$ -- 90
 preamble$ -- 1
-purify$ -- 10
+purify$ -- 11
 quote$ -- 4
-skip$ -- 8289
+skip$ -- 8322
 stack$ -- 0
-substring$ -- 6297
-swap$ -- 27
-text.length$ -- 37
+substring$ -- 6334
+swap$ -- 28
+text.length$ -- 39
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 88
 warning$ -- 0
-while$ -- 57
+while$ -- 62
 width$ -- 0
-write$ -- 108
-(There were 7 error messages)
+write$ -- 113

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.7)  7 FEB 2023 14:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.7)  8 FEB 2023 23:25
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -476,56 +476,59 @@ LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <8> not available
 (Font)              Font shape `OT1/phv/m/sl' tried instead on input line 179.
  [1{/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
-]
+] [2]
+Underfull \vbox (badness 1448) has occurred while \output is active []
 
-LaTeX Warning: Reference `edgetripjunction' on page 2 undefined on input line 1
-95.
+ [3]
+[4]
 
-[2] [3] [4] [5] [6]
+LaTeX Warning: Reference `MaxEnt' on page 5 undefined on input line 344.
+
+[5] [6]
 
 LaTeX Warning: Reference `fig:map-lausanne' on page 7 undefined on input line 3
-79.
+85.
 
 
 LaTeX Warning: Reference `fig:network-lausanne' on page 7 undefined on input li
-ne 379.
+ne 385.
 
 <img/stop_area_c.png, id=34, 685.56125pt x 435.6275pt>
 File: img/stop_area_c.png Graphic file (type png)
 <use img/stop_area_c.png>
-Package pdftex.def Info: img/stop_area_c.png  used on input line 384.
+Package pdftex.def Info: img/stop_area_c.png  used on input line 390.
 (pdftex.def)             Requested size: 170.71652pt x 108.47453pt.
 
-Overfull \hbox (2.71652pt too wide) in paragraph at lines 384--385
+Overfull \hbox (2.71652pt too wide) in paragraph at lines 390--391
  [][] 
  []
 
 <img/edge_type3.png, id=36, 532.1481pt x 489.9906pt>
 File: img/edge_type3.png Graphic file (type png)
 <use img/edge_type3.png>
-Package pdftex.def Info: img/edge_type3.png  used on input line 392.
+Package pdftex.def Info: img/edge_type3.png  used on input line 398.
 (pdftex.def)             Requested size: 113.81102pt x 104.79265pt.
 [7]
-Underfull \hbox (badness 10000) in paragraph at lines 425--426
+Underfull \hbox (badness 10000) in paragraph at lines 431--432
 
  []
 
 
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 427--440
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 433--446
 [] 
  []
 
 
-LaTeX Warning: Reference `fig:example-map' on page 8 undefined on input line 44
-6.
+LaTeX Warning: Reference `fig:example-map' on page 8 undefined on input line 45
+2.
 
 <img/example_map.png, id=41, 639.38875pt x 556.0775pt>
 File: img/example_map.png Graphic file (type png)
 <use img/example_map.png>
-Package pdftex.def Info: img/example_map.png  used on input line 452.
+Package pdftex.def Info: img/example_map.png  used on input line 458.
 (pdftex.def)             Requested size: 199.16928pt x 173.21378pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 460.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 466.
 [8] (./article_v0.bbl)
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -536,29 +539,33 @@ AED: lastpage setting LastPage
 
 LaTeX Warning: There were undefined references.
 
- ) 
+ )
+(\end occurred inside a group at level 1)
+
+### simple group (level 1) entered at line 276 ({)
+### bottom level 
 Here is how much of TeX's memory you used:
- 5388 strings out of 480608
- 77536 string characters out of 5903630
- 326053 words of memory out of 5000000
- 21169 multiletter control sequences out of 15000+600000
+ 5390 strings out of 480608
+ 77533 string characters out of 5903630
+ 326062 words of memory out of 5000000
+ 21171 multiletter control sequences out of 15000+600000
  607538 words of font info for 172 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 50i,14n,48p,1389b,402s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2020/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
-exlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
-xlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/tex
-live/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texli
-ve/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texliv
-e/2020/texmf-dist/fonts/type1/public/rsfs/rsfs10.pfb></usr/local/texlive/2020/t
-exmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2020/texmf-di
-st/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2020/texmf-dist/font
-s/type1/urw/helvetic/uhvro8a.pfb></usr/local/texlive/2020/texmf-dist/fonts/type
-1/urw/symbol/usyr.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/urw/symbo
-l/usyr.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/urw/times/utmb8a.pfb
-></usr/local/texlive/2020/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/loc
-al/texlive/2020/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on article_v0.pdf (10 pages, 141654 bytes).
+ 50i,14n,48p,1389b,452s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2020/texmf-dist/fonts/enc/dvips/base/8r.enc
+}</usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb>
+</usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
+/usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></u
+sr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></us
+r/local/texlive/2020/texmf-dist/fonts/type1/public/rsfs/rsfs10.pfb></usr/local/
+texlive/2020/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive
+/2020/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2020/t
+exmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb></usr/local/texlive/2020/texmf-d
+ist/fonts/type1/urw/symbol/usyr.pfb></usr/local/texlive/2020/texmf-dist/fonts/t
+ype1/urw/symbol/usyr.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/urw/ti
+mes/utmb8a.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/urw/times/utmr8a
+.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on article_v0.pdf (10 pages, 142910 bytes).
 PDF statistics:
  94 PDF objects out of 1000 (max. 8388607)
  64 compressed objects within 1 object stream

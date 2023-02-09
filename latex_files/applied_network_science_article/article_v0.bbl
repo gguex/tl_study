@@ -45,7 +45,8 @@
 %%% 1
 \bibitem{boyle_passenger_1998}
 \begin{bbook}
-\bauthor{\bsnm{Boyle}, \binits{M.C.D.} \bsuffix{Douglas}}:
+\bauthor{\bsnm{Boyle}, \binits{D.}},
+\bauthor{\bsnm{Mark~C}, \binits{D.}}:
 \bbtitle{Passenger Counting Technologies and Procedures}.
 \bpublisher{National Academy Press},
 \blocation{Washington, DC}
@@ -78,7 +79,8 @@
 <bibl id="B1">
   <title><p>Passenger counting technologies and procedures</p></title>
   <aug>
-    <au><snm>Boyle</snm><fnm>MCD</fnm></au>
+    <au><snm>Boyle</snm><fnm>D</fnm></au>
+    <au><snm>Mark C</snm><fnm>D</fnm></au>
   </aug>
   <publisher>Washington, DC: National Academy Press</publisher>
   <pubdate>1998</pubdate>

@@ -56,7 +56,7 @@ display_it = F
 # number of iterations
 n_test = 50
 # prop limit
-hyper_par = c(0.01, 0.1, 0.3, 0.5, 0.7, 0.9, 0.99)
+hyper_par = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1)
 # number of passengers
 n_passengers = 2000
 
@@ -111,8 +111,28 @@ mdf = melt(mdf, id=c("par"))
 ggplot(mdf, aes(x=variable, y=value, color=par)) +
   # geom_smooth(show.legend = FALSE, fullrange=TRUE) +
   geom_point(show.legend = FALSE) +
-  labs(title = paste(nb_lines, "lines network", n_test, "iterations"), x ="Parameter", y = "% of error") +
-  stat_summary(aes(y = value,group=1), fun=mean, colour="blue", geom="line",group=1)
+  labs(title = paste(nb_lines, "lines network", n_test, "tests"), x =expression(theta), y = "% of error") +
+  stat_summary(aes(y = value,group=1), fun=mean, colour="black", geom="line",group=1)
+
+
+# Line plot, V2
+# Add the mean and the standard deviation
+mean_par = as.data.frame(colMeans(df))
+sd_par = apply(df, 2, sd)
+# sd_par = sd_par/sqrt(n_test)
+mean_par = cbind(hyper_par, mean_par, sd_par)
+colnames(mean_par) <- c("hyper_par","mean_par", "sd_par")
+
+ggplot() +
+  geom_line(data = mean_par, aes(x = hyper_par, y = mean_par), color = "black") +
+  # geom_point(data = mean_par[seq(1, nrow(mean_par), by = 3),],
+  #            aes(x = Passengers, y = mean_par)) +
+  # geom_line(data = mean_pass2, aes(x = Passengers, y = mean_par)) +
+  geom_errorbar(data=mean_par, aes(x=hyper_par, ymin=mean_par-sd_par, ymax=mean_par+sd_par), width=0.025) +
+  labs(title = paste(n_test, "tests"), x =expression(theta), y = "% of error") +
+  scale_x_continuous(limits = c(min(mean_par$hyper_par)-0.05, max(mean_par$hyper_par)+0.05),
+                     breaks = pretty(mean_par$hyper_par))
+
 
 # Network drawing
 set.seed(1)
