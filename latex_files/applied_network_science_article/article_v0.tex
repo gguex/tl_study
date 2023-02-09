@@ -125,9 +125,22 @@ Blabla
 
 % Main Body
 
+%% --------------------------------- INTRODUCTION
+
+ 
+
+\section{Introduction}
+
+\subsection{Context}
+
+\subsection{Statement of the problem}
+
+\subsection{Related Works}
 
 
-%% --------------------------------- OLD IMPORT
+
+
+%% --------------------------------- NOTATIONS AND FORMALISM
 
 \section{Notations and formalism}
 \subsection{Lines, stops  and junctions}
@@ -324,15 +337,15 @@ will be shrinked by a suitable ratio whenever edge flows $(i,j)\in [s,t]$ exhibi
  For any edge $(i, j)$, let us compute the \emph{flow ratio} $r_{ij}$ as
 \begin{equation}
 	\label{flow_ratio}
-	r_{ij} = \max \left(1, \frac{z_{i \bullet}}{(1 - \theta)b_i}, \frac{z_{\bullet j}}{(1 - \theta)a_j} \right)\: \ge\: 1\enspace ,
+	r_{ij} = \max \left(1, \frac{z_{i \bullet}}{(1 - \theta)b_i}, \frac{z_{\bullet j}}{(1 - \theta)a_j} \right)\: \ge\: 1\enspace,
 \end{equation}
 where $r_{ij} > 1$ denotes an overflow through edge $(i, j)$. For a given origin-destination $[s,t]$, define the \emph{orgin-destination flow ratio} $\bar{r}_{st}$ 
 as the largest $r_{ij}$ among edge flows $(i,j)\in [s,t]$, that is as 
 \begin{equation}
 	\label{st_flow_ratio}
-	\bar{r}_{st} = \max_{ij} \chi_{ij}^{st} r_{ij}\: \ge\: 1\enspace ,
+	\bar{r}_{st} = \max_{ij} \chi_{ij}^{st} r_{ij}\: \ge\: 1\enspace.
 \end{equation}
-where again $\bar{r}_{st} > 1$ denotes an overflow between $s$ and $t$. To adjust the flow, we shall divide the previous flow by this ratio
+By construction, $\bar{r}_{st} > 1$ denotes an overflow on some transfer edge between $s$ and $t$. To adjust the flow, we shall divide the previous flow by this ratio
 \begin{equation}
 	\label{update_flow}
 	\widetilde{n}_{st} =\frac{n_{st}}{\bar{r}_{st}}
@@ -344,23 +357,72 @@ and define the new prior distribution  as
 \end{equation}
 where $\phi_s$ and $\psi_t$ are the values (\ref{Sol_LagMult}) obtained in the previous maximum entropy step. 
 
-\section{Single line}
+
+
+
+
+\subsection{The case of a single line}
 \label{Single line}
-Let  $i=1,\ldots, l$ enumerate the bus stops in increasing order,  i.e. $F(i)=i+1$. Define $g_{st}=\frac{1}{(l-1)(l-2)}\chi(s<t)$ (where $\chi(.)$ denotes the 0/1  indicator function) as the maximally uniform prior, reflecting only the unidirectional nature of trips. 
-Constraints $n_{r\bullet}=a_r$ (resp. $n_{\bullet r}=b_r$), correspond to $o^r_{st}=
-\delta_{sr}$ (resp. $o^r_{st}=\delta_{tr}$) in (\ref{MaxEnt}), which finally yields, after reparametrization, the maximum entropy flow reads
+A ``network" made of a single line contains no transfers, and flow estimates can be obtained at once by the maximum entropy step only.
+
+
+Let  $i=1,\ldots, l$ enumerate the bus stops in increasing order,  i.e. $F(i)=i+1$. The initial prior is simply $g_{st}=\frac{I(s<t)}{(l-1)(l-2)}$ (where $I(.)$ denotes the 0/1  indicator function), reflecting only the unidirectional nature of trips. The margins of the empirical distribution $f_{st}$ as well as the total flow are know, namely 
+\begin{displaymath}
+\alpha_s=\frac{a_s}{a_\bullet}\qquad\qquad\qquad \beta_t=\frac{b_t}{b_\bullet}\qquad\qquad\qquad n_{\bullet\bullet}=a_{\bullet}=b_\bullet
+\end{displaymath}
+and (\ref{Sol}) yields, after reparameterization, maximum entropy flows of the form
 \begin{equation}
 \label{nosignle}
-n^0_{st}=I(s<t)\, c_s\, d_t \qquad\qquad\mbox{where}\quad \sum_{s<t}c_s\, d_t=n_{\bullet\bullet}=a_{\bullet}=b_\bullet
+n_{st}=I(s<t)\, c_s\, d_t \qquad\qquad\mbox{where}\quad \sum_{s}c_s\, \sum_{t>s}d_t=n_{\bullet\bullet}
 \end{equation}
-In addition, the (dis-)embarking constraints  yield
+where the constraints (\ref{Sol_LagMult}) equivalently express as 
 \begin{equation}
-\label{(dis embarking constraints}
-a_i=c_i \sum_{t>i}d_t=c_i\, D_i 
+\label{dis embarking constraints}
+c_s=\frac{a_s}{\sum_{t>s}d_t}
 \qquad\qquad\qquad
-b_j=d_j\sum_{s<j}c_s=d_j \, C_j  
+d_t=\frac{b_t}{\sum_{s<t}c_s}
 \end{equation}
-where $D_i=\sum_{t>i}d_t$ and $C_j=\sum_{s<j}c_s$. This maximum entropy solution constitutes one possible consistent transportation flow among many others, such as the ``first in, first out" (FIFO) flow. Interestingly enough, (\ref{nosignle}) is reminiscent of the so-called gravity flows of quantitative Geography (**ref**) $n_{st}=h_{st}\, c_s\, d_t $, but with a purely asymmetric ``distance deterrence function" $h_{st}=I(s<t)$.  Also, 
+to be solved by iterative fitting. 
+
+The form (\ref{nosignle}) for the flows is reminiscent of the {\em gravity flows} \cite{wilson1967statistical}  \cite{erlander1990gravity}, where 
+$c_s$ is the {\em push factor}, $d_t$ is the {\em pull factor}, and $I(s<t)$ the {\em distance deterrence function}. Yet, instead of  
+being symmetric in $s,t$ and decreasing with the distance $|s-t|$, the distance deterrence function is here asymmetric due to line orientation, but otherwise constant. This constancy entails the following Markovian behavior of flows: let $m_{st}$ be the number of travelers embarking on $s$ and still present at stop $t>s$, and $\rho_s$ the probability to disembark at $s$. Then, by definition and (\ref{nosignle}), ****
+\begin{displaymath}
+n_{st}=m_{st}\rho_t \qquad\qquad n_{s,t+1}=m_{st}(1-\rho_t)\rho_{t+1}\qquad\qquad \frac{n_{s,t+1}}{n_{st}}=\frac{(1-\rho_t)\rho_{t+1}}{\rho_t}=\frac{d_{t+1}}{d_t}
+\end{displaymath}
+Ainsi 
+\begin{displaymath}
+\frac{d_{t+2}}{d_{t+1}}=\frac{(1-\rho_{t+1})\rho_{t+2}}{\rho_{t+1}}
+\qquad\qquad \frac{d_{t+2}}{d_{t}}=\frac{d_{t+2}}{d_{t+1}}\frac{d_{t+1}}{d_{t}}=\frac{(1-\rho_{t+1})\rho_{t+2}}{\rho_{t+1}}\frac{(1-\rho_t)\rho_{t+1}}{\rho_t}=
+\rho_{t+2}(1-\rho_{t+1})(1-\rho_{t})\frac{1}{\rho_{t}}
+\end{displaymath}
+\begin{displaymath}
+\frac{d_{t+q}}{d_{t}}=
+\rho_{t+q}(1-\rho_{t+q-1})(1-\rho_{t+q-2})\ldots(1-\rho_{t+1}) (1-\rho_{t})\frac{1}{\rho_{t}}
+\end{displaymath}
+\begin{displaymath}
+d_l+d_{l-1}=d_2[\rho_l(1-\rho_{l-1})+\rho_{l-1}](1-\rho_{l-2})(1-\rho_{l-3})\ldots(1-\rho_{3}) (1-\rho_{2})\frac{1}{\rho_{2}}
+\end{displaymath}
+\begin{displaymath}
+D_i=\sum_{t>i}d_t
+\end{displaymath}
+Soit $z_{st}$ la proportion de voyageurs présents dans le bus en $s$ et toujours présents en $t>s$. Soit $\tau_s$ la probabilité de monter en $s$. Alors
+$f_{st}=\tau_sz_{st}\rho_t$
+
+
+
+
+
+\
+
+
+\
+
+
+*****
+
+
+where $D_s=\sum_{t>s}d_t$ and $C_t=\sum_{s<t}c_s$. This maximum entropy solution constitutes one possible consistent transportation flow among many others, such as the ``first in, first out" (FIFO) flow. Interestingly enough, (\ref{nosignle}) is reminiscent of the so-called gravity flows of quantitative Geography (**ref**) $n_{st}=h_{st}\, c_s\, d_t $, but with a purely asymmetric ``distance deterrence function" $h_{st}=I(s<t)$.  Also, 
 (\ref{nosignle}) shows that  the conditional probability to exit on $t$, given an entrance on $s$, is $w_{st}=n^0_{st}/n^0_{s\bullet}=I(s<t)\, d_t/D_s$. 
 
 
@@ -373,12 +435,20 @@ where $D_i=\sum_{t>i}d_t$ and $C_j=\sum_{s<j}c_s$. This maximum entropy solution
 
 *** ici l'équivalence avec l'approche chaîne de Markov de Guillaume ? ***
  
+%% --------------------------------- CASE STUDIES
+
+\section{Case Studies}
 
 
-\section{Multiple lines} 
+\subsection{Toy Examples}
 
-*** $a_{\bullet}=b_{\bullet}$ (where ``$\bullet$" denotes summation over the replaced index). 
- 
+\subsection{Real Data}
+
+%% --------------------------------- CONCLUSION
+
+\section{Conclusion}
+
+  
 \newpage
 
 \section*{Previous submission to complex networks 2022}
@@ -494,39 +564,6 @@ The current work performs computer-intensive simulations of flow over the entire
 
 
 
-%% --------------------------------- INTRODUCTION
-
- 
-
-\section{Introduction}
-
-\subsection{Context}
-
-\subsection{Statement of the problem}
-
-\subsection{Related Works}
-
-%% --------------------------------- FORMALISM
-
-\section{Formalism}
-
-\subsection{Notations}
-
-\subsection{Problem}
-
-\subsection{Solution}
-
-%% --------------------------------- CASE STUDIES
-
-\section{Case Studies}
-
-\subsection{Toy Examples}
-
-\subsection{Real Data}
-
-%% --------------------------------- CONCLUSION
-
-\section{Conclusion}
 
 
 \section*{Appendix}
