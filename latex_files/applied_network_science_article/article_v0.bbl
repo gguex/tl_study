@@ -1,6 +1,6 @@
 %% BioMed_Central_Bib_Style_v1.01
 
-\begin{thebibliography}{7}
+\begin{thebibliography}{8}
 % BibTex style file: bmc-mathphys.bst (version 2.1), 2014-07-24
 \ifx \bisbn   \undefined \def \bisbn  #1{ISBN #1}\fi
 \ifx \binits  \undefined \def \binits#1{#1}\fi
@@ -111,6 +111,18 @@ pp. \bfpage{54}--\blpage{78}.
 \endbibitem
 
 %%% 6
+\bibitem{bavaud2002quasi}
+\begin{barticle}
+\bauthor{\bsnm{Bavaud}, \binits{F.}}:
+\batitle{The quasi-symmetric side of gravity modelling}.
+\bjtitle{Environment and Planning A}
+\bvolume{34}(\bissue{1}),
+\bfpage{61}--\blpage{79}
+(\byear{2002})
+\end{barticle}
+\endbibitem
+
+%%% 7
 \bibitem{boyle_passenger_1998}
 \begin{bbook}
 \bauthor{\bsnm{Boyle}, \binits{D.}},
@@ -123,7 +135,7 @@ pp. \bfpage{54}--\blpage{78}.
 \end{bbook}
 \endbibitem
 
-%%% 7
+%%% 8
 \bibitem{bishop_discrete_2007}
 \begin{bbook}
 \bauthor{\bsnm{Bishop}, \binits{Y.M.}},
@@ -218,6 +230,20 @@ pp. \bfpage{54}--\blpage{78}.
 </bibl>
 
 <bibl id="B6">
+  <title><p>The quasi-symmetric side of gravity modelling</p></title>
+  <aug>
+    <au><snm>Bavaud</snm><fnm>F</fnm></au>
+  </aug>
+  <source>Environment and Planning A</source>
+  <publisher>SAGE Publications Sage UK: London, England</publisher>
+  <pubdate>2002</pubdate>
+  <volume>34</volume>
+  <issue>1</issue>
+  <fpage>61</fpage>
+  <lpage>-79</lpage>
+</bibl>
+
+<bibl id="B7">
   <title><p>Passenger counting technologies and procedures</p></title>
   <aug>
     <au><snm>Boyle</snm><fnm>D</fnm></au>
@@ -228,7 +254,7 @@ pp. \bfpage{54}--\blpage{78}.
   <note>OCLC: 632725908</note>
 </bibl>
 
-<bibl id="B7">
+<bibl id="B8">
   <title><p>Discrete {Multivariate} {Analysis}: {Theory} and
   {Practice}</p></title>
   <aug>

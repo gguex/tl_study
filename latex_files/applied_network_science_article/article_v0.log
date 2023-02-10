@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.7)  9 FEB 2023 19:36
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.7)  10 FEB 2023 02:06
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -477,69 +477,66 @@ LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <8> not available
  [1{/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 ] [2] [3] [4]
-[5]
-Overfull \hbox (76.02725pt too wide) detected at line 398
- $[] \OT1/ztmcm/m/n/10 = []  [] = [][] = [][] = \OML/ztmcm/m/it/10 ^^Z[]\OT1/zt
-mcm/m/n/10 (1 \OMS/ztmcm/m/n/10 ^^@ \OML/ztmcm/m/it/10 ^^Z[]\OT1/ztmcm/m/n/10 )
-(1 \OMS/ztmcm/m/n/10 ^^@ \OML/ztmcm/m/it/10 ^^Z[]\OT1/ztmcm/m/n/10 )[]$ 
- []
-
-[6] [7]
+[5] [6] [7]
 
 LaTeX Warning: Reference `fig:map-lausanne' on page 8 undefined on input line 4
-62.
+41.
 
 
 LaTeX Warning: Reference `fig:network-lausanne' on page 8 undefined on input li
-ne 462.
+ne 441.
 
 <img/stop_area_c.png, id=38, 685.56125pt x 435.6275pt>
 File: img/stop_area_c.png Graphic file (type png)
 <use img/stop_area_c.png>
-Package pdftex.def Info: img/stop_area_c.png  used on input line 467.
+Package pdftex.def Info: img/stop_area_c.png  used on input line 446.
 (pdftex.def)             Requested size: 170.71652pt x 108.47453pt.
 
-Overfull \hbox (2.71652pt too wide) in paragraph at lines 467--468
+Overfull \hbox (2.71652pt too wide) in paragraph at lines 446--447
  [][] 
  []
 
 <img/edge_type3.png, id=40, 532.1481pt x 489.9906pt>
 File: img/edge_type3.png Graphic file (type png)
 <use img/edge_type3.png>
-Package pdftex.def Info: img/edge_type3.png  used on input line 475.
+Package pdftex.def Info: img/edge_type3.png  used on input line 454.
 (pdftex.def)             Requested size: 113.81102pt x 104.79265pt.
 [8]
-Underfull \hbox (badness 10000) in paragraph at lines 508--509
+Underfull \hbox (badness 10000) in paragraph at lines 487--488
 
  []
 
 
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 510--523
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 489--502
 [] 
  []
 
 
-LaTeX Warning: Reference `fig:example-map' on page 9 undefined on input line 52
-9.
+LaTeX Warning: Reference `fig:example-map' on page 9 undefined on input line 50
+8.
 
 <img/example_map.png, id=44, 639.38875pt x 556.0775pt>
 File: img/example_map.png Graphic file (type png)
 <use img/example_map.png>
-Package pdftex.def Info: img/example_map.png  used on input line 535.
+Package pdftex.def Info: img/example_map.png  used on input line 514.
 (pdftex.def)             Requested size: 199.16928pt x 173.21378pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 543.
-[9] (./article_v0.bbl) [10] 
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 522.
+[9] (./article_v0.bbl)
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
 AED: lastpage setting LastPage
-[11] (./article_v0.aux)
+[10] [11] (./article_v0.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
  5394 strings out of 480608
- 77641 string characters out of 5903630
- 325063 words of memory out of 5000000
+ 77649 string characters out of 5903630
+ 325066 words of memory out of 5000000
  21175 multiletter control sequences out of 15000+600000
  607538 words of font info for 172 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -557,7 +554,7 @@ s/type1/urw/helvetic/uhvro8a.pfb></usr/local/texlive/2020/texmf-dist/fonts/type
 l/usyr.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/urw/times/utmb8a.pfb
 ></usr/local/texlive/2020/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/loc
 al/texlive/2020/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on article_v0.pdf (11 pages, 146905 bytes).
+Output written on article_v0.pdf (11 pages, 146082 bytes).
 PDF statistics:
  97 PDF objects out of 1000 (max. 8388607)
  66 compressed objects within 1 object stream
