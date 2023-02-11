@@ -209,12 +209,24 @@ build_sp_data = function(line_mbrshps, tour_mbrshps, adj_w, adj_b,
 #---------------------------------------------------------------------------
 
 compute_sp_edges = function(s, t, adj_w, adj_b, ped_t_mat, travel_t_mat, 
-                            full_g, edge_ref){
+                            full_g, edge_ref, line_mbrshps){
   
-  # Test if i, j are not valid
+  # Test if s, t are not valid
   if((s == t) | 
      ((adj_w[s, t] == 0) & (travel_t_mat[s, t] > ped_t_mat[s, t]))){
     return(NULL)
+  }
+  
+  # Test if s,t are on the same line and s < t
+  if((line_mbrshps[s] == line_mbrshps[t]) & s < t){
+    # Get the index of edges in sp
+    index_sp_edge = sapply(s:t,
+      function(i) which((edge_ref[,1] == i) & (edge_ref[,2] == i+1)))
+    if(typeof(ed) == "integer"){
+      return(index_sp_edge)
+    } else {
+      return(NULL)
+    }
   }
   
   # Get the shortest path
@@ -293,7 +305,8 @@ build_sp_data_mc = function(line_mbrshps, tour_mbrshps, adj_w, adj_b,
   # Compute shortest_path edges with multiple cores
   sp_edges = mcmapply(function(s, t) 
     compute_sp_edges(s, t, adj_w, adj_b, ped_t_mat, travel_t_mat, 
-                     full_g, edge_ref), s_vec, t_vec, mc.cores=mc.cores)
+                     full_g, edge_ref, line_mbrshps), 
+    s_vec, t_vec, mc.cores=mc.cores)
   
   # Admissible sp indices
   admissible_sp_ind = which(!sapply(sp_edges, is.null))
