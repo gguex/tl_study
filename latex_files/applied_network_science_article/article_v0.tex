@@ -65,7 +65,7 @@
 
 % Document information
 
-\title{Estimation of flow trajectories in a multi-lines network}
+\title{Estimation of flow trajectories in a multi-lines transportation network}
 
 \author[
   addressref={aff1},                   
@@ -82,7 +82,7 @@ email={fbavaud@unil.ch}
 ]{\inits{F.B.}\fnm{François} \snm{Bavaud}}
 
 \address[id=aff1]{%                           
-  \orgdiv{Departement of Language and Information Sciences},             
+  \orgdiv{Department of Language and Information Sciences},             
   \orgname{University of Lausanne},          
   \city{Lausanne},                              
   \cny{Switzerland}                                   
@@ -101,15 +101,17 @@ email={fbavaud@unil.ch}
 \begin{abstractbox}
 
 \begin{abstract} % abstract
-Blabla
+Characterizing a public transportation network, such as an urban multi-lines bus network, requires the origin-destination trip counts during a given period. Yet, if automatic counting makes the embarkment (boarding) and disembarkment (alighting) counts at each bus stop known, it often happens that pedestrian transfers between stops are unknown, and this contribution proposes a three-steps procedure for estimating the missing information, involving maximum entropy and iterative fitting. ** à poursuivre ***
 \end{abstract}
 
 % Keywords begin here  
 
 \begin{keyword}
-\kwd{sample}
-\kwd{article}
-\kwd{author}
+\kwd{multiline bus network}
+\kwd{origin-destination flows}
+\kwd{boarding and alighting counts}
+\kwd{transit flows}
+\kwd{maximum entropy estimation}
 \end{keyword}
 
 % MSC classifications codes, if any
@@ -127,21 +129,20 @@ Blabla
 
 %% --------------------------------- INTRODUCTION
 
- 
-
 \section{Introduction}
-Transportation networks determine our mobility, require a considerable amount of planning and resources, and elicit much hopes and critics. 
+% Alternative title: Estimating transit flows from boarding and alighting counts
+Transportation networks determine our mobility, require a considerable amount of planning and resources, and elicit much public hopes and critics. 
 They also constitute an endless source of inspiration in formal modeling and optimization, as attested in operations research (classical optimal transportation, maximum flow problem), quantitative geography and spatial econometrics (spatial navigation, multimodality, gravity models for flows), and machine learning (recent developments in regularized optimal transportation, such as color transfer or images interpolation; see e.g. \cite{peyre2019computational}). 
 
-This contribution adresses a simple, yet central issue in public transportation networks: given a network made of many bus lines, how can one estimate the real trips made by the travelers, on the sole basis of  the embarkment and disembarkment counts for each bus stop? Transfer of travelers between bus lines constitute the missing information, and their defendable evaluation requests some methodological reflexion and experimentation. 
+This contribution adresses a straightforward, yet central issue in public transportation networks: given a network made of many bus lines, how can one estimate the real trips made by the travelers, on the sole basis of  the embarkment (boarding) counts and disembarkment (alighting) counts for each bus stop? Although estimating origin-destination flows is a central issue in transportation modeling (see e.g \cite{bell1997transportation} \cite{hazelton2000estimation} \cite{ashok2002estimation} \cite{cui2006bus} and references therein), the specific problem addressed in this contribution seems, to the best of our knowledge, original. 
 
-***
 
-\subsection{Context}
+Pedestrian transfers of travelers between bus lines here constitute the missing information, whose principled evaluation require some methodological reflexion and experimentation. Section \ref{notforma} introduces the notations and the formalism, as well as the statement of the problem and the iterative solution method, which consist of three consecutive steps: a maximum-entropy computation of the trip distributions, obeying marginal constraints and with a given prior (section \ref{maxenso}); an update of the marginal flows to avoid transfer overflow (section \ref{marginup}); and an update of the prior distribution  (section \ref{priorup}) by shrinking the components responsible for overflow. 
 
-\subsection{Statement of the problem}
+The fist step only is required for solving the single line case (section \ref{Single line}), naturally much simpler but  yet  not trivial, and exhibiting a disembarking probability independent of the embarking stop (Markov property). 
 
-\subsection{Related Works}
+Cases studies are presented in section \ref{casestudies} *** à poursuivre *** 
+
 
 
 
@@ -149,6 +150,7 @@ This contribution adresses a simple, yet central issue in public transportation 
 %% --------------------------------- NOTATIONS AND FORMALISM
 
 \section{Notations and formalism}
+\label{notforma}
 \subsection{Lines, stops  and junctions}
 \label{Lines and junctions}
 Consider a transportation network made of bus lines numbered $\ell=1,\ldots, q$, of respective lengths (number of stops) $l_\ell$.  Opposite lines, that is parallel lines running in the back and forth directions are considered as distinct. 
@@ -243,8 +245,7 @@ ensuring $\hat{a}_\bullet=\hat{b}_\bullet$, unless $\varepsilon> 2$ or $\varepsi
 Also, the geometry of the network permits to derive the edge-trip incidence matrix $\bm{\chi}$ defined in (\ref{edgetrip}). 
 
 
-Intra-line edge flows $\mathbf{Y}=(y_{ij})$ can be determined by (\ref{bilan1ligne}), but transfer edge flows $\mathbf{Z}=(z_{ij})$ are, here and typically, unknown. The objective is to estimate the $l\times l$ transportation flow $\mathbf{N}=(n_{st})$. Many consistent solutions coexist in general, even for a single line with no transferts (section \ref{Single line}). This issue of incompletely observed data can be tackled by the maximum entropy formalism \cite{jaynes1957information}, and has been often  in transportation modelling \cite{wilson1967statistical}  \cite{erlander1990gravity}. Its contemporary justification corresponds to the ``expectation step" of the EM algorithm \cite{dempster1977maximum}  \cite{bavaud2009information}. 
-
+Intra-line edge flows $\mathbf{Y}=(y_{ij})$ can be determined by (\ref{bilan1ligne}), but transfer edge flows $\mathbf{Z}=(z_{ij})$ are, here and typically, unknown. The objective is to estimate the $l\times l$ transportation flow $\mathbf{N}=(n_{st})$. Many consistent solutions coexist in general, even for a single line with no transferts (section \ref{Single line}). This issue of incompletely observed data can be tackled by the maximum entropy formalism \cite{jaynes1957information}, and has been often  in transportation modelling \cite{wilson1967statistical}  \cite{erlander1990gravity}. 
 
 
 
@@ -252,12 +253,18 @@ Let $f_{st}=n_{st}/n_{\bullet\bullet}$ be the proportion of $st$-trips (empirica
 Assuming some reasonable initial prior $g_{st}$, 
 \begin{itemize}
 \item[(1)] we shall first suppose that the empirical margins $\alpha_s=f_{s\bullet}$ and $\beta_t=f_{\bullet t}$ are known.  
-Then $f_{st}$ can be determined as the maximum entropy solution (section \ref{maxenso}), i.e. as the distribution closest to $g_{st}$ in the Kullback-Leibler divergence sense under the margin constraints
+Then $f_{st}$ can be determined as the maximum entropy solution (section \ref{maxenso}), i.e. as the distribution closest to $g_{st}$ in the Kullback-Leibler divergence sense under the margin constraints, to be calibrated by an iterative fitting inner loop
 \item[(2)] then (section \ref{marginup}), the margins will be updated to $\tilde{\alpha}_s$ and $\tilde{\beta}_t$   by requiring a minimum proportion $\theta\in (0,1)$ of passengers entering/leaving the network at each stop, as well as avoiding transfer overflow exceeding the embarking and disembarking counts at each stop
  \item[(3)] finally (section \ref{priorup}), the prior will be updated to $\tilde{g}_{st}$ by shrinking, if necessary, the priors $g_{st}$ associated to overflows. 
 \end{itemize}
 With the new prior distribution $\widetilde{g}_{st}$ and the new margin distributions $\widetilde{\alpha}_s$, $\widetilde{\beta}_t$, we can iterate the 
- the above steps, until convergence. The only free parameter is $\theta$, which will be discussed in section *** . *** This solution method is reminiscent, but quite distinct of the ME algorithm ...***
+ the above steps, until convergence. The only free parameter is $\theta$, which will be discussed in section *** . 
+ 
+ 
+ *** The above iterative solution method is somewhat reminiscent of the EM algorithm. As a matter of fact, the first  step  (maximum entropy) exactly correspond to the ``expectation step" of the EM algorithm (see e.g. \cite{dempster1977maximum}  \cite{bavaud2009information}), but steps two and three, aiming at calibrating the parameters $\bm{\alpha}$, $\bm{\beta}$ and $\mathbf{g}$, do not follow the maximum likelihood rationale of the ``maximisation step". 
+ 
+
+
 
 
 
@@ -390,7 +397,7 @@ d_t=\frac{b_t}{\sum_{s<t}c_s}=\frac{b_t}{C_t}
 \end{equation}
 to be solved by iterative fitting. 
 
-Interestingly enough, the form (\ref{nosignle}) for the flows is reminiscent of the {\em gravity flows} of quantitative Geography \cite{wilson1967statistical}  \cite{erlander1990gravity} \cite{bavaud2002quasi}, where 
+Interestingly enough, the form (\ref{nosignle}) for the flows is reminiscent of the {\em gravity flows} of quantitative Geography \cite{wilson1967statistical}  \cite{erlander1990gravity} \cite{bavaud2002quasi} \cite{Thomas-Agnan2021}, where 
 $c_s$ is the {\em push factor}, $d_t$ is the {\em pull factor}, and $I(s<t)$ the {\em distance deterrence function}. Yet, instead of  
 being symmetric in $s,t$ and decreasing with the distance $|s-t|$, the distance deterrence function is here asymmetric due to the line orientation, but otherwise constant. 
 
@@ -423,7 +430,7 @@ traveled distances among users) or the ``last in, first out" (LIFO) flows (tendi
 %% --------------------------------- CASE STUDIES
 
 \section{Case Studies}
-
+\label{casestudies}
 
 \subsection{Toy Examples}
 

@@ -1,6 +1,6 @@
 %% BioMed_Central_Bib_Style_v1.01
 
-\begin{thebibliography}{9}
+\begin{thebibliography}{14}
 % BibTex style file: bmc-mathphys.bst (version 2.1), 2014-07-24
 \ifx \bisbn   \undefined \def \bisbn  #1{ISBN #1}\fi
 \ifx \binits  \undefined \def \binits#1{#1}\fi
@@ -56,6 +56,57 @@
 \endbibitem
 
 %%% 2
+\bibitem{bell1997transportation}
+\begin{bbook}
+\bauthor{\bsnm{Bell}, \binits{M.G.}},
+\bauthor{\bsnm{Lida}, \binits{Y.}}:
+\bbtitle{Transportation Network Analysis}.
+\bpublisher{Wiley},
+\blocation{Chichester}
+(\byear{1997})
+\end{bbook}
+\endbibitem
+
+%%% 3
+\bibitem{hazelton2000estimation}
+\begin{barticle}
+\bauthor{\bsnm{Hazelton}, \binits{M.L.}}:
+\batitle{Estimation of origin--destination matrices from link flows on
+  uncongested networks}.
+\bjtitle{Transportation Research Part B: Methodological}
+\bvolume{34}(\bissue{7}),
+\bfpage{549}--\blpage{566}
+(\byear{2000})
+\end{barticle}
+\endbibitem
+
+%%% 4
+\bibitem{ashok2002estimation}
+\begin{barticle}
+\bauthor{\bsnm{Ashok}, \binits{K.}},
+\bauthor{\bsnm{Ben-Akiva}, \binits{M.E.}}:
+\batitle{Estimation and prediction of time-dependent origin-destination flows
+  with a stochastic mapping to path flows and link flows}.
+\bjtitle{Transportation science}
+\bvolume{36}(\bissue{2}),
+\bfpage{184}--\blpage{198}
+(\byear{2002})
+\end{barticle}
+\endbibitem
+
+%%% 5
+\bibitem{cui2006bus}
+\begin{botherref}
+\oauthor{\bsnm{Cui}, \binits{A.}}:
+Bus passenger origin-destination matrix estimation using automated data
+  collection systems.
+PhD thesis,
+Massachusetts Institute of Technology
+(2006)
+\end{botherref}
+\endbibitem
+
+%%% 6
 \bibitem{jaynes1957information}
 \begin{barticle}
 \bauthor{\bsnm{Jaynes}, \binits{E.T.}}:
@@ -67,7 +118,7 @@
 \end{barticle}
 \endbibitem
 
-%%% 3
+%%% 7
 \bibitem{wilson1967statistical}
 \begin{barticle}
 \bauthor{\bsnm{Wilson}, \binits{A.}}:
@@ -79,7 +130,7 @@
 \end{barticle}
 \endbibitem
 
-%%% 4
+%%% 8
 \bibitem{erlander1990gravity}
 \begin{bbook}
 \bauthor{\bsnm{Erlander}, \binits{S.}},
@@ -92,13 +143,13 @@ vol. \bseriesno{3}.
 \end{bbook}
 \endbibitem
 
-%%% 5
+%%% 9
 \bibitem{dempster1977maximum}
 \begin{barticle}
 \bauthor{\bsnm{Dempster}, \binits{A.P.}},
 \bauthor{\bsnm{Laird}, \binits{N.M.}},
 \bauthor{\bsnm{Rubin}, \binits{D.B.}}:
-\batitle{Maximum likelihood from incomplete data via the em algorithm}.
+\batitle{Maximum likelihood from incomplete data via the {E}{M} algorithm}.
 \bjtitle{Journal of the royal statistical society: series B (methodological)}
 \bvolume{39}(\bissue{1}),
 \bfpage{1}--\blpage{22}
@@ -106,7 +157,7 @@ vol. \bseriesno{3}.
 \end{barticle}
 \endbibitem
 
-%%% 6
+%%% 10
 \bibitem{bavaud2009information}
 \begin{bchapter}
 \bauthor{\bsnm{Bavaud}, \binits{F.}}:
@@ -123,7 +174,7 @@ pp. \bfpage{54}--\blpage{78}.
 \end{bchapter}
 \endbibitem
 
-%%% 7
+%%% 11
 \bibitem{bavaud2002quasi}
 \begin{barticle}
 \bauthor{\bsnm{Bavaud}, \binits{F.}}:
@@ -135,7 +186,22 @@ pp. \bfpage{54}--\blpage{78}.
 \end{barticle}
 \endbibitem
 
-%%% 8
+%%% 12
+\bibitem{Thomas-Agnan2021}
+\begin{bbook}
+\bauthor{\bsnm{Thomas-Agnan}, \binits{C.}},
+\bauthor{\bsnm{LeSage}, \binits{J.P.}}:
+In: \beditor{\bsnm{Fischer}, \binits{M.M.}},
+\beditor{\bsnm{Nijkamp}, \binits{P.}} (eds.)
+\bbtitle{Spatial Econometric OD-Flow Models},
+pp. \bfpage{2179}--\blpage{2199}.
+\bpublisher{Springer},
+\blocation{Berlin, Heidelberg}
+(\byear{2021})
+\end{bbook}
+\endbibitem
+
+%%% 13
 \bibitem{boyle_passenger_1998}
 \begin{bbook}
 \bauthor{\bsnm{Boyle}, \binits{D.}},
@@ -148,7 +214,7 @@ pp. \bfpage{54}--\blpage{78}.
 \end{bbook}
 \endbibitem
 
-%%% 9
+%%% 14
 \bibitem{bishop_discrete_2007}
 \begin{bbook}
 \bauthor{\bsnm{Bishop}, \binits{Y.M.}},
@@ -187,6 +253,58 @@ pp. \bfpage{54}--\blpage{78}.
 </bibl>
 
 <bibl id="B2">
+  <title><p>Transportation network analysis</p></title>
+  <aug>
+    <au><snm>Bell</snm><fnm>MG</fnm></au>
+    <au><snm>Lida</snm><fnm>Y</fnm></au>
+  </aug>
+  <publisher>Chichester: Wiley</publisher>
+  <pubdate>1997</pubdate>
+</bibl>
+
+<bibl id="B3">
+  <title><p>Estimation of origin--destination matrices from link flows on
+  uncongested networks</p></title>
+  <aug>
+    <au><snm>Hazelton</snm><fnm>ML</fnm></au>
+  </aug>
+  <source>Transportation Research Part B: Methodological</source>
+  <publisher>Elsevier</publisher>
+  <pubdate>2000</pubdate>
+  <volume>34</volume>
+  <issue>7</issue>
+  <fpage>549</fpage>
+  <lpage>-566</lpage>
+</bibl>
+
+<bibl id="B4">
+  <title><p>Estimation and prediction of time-dependent origin-destination
+  flows with a stochastic mapping to path flows and link flows</p></title>
+  <aug>
+    <au><snm>Ashok</snm><fnm>K</fnm></au>
+    <au><snm>Ben Akiva</snm><fnm>ME</fnm></au>
+  </aug>
+  <source>Transportation science</source>
+  <publisher>INFORMS</publisher>
+  <pubdate>2002</pubdate>
+  <volume>36</volume>
+  <issue>2</issue>
+  <fpage>184</fpage>
+  <lpage>-198</lpage>
+</bibl>
+
+<bibl id="B5">
+  <title><p>Bus passenger origin-destination matrix estimation using automated
+  data collection systems</p></title>
+  <aug>
+    <au><snm>Cui</snm><fnm>A</fnm></au>
+  </aug>
+  <source>PhD thesis</source>
+  <publisher>Massachusetts Institute of Technology</publisher>
+  <pubdate>2006</pubdate>
+</bibl>
+
+<bibl id="B6">
   <title><p>Information theory and statistical mechanics</p></title>
   <aug>
     <au><snm>Jaynes</snm><fnm>ET</fnm></au>
@@ -199,7 +317,7 @@ pp. \bfpage{54}--\blpage{78}.
   <fpage>620</fpage>
 </bibl>
 
-<bibl id="B3">
+<bibl id="B7">
   <title><p>A statistical theory of spatial distribution models</p></title>
   <aug>
     <au><snm>Wilson</snm><fnm>AG</fnm></au>
@@ -213,7 +331,7 @@ pp. \bfpage{54}--\blpage{78}.
   <lpage>-269</lpage>
 </bibl>
 
-<bibl id="B4">
+<bibl id="B8">
   <title><p>The gravity model in transportation analysis: theory and
   extensions</p></title>
   <aug>
@@ -225,8 +343,8 @@ pp. \bfpage{54}--\blpage{78}.
   <volume>3</volume>
 </bibl>
 
-<bibl id="B5">
-  <title><p>Maximum likelihood from incomplete data via the EM
+<bibl id="B9">
+  <title><p>Maximum likelihood from incomplete data via the {E}{M}
   algorithm</p></title>
   <aug>
     <au><snm>Dempster</snm><fnm>AP</fnm></au>
@@ -243,7 +361,7 @@ pp. \bfpage{54}--\blpage{78}.
   <lpage>-22</lpage>
 </bibl>
 
-<bibl id="B6">
+<bibl id="B10">
   <title><p>Information theory, relative entropy and statistics</p></title>
   <aug>
     <au><snm>Bavaud</snm><fnm>F</fnm></au>
@@ -259,7 +377,7 @@ pp. \bfpage{54}--\blpage{78}.
   <lpage>78</lpage>
 </bibl>
 
-<bibl id="B7">
+<bibl id="B11">
   <title><p>The quasi-symmetric side of gravity modelling</p></title>
   <aug>
     <au><snm>Bavaud</snm><fnm>F</fnm></au>
@@ -273,7 +391,21 @@ pp. \bfpage{54}--\blpage{78}.
   <lpage>-79</lpage>
 </bibl>
 
-<bibl id="B8">
+<bibl id="B12">
+  <title><p>Spatial Econometric OD-Flow Models</p></title>
+  <aug>
+    <au><snm>Thomas Agnan</snm><fnm>C</fnm></au>
+    <au><snm>LeSage</snm><fnm>JP</fnm></au>
+  </aug>
+  <source>Handbook of Regional Science</source>
+  <publisher>Berlin, Heidelberg: Springer Berlin Heidelberg</publisher>
+  <editor>Fischer, Manfred M. and Nijkamp, Peter</editor>
+  <pubdate>2021</pubdate>
+  <fpage>2179</fpage>
+  <lpage>-2199</lpage>
+</bibl>
+
+<bibl id="B13">
   <title><p>Passenger counting technologies and procedures</p></title>
   <aug>
     <au><snm>Boyle</snm><fnm>D</fnm></au>
@@ -284,7 +416,7 @@ pp. \bfpage{54}--\blpage{78}.
   <note>OCLC: 632725908</note>
 </bibl>
 
-<bibl id="B9">
+<bibl id="B14">
   <title><p>Discrete {Multivariate} {Analysis}: {Theory} and
   {Practice}</p></title>
   <aug>
