@@ -130,6 +130,12 @@ Blabla
  
 
 \section{Introduction}
+Transportation networks determine our mobility, require a considerable amount of planning and resources, and elicit much hopes and critics. 
+They also constitute an endless source of inspiration in formal modeling and optimization, as attested in operations research (classical optimal transportation, maximum flow problem), quantitative geography and spatial econometrics (spatial navigation, multimodality, gravity models for flows), and machine learning (recent developments in regularized optimal transportation, such as color transfer or images interpolation; see e.g. \cite{peyre2019computational}). 
+
+This contribution adresses a simple, yet central issue in public transportation networks: given a network made of many bus lines, how can one estimate the real trips made by the travelers, on the sole basis of  the embarkment and disembarkment counts for each bus stop? Transfer of travelers between bus lines constitute the missing information, and their defendable evaluation requests some methodological reflexion and experimentation. 
+
+***
 
 \subsection{Context}
 
@@ -397,7 +403,7 @@ The empirical estimate of $\rho_{st}$ is given by the proportion, among the trav
 \begin{displaymath}
 \rho_{st}=\frac{n_{st}}{m_{st}}=\frac{c_s\,  d_t}{c_s\,  (d_t+D_t)}=\frac{d_t}{d_t+D_t}=\frac{b_t}{C_t\, (d_t+D_t)}\le 1
 \end{displaymath}
-which depends on $t$ only: it  finally  turns out that the disembarkment probability $\rho_t=\frac{d_t}{d_t+D_t}$ at $t$ is {\em independent} of the embarkment stop $s$. Said otherwise, a traveler embarking at any stop $s$ (and thus necessarily in the bus at $F(s)=s+1$) experiences the {\em same disembarkment probability} at each  stop $t$. 
+which depends on $t$ only: it appears that the disembarkment probability $\rho_t=\frac{d_t}{d_t+D_t}$ at $t$ is {\em independent} of the embarkment stop $s$. Said otherwise, a traveler embarking at any stop $s$ (and thus necessarily in the bus at $F(s)=s+1$) experiences the {\em same disembarkment probability} at each further stop $t>s$. 
 
 
 This Markov property, enjoyed by maximum-entropic flows, contrasts other possible solutions, such as  the ``first in, first out" (FIFO) flows (homogenizing the 
