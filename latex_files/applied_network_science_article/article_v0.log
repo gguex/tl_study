@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.1.9)  13 FEB 2023 15:32
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.1.9)  13 FEB 2023 16:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -490,55 +490,55 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 159.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 159.
- [2] [3] [4] [5] [6]
+ [2] [3] [4] [5]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 438.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 383.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [7]
-[8]
+ [6]
+[7] [8]
 
 LaTeX Warning: Reference `fig:map-lausanne' on page 9 undefined on input line 4
-79.
+97.
 
 
 LaTeX Warning: Reference `fig:network-lausanne' on page 9 undefined on input li
-ne 479.
+ne 497.
 
 <img/stop_area_c.png, id=41, 685.56125pt x 435.6275pt>
 File: img/stop_area_c.png Graphic file (type png)
 <use img/stop_area_c.png>
-Package pdftex.def Info: img/stop_area_c.png  used on input line 484.
+Package pdftex.def Info: img/stop_area_c.png  used on input line 502.
 (pdftex.def)             Requested size: 170.71652pt x 108.47453pt.
 
-Overfull \hbox (2.71652pt too wide) in paragraph at lines 484--485
+Overfull \hbox (2.71652pt too wide) in paragraph at lines 502--503
  [][] 
  []
 
 <img/edge_type3.png, id=43, 532.1481pt x 489.9906pt>
 File: img/edge_type3.png Graphic file (type png)
 <use img/edge_type3.png>
-Package pdftex.def Info: img/edge_type3.png  used on input line 492.
+Package pdftex.def Info: img/edge_type3.png  used on input line 510.
 (pdftex.def)             Requested size: 113.81102pt x 104.79265pt.
 [9]
-Underfull \hbox (badness 10000) in paragraph at lines 525--526
+Underfull \hbox (badness 10000) in paragraph at lines 543--544
 
  []
 
 
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 527--540
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 545--558
 [] 
  []
 
 
 LaTeX Warning: Reference `fig:example-map' on page 10 undefined on input line 5
-46.
+64.
 
 <img/example_map.png, id=47, 639.38875pt x 556.0775pt>
 File: img/example_map.png Graphic file (type png)
 <use img/example_map.png>
-Package pdftex.def Info: img/example_map.png  used on input line 552.
+Package pdftex.def Info: img/example_map.png  used on input line 570.
 (pdftex.def)             Requested size: 199.16928pt x 173.21378pt.
 [10] (./article_v0.bbl
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <7> not available
@@ -563,11 +563,11 @@ LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 6708 strings out of 478287
- 106884 string characters out of 5849290
- 406127 words of memory out of 5000000
- 24752 multiletter control sequences out of 15000+600000
- 556831 words of font info for 200 fonts, out of 8000000 for 9000
+ 6710 strings out of 478287
+ 106894 string characters out of 5849290
+ 411117 words of memory out of 5000000
+ 24751 multiletter control sequences out of 15000+600000
+ 557609 words of font info for 203 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  69i,14n,79p,1392b,505s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
@@ -582,7 +582,7 @@ texlive/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-di
 st/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/u
 rw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a
 .pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on article_v0.pdf (12 pages, 162925 bytes).
+Output written on article_v0.pdf (12 pages, 164884 bytes).
 PDF statistics:
  113 PDF objects out of 1000 (max. 8388607)
  68 compressed objects within 1 object stream
