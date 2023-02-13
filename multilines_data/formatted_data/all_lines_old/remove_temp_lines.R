@@ -8,7 +8,7 @@ bus_df = read.csv("bus_df.csv")
 ped_time_mat = read.csv("ped_time.csv", header=F)
 
 # Line numbers to remove
-lines_to_remove = c(23, 29, 36, 41, 48, 54, 60, 81, 82)
+lines_to_remove = c(23, 29, 36, 41, 48, 60, 69, 81, 82)
 
 # Indices to remove
 to_remove_ids = which(bus_df$line_nbr %in% lines_to_remove)

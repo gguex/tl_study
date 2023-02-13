@@ -5,11 +5,8 @@
 #-------------------------------------------------------------------------------
 # Delete transports lines with a high difference between in and out passengers
 
-# Set working directory path
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-
 # Read data
-line_df = read.csv("multilines_data/preprocessed_data/all_lines/line_df.csv")
+line_df = read.csv("multilines_data/formatted_data/all_lines_old/bus_df.csv")
 
 # Sum passengers by line A and R
 sum_table = data.frame(line=numeric(), a_in=numeric(), r_in=numeric(),
@@ -28,9 +25,12 @@ for (i in unique(line_df$line_nbr)) {
   
   diff_a = a_in/a_out
   diff_r = r_in/r_out
+  diff_tot_a = round((a_in - a_out) / (a_in + a_out + 1e-40), 4)
+  diff_tot_r = round((r_in - r_out) / (r_in + r_out + 1e-40), 4)
   
   new_row <- data.frame(line=line, a_in=a_in,a_out=a_out, diff_a=diff_a,
-                        r_in=r_in, r_out=r_out, diff_r=diff_r)
+                        r_in=r_in, r_out=r_out, diff_r=diff_r, 
+                        diff_tot_a=diff_tot_a, diff_tot_r=diff_tot_r)
   sum_table <- rbind(sum_table, new_row)
 }
 
@@ -40,4 +40,13 @@ for (i in unique(line_df$line_nbr)) {
 invalid_lines = sum_table[(sum_table$diff_a < 0.3 | sum_table$diff_a > 1.3) | 
                             (sum_table$diff_r < 0.7 | sum_table$diff_r > 1.3)| 
                             is.na(sum_table$diff_r) | is.na(sum_table$diff_a), ]
+
+
+threshold = 0.15
+min_count = 10000
+invalid_lines_2 = sum_table[abs(sum_table$diff_tot_a) > threshold | 
+                              abs(sum_table$diff_tot_r) > threshold | 
+                              (((sum_table$a_in+sum_table$a_out)/2 < min_count) & 
+                               ((sum_table$r_in+sum_table$r_out)/2 < min_count)), ]
+
 

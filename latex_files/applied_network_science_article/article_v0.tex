@@ -32,6 +32,9 @@
 
 \usepackage{caption}
 
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                             %%
 %%  If you wish to display your graphics for   %%
@@ -425,6 +428,30 @@ traveled distances among users) or the ``last in, first out" (LIFO) flows (tendi
 \
 
 *** @G, @R, ici la (les) figure de l'exemple  ``starting from Maladière, Riant-Cour, Dapples"... ? ***
+
+
+\subsection{Algorithm pseudo-code}
+\label{algo}
+\begin{algorithm}[H]
+	\caption{Compute the transportation flow matrix $\mathbf{N} = (n_{st})$ knowing the edge-trip incidence matrix $\bm{\chi} = (\chi_{ij}^{st})$, the embarking flow $\mathbf{a}$, the disambarking flow $\mathbf{b}$, the index of an isolated source node $\tilde{s}$, and the minimum proportion of passengers entering/leaving the network hyperparameter $\theta$.}
+	\label{algo1}
+	\begin{algorithmic}[1]
+		\State $g_{st} \leftarrow I(\chi_{\bullet \bullet}^{st} > 0) / \sum_{s't'}I(\chi_{\bullet \bullet}^{s't'} > 0), \; \forall s,t$ \Comment{{\footnotesize Initialize the prior distribution.}}
+		\State $\alpha_s \leftarrow a_s / a_\bullet ,\; \beta_t \leftarrow b_t / b_\bullet, \; \forall s,t$ \Comment{{\footnotesize Initialize the margin distributions.}}
+		\State $\epsilon \leftarrow 10^{-40}$ \Comment{{\footnotesize Fix a small quantity}}
+		\While{$\mathbf{N} = (n_{st})$ has not converge} \Comment{{\footnotesize Main loop.}}
+			\State $\psi_t \leftarrow 1, \; \forall t$ \Comment{{\footnotesize Initialize the lagragian multiplier for destinations.}}
+			\While{$\bm{\psi} = (\psi_t)$ has not converge} \Comment{{\footnotesize Iterative fitting loop.}}
+				\State $\phi_s \leftarrow \alpha_s / (\sum_t \psi_t g_{st} + \epsilon), \; \forall s$
+				\State $\psi_t \leftarrow \beta_t / (\sum_s \phi_s g_{st} + \epsilon), \; \forall t$
+			\EndWhile
+			
+			\State $n_{st} \leftarrow \frac{a_{\tilde{s}}}{\alpha_{\tilde{s}}} \phi_s \psi_t g_{st}, \; \forall s,t$ \Comment{{\footnotesize Compute the transportation flow.}}
+			
+		\EndWhile
+		\State \Return $\mathbf{Z}$
+	\end{algorithmic}
+\end{algorithm}
 
  
 %% --------------------------------- CASE STUDIES
