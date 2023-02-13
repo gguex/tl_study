@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.7)  12 FEB 2023 11:28
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.7)  13 FEB 2023 15:17
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -481,48 +481,48 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 [5] [6] [7]
 
 LaTeX Warning: Reference `fig:map-lausanne' on page 8 undefined on input line 4
-54.
+45.
 
 
 LaTeX Warning: Reference `fig:network-lausanne' on page 8 undefined on input li
-ne 454.
+ne 445.
 
 <img/stop_area_c.png, id=38, 685.56125pt x 435.6275pt>
 File: img/stop_area_c.png Graphic file (type png)
 <use img/stop_area_c.png>
-Package pdftex.def Info: img/stop_area_c.png  used on input line 459.
+Package pdftex.def Info: img/stop_area_c.png  used on input line 450.
 (pdftex.def)             Requested size: 170.71652pt x 108.47453pt.
 
-Overfull \hbox (2.71652pt too wide) in paragraph at lines 459--460
+Overfull \hbox (2.71652pt too wide) in paragraph at lines 450--451
  [][] 
  []
 
 <img/edge_type3.png, id=40, 532.1481pt x 489.9906pt>
 File: img/edge_type3.png Graphic file (type png)
 <use img/edge_type3.png>
-Package pdftex.def Info: img/edge_type3.png  used on input line 467.
+Package pdftex.def Info: img/edge_type3.png  used on input line 458.
 (pdftex.def)             Requested size: 113.81102pt x 104.79265pt.
 [8]
-Underfull \hbox (badness 10000) in paragraph at lines 500--501
+Underfull \hbox (badness 10000) in paragraph at lines 491--492
 
  []
 
 
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 502--515
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 493--506
 [] 
  []
 
 
-LaTeX Warning: Reference `fig:example-map' on page 9 undefined on input line 52
-1.
+LaTeX Warning: Reference `fig:example-map' on page 9 undefined on input line 51
+2.
 
 <img/example_map.png, id=44, 639.38875pt x 556.0775pt>
 File: img/example_map.png Graphic file (type png)
 <use img/example_map.png>
-Package pdftex.def Info: img/example_map.png  used on input line 527.
+Package pdftex.def Info: img/example_map.png  used on input line 518.
 (pdftex.def)             Requested size: 199.16928pt x 173.21378pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 535.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 526.
 [9] (./article_v0.bbl
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <7> not available
 (Font)              Font shape `OT1/phv/m/sl' tried instead on input line 49.
@@ -582,7 +582,7 @@ s/type1/urw/helvetic/uhvro8a.pfb></usr/local/texlive/2020/texmf-dist/fonts/type
 l/usyr.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/urw/times/utmb8a.pfb
 ></usr/local/texlive/2020/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/loc
 al/texlive/2020/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on article_v0.pdf (11 pages, 149830 bytes).
+Output written on article_v0.pdf (11 pages, 149200 bytes).
 PDF statistics:
  97 PDF objects out of 1000 (max. 8388607)
  66 compressed objects within 1 object stream
