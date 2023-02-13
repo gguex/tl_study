@@ -240,10 +240,11 @@ As explained in section \ref{Lines and junctions}, transfers can only occur at j
 \subsection{Statement of the problem and solution method}
 Automatic passenger counters measure the number of passengers entering and leaving buses at each stop [Boyle, 1998], that is $\mathbf{a}$ and $\mathbf{b}$, which provide the basic raw data of the present study, kindly provided by the Lausanne Transportation Agency (tl), after some preliminary, undocumented corrections (i.e. the components of $\mathbf{a}$ and $\mathbf{b}$ can be non-integer). It may also happen that raw data do not obey the necessary consistency condition  $a_\bullet=b_\bullet$, in which case we did rescale the embarking and disembarking counts as 
 \begin{displaymath}
-\hat{a}_i=\varepsilon a_i \qquad\qquad \hat{b}_i=\frac{1}{\varepsilon} b_i \qquad\qquad\mbox{with}\quad \varepsilon=\sqrt{\frac{b_\bullet}{a_\bullet}}
+\hat{a}_i=(1-\frac{a_\bullet-b_\bullet}{a_\bullet+b_\bullet})\, a_i 
+ \qquad\qquad\qquad
+  \hat{b}_i=(1+\frac{a_\bullet-b_\bullet}{a_\bullet+b_\bullet})\,  b_i 
 \end{displaymath}
-ensuring $\hat{a}_\bullet=\hat{b}_\bullet$, unless $\varepsilon> 2$ or $\varepsilon<\frac{1}{2}$ ***@R, @G : c'est à peu près cela??*** , in which case the corresponding line (which always turned out to be a temporary line with small  counts) was simply disregarded and removed from the network. 
-
+ensuring $\hat{a}_\bullet=\hat{b}_\bullet=2a_\bullet b_\bullet/(a_\bullet+b_\bullet)$. However, strongly unbalanced lines such that  $|a_\bullet-b_\bullet|/a_\bullet > 0.3$ or $|a_\bullet-b_\bullet|/b_\bullet > 0.3$  (which always turned out to be temporary lines with small  counts) were simply disregarded and removed from the network. 
 
 Also, the geometry of the network permits to derive the edge-trip incidence matrix $\bm{\chi}$ defined in (\ref{edgetrip}). 
 
@@ -377,49 +378,47 @@ where $\phi_s$ and $\psi_t$ are the values (\ref{Sol_LagMult}) obtained in the p
 
 
 
-\subsection{The case of a single line}
+\subsection{Markov property for a single line}
 \label{Single line}
 A ``network" made of a single line contains no transfers, and flow estimates can be obtained at once by the maximum entropy step only.
 
 
-Let  $i=1,\ldots, l$ enumerate the bus stops in increasing order,  i.e. $F(i)=i+1$. The initial prior is simply $g_{st}=\frac{I(s<t)}{(l-1)(l-2)}$ (where $I(.)$ denotes the 0/1  indicator function), capturing solely the unidirectional nature of trips. The margins of the empirical distribution $f_{st}$, as well as the total flow, are here known : 
+Let  $i=1,\ldots, l$ enumerate the bus stops in increasing order,  i.e. $F(i)=i+1$. The initial prior is simply $g_{st}=c\; I(s<t)$ and captures solely the unidirectional nature of trips,  where $I(.)$ denotes the 0/1  indicator function and $c=\frac{1}{(l-1)(l-2)}$.   The margins of the empirical distribution $f_{st}$, as well as the total flow, are here known : 
 \begin{displaymath}
-\alpha_s=\frac{a_s}{a_\bullet}\qquad\qquad\qquad \beta_t=\frac{b_t}{b_\bullet}\qquad\qquad\qquad n_{\bullet\bullet}=a_{\bullet}=b_\bullet
+\alpha_s=\frac{a_s}{a_\bullet}\qquad\qquad\qquad \beta_t=\frac{b_t}{b_\bullet}\qquad\qquad\qquad n_{\bullet\bullet}=a_{\bullet}=b_\bullet\enspace. 
 \end{displaymath}
-and (\ref{Sol}) yields, after reparameterization, maximum entropy flows of the form
+Following  (\ref{Sol}) maximum entropy flows are of the form
 \begin{equation}
 \label{nosignle}
-n_{st}=I(s<t)\, c_s\, d_t \qquad\qquad\mbox{where}\quad \sum_{s}c_s\, \sum_{t>s}d_t=n_{\bullet\bullet}
+n_{st}= n_{\bullet\bullet}\,  c\, I(s<t)\, \phi_s\,  \psi_t 
 \end{equation}
-where (setting $D_s:=\sum_{t>s}d_t$ and $C_t:=\sum_{s<t}c_s$) the constraints (\ref{Sol_LagMult}) equivalently express as 
+where (setting $\Psi_s:=\sum_{t>s}\psi_t$ and $\Phi_t:=\sum_{s<t}c\phi_s$) the constraints (\ref{Sol_LagMult}) equivalently read
 \begin{equation}
 \label{dis embarking constraints}
-c_s=\frac{a_s}{\sum_{t>s}d_t}=\frac{a_s}{D_s}
+\phi_s=\frac{\alpha_s}{c\, \sum_{t>s}\psi_t}=\frac{a_s}{n_{\bullet\bullet}\,  c\, \Psi_s}
 \qquad\qquad\qquad
-d_t=\frac{b_t}{\sum_{s<t}c_s}=\frac{b_t}{C_t}
+\psi_t=\frac{\beta_t}{c\, \sum_{s<t}\phi_s}=\frac{b_t}{n_{\bullet\bullet}\, c\, \Phi_t}
 \end{equation}
 to be solved by iterative fitting. 
 
 Interestingly enough, the form (\ref{nosignle}) for the flows is reminiscent of the {\em gravity flows} of quantitative Geography \cite{wilson1967statistical}  \cite{erlander1990gravity} \cite{bavaud2002quasi} \cite{Thomas-Agnan2021}, where 
-$c_s$ is the {\em push factor}, $d_t$ is the {\em pull factor}, and $I(s<t)$ the {\em distance deterrence function}. Yet, instead of  
+$\phi_s$ is the {\em push factor}, $\psi_t$ is the {\em pull factor}, and $I(s<t)$ the {\em distance deterrence function}. Yet, instead of  
 being symmetric in $s,t$ and decreasing with the distance $|s-t|$, the distance deterrence function is here asymmetric due to the line orientation, but otherwise constant. 
 
 This constancy entails the following Markovian behaviour for flows: let $m_{st}$ be the number of travelers embarking at stop $s$ and still inside the bus at stop $t>s$, and let $\rho_{st}$ the probability that travelers embarking at $s$ will disembark at $t$. By (\ref{nosignle}), 
 \begin{displaymath}
-m_{st}=\sum_{u\ge t}n_{su}=c_s \sum_{u\ge t} I(s<u)\, d_u =c_s (d_t+D_t) 
+m_{st}=\sum_{u\ge t}n_{su}=n_{\bullet\bullet}\, c\, \phi_s  \sum_{u\ge t} I(s<u)\, \psi_u =n_{\bullet\bullet}\, c\,  \phi_s (\psi_t+\Psi_t) 
 \end{displaymath}
 The empirical estimate of $\rho_{st}$ is given by the proportion, among the travelers embarking at $s$ and 
  still present at $t>s$,  of travelers disembarking at $t$, that is 
 \begin{displaymath}
-\rho_{st}=\frac{n_{st}}{m_{st}}=\frac{c_s\,  d_t}{c_s\,  (d_t+D_t)}=\frac{d_t}{d_t+D_t}=\frac{b_t}{C_t\, (d_t+D_t)}\le 1
+\rho_{st}=\frac{n_{st}}{m_{st}}=\frac{n_{\bullet\bullet}\, c\,  \phi_s\,   \psi_t}{n_{\bullet\bullet}\, c\,  \phi_s (\psi_t+\Psi_t)}=\frac{\psi_t}{\psi_t+\Psi_t}\le 1 
 \end{displaymath}
-which depends on $t$ only: it appears that the disembarkment probability $\rho_t=\frac{d_t}{d_t+D_t}$ at $t$ is {\em independent} of the embarkment stop $s$. Said otherwise, a traveler embarking at any stop $s$ (and thus necessarily in the bus at $F(s)=s+1$) experiences the {\em same disembarkment probability} at each further stop $t>s$. 
+which depends on $t$ only: it appears that the disembarkment probability $\rho_t=\frac{\psi_t}{\psi_t+\Psi_t}$ at $t$ is {\em independent} of the embarkment stop $s$. Said otherwise, a traveler embarking at any stop $s$ (and thus necessarily in the bus at $F(s)=s+1$) experiences the {\em same disembarkment probability} at each further stop $t>s$. 
 
 
 This Markov property, enjoyed by maximum-entropic flows, contrasts other possible solutions, such as  the ``first in, first out" (FIFO) flows (homogenizing the 
 traveled distances among users) or the ``last in, first out" (LIFO) flows (tending to generate maximally  contrasted traveled distances).
-
-\
 
 
 ***  @G, ici davantage de développements sur l'approche Markovienne, ainsi que le joli schéma ?  ***
@@ -452,7 +451,6 @@ traveled distances among users) or the ``last in, first out" (LIFO) flows (tendi
 		\State \Return $\mathbf{Z}$
 	\end{algorithmic}
 \end{algorithm}
-
  
 %% --------------------------------- CASE STUDIES
 
