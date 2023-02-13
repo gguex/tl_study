@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.1.9)  13 FEB 2023 15:27
-=======
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.7)  13 FEB 2023 15:17
->>>>>>> 58ed4004edeaab4df4213cc54e564d4521964b65
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.1.9)  13 FEB 2023 15:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -496,95 +492,55 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 159.
  [2] [3] [4] [5] [6]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 439.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 438.
 
-<<<<<<< HEAD
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [7]
 [8]
 
 LaTeX Warning: Reference `fig:map-lausanne' on page 9 undefined on input line 4
-81.
+79.
 
 
 LaTeX Warning: Reference `fig:network-lausanne' on page 9 undefined on input li
-ne 481.
-=======
-LaTeX Warning: Reference `fig:map-lausanne' on page 8 undefined on input line 4
-45.
-
-
-LaTeX Warning: Reference `fig:network-lausanne' on page 8 undefined on input li
-ne 445.
->>>>>>> 58ed4004edeaab4df4213cc54e564d4521964b65
+ne 479.
 
 <img/stop_area_c.png, id=41, 685.56125pt x 435.6275pt>
 File: img/stop_area_c.png Graphic file (type png)
 <use img/stop_area_c.png>
-<<<<<<< HEAD
-Package pdftex.def Info: img/stop_area_c.png  used on input line 486.
+Package pdftex.def Info: img/stop_area_c.png  used on input line 484.
 (pdftex.def)             Requested size: 170.71652pt x 108.47453pt.
 
-Overfull \hbox (2.71652pt too wide) in paragraph at lines 486--487
-=======
-Package pdftex.def Info: img/stop_area_c.png  used on input line 450.
-(pdftex.def)             Requested size: 170.71652pt x 108.47453pt.
-
-Overfull \hbox (2.71652pt too wide) in paragraph at lines 450--451
->>>>>>> 58ed4004edeaab4df4213cc54e564d4521964b65
+Overfull \hbox (2.71652pt too wide) in paragraph at lines 484--485
  [][] 
  []
 
 <img/edge_type3.png, id=43, 532.1481pt x 489.9906pt>
 File: img/edge_type3.png Graphic file (type png)
 <use img/edge_type3.png>
-<<<<<<< HEAD
-Package pdftex.def Info: img/edge_type3.png  used on input line 494.
+Package pdftex.def Info: img/edge_type3.png  used on input line 492.
 (pdftex.def)             Requested size: 113.81102pt x 104.79265pt.
 [9]
-Underfull \hbox (badness 10000) in paragraph at lines 527--528
-=======
-Package pdftex.def Info: img/edge_type3.png  used on input line 458.
-(pdftex.def)             Requested size: 113.81102pt x 104.79265pt.
-[8]
-Underfull \hbox (badness 10000) in paragraph at lines 491--492
->>>>>>> 58ed4004edeaab4df4213cc54e564d4521964b65
+Underfull \hbox (badness 10000) in paragraph at lines 525--526
 
  []
 
 
-<<<<<<< HEAD
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 529--542
-=======
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 493--506
->>>>>>> 58ed4004edeaab4df4213cc54e564d4521964b65
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 527--540
 [] 
  []
 
 
-<<<<<<< HEAD
 LaTeX Warning: Reference `fig:example-map' on page 10 undefined on input line 5
-48.
-=======
-LaTeX Warning: Reference `fig:example-map' on page 9 undefined on input line 51
-2.
->>>>>>> 58ed4004edeaab4df4213cc54e564d4521964b65
+46.
 
 <img/example_map.png, id=47, 639.38875pt x 556.0775pt>
 File: img/example_map.png Graphic file (type png)
 <use img/example_map.png>
-<<<<<<< HEAD
-Package pdftex.def Info: img/example_map.png  used on input line 554.
+Package pdftex.def Info: img/example_map.png  used on input line 552.
 (pdftex.def)             Requested size: 199.16928pt x 173.21378pt.
 [10] (./article_v0.bbl
-=======
-Package pdftex.def Info: img/example_map.png  used on input line 518.
-(pdftex.def)             Requested size: 199.16928pt x 173.21378pt.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 526.
-[9] (./article_v0.bbl
->>>>>>> 58ed4004edeaab4df4213cc54e564d4521964b65
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <7> not available
 (Font)              Font shape `OT1/phv/m/sl' tried instead on input line 49.
 LaTeX Font Info:    Trying to load font information for TS1+phv on input line 5
@@ -613,7 +569,6 @@ Here is how much of TeX's memory you used:
  24752 multiletter control sequences out of 15000+600000
  556831 words of font info for 200 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
-<<<<<<< HEAD
  69i,14n,79p,1392b,505s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texm
@@ -627,24 +582,7 @@ texlive/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-di
 st/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/u
 rw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a
 .pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on article_v0.pdf (12 pages, 162754 bytes).
-=======
- 50i,14n,48p,1389b,402s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2020/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
-exlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
-xlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/tex
-live/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texli
-ve/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texliv
-e/2020/texmf-dist/fonts/type1/public/rsfs/rsfs10.pfb></usr/local/texlive/2020/t
-exmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2020/texmf-di
-st/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2020/texmf-dist/font
-s/type1/urw/helvetic/uhvro8a.pfb></usr/local/texlive/2020/texmf-dist/fonts/type
-1/urw/symbol/usyr.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/urw/symbo
-l/usyr.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/urw/times/utmb8a.pfb
-></usr/local/texlive/2020/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/loc
-al/texlive/2020/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on article_v0.pdf (11 pages, 149200 bytes).
->>>>>>> 58ed4004edeaab4df4213cc54e564d4521964b65
+Output written on article_v0.pdf (12 pages, 162925 bytes).
 PDF statistics:
  113 PDF objects out of 1000 (max. 8388607)
  68 compressed objects within 1 object stream
