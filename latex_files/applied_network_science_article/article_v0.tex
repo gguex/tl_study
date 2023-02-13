@@ -382,7 +382,7 @@ where $\phi_s$ and $\psi_t$ are the values (\ref{Sol_LagMult}) obtained in the p
 	\begin{algorithmic}[1]
 		\State $g_{st} \leftarrow I(\chi_{\bullet \bullet}^{st} > 0) / \sum_{s't'}I(\chi_{\bullet \bullet}^{s't'} > 0), \; \forall s,t$ \Comment{{\footnotesize Initialize the prior distribution}}
 		
-		\State $\alpha_s \leftarrow a_s / a_\bullet, \; \forall s,t$ \Comment{{\footnotesize Initialize the network ingoing distribution}}
+		\State $\alpha_s \leftarrow a_s / a_\bullet, \; \forall s$ \Comment{{\footnotesize Initialize the network ingoing distribution}}
 		
 		\State $\beta_t \leftarrow b_t / b_\bullet, \; \forall t$ \Comment{{\footnotesize Initialize the network outgoing distribution}}
 		
@@ -485,120 +485,6 @@ traveled distances among users) or the ``last in, first out" (LIFO) flows (tendi
 
   
 \newpage
-
-\section*{Previous submission to complex networks 2022}
-
-%
-\section*{Statement of the problem}
-%
-
-Automatic passenger counters measure the number of passengers entering and leaving buses at each stop \cite{boyle_passenger_1998}. Given this information, can we estimate the complete trajectories of passengers within the entire multi-line network? This communication attempts to propose an estimation of all passenger trajectories in the multi-line network with an algorithm based on iterative proportional fitting (IPF) \cite{bishop_discrete_2007}.
-
-The exploited dataset is provided by the Lausanne Transportation Agency (tl) in Switzerland. The dataset includes 42 lines of buses (or subways) and more than 1361 stops, including 497 clusters of stops (Fig. \ref{fig:map-lausanne}),  carrying around 115 million passengers in 2019. Each stop refers to a single directed line, and return lines are considered as distinct.  In addition to  \emph{line edges},  it is possible to construct pedestrian \emph{transfer edges} (Fig. \ref{fig:network-lausanne}) to make the graph unilaterally connected by considering, e.g., clusters of stops connected.
-
-\noindent \begin{minipage}[c]{0.5\textwidth}
-   \begin{figure}[H]
-      \centering
-      \includegraphics[width=6cm]{img/stop_area_c.png}
-      \caption{Cluster of stops} 
-      \label{fig:map-lausanne}
-   \end{figure}
-\end{minipage}%
-\begin{minipage}[c]{0.5\textwidth}
-   \begin{figure}[H]
-      \centering
-      \includegraphics[width=4cm]{img/edge_type3.png}
-      \caption{The multi-line network structure} 
-      \label{fig:network-lausanne}
-   \end{figure}
-\end{minipage}
-
-
-$\mbox{}$
-
-Knowing only the network structure and the number of passengers embarking and disembarking at each stop, how can we infer the most probable passenger trajectories in the network? Before examining the general multi-line network problem,  we address the estimation of trajectories on a single line.
-
-%
-\section{Single line}
-%
-
-Consider a one-directional line with $n$ stops indexed regarding the order found in the line.  Let $\mathbf{a}_\text{in} = (a_{s}^\text{in})$ and $\mathbf{a}_\text{out} = (a_{t}^\text{out})$ be two vectors representing, respectively, the passengers entering and leaving the line at each stop. The goal is to estimate the $(n \times n)$ origin-destination matrix $\mathbf{N} = (n_{st})$, where $n_{st}$ represents the number of passengers entering the line at $s$ and leaving at $t$, subject to constraints $n_{s\bullet} = a^\text{in}_s$ and $n_{\bullet t} = a^\text{out}_t$.  Among many feasible solutions, arguably the most elegant one is the maximum entropy solution, which can be derived  from different means:  (i) passenger flows can be modelled using a Markovian assumption, which translates by assuming that every passenger has the same probability to continue the trip after having travelled at last one stop ; (ii) an iterative proportional fitting algorithm can be performed, starting with an initial origin-destination affinity matrix $\mathbf{S} = (s_{st})$, defined as the upper triangular $n\times n$ matrix filled with $1$, and then iterated to satisfy the margin constraints given by $\mathbf{a}_\text{in}$ and $\mathbf{a}_\text{out}$. Both approaches give the same solution, but only the latter remains pertinent in the multi-line problem.
-
-%
-\section{Multi-lines}
-%
-
-In the multi-line problem, a passenger can transfer from a line to another. The problem cannot be tackled with Markov chain modelling anymore, which generate unrealistic random trajectories. Instead, we will assume that passengers follow shortest paths. Starting from an origin-destination matrix $\mathbf{N} = (n_{st})$, where $s$ denotes the stop at which a passenger \emph{enters into the network} (and not simply enters a particular line), and $t$ denotes the stop where the passenger \emph{leaves definitively the network}, this shortest paths assumption allows us to compute the flow matrix on edges $\mathbf{X} = (x_{ij})$. The latter decomposes into the within-line flow and the transfer flow, i.e., $\mathbf{X}=\mathbf{X}_\text{W}+\mathbf{X}_\text{B}$. 
-Moreover, in the multi-line problem, we also have to distinguish between:
-\begin{itemize}
-	\item[$\bullet$]  passengers who enter and leave bus lines at each stop, represented by vectors $\mathbf{a}_\text{in}$ and $\mathbf{a}_\text{out}$, which are \emph{measured},
-	\item[$\bullet$] and passengers who enter and leave the network at each stop $i$, represented by the \emph{unknown} quantities $n_{\bullet i}$ and $n_{i \bullet}$.
-\end{itemize}
-By construction, 
-\begin{align}
-		a^\text{in}_i &=n_{i\bullet} + x^\text{B}_{i\bullet},  &
-		a^\text{out}_i &= n_{\bullet i} + x^\text{B}_{\bullet i},
-\end{align}
-
-Using these two constraints, along with the shortest paths assumption and iterative proportional fitting, we propose the following iterative algorithm in order to find $\mathbf{N}$ from measured $\mathbf{a}_\text{in}$ and $\mathbf{a}_\text{out}$. \\
-
-\noindent \fbox{\begin{minipage}{\textwidth}
-
-\textbf{Initialisation:} $\mathbf{S}^{(0)}$ is filled with 1 excepted for aberrant origin-destination pairs (such as $t$ beeing a previous stop of the same line as $s$). The margins of $\mathbf{N}$ are fixed as $\mathbf{n}^{(0)}_{\mbox{\scriptsize in}} = \mathbf{a}_\text{in}$ and $\mathbf{n}^{(0)}_{\mbox{\scriptsize out}} = \mathbf{a}_\text{out}$.
-
-\textbf{Step 1, Iterative proportional fitting:}
-We use IPF to compute $\mathbf{N}^{(r)}$ starting from $\mathbf{S}^{(r)}$, such that margin constraints, defined by $\mathbf{n}^{(r)}_\text{in}$ and $\mathbf{n}^{(r)}_\text{out}$ are satisfied.
-
-\textbf{Step 2, Shortest paths flow:}
-Using shortest paths information, we compute $\mathbf{X}^{(r)}_\text{B}$ from $\mathbf{N}^{(r)}$.
-
-\textbf{Step 3, Affinity and margin update:}
-$\mathbf{S}^{(r+1)}$, $\mathbf{n}^{(r+1)}_\text{in}$ and $\mathbf{n}^{(r+1)}_\text{out}$ are updated in order to respect constraints defined by (1).
-\end{minipage}}
-
-Step 1, 2, and 3 are iterated until convergence, giving an admissible solution to the problem.
-%
-\section{A small example}
-%
-
-As an illustration, an estimated solution proposed by the algorithm on a restricted network made of four lines only is depicted on Fig. \ref{fig:example-map}. A total of $n_{\bullet \bullet} = 16,837,494$ passengers using this network is estimated by the algorithm. The red circle on the bottom left represents the start of the trip $s$ and the size of the circles at stops $t$ represents the estimated number of passengers terminating their trip at $t$. In this example, the majority of passengers exit the network on the same initial embarkment line. A small fraction of them takes another line. 
-
-Table \ref{fig:example-edges} represents the estimated ten most frequented transfer edges. The code of the stop represents the number of the line, the direction and a condensed name of its stop cluster. The third column gives the number (in thousands) of passengers transferring through this edge.
-
-\noindent \begin{minipage}[c]{0.6\textwidth}
-   \begin{figure}[H]
-      \includegraphics[width=7cm]{img/example_map.png}
-      \caption{Example map} 
-      \label{fig:example-map}
-   \end{figure}
-\end{minipage}%
-\begin{minipage}[c]{0.43\textwidth}
-      %\centering
-      \begin{table}[H]
-		\begin{tabular}{l|l|r}
-		\multicolumn{1}{c|}{\textbf{From stop}} & \multicolumn{1}{c|}{\textbf{To stop}} & \multicolumn{1}{c}{\textbf{Count}} \\ \hline
-		{\scriptsize S7\_A\_SF\_O}			& {\scriptsize S9\_A\_SF\_O}			& 192k		\\ \hline
-		{\scriptsize S9\_R\_CH\_E}			& {\scriptsize S6\_A\_CH\_E}			& 187k		\\ \hline
-		{\scriptsize S7\_A\_SF\_O}		& {\scriptsize S8\_R\_SF\_S}				& 135k			\\ \hline
-		{\scriptsize S6\_R\_CH\_O}			& {\scriptsize S9\_A\_CH\_O}			& 135k			\\ \hline
-		{\scriptsize S8\_A\_GTE\_N}		& {\scriptsize S9\_R\_GTE\_E}			& 103k		\\ \hline
-		{\scriptsize S9\_R\_B-AIR\_C}		& {\scriptsize S8\_A\_B-AIR\_N}		& 99k			\\ \hline
-		{\scriptsize S9\_A\_SF\_O}			& {\scriptsize S7\_A\_SF\_O}			& 88k			\\ \hline
-		{\scriptsize S8\_R\_B-AIR\_D}		& {\scriptsize S6\_A\_B-AIR\_C}		& 87k			\\ \hline
-		{\scriptsize S6\_R\_SF\_O}			& {\scriptsize S8\_A\_SF\_O}			& 86k			\\ \hline
-		{\scriptsize S9\_A\_GTE\_O}		& {\scriptsize S8\_R\_GTE\_S}		& 84k                                        
-		\end{tabular}
-\vspace*{0.2cm}	\caption{List of the ten most\\ frequented transfer edges} 
-	\label{fig:example-edges}
-	\end{table}
-\end{minipage}
-
-\vspace*{0.2cm}
-
-The current work performs computer-intensive simulations of flow over the entire network (1361 stops), permitting to extract usual network indices (centrality, betweenness...) characterizing both the stops \emph{and} the lines. In parallel, the computational effects of various fine tuning calibration parameters used in the algorithm are investigated. 
-
-
-
 
 
 \section*{Appendix}
