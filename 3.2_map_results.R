@@ -85,7 +85,7 @@ stops_sel_shp = stops_shp %>%
 # --- Creating big shapefiles from results  
 
 # Id for the starting stop
-id_stop = 1
+id_stop = 50
 
 # Getting the ingoing and outgoing flow for each stops
 init_stop = stop_names[id_stop]
@@ -156,7 +156,7 @@ line_map = leaflet() %>%
 line_map
 
 # --- Transfert table
-line_res_small = line_res[, c("line_nbr", "direction", "label", "transferts_in", "transferts_out")]
+line_res_small = line_res[, c("line_nbr", "direction", "label", "transfers_in", "transfers_out")]
 
 # Only not null transferts edges
 line_res_small_NN = line_res_small[rowSums(line_res_small[,4:5]) > 0, ]

@@ -65,7 +65,7 @@ res_net_list = build_network_structure(line_mbrshps,
 # Travel time vec
 travel_t_vec = line_df$travel_time
 # Waiting time vec
-waiting_t_vec = rep(waiting_time, n)
+wait_t_vec = rep(waiting_time, n)
 # Adjacency within
 adj_w = res_net_list$adj_w
 # Adjacency between
@@ -80,7 +80,7 @@ res_sp_list = build_sp_data_mc(line_mbrshps,
                                adj_w,
                                adj_b, 
                                travel_t_vec,
-                               waiting_t_vec,
+                               wait_t_vec,
                                ped_t_mat, 
                                mc.cores=mc.cores)
 

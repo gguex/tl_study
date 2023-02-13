@@ -218,11 +218,11 @@ compute_sp_edges = function(s, t, adj_w, adj_b, ped_t_mat, travel_t_mat,
   }
   
   # Test if s,t are on the same line and s < t
-  if((line_mbrshps[s] == line_mbrshps[t]) & s < t){
+  if((line_mbrshps[s] == line_mbrshps[t]) & (s < t)){
     # Get the index of edges in sp
-    index_sp_edge = sapply(s:t,
+    index_sp_edge = sapply(s:(t-1),
       function(i) which((edge_ref[,1] == i) & (edge_ref[,2] == i+1)))
-    if(typeof(ed) == "integer"){
+    if(typeof(index_sp_edge) == "integer"){
       return(index_sp_edge)
     } else {
       return(NULL)
@@ -294,7 +294,7 @@ build_sp_data_mc = function(line_mbrshps, tour_mbrshps, adj_w, adj_b,
   n_edges = dim(edge_ref)[1]
   
   # --- Compute shortest-path data
-  
+  s
   # Create the graph 
   full_g = graph_from_adjacency_matrix(adj_w + adj_b, mode="directed")
   
@@ -553,7 +553,7 @@ compute_origin_destination =
       sum(btw_edge_flow[edge_btw_ref[, 2] == i]))
     node_out_btw = sapply(1:n, function(i) 
       sum(btw_edge_flow[edge_btw_ref[, 1] == i]))
-  
+
     # Compute unscaled sigmas
     unscaled_sigma_in = flow_l_in - node_in_btw
     unscaled_sigma_out = flow_l_out - node_out_btw
