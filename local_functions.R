@@ -464,7 +464,7 @@ compute_origin_destination =
   function(flow_l_in, flow_l_out, edge_ref, sp_ref, sp_edge_link, 
            s_mat=NULL, min_p_ntwk=0.1, conv_thres_if=1e-5,
            conv_thres_algo=1e-5, epsilon=1e-40,
-           max_it=200, max_it_if=400, display_it=T){
+           max_it=200, max_it_if=400, display_it=T, return_it=F){
   
   # --- Get the network structure 
   
@@ -505,6 +505,12 @@ compute_origin_destination =
   converge_algo = F
   # Iteration counter
   it_algo = 1
+  
+  # --- For it return
+  
+  if(return_it){
+    n_mat_list = list()
+  }
   
   while(!converge_algo & it_algo <= max_it){
     
@@ -615,12 +621,20 @@ compute_origin_destination =
     if(diff_f < conv_thres_algo){
       converge_algo = T
     }
+    # If return for each it
+    if(return_it){
+      n_mat_list[[it_algo]] = n_mat
+    }
     # Iteration
     it_algo = it_algo + 1
   }
   
   # Return results
-  return(n_mat)
+  if(return_it){
+    return(n_mat_list)
+  } else {
+    return(n_mat)
+  }
 }
 
 #-------------------------------------------------------------------------------
