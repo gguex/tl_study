@@ -56,7 +56,6 @@ n_test = 50
 # prop limit
 # hyper_par = c(0.1, 0.3, 0.5, 0.7)
 hyper_par = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1)
-# hyper_par = 0.1
 # number of passengers
 n_passengers = 2000
 # number of cores
@@ -98,6 +97,7 @@ for (j in 1:length(hyper_par)) {
   mean_line$param = substr(mean_line$param, 4, 7)
 }
 # write.csv(res_mat_line, "res_error_line_2000p_50test.csv", row.names = F)
+# write.csv(mean_line, "mean_error_line_param_2000p_50test.csv", row.names = F)
 
 # Plot the results
 ggplot() +
@@ -116,6 +116,7 @@ ggplot() +
 ggplot() +
   geom_line(data=mean_line,
             aes(x=param, y=mean_error, group=Lines, color=factor(Lines))) +
-  # labs(title=paste(n_test, "iterations, parameter:", paste(hyper_par,collapse = ', ')), x = "Nb of lines into the network", y = "Mean error")
   labs(x=expression(theta), y="Error") +
-  labs(color="Lines")
+  labs(color="Lines") +
+  geom_errorbar(data=mean_line,
+                aes(x=param, ymin=mean_error-sd_error, ymax=mean_error+sd_error), width=0.1)
