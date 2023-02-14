@@ -25,12 +25,12 @@ nb_lines = 2
 # Choose number of stops
 nb_stops = nb_lines + 1
 # Choose number of passengers in the network (with normal distribution)
-nb_passengers = 1000
+nb_passengers = 100
 # Total number of stops *2 (back and forth)
 nb_stops_tot = nb_lines*nb_stops*2
 
 # Conv threshold for iterative fitting
-conv_thres_if = 1e-5
+conv_thres_if = 1e-6
 # Conv threshold
 conv_thres_algo = 1e-8
 # proportional limit 
@@ -40,13 +40,13 @@ epsilon = 1e-40
 # max iterations
 max_it = 16
 # max iterations for iterative fitting
-max_it_if = 400
+max_it_if = 1000
 
 # Seed
-set.seed(35)
+set.seed(10)
 
 # It list
-it_list = c(1, 3, 6, 11, 16)
+it_list = c(2, 4, 7, 11, 16)
 
 #--------------------------------
 # Code
@@ -55,7 +55,10 @@ it_list = c(1, 3, 6, 11, 16)
 # --- Network creation
 
 # Stop names 
-stop_names = rep(c("A1", "R1", "A2", "R2"), each=3)
+stop_names = c("A1", "A2", "A3", 
+               "B1", "B2", "B3", 
+               "C1", "C2", "C3", 
+               "D1", "D2", "D3")
 
 # Create the network
 network_prop = network_prop(nb_lines, nb_stops)
@@ -116,20 +119,32 @@ layout = matrix(c(1, 2,
                   1, 3), 12, 2, byrow = T)
 layout = layout[v_order, ]
 
-pdf(paste0(result_folder, "/real.pdf"))
+e_line_size = 0.2
+e_flow_size = 3
+v_label_size = 1
+
+pdf(paste0(result_folder, "/iterations.pdf"))
+par(mfrow=c(2,3))
 plot_flow_graph(adj, n_real, layout, v_names=stop_names, main="Real", 
-                e_line_size=1, e_flow_size=6, v_label_size=1.6)
-dev.off()
+                e_line_size=e_line_size, e_flow_size=e_flow_size, 
+                v_label_size=v_label_size)
 
 for(it in it_list){
   n_mat = n_mat_list[[it]]
-  error_mat = abs(n_mat - n_real)
-  error = sum(error_mat[!is.infinite(error_mat)])
-  pdf(paste0(result_folder, "/it_", it - 1, ".pdf"))
+  x_r_btw = compute_x_from_n(n_mat, edge_ref, sp_ref, sp_edge_link)$x_btw
+  flow_r_in = rowSums(n_mat) + colSums(x_r_btw)
+  flow_r_out = colSums(n_mat) + rowSums(x_r_btw)
+  error = sum(abs(n_mat - n_real))
+  error_in = sum(abs(flow_l_in - flow_r_in)) / sum(flow_l_in)
+  error_out = sum(abs(flow_l_out - flow_r_out)) / sum(flow_l_out)
+  error_m = mean(c(error_in, error_out))
   plot_flow_graph(adj, n_mat, layout, v_names=stop_names, 
-                  main=paste0("It=", it - 1, ", Error=", 
+                  main=paste0("\nIt=", it - 1, "\nError=", 
+                              format(error, digits=),"\nMargin error=", 
                               format(error, digits=)), 
-                  e_line_size=1, e_flow_size=6, v_label_size=1.6)
-  dev.off()
+                  e_line_size=e_line_size, e_flow_size=e_flow_size, 
+                  v_label_size=v_label_size)
 }
+dev.off()
+
 

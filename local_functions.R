@@ -737,13 +737,13 @@ plot_flow_graph = function(adj, n_mat, layout=NULL, v_names=NULL,
   n_edges = length(E(g_tot))
   std_weights = E(g_tot)$weight[E(g_tot)$type == "flow"]
   std_weights = std_weights / max(std_weights)
-  color_green_fn = colorRamp(c("white", "red"))
+  color_green_fn = colorRamp(c("white", "forestgreen"))
   color_red_fn = colorRamp(c("white", "red"))
   color_blue_fn = colorRamp(c("white", "blue"))
   
   edge_sizes = (E(g_tot)$type == "line") * e_line_size
   edge_sizes[E(g_tot)$type == "flow"] = std_weights * e_flow_size
-  edge_curves = (E(g_tot)$type == "line") * 0.2
+  edge_curves = (E(g_tot)$type == "flow") * 0.3
   edge_colors = rep("black", n_edges)
   new_colors = apply(cbind(color_green_fn(std_weights), std_weights), 1, 
                      function(row) rgb(row[1], row[2], row[3], row[4]*255, 
@@ -757,12 +757,13 @@ plot_flow_graph = function(adj, n_mat, layout=NULL, v_names=NULL,
   in_prop = in_prop / max(in_prop)
   out_prop = colSums(n_mat)
   out_prop = out_prop / max(out_prop)
+  g_order = order(as.numeric(V(g_tot)$name))
   for (i in 1:n_vertices){
     pie_prop[[i]] = c(0.5, 0.5)
     in_color = color_red_fn(in_prop[i])
     out_color = color_blue_fn(out_prop[i])
-    in_out_colors[[i]] = c(rgb(in_color, alpha=125, maxColorValue=255), 
-                           rgb(out_color, alpha=125, maxColorValue=255))
+    in_out_colors[[g_order[i]]] = c(rgb(in_color, alpha=180, maxColorValue=255),
+                                    rgb(out_color, alpha=180, maxColorValue=255))
   }
   
   # Set names
@@ -774,9 +775,10 @@ plot_flow_graph = function(adj, n_mat, layout=NULL, v_names=NULL,
   # Plot graph
   par(mar=c(0,0,1.2,0)+.1)
   plot(g_tot, layout=layout, edge.color=edge_colors, edge.width=edge_sizes,
-       edge.curved=edge_curves, edge.arrow.size=edge_sizes, 
-       vertex.shape="pie", vertex.pie=pie_prop, vertex.pie.color=in_out_colors, 
-       main=main, vertex.label.cex=v_label_size, vertex.label.color="black")
+       edge.curved=edge_curves, edge.arrow.size=edge_sizes*3, 
+       edge.arrow.width=edge_sizes*3, vertex.shape="pie", vertex.pie=pie_prop, 
+       vertex.pie.color=in_out_colors, main=main, vertex.label.cex=v_label_size, 
+       vertex.label.color="black")
   if(!is.null(main)){
     title(main)
   }
