@@ -52,9 +52,10 @@ max_it = 1000
 # print iterations
 display_it = F
 # number of iterations
-n_test = 5
+n_test = 50
 # prop limit
-hyper_par = c(0.1, 0.3, 0.5, 0.7)
+# hyper_par = c(0.1, 0.3, 0.5, 0.7)
+hyper_par = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1)
 # hyper_par = 0.1
 # number of passengers
 n_passengers = 2000
@@ -96,6 +97,7 @@ for (j in 1:length(hyper_par)) {
   colnames(mean_line) <- c("Lines", "mean_error", "sd_error","param")
   mean_line$param = substr(mean_line$param, 4, 7)
 }
+# write.csv(res_mat_line, "res_error_line_2000p_50test.csv", row.names = F)
 
 # Plot the results
 ggplot() +
@@ -109,3 +111,11 @@ ggplot() +
   scale_x_continuous(limits = c(min(mean_line$Lines)-1, max(mean_line$Lines))+0.5,
                      breaks = pretty(mean_line$Lines)) +
   labs(color=expression(theta)) 
+
+# Plot the results 2
+ggplot() +
+  geom_line(data=mean_line,
+            aes(x=param, y=mean_error, group=Lines, color=factor(Lines))) +
+  # labs(title=paste(n_test, "iterations, parameter:", paste(hyper_par,collapse = ', ')), x = "Nb of lines into the network", y = "Mean error")
+  labs(x=expression(theta), y="Error") +
+  labs(color="Lines")
