@@ -525,7 +525,7 @@ compute_origin_destination =
     
     distrib2flow_const = flow_l_in[node_ref] / sigma_in[node_ref]
     
-    # --- STEP 1: Iterative fitting 
+    # --- STEP 1: Iterative fitting
     
     psi = rep(1, ncol(g_ref))
     converge_if = F
@@ -703,31 +703,20 @@ compute_x_from_n = function(n_mat, edge_ref, sp_ref, sp_edge_link){
 # - None, gives a plot
 #-------------------------------------------------------------------------------
 
-plot_flow_graph = function(adj, n_mat, layout=NULL, main=NULL, annotate=F){
+plot_flow_graph = function(adj, n_mat, layout=NULL, v_names=NULL, 
+                           main=NULL, e_line_size=1.5, e_flow_size=2, 
+                           v_label_size=2){
   
-  if(annotate){
-    igraph_options(annotate.plot=TRUE)
-  }
-  
+  # Number of edges
   n = dim(adj)[1]
   
   # Names management
-  if(!is.null(colnames(adj))){
-    v_names = colnames(adj)
-  } else if (!is.null(rownames(adj))){
-    v_names = rownames(adj)
-  } else if (!is.null(colnames(n_mat))){
-    v_names = colnames(n_mat)
-  } else if (!is.null(rownames(n_mat))){
-    v_names = rownames(n_mat)
-  } else {
-    v_names = paste0("S", 1:n)
-  }
-  rownames(adj) = v_names
-  colnames(adj) = v_names
-  rownames(n_mat) = v_names
-  colnames(n_mat) = v_names
+  rownames(adj) = NULL
+  colnames(adj) = NULL
+  rownames(n_mat) = NULL
+  colnames(n_mat) = NULL
   
+  # Build dataframes
   df_line = igraph::as_data_frame(graph_from_adjacency_matrix(adj, 
                                                               weighted = TRUE))
   df_line["type"] = "line"
@@ -736,24 +725,24 @@ plot_flow_graph = function(adj, n_mat, layout=NULL, main=NULL, annotate=F){
   df_flow["type"] = "flow"
   df_tot = rbind(df_line, df_flow)
   
+  # Set layout
   if(is.null(layout)){
     layout = layout_nicely(graph_from_data_frame(df_line))
   }
   
+  # Build the full graph
   g_tot = graph_from_data_frame(df_tot)
   
   n_vertices = length(V(g_tot))
   n_edges = length(E(g_tot))
-  
   std_weights = E(g_tot)$weight[E(g_tot)$type == "flow"]
   std_weights = std_weights / max(std_weights)
-  
-  color_green_fn = colorRamp(c("white", "forestgreen"))
+  color_green_fn = colorRamp(c("white", "red"))
   color_red_fn = colorRamp(c("white", "red"))
   color_blue_fn = colorRamp(c("white", "blue"))
   
-  edge_sizes = (E(g_tot)$type == "line") * 0.5
-  edge_sizes[E(g_tot)$type == "flow"] = std_weights * 2
+  edge_sizes = (E(g_tot)$type == "line") * e_line_size
+  edge_sizes[E(g_tot)$type == "flow"] = std_weights * e_flow_size
   edge_curves = (E(g_tot)$type == "line") * 0.2
   edge_colors = rep("black", n_edges)
   new_colors = apply(cbind(color_green_fn(std_weights), std_weights), 1, 
@@ -761,6 +750,7 @@ plot_flow_graph = function(adj, n_mat, layout=NULL, main=NULL, annotate=F){
                                        maxColorValue=255))
   edge_colors[E(g_tot)$type == "flow"] = new_colors
   
+  # Set in-out colors
   pie_prop = list()
   in_out_colors = list()
   in_prop = rowSums(n_mat)
@@ -769,17 +759,27 @@ plot_flow_graph = function(adj, n_mat, layout=NULL, main=NULL, annotate=F){
   out_prop = out_prop / max(out_prop)
   for (i in 1:n_vertices){
     pie_prop[[i]] = c(0.5, 0.5)
-    loc = which(V(g_tot)$name == names(in_prop)[i])
     in_color = color_red_fn(in_prop[i])
     out_color = color_blue_fn(out_prop[i])
-    in_out_colors[[loc]] = c(rgb(in_color, maxColorValue=255), 
-                             rgb(out_color, maxColorValue=255))
+    in_out_colors[[i]] = c(rgb(in_color, alpha=125, maxColorValue=255), 
+                           rgb(out_color, alpha=125, maxColorValue=255))
   }
-  in_out_colors = setNames(in_out_colors, names(in_prop))
   
+  # Set names
+  if(!is.null(v_names)){
+    v_order = as.numeric(V(g_tot)$name)
+    V(g_tot)$name = v_names[v_order]
+  }
+  
+  # Plot graph
+  par(mar=c(0,0,1.2,0)+.1)
   plot(g_tot, layout=layout, edge.color=edge_colors, edge.width=edge_sizes,
-       edge.curved=edge_curves, edge.arrow.size=0.3, vertex.shape="pie", 
-       vertex.pie=pie_prop, vertex.pie.color=in_out_colors, main=main)
+       edge.curved=edge_curves, edge.arrow.size=edge_sizes, 
+       vertex.shape="pie", vertex.pie=pie_prop, vertex.pie.color=in_out_colors, 
+       main=main, vertex.label.cex=v_label_size)
+  if(!is.null(main)){
+    title(main)
+  }
 }
 
 #-------------------------------------------------------------------------------
