@@ -17,6 +17,9 @@ source("local_functions.R")
 # Parameters
 #--------------------------------
 
+# Result folder
+result_folder = "results/iteration_plots"
+
 # Choose number of lines
 nb_lines = 2
 # Choose number of stops
@@ -35,12 +38,15 @@ min_p_ntwk = 0.1
 # epsilon
 epsilon = 1e-40
 # max iterations
-max_it = 15
+max_it = 16
 # max iterations for iterative fitting
 max_it_if = 400
 
 # Seed
 set.seed(35)
+
+# It list
+it_list = c(1, 3, 6, 11, 16)
 
 #--------------------------------
 # Code
@@ -49,12 +55,7 @@ set.seed(35)
 # --- Network creation
 
 # Stop names 
-stop_names = c("A1", "A2", "A3",
-               "B1", "B2", "B3",
-               "C1", "C2", "C3",
-               "D1", "D2", "D3")
-
-stop_names = rep(1:4, each=3)
+stop_names = rep(c("A1", "R1", "A2", "R2"), each=3)
 
 # Create the network
 network_prop = network_prop(nb_lines, nb_stops)
@@ -92,16 +93,43 @@ n_mat_list = compute_origin_destination(flow_l_in,
 # --- Graphs 
 
 # Layout
+rownames(adj) = NULL
+colnames(adj) = NULL
 df_line = igraph::as_data_frame(graph_from_adjacency_matrix(adj, 
                                                             weighted = TRUE))
-layout = layout_nicely(graph_from_data_frame(df_line))
 
-# 
-plot_flow_graph(adj, n_real, layout)
+#layout = layout_nicely(graph_from_data_frame(df_line))
 
-n_mat = n_mat_list[[1]]
-graph_mat = as.matrix(n_mat)
-rownames(graph_mat) = rownames(adj)
-colnames(graph_mat) = colnames(adj)
-plot_flow_graph(adj, graph_mat, layout, v_names=stop_names, main="LABGP", 
-                e_line_size=1, e_flow_size=6, v_label_size=2)
+lay_g = graph_from_data_frame(df_line)
+v_order = as.numeric(V(lay_g)$name)
+layout = matrix(c(1, 2,
+                  2, 2,
+                  2, 1,
+                  3, 1,
+                  3, 2,
+                  4, 2,
+                  4, 3,
+                  3, 3,
+                  3, 4,
+                  2, 4,
+                  2, 3,
+                  1, 3), 12, 2, byrow = T)
+layout = layout[v_order, ]
+
+pdf(paste0(result_folder, "/real.pdf"))
+plot_flow_graph(adj, n_real, layout, v_names=stop_names, main="Real", 
+                e_line_size=1, e_flow_size=6, v_label_size=1.6)
+dev.off()
+
+for(it in it_list){
+  n_mat = n_mat_list[[it]]
+  error_mat = abs(n_mat - n_real)
+  error = sum(error_mat[!is.infinite(error_mat)])
+  pdf(paste0(result_folder, "/it_", it - 1, ".pdf"))
+  plot_flow_graph(adj, n_mat, layout, v_names=stop_names, 
+                  main=paste0("It=", it - 1, ", Error=", 
+                              format(error, digits=)), 
+                  e_line_size=1, e_flow_size=6, v_label_size=1.6)
+  dev.off()
+}
+

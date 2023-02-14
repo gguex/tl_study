@@ -20,7 +20,7 @@ source("local_functions.R")
 
 # --- Test 6789
 
-# # The folder containing pre-processed data
+# The folder containing pre-processed data
 # data_folder = "multilines_data/preprocessed_data/test_mc_6789"
 # # Output folder for results
 # out_folder = "results/test_mc_6789"

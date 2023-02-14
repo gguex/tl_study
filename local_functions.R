@@ -776,7 +776,7 @@ plot_flow_graph = function(adj, n_mat, layout=NULL, v_names=NULL,
   plot(g_tot, layout=layout, edge.color=edge_colors, edge.width=edge_sizes,
        edge.curved=edge_curves, edge.arrow.size=edge_sizes, 
        vertex.shape="pie", vertex.pie=pie_prop, vertex.pie.color=in_out_colors, 
-       main=main, vertex.label.cex=v_label_size)
+       main=main, vertex.label.cex=v_label_size, vertex.label.color="black")
   if(!is.null(main)){
     title(main)
   }
