@@ -703,9 +703,11 @@ compute_x_from_n = function(n_mat, edge_ref, sp_ref, sp_edge_link){
 # - None, gives a plot
 #-------------------------------------------------------------------------------
 
-plot_flow_graph = function(adj, n_mat, layout=NULL, main=NULL){
+plot_flow_graph = function(adj, n_mat, layout=NULL, main=NULL, annotate=F){
   
-  igraph_options(annotate.plot=TRUE)
+  if(annotate){
+    igraph_options(annotate.plot=TRUE)
+  }
   
   n = dim(adj)[1]
   
