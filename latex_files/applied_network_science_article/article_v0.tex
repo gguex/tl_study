@@ -238,13 +238,13 @@ As explained in section \ref{Lines and junctions}, transfers can only occur at j
 
  
 \subsection{Statement of the problem and solution method}
-Automatic passenger counters measure the number of passengers entering and leaving buses at each stop [Boyle, 1998], that is $\mathbf{a}$ and $\mathbf{b}$, which provide the basic raw data of the present study, kindly provided by the Lausanne Transportation Agency (tl), after some preliminary, undocumented corrections (i.e. the components of $\mathbf{a}$ and $\mathbf{b}$ can be non-integer). It may also happen that raw data do not obey the necessary consistency condition  $a_\bullet=b_\bullet$, in which case we did rescale the embarking and disembarking counts as 
+Automatic passenger counters measure the number of passengers entering and leaving buses at each stop [Boyle, 1998], that is $\mathbf{a}$ and $\mathbf{b}$, which provide the basic raw data of the present study, kindly provided by the Lausanne Transportation Agency (tl), after some preliminary, undocumented corrections (i.e. the components of $\mathbf{a}$ and $\mathbf{b}$ can be non-integer). It may also happen that, on some lines $\ell$,  raw data do not obey the necessary consistency condition  $a_\bullet^\ell=b_\bullet^\ell$ (where the latter quantities denote the total embarkments and disembarkments on line $\ell$), in which case we did rescale the embarking and disembarking line counts as 
 \begin{displaymath}
-\hat{a}_i=(1-\frac{a_\bullet-b_\bullet}{a_\bullet+b_\bullet})\, a_i 
+\hat{a}_i=(1-\frac{a_\bullet^\ell-b_\bullet^\ell}{a_\bullet^\ell+b_\bullet^\ell})\, a_i 
  \qquad\qquad\qquad
-  \hat{b}_i=(1+\frac{a_\bullet-b_\bullet}{a_\bullet+b_\bullet})\,  b_i 
+  \hat{b}_i=(1+\frac{a_\bullet^\ell-b_\bullet^\ell}{a_\bullet^\ell+b_\bullet^\ell})\,  b_i 
 \end{displaymath}
-ensuring $\hat{a}_\bullet=\hat{b}_\bullet=2a_\bullet b_\bullet/(a_\bullet+b_\bullet)$. However, strongly unbalanced lines such that  $|a_\bullet-b_\bullet|/a_\bullet > 0.3$ or $|a_\bullet-b_\bullet|/b_\bullet > 0.3$  (which always turned out to be temporary lines with small  counts) were simply disregarded and removed from the network. 
+ensuring $\hat{a}_\bullet^\ell=\hat{b}_\bullet^\ell=2a_\bullet^\ell b_\bullet^\ell/(a_\bullet^\ell+b_\bullet^\ell)$. However, strongly unbalanced lines such that  $|a_\bullet^\ell-b_\bullet|^\ell/a_\bullet^\ell > 0.3$ or $|a_\bullet^\ell-b_\bullet^\ell|/b_\bullet^\ell > 0.3$  (which always turned out to be temporary lines with small  counts) were simply disregarded and line $\ell$ removed from the network. 
 
 Also, the geometry of the network permits to derive the edge-trip incidence matrix $\bm{\chi}$ defined in (\ref{edgetrip}). 
 
