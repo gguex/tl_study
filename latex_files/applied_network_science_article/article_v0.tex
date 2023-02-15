@@ -475,7 +475,27 @@ traveled distances among users) or the ``last in, first out" (LIFO) flows (tendi
 \section{Case Studies}
 \label{casestudies}
 
+Case studies are divided in two sections. In the first section, we test the algorithm on toy examples, which are artifical networks where the transportation flow $n_{st}$ is randomly drawn. These examples enable some kind of validation of the algorithm, as "real" transportation flows are known and can be compared to the solutions given by our method. This setup differs from the second section, which is dedicated to applying the algorithm to the real case of the public transportation network of the city of Lausanne (tl), where embarkement and disembarkement flows are measured but transportation flows are unknown. This second case study shows that the algorithm is applicable on large, real datasets and can gives insights to transportation network planners.
+
 \subsection{Toy Examples}
+
+\subsubsection{Construction}
+
+All constructed toy examples are built following the same approach, which aims at being simple but somewhat realistic. We fix a number of \emph{line tours} $p \geq 2$, each of which is constituted of a forward line and a backward line, for a total of $q = 2p$ lines. Every line has a starting and ending node, which are isolated node, and posses $p-1$ intermediary nodes which allows transfers to the other tour lines, giving a total of $n = 2p(p + 1)$ nodes in the network. Examples of these toy networks can be found in Figure \ref{toy_example_plots}.
+
+\begin{figure}
+	\label{toy_example_plots}
+	\includegraphics[width=0.3\textwidth]{fig/toy_2_display.pdf}
+	\includegraphics[width=0.3\textwidth]{fig/toy_3_display.pdf}
+	\includegraphics[width=0.3\textwidth]{fig/toy_4_display.pdf}
+	\caption{3 toy examples, with the number of tours $p \in \{2,3,4\}$. Tours are in the same color, line have a unique letter, and each stop a unique combination of a letter and a number. Clusters of nodes represent positions where transfer between tours are possible.}
+\end{figure}
+
+\begin{figure}
+	\label{iteration_plots}
+	\includegraphics[width=0.98\textwidth]{fig/iterations.pdf}
+	\caption{Blabla}
+\end{figure}
 
 \subsection{Real Data}
 

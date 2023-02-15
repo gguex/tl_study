@@ -705,7 +705,7 @@ compute_x_from_n = function(n_mat, edge_ref, sp_ref, sp_edge_link){
 
 plot_flow_graph = function(adj, n_mat, layout=NULL, v_names=NULL, 
                            main=NULL, e_line_size=0.2, e_flow_size=2, 
-                           v_label_size=2){
+                           v_label_size=2, v_size=20){
   
   # Number of edges
   n = dim(adj)[1]
@@ -775,10 +775,10 @@ plot_flow_graph = function(adj, n_mat, layout=NULL, v_names=NULL,
   # Plot graph
   par(mar=c(0,0,1.2,0)+.1)
   plot(g_tot, layout=layout, edge.color=edge_colors, edge.width=edge_sizes,
-       edge.curved=edge_curves, edge.arrow.size=edge_sizes*3, 
-       edge.arrow.width=edge_sizes*3, vertex.shape="pie", vertex.pie=pie_prop, 
+       edge.curved=edge_curves, edge.arrow.size=0.5, 
+       edge.arrow.width=1.5, vertex.shape="pie", vertex.pie=pie_prop, 
        vertex.pie.color=in_out_colors, main=main, vertex.label.cex=v_label_size, 
-       vertex.label.color="black")
+       vertex.label.color="black", vertex.size=v_size)
   if(!is.null(main)){
     title(main)
   }

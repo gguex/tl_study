@@ -18,10 +18,10 @@ source("local_functions.R")
 #--------------------------------
 
 # Result folder
-result_folder = "results/iteration_plots"
+result_folder = "results/toy_example_plots"
 
 # Choose number of lines
-nb_lines = 4
+nb_lines = 2
 # Choose number of stops
 nb_stops = nb_lines + 1
 # Choose number of passengers in the network (with normal distribution)
@@ -123,15 +123,16 @@ if(nb_lines == 2){
 }
 
 
-e_line_size = 0.2
+e_line_size = 0.02
 e_flow_size = 3
-v_label_size = 1
+v_size = 20
+v_label_size = 0.00001
 
-pdf(paste0(result_folder, "/iterations_2.pdf"))
+pdf(paste0(result_folder, "/iterations.pdf"))
 par(mfrow=c(2,3))
 plot_flow_graph(adj, n_real, layout, v_names=stop_names, main="Real", 
                 e_line_size=e_line_size, e_flow_size=e_flow_size, 
-                v_label_size=v_label_size)
+                v_label_size=v_label_size, v_size=v_size)
 
 for(it in it_list){
   n_mat = n_mat_list[[it]]
@@ -147,7 +148,7 @@ for(it in it_list){
                               format(error, digits=3),"\nMargins error=", 
                               round(error_m, digits=3)), 
                   e_line_size=e_line_size, e_flow_size=e_flow_size, 
-                  v_label_size=v_label_size)
+                  v_label_size=v_label_size, v_size=v_size)
 }
 dev.off()
 
