@@ -1115,7 +1115,6 @@ compute_toy = function(hyper_par, n_test, paths, n_passengers, edge_ref, sp_ref,
   for (i in 1:n_test) {
     set.seed(i)
     paths_passengers = n_multin(paths, n_passengers, epsilon=epsilon)
-    paths_passengers = paths_passengers / sum(paths_passengers)
     x_btw = compute_x_from_n(paths_passengers, edge_ref, sp_ref, 
                              sp_edge_link)$x_btw
     flow_l_in = rowSums(paths_passengers) + colSums(x_btw)
@@ -1135,10 +1134,7 @@ compute_toy = function(hyper_par, n_test, paths, n_passengers, edge_ref, sp_ref,
                                          epsilon=epsilon,
                                          max_it=max_it, 
                                          display_it=display_it)
-      stat_out = abs(n_mat - paths_passengers)
-      stat_out = stat_out[!is.infinite(stat_out)]
-      stat_out = sum(stat_out)
-      
+      stat_out = sum(abs(n_mat - paths_passengers)) / sum(paths_passengers)
       res_mat[i,j] = stat_out
       
       cat("Iteration n°:", i, "Parameter n°:", j, "done.\n")

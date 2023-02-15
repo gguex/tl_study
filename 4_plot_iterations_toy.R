@@ -73,7 +73,6 @@ rownames(adj) = stops
 # --- Flow creation
 
 n_real = n_multin(paths, nb_passengers)
-n_real = n_real / sum(n_real)
 x_btw = compute_x_from_n(n_real, edge_ref, sp_ref, sp_edge_link)$x_btw
 flow_l_in = rowSums(n_real) + colSums(x_btw)
 flow_l_out = colSums(n_real) + rowSums(x_btw)
@@ -134,7 +133,7 @@ for(it in it_list){
   x_r_btw = compute_x_from_n(n_mat, edge_ref, sp_ref, sp_edge_link)$x_btw
   flow_r_in = rowSums(n_mat) + colSums(x_r_btw)
   flow_r_out = colSums(n_mat) + rowSums(x_r_btw)
-  error = sum(abs(n_mat - n_real))
+  error = sum(abs(n_mat - n_real)) / sum(n_real)
   error_in = sum(abs(flow_l_in - flow_r_in)) / sum(flow_l_in)
   error_out = sum(abs(flow_l_out - flow_r_out)) / sum(flow_l_out)
   error_m = mean(c(error_in, error_out))
