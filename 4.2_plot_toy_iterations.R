@@ -21,7 +21,7 @@ source("local_functions.R")
 result_folder = "results/iteration_plots"
 
 # Choose number of lines
-nb_lines = 2
+nb_lines = 4
 # Choose number of stops
 nb_stops = nb_lines + 1
 # Choose number of passengers in the network (with normal distribution)
@@ -55,20 +55,22 @@ it_list = c(2, 4, 7, 11, 16)
 # --- Network creation
 
 # Stop names 
-stop_names = c("A1", "A2", "A3", 
-               "B1", "B2", "B3", 
-               "C1", "C2", "C3", 
-               "D1", "D2", "D3")
+if(nb_lines == 2){
+  stop_names = c("A1", "A2", "A3", 
+                 "B1", "B2", "B3", 
+                 "C1", "C2", "C3", 
+                 "D1", "D2", "D3")
+} else {
+  stop_names = NULL
+}
 
 # Create the network
-network_prop = network_prop(nb_lines, nb_stops)
-edge_ref = network_prop$edge_ref
-sp_ref = network_prop$sp_ref
-sp_edge_link = network_prop$sp_edge_link
-paths = network_prop$paths
-adj = network_prop$adj
-colnames(adj) = stops
-rownames(adj) = stops
+network_data = network_prop(nb_lines, nb_stops)
+edge_ref = network_data$edge_ref
+sp_ref = network_data$sp_ref
+sp_edge_link = network_data$sp_edge_link
+paths = network_data$paths
+adj = network_data$adj
 
 # --- Flow creation
 
@@ -100,29 +102,32 @@ colnames(adj) = NULL
 df_line = igraph::as_data_frame(graph_from_adjacency_matrix(adj, 
                                                             weighted = TRUE))
 
-#layout = layout_nicely(graph_from_data_frame(df_line))
+layout = layout_nicely(graph_from_data_frame(df_line))
 
-lay_g = graph_from_data_frame(df_line)
-v_order = as.numeric(V(lay_g)$name)
-layout = matrix(c(1, 2,
-                  2, 2,
-                  2, 1,
-                  3, 1,
-                  3, 2,
-                  4, 2,
-                  4, 3,
-                  3, 3,
-                  3, 4,
-                  2, 4,
-                  2, 3,
-                  1, 3), 12, 2, byrow = T)
-layout = layout[v_order, ]
+if(nb_lines == 2){
+  lay_g = graph_from_data_frame(df_line)
+  v_order = as.numeric(V(lay_g)$name)
+  layout = matrix(c(1, 2,
+                    2, 2,
+                    2, 1,
+                    3, 1,
+                    3, 2,
+                    4, 2,
+                    4, 3,
+                    3, 3,
+                    3, 4,
+                    2, 4,
+                    2, 3,
+                    1, 3), 12, 2, byrow = T)
+  layout = layout[v_order, ]
+}
+
 
 e_line_size = 0.2
 e_flow_size = 3
 v_label_size = 1
 
-pdf(paste0(result_folder, "/iterations.pdf"))
+pdf(paste0(result_folder, "/iterations_2.pdf"))
 par(mfrow=c(2,3))
 plot_flow_graph(adj, n_real, layout, v_names=stop_names, main="Real", 
                 e_line_size=e_line_size, e_flow_size=e_flow_size, 
