@@ -12,7 +12,7 @@
 #--------------------------------
 
 # Set working directory path
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+# setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Libraries
 #--------------------------------
@@ -107,7 +107,7 @@ for (j in 1:length(hyper_par)) {
 # write.csv(mean_line, "mean_line_param_small.csv", row.names = F)
 
 # Read saved data
-mean_line = read.csv("mean_line_param.csv")
+mean_line = read.csv("results/5_toy_ex_outputs/mean_line_param.csv")
 # Delete parm. 0
 mean_line = mean_line[-(1:7),]
 

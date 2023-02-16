@@ -12,7 +12,7 @@
 #--------------------------------
 
 # Set working directory path
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+# setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Libraries
 #--------------------------------
@@ -34,8 +34,7 @@ out_folder = "results/loop_toy_example"
 # Network parameters
 #--------------------------------
 # Choose number of lines
-nb_lines = 3
-nb_lines = 2:3
+nb_lines = 2:8
 # Choose number of stops
 nb_stops = nb_lines + 1
 
@@ -54,11 +53,9 @@ max_it = 1000
 # print iterations
 display_it = F
 # number of iterations
-n_test = 3
+n_test = 10
 # prop limit
 hyper_par = 0.1
-# number of passengers
-n_passengers = 1000
 
 #--------------------------------
 # Output and visualizations
@@ -66,110 +63,63 @@ n_passengers = 1000
 
 # Network properties output
 #--------------------------
-network_prop = network_prop(nb_lines, nb_stops)
+# network_prop_list = network_prop(nb_lines, nb_stops)
 # Unlist and save variables
-list2env(network_prop, .GlobalEnv)
+# list2env(network_prop_list, .GlobalEnv)
 
 # Create a data frame with all different number of passengers into the network
-res_mat_passengers = c()
+
+res_mean = c()
 seq_passengers = seq(from = 200, to = 4000, by = 200)
 
-for (i in seq_passengers) {
-  res_mat = compute_toy(hyper_par, n_test, paths, i, edge_ref, sp_ref,
-                        sp_edge_link, conv_thres_algo, conv_thres_if, max_it,
-                        display_it)
-  colnames(res_mat)[1] <- paste("Nb:", i)
-  res_mat_passengers = cbind(res_mat_passengers, res_mat)
-}
-
-
-# Add the mean and the standard deviation
-mean_pass = as.data.frame(colMeans(res_mat_passengers))
-sd_pass = apply(res_mat_passengers, 2, sd)
-sd_pass = sd_pass/sqrt(n_test)
-mean_pass = cbind(seq_passengers, mean_pass, sd_pass)
-colnames(mean_pass) <- c("Passengers","mean_error", "sd_error")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Create a data frame with all different number of passengers into the network
-# A continuer...
-res_mat_passengers = c()
-seq_passengers = seq(from = 200, to = 600, by = 200)
-seq_lines = 2:3
-
-for (j in seq_lines) {
+for (j in 1:length(nb_lines)) {
+  
+  res_mat = c()
+  res_mat_passengers = c()
+  
+  network_prop_list = network_prop(nb_lines[j], nb_lines[j]+1)
+  # Unlist and save variables
+  list2env(network_prop_list, .GlobalEnv)
+  
   for (i in seq_passengers) {
     res_mat = compute_toy(hyper_par, n_test, paths, i, edge_ref, sp_ref,
                           sp_edge_link, conv_thres_algo, conv_thres_if, max_it,
                           display_it)
-    colnames(res_mat)[1] = paste("Nb:", i)
-    res_mat = cbind(res_mat, j)
-    colnames(res_mat)[2] = paste("par", i)
     res_mat_passengers = cbind(res_mat_passengers, res_mat)
   }
-}
-library(tidyr)
-df_transformed <- pivot_wider(res_mat_passengers, names_from =, values_from = A)
-
   
+  mean_pass = c()
   # Add the mean and the standard deviation
   mean_pass = as.data.frame(colMeans(res_mat_passengers))
   sd_pass = apply(res_mat_passengers, 2, sd)
   sd_pass = sd_pass/sqrt(n_test)
   mean_pass = cbind(seq_passengers, mean_pass, sd_pass)
-  colnames(mean_pass) <- c("Passengers","mean_error", "sd_error")
-
-
-  as.data.frame(res_mat_passengers)
-  df_new <- as.data.frame(res_mat_passengers) %>% 
-    gather(key = "key", value = "value") %>% 
-    separate(key, into = c("letter", "number")) %>% 
-    spread(key = letter, value = value)
+  colnames(mean_pass) = c("passengers","mean_error", "sd_error")
   
-  colnames(df_new)[1] <- "letter"
-  df_new <- df_new[,c(1,3,4,5,6)]
-#...
+  mean_pass$line[1:length(seq_passengers)] = nb_lines[j]
+  
+  res_mean = rbind(res_mean, mean_pass)
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# write.csv(res_mean, "results/5_toy_ex_outputs/res_mean_passengers.csv", row.names = F)
 
 ### Best graph according to the number of passengers into the network
 # only 1/3 error bar
-ggplot() +
-  geom_line(data = mean_pass, aes(x = Passengers, y = mean_error), color = "red") +
-  # geom_point(data = mean_pass[seq(1, nrow(mean_pass), by = 3),],
-  #            aes(x = Passengers, y = mean_error)) +
-  # geom_line(data = mean_pass2, aes(x = Passengers, y = mean_error)) +
-  geom_errorbar(data=mean_pass[seq(1, nrow(mean_pass), by = 3),],
-                aes(x=Passengers, ymin=mean_error-sd_error, ymax=mean_error+sd_error), width=100) +
-  labs(title = paste0(n_test, " iterations, ", expression(theta), ": ", hyper_par), x = "Passengers into the network", y = "Mean error")
+# ggplot() +
+#   geom_line(data = mean_pass, aes(x = Passengers, y = mean_error), color = "red") +
+#   # geom_point(data = mean_pass[seq(1, nrow(mean_pass), by = 3),],
+#   #            aes(x = Passengers, y = mean_error)) +
+#   # geom_line(data = mean_pass2, aes(x = Passengers, y = mean_error)) +
+#   geom_errorbar(data=mean_pass[seq(1, nrow(mean_pass), by = 3),],
+#                 aes(x=Passengers, ymin=mean_error-sd_error, ymax=mean_error+sd_error), width=100) +
+#   labs(title = paste0(n_test, " iterations, ", expression(theta), ": ", hyper_par), x = "Passengers into the network", y = "Mean error")
 
+# Plot the results 2
+ggplot(data=res_mean) +
+  geom_ribbon(aes(x=passengers, ymin=mean_error-sd_error/sqrt(n_test), 
+                  ymax=mean_error+sd_error/sqrt(n_test), group=line, 
+                  fill=factor(line)), alpha=0.2) +
+  geom_line(aes(x=passengers, y=mean_error, group=line, color=factor(line))) +
+  labs(x="Nb passengers", y="MTE") +
+  # geom_point(data=min_max,aes(x=passengers, y=mean_error, color=factor(line)))+
+  labs(color = "Nb tours", fill = "Nb tours")
