@@ -121,5 +121,4 @@ ggplot(data=res_mean) +
                   fill=factor(line)), alpha=0.2) +
   geom_line(aes(x=passengers, y=mean_error, group=line, color=factor(line))) +
   labs(x="Nb passengers", y="MTE") +
-  # geom_point(data=min_max,aes(x=passengers, y=mean_error, color=factor(line)))+
   labs(color = "Nb tours", fill = "Nb tours")
