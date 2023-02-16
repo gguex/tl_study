@@ -704,8 +704,8 @@ compute_x_from_n = function(n_mat, edge_ref, sp_ref, sp_edge_link){
 #-------------------------------------------------------------------------------
 
 plot_flow_graph = function(adj, n_mat, layout=NULL, v_names=NULL, 
-                           main=NULL, e_line_size=1.5, e_flow_size=2, 
-                           v_label_size=2){
+                           main=NULL, e_line_size=0.2, e_flow_size=2, 
+                           v_label_size=2, v_size=20){
   
   # Number of edges
   n = dim(adj)[1]
@@ -775,10 +775,10 @@ plot_flow_graph = function(adj, n_mat, layout=NULL, v_names=NULL,
   # Plot graph
   par(mar=c(0,0,1.2,0)+.1)
   plot(g_tot, layout=layout, edge.color=edge_colors, edge.width=edge_sizes,
-       edge.curved=edge_curves, edge.arrow.size=edge_sizes*3, 
-       edge.arrow.width=edge_sizes*3, vertex.shape="pie", vertex.pie=pie_prop, 
+       edge.curved=edge_curves, edge.arrow.size=0.5, 
+       edge.arrow.width=1.5, vertex.shape="pie", vertex.pie=pie_prop, 
        vertex.pie.color=in_out_colors, main=main, vertex.label.cex=v_label_size, 
-       vertex.label.color="black")
+       vertex.label.color="black", vertex.size=v_size)
   if(!is.null(main)){
     title(main)
   }
@@ -864,6 +864,7 @@ adj_function = function(stops, name_stops){
 # Crossing on different stops
 adj_function2 = function(stops, name_stops){
   nb_stops_tot = length(stops)
+  nb_lines = length(unique(name_stops[, 1]))
   nb_stops = dim(name_stops[name_stops[, 1] == name_stops[1, 1], ])[1] / 2
   adj = matrix(0, nrow = nb_stops_tot, ncol = nb_stops_tot)
   colnames(adj) = rownames(adj) = stops
@@ -1115,7 +1116,6 @@ compute_toy = function(hyper_par, n_test, paths, n_passengers, edge_ref, sp_ref,
   for (i in 1:n_test) {
     set.seed(i)
     paths_passengers = n_multin(paths, n_passengers, epsilon=epsilon)
-    paths_passengers = paths_passengers / sum(paths_passengers)
     x_btw = compute_x_from_n(paths_passengers, edge_ref, sp_ref, 
                              sp_edge_link)$x_btw
     flow_l_in = rowSums(paths_passengers) + colSums(x_btw)
@@ -1135,10 +1135,7 @@ compute_toy = function(hyper_par, n_test, paths, n_passengers, edge_ref, sp_ref,
                                          epsilon=epsilon,
                                          max_it=max_it, 
                                          display_it=display_it)
-      stat_out = abs(n_mat - paths_passengers)
-      stat_out = stat_out[!is.infinite(stat_out)]
-      stat_out = sum(stat_out)
-      
+      stat_out = sum(abs(n_mat - paths_passengers)) / sum(paths_passengers)
       res_mat[i,j] = stat_out
       
       cat("Iteration n°:", i, "Parameter n°:", j, "done.\n")
