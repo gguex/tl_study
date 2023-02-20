@@ -294,7 +294,7 @@ build_sp_data_mc = function(line_mbrshps, tour_mbrshps, adj_w, adj_b,
   n_edges = dim(edge_ref)[1]
   
   # --- Compute shortest-path data
-  s
+  
   # Create the graph 
   full_g = graph_from_adjacency_matrix(adj_w + adj_b, mode="directed")
   
