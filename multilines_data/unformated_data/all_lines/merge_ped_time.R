@@ -24,4 +24,4 @@ for (i in i:length(files_list)) {
 }
 
 # Save results
-write.table(time_mat,"ped_time.csv", sep=",", row.names = F,col.names = F)
+write.table(time_mat,"multilines_data/unformated_data/all_lines/ped_time_tot.csv", sep=",", row.names = F,col.names = F)
