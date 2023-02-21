@@ -452,19 +452,27 @@ balance_flow_l_inout =
 #                     algorithm (default = 1e-5).
 # - conv_thres_algo:  A threshold for the convergence of the whole algorithm 
 #                     (default = 1e-5).
-# - epsilon:          A small number, added in iterative fitting to make sure 
-#                     the components are not null (default = 1e-40).
-# - max_it:           The maximum number of iterations.
+# - epsilon:  A small number, added in iterative fitting to make sure 
+#             the components are not null (default = 1e-40).
+# - max_it:   The maximum number of iterations (default = 200)
+# - max_it_if:  The maximum iterative fitting iterations (default = 400)
+# - display_it: Display iteration details (default = T)
+# - return_it:  Return n_mat for every iterations (default = F)
+# - return_details: Return statistics for every iterations (default = F)
 # Out:
 # - n_mat:            A (n x n) matrix containing the origin-destination flow
 #                     when using the multiple lines network.
+# or (with return_it or return_details options turn on) :
+# - n_mat_list:       The list of (n x n) od-flow matrices for each iterations.
+# - iterations_df:    A dataframe containing iterations details.
 #-------------------------------------------------------------------------------
 
 compute_origin_destination = 
   function(flow_l_in, flow_l_out, edge_ref, sp_ref, sp_edge_link, 
            s_mat=NULL, min_p_ntwk=0.1, conv_thres_if=1e-5,
            conv_thres_algo=1e-5, epsilon=1e-40,
-           max_it=200, max_it_if=400, display_it=T, return_it=F){
+           max_it=200, max_it_if=400, display_it=T, return_it=F, 
+           return_details=F){
   
   # --- Get the network structure 
   
@@ -511,6 +519,19 @@ compute_origin_destination =
   if(return_it){
     n_mat_list = list()
   }
+  
+  # --- For details return
+  if(return_details){
+    iterations_df = data.frame(it_algo=NULL,
+                               diff_f=NULL,
+                               diff_g=NULL,
+                               error_in=NULL,
+                               error_out=NULL,
+                               max_diff_flow=NULL,
+                               couple_1=NULL,
+                               couple_2=NULL)
+  }
+  
   
   while(!converge_algo & it_algo <= max_it){
     
@@ -625,16 +646,34 @@ compute_origin_destination =
     if(return_it){
       n_mat_list[[it_algo]] = n_mat
     }
+    # If iteration details
+    if(return_details){
+      row_df = data.frame(it_algo=it_algo,
+                          diff_f=diff_f,
+                          diff_g=diff_g,
+                          error_in=error_in,
+                          error_out=error_out,
+                          max_diff_flow=max_diff_flow,
+                          couple_1=couple[1],
+                          couple_2=couple[2])
+      iterations_df = rbind(iterations_df, row_df)
+    }
     # Iteration
     it_algo = it_algo + 1
   }
   
   # Return results
-  if(return_it){
-    return(n_mat_list)
+  results = NULL
+  if(!return_it & !return_details){
+    results = n_mat
+  } else if (!return_it & return_details){
+    results = list(n_mat=n_mat, iterations_df=iterations_df)
+  } else if (return_it & !return_details){
+    results = n_mat_list
   } else {
-    return(n_mat)
+    results = list(n_mat_list=n_mat_list, iterations_df=iterations_df)
   }
+  return(results)
 }
 
 #-------------------------------------------------------------------------------
