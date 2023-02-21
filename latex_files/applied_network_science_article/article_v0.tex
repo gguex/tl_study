@@ -156,23 +156,25 @@ Cases studies are presented in section \ref{casestudies} *** à poursuivre ***
 \label{notforma}
 \subsection{Lines, stops  and junctions}
 \label{Lines and junctions}
-Consider a transportation network made of bus lines numbered $\ell=1,\ldots, q$, of respective lengths (number of stops) $l_\ell$.  Opposite lines, that is parallel lines running in the back and forth directions are considered as distinct. 
+Consider a \emph{transportation network} made of \emph{lines} numbered $\ell=1,\ldots, q$, of respective lengths (number of stops) $l_\ell$.  Opposite lines, that is parallel lines running in the back and forth directions are considered as distinct. 
 
-The $l=\sum_{\ell=1}^ql_\ell$ bus stops constitute the nodes of the transportation network. Each stop $i=1,\ldots,l$ belongs to {\em  a single bus line}, and defines a unique next or forward stop $F(i)$ (unless $i$ is the line terminus) and a unique backward stop $B(i)$ (unless $i$ is the line start), both on the same line.  
+The $l=\sum_{\ell=1}^ql_\ell$ \emph{stops} constitute the nodes of the transportation network. Each stop $i=1,\ldots,l$ belongs to a single line, and defines a unique next or forward stop $F(i)$ (unless $i$ is the line terminus) and a unique backward stop $B(i)$ (unless $i$ is the line start), both on the same line.  
 
-Let $S_i$ denote the set of stops which can be reached from stop $i$ within walking distance, excluding $i$ itself. A stop $i$ is referred to as an {\em isolated stop} if $S_i=\emptyset$, and to as a {\em junction} otherwise. 
+Let $S_i$ denote the \emph{set of stops which can be reached from stop $i$ outside lines connection} (with, e.g., an acceptable walking distance), excluding $i$ itself. A stop $i$ is referred to as an \emph{isolated stop} if $S_i=\emptyset$, and to as a \emph{junction} otherwise. 
 
 
-\subsection{Line edges, transfer edges and trips}
+\subsection{Edges, trips, and the incidence matrix}
 \label{Line edges, transfer edges and trips}
+
 Two sorts of oriented edges are involved in the transportation network: 
 \begin{enumerate}
-  \item[$\bullet$] intra-line edges $(i,j)=(i,F(i))$ belonging to a single line  $\ell(i)=\ell(j)$
-  \item[$\bullet$] inter-line or transfer edges $(i,j)$ connecting different lines $\ell(i)\neq \ell(j)$, involving walks from junction $i$ to $j\in S_i$.
-  \end{enumerate}
-A $st$-trip, noted $[s,t]$, consists of entering into the network at stop $s$, and leaving the network at $t$, by following the shortest-path (i.e. achieving the minimum distance,  minimum time, or  minimum cost), supposed unique, leading to $s$ from $t$. 
+  \item[$\bullet$] \emph{intra-line edges} $(i,j)=(i,F(i))$ belonging to a single line  $\ell(i)=\ell(j)$
+  \item[$\bullet$] \emph{inter-line} or \emph{transfer edges} $(i,j)$ connecting different lines $\ell(i)\neq \ell(j)$, involving walks from junction $i$ to $j\in S_i$. The \emph{set of transfer edges} is denoted by $T$.
+\end{enumerate}
 
-The succession of edges $(ij)$ belonging to the $st$-trip, noted $(ij)\in [s,t]$, is unique. Define the edge-trip incidence matrix as
+A \emph{$st$-trip}, noted $[s,t]$, consists of entering into the network at stop $s$, and leaving the network at $t$, by following the shortest-path (i.e. achieving the minimum distance,  minimum time, or  minimum cost), supposed unique, leading to $s$ from $t$.
+
+The succession of edges $(i, j)$ belonging to the $st$-trip, noted $(i,j)\in [s,t]$, is unique. Define the \emph{edge-trip incidence matrix} as
 \begin{equation}
 \label{edgetrip}
 \chi_{ij}^{st} = \begin{cases}
@@ -180,19 +182,20 @@ The succession of edges $(ij)$ belonging to the $st$-trip, noted $(ij)\in [s,t]$
   0    & \text{otherwise}.
 \end{cases}
 \end{equation}
-A $st$-trip always starts with the edge $(s,F(s))$, and finishes with $(B(t),t)$. Transfers can occur in-between, but never at the beginning nor at the end of the trip. 
+
+Note that we can also forbid some aberrant trips across the network, for example, trips $[s, t]$ where $(s, t)$ is a transfer edge (making this trip do not actually use the line network). The \emph{set of permitted trips} across the network is denoted by $P$, and can be defined regarding some conditions.
 
 \vspace*{0.1cm}
 
 \subsection{Transportation flows}
 \label{Transportation flows}
-Let  $x_{ij}$ count the number of travelers using edge $(ij)$ in a given period, such as a given hour, day, week or  year.  The edge flow $x_{ij}$ is denoted by $y_{ij}$ for an intra-line edge $(i,j)$, and 
+Let  $x_{ij}$ count the \emph{number of travelers using edge $(i,j)$} in a given period, such as a given hour, day, week or  year.  The edge flow $x_{ij}$ is denoted by $y_{ij}$ for an intra-line edge $(i,j)$, and 
 by $z_{ij}$ for a transfer edge $(i,j)$. By construction, $x_{ij}=y_{ij}+z_{ij}$, where $y_{ij}\,  z_{ij}=0$. 
 
 \vspace*{0.1cm}
 
 
-Let $a_i$, respectively $b_i$, the number of passengers embarking, respectively disembarking at stop $i$. By construction, 
+Let $a_i$, respectively $b_i$, the \emph{number of passengers embarking}, respectively \emph{disembarking} at stop $i$. By construction, 
 \begin{equation}
 \label{bilan1ligne}
 \begin{cases}
@@ -201,14 +204,14 @@ y_{B(i),i}=b_i \text{\,  and } a_i=0   & \text{if $i$ is a line terminus}, \\
  y_{i,F(i)}=y_{B(i),i}+a_i-b_i     & \text{otherwise}.
 \end{cases}
 \end{equation}
-Also, $\mathbf{a}$ and $\mathbf{b}$ must be consistent, in the sense that $A_i\ge B_i$, where $A_i$ (respectively $B_i$) is the cumulated number of embarked 
-(resp. disembarked) passengers on the line under consideration, recursively defined as $A_{F(i)}=A_i+a_i$ (resp. $B_{F(i)}=B_i+b_i$). Moreover,  $A_i=B_i$ at a terminal line stop $i$. This common value yields  the total number of passengers transported by the line. 
+Also, $\mathbf{a}$ and $\mathbf{b}$ must be consistent, in the sense that $A_i\ge B_i$, where $A_i$ (respectively $B_i$) is the \emph{cumulated number of embarked 
+(resp. disembarked) passengers} on the line under consideration, recursively defined as $A_{F(i)}=A_i+a_i$ (resp. $B_{F(i)}=B_i+b_i$). Moreover,  $A_i=B_i$ at a terminal line stop $i$. This common value yields  the total number of passengers transported by the line. 
 
 
 
 \vspace*{0.1cm}
 
-Let the transportation flow $n_{st}$ denote the number of passengers following an $st$-trip, that is entering the network at $s$ and leaving the network at $t$ by using the shortest path. One gets from (\ref{edgetrip}) 
+Let the \emph{transportation flow} $n_{st}$ denotes the number of passengers following an $st$-trip, that is entering the network at $s$ and leaving the network at $t$ by using the shortest-path. One gets from (\ref{edgetrip}) 
 \begin{equation}
 \label{equationGG}
 x_{ij}=\sum_{st}\chi_{ij}^{st}\:  n_{st}
@@ -233,40 +236,29 @@ where $n_{\bullet\bullet}$ counts the number of passengers, and $z_{\bullet\bull
 
 
 
-As explained in section \ref{Lines and junctions}, transfers can only occur at junctions, that is $z_{ij}>0$ implies $j\in S_i$. In particular,  $z_{ii}=0$ : no traveller is supposed to disembark and re-embark later at the same stop. 
+As explained in section \ref{Lines and junctions}, transfers can only occur at junctions, that is $z_{ij}>0$ implies $(i, j) \in T$. In particular,  $z_{ii}=0$ : no traveller is supposed to disembark and re-embark later at the same stop. 
 
 
  
 \subsection{Statement of the problem and solution method}
-Automatic passenger counters measure the number of passengers entering and leaving buses at each stop [Boyle, 1998], that is $\mathbf{a}$ and $\mathbf{b}$, which provide the basic raw data of the present study, kindly provided by the Lausanne Transportation Agency (tl), after some preliminary, undocumented corrections (i.e. the components of $\mathbf{a}$ and $\mathbf{b}$ can be non-integer). It may also happen that, on some lines $\ell$,  raw data do not obey the necessary consistency condition  $a_\bullet^\ell=b_\bullet^\ell$ (where the latter quantities denote the total embarkments and disembarkments on line $\ell$), in which case we did rescale the embarking and disembarking line counts as 
-\begin{displaymath}
-\hat{a}_i=(1-\frac{a_\bullet^\ell-b_\bullet^\ell}{a_\bullet^\ell+b_\bullet^\ell})\, a_i 
- \qquad\qquad\qquad
-  \hat{b}_i=(1+\frac{a_\bullet^\ell-b_\bullet^\ell}{a_\bullet^\ell+b_\bullet^\ell})\,  b_i 
-\end{displaymath}
-ensuring $\hat{a}_\bullet^\ell=\hat{b}_\bullet^\ell=2a_\bullet^\ell b_\bullet^\ell/(a_\bullet^\ell+b_\bullet^\ell)$. However, strongly unbalanced lines such that  $|a_\bullet^\ell-b_\bullet|^\ell/a_\bullet^\ell > 0.3$ or $|a_\bullet^\ell-b_\bullet^\ell|/b_\bullet^\ell > 0.3$  (which always turned out to be temporary lines with small  counts) were simply disregarded and line $\ell$ removed from the network. 
+\emph{Automatic passenger counters} measure the number of passengers entering and leaving lines at each stop [Boyle, 1998], that is $\mathbf{a}$ and $\mathbf{b}$, which provide the basic raw data of the present study, kindly provided by the Lausanne Transportation Agency (tl) for the case study in section \ref{real_data}. We will suppose here that this data obeys the necessary consistency condition $a_\bullet^\ell=b_\bullet^\ell$ (where the latter quantities denote the total embarkments and disembarkments on line $\ell$), even if, in real case studies, a rescaling must usually be performed to balance in and out-flows on each lines.
 
-Also, the geometry of the network permits to derive the edge-trip incidence matrix $\bm{\chi}$ defined in (\ref{edgetrip}). 
-
-
-Intra-line edge flows $\mathbf{Y}=(y_{ij})$ can be determined by (\ref{bilan1ligne}), but transfer edge flows $\mathbf{Z}=(z_{ij})$ are, here and typically, unknown. The objective is to estimate the $l\times l$ transportation flow $\mathbf{N}=(n_{st})$. Many consistent solutions coexist in general, even for a single line with no transferts (section \ref{Single line}). This issue of incompletely observed data can be tackled by the maximum entropy formalism \cite{jaynes1957information}, and has been often  in transportation modelling \cite{wilson1967statistical}  \cite{erlander1990gravity}. 
+Intra-line edge flows $\mathbf{Y}=(y_{ij})$ can be determined by (\ref{bilan1ligne}), but transfer edge flows $\mathbf{Z}=(z_{ij})$ are, here and typically, unknown. The objective is to estimate the $l\times l$ transportation flow matrix $\mathbf{N}=(n_{st})$. Many consistent solutions coexist in general, even for a single line with no transferts (section \ref{Single line}). This issue of incompletely observed data can be tackled by the maximum entropy formalism \cite{jaynes1957information}, which has often been the case in transportation modelling researches \cite{wilson1967statistical}  \cite{erlander1990gravity}. 
 
 
 
-Let $f_{st}=n_{st}/n_{\bullet\bullet}$ be the proportion of $st$-trips (empirical distribution) and let $g_{st}$ be some prior guess on its shape (theoretical distribution). 
+Let $f_{st}=n_{st}/n_{\bullet\bullet}$ be the \emph{distribution of $st$-trips} (empirical distribution) and let $g_{st}$ be some prior guess on its shape (theoretical distribution). 
 Assuming some reasonable initial prior $g_{st}$, 
 \begin{itemize}
 \item[(1)] we shall first suppose that the empirical margins $\alpha_s=f_{s\bullet}$ and $\beta_t=f_{\bullet t}$ are known.  
 Then $f_{st}$ can be determined as the maximum entropy solution (section \ref{maxenso}), i.e. as the distribution closest to $g_{st}$ in the Kullback-Leibler divergence sense under the margin constraints, to be calibrated by an iterative fitting inner loop
-\item[(2)] then (section \ref{marginup}), the margins will be updated to $\tilde{\alpha}_s$ and $\tilde{\beta}_t$   by requiring a minimum proportion $\theta\in (0,1)$ of passengers entering/leaving the network at each stop, as well as avoiding transfer overflow exceeding the embarking and disembarking counts at each stop
+\item[(2)] then (section \ref{marginup}), the margins will be updated to $\tilde{\alpha}_s$ and $\tilde{\beta}_t$   by requiring a \emph{minimum proportion} $\theta\in (0,1)$ of passengers entering/leaving the network at each stop, as well as avoiding transfer overflow exceeding the embarking and disembarking counts at each stop
  \item[(3)] finally (section \ref{priorup}), the prior will be updated to $\tilde{g}_{st}$ by shrinking, if necessary, the priors $g_{st}$ associated to overflows. 
 \end{itemize}
 With the new prior distribution $\widetilde{g}_{st}$ and the new margin distributions $\widetilde{\alpha}_s$, $\widetilde{\beta}_t$, we can iterate the 
- the above steps, until convergence. The only free parameter is $\theta$, which will be discussed in section *** . 
+ the above steps, until convergence. The only free parameter is $\theta$, whose effect is studied on toy examples in section \ref{toy_examples}.
  
- 
- *** The above iterative solution method is somewhat reminiscent of the EM algorithm. As a matter of fact, the first  step  (maximum entropy) exactly correspond to the ``expectation step" of the EM algorithm (see e.g. \cite{dempster1977maximum}  \cite{bavaud2009information}), but steps two and three, aiming at calibrating the parameters $\bm{\alpha}$, $\bm{\beta}$ and $\mathbf{g}$, do not follow the maximum likelihood rationale of the ``maximisation step". 
- 
+The above iterative solution method is somewhat reminiscent of the EM algorithm. As a matter of fact, the first  step  (maximum entropy) exactly correspond to the ``expectation step" of the EM algorithm (see e.g. \cite{dempster1977maximum}  \cite{bavaud2009information}), but steps two and three, aiming at calibrating parameters $\alpha_s$, $\beta_t$ and $g_{st}$, do not follow the maximum likelihood rationale of the ``maximisation step". Pseudocode of the algorithm is shown with Algorithm \ref{algo1}.
 
 
 
@@ -320,10 +312,10 @@ whose plugging into (\ref{equationGG}) yields the intra-line edge flows $\mathbf
 
 
 \subsubsection{Initialization of the prior and the margins}
-The geometry of the network permits to rule out forbidden $st$-paths, i.e. obeying  $\chi^{st}_{\bullet\bullet}=0$. Such forbidden $st$-paths consist of *** @G? donner une liste exhaustive de critères d'exclusion ici ? ***  The initial prior was chosen as the uniform distribution on the remaining $c<l^2$ admissible $st$-paths, *** @G: que vaut $l$? que vaut $c$? ***,  that is as
+The geometry of the network permits to define the set of permitted $st$-trips across the network denoted by $P$. The initial prior was chosen as the uniform distribution on admissible paths, that is as
 \begin{equation*}
-g_{ij} = \begin{cases}
-  \frac{1}{c}    & \text{if $\chi^{st}_{\bullet\bullet}>0$}, \\
+g_{st} = \begin{cases}
+  \frac{1}{\vert P \vert}    & [s, t] \in $P$, \\
   0    & \text{otherwise}.
 \end{cases}
 \end{equation*}
@@ -333,11 +325,11 @@ The initial margins were chosen as  those of the flow without transfer, namely $
 
 \subsubsection{Updating  the margin distributions}
 \label{marginup}
-Let us define the hyperparameter $ \theta\in [0, 1)$ as the \emph{minimum proportion of passengers (among $a_i$ and $b_i$) entering/leaving the network at each stop}, that is $n_{s\bullet}\ge \theta a_s$ and $n_{\bullet t}\ge \theta b_t$. Note that we could set a different hyperparameter for each node, and differing for embarkments and disembarkments, but without addition information, we will restrain to this simpler case. Identities (\ref{entrer}) and  (\ref{sortir}) then imply the inequalities
+Let us define the hyperparameter $ \theta\in (0, 1)$ as the \emph{minimum proportion of passengers (among $a_i$ and $b_i$) entering/leaving the network at each stop}, that is $n_{s\bullet}\ge \theta a_s$ and $n_{\bullet t}\ge \theta b_t$. Note that we could set a different hyperparameter for each node, and differing for embarkments and disembarkments, but without addition information, we will restrain to this simpler case. Identities (\ref{entrer}) and  (\ref{sortir}) then imply the inequalities
 \begin{displaymath}
 z_{\bullet s} \le (1 - \theta) a_s\qquad\qquad \qquad z_{t \bullet} \le  (1 - \theta) b_t
 \end{displaymath}
-the violation of which constitutes transfer overflow. Hence requiring a minimal transfer yet avoiding overflow can be granted with the following updating of margins
+the violation of which constitutes transfer overflow. Hence requiring a maximal transfer yet avoiding overflow can be granted with the following updating of margins
 \begin{equation}
 \label{alpha_beta_update}
 \widetilde{\alpha}_s = \frac{\min(\theta a_s, a_s - z_{\bullet s})}{\sum_{s'} \min(\theta a_{s'}, a_{s'} - z_{\bullet {s'}})}   \qquad \qquad \qquad
@@ -347,14 +339,10 @@ the violation of which constitutes transfer overflow. Hence requiring a minimal 
 
 \subsubsection{Updating the prior distribution}
 \label{priorup}
-Overflow occurs in transfer edge $(i, j)$ if  $z_{i \bullet} > (1 - \theta)b_i$ or $z_{\bullet j} > (1 - \theta)a_j$. To avoid it, components $g_{st}$ of the prior distribution 
-will be shrinked by a suitable ratio whenever edge flows $(i,j)\in [s,t]$ exhibit overflow. 
-
-
- For any edge $(i, j)$, let us compute the \emph{flow ratio} $r_{ij}$ as
+Overflow occurs in transfer edge $(i, j)$ if  $z_{i \bullet} > (1 - \theta)b_i$ or $z_{\bullet j} > (1 - \theta)a_j$. To avoid it, components $g_{st}$ of the prior distribution will be shrinked by a suitable ratio whenever edge flows $(i,j)\in [s,t]$ exhibit overflow. 
+For any edge $(i, j)$, let us compute the \emph{flow ratio} $r_{ij}$ as
 \begin{equation}
-	\label{flow_ratio}
-	r_{ij} = \max \left(1, \frac{z_{i \bullet}}{(1 - \theta)b_i}, \frac{z_{\bullet j}}{(1 - \theta)a_j} \right)\: \ge\: 1\enspace,
+	r_{ij} = \max \left(1, \frac{z_{i \bullet}}{(1 - \theta)b_i}, \frac{z_{\bullet j}}{(1 - \theta)a_j} \right)\: \ge\: 1\enspace, \label{flow_ratio}
 \end{equation}
 where $r_{ij} > 1$ denotes an overflow through edge $(i, j)$. For a given origin-destination $[s,t]$, define the \emph{orgin-destination flow ratio} $\bar{r}_{st}$ 
 as the largest $r_{ij}$ among edge flows $(i,j)\in [s,t]$, that is as 
@@ -367,20 +355,18 @@ By construction, $\bar{r}_{st} > 1$ denotes an overflow on some transfer edge be
 	\label{update_flow}
 	\widetilde{n}_{st} =\frac{n_{st}}{\bar{r}_{st}}
 \end{equation}
-and define the new prior distribution  as
+and define the new prior distribution as
 \begin{equation}
 	\label{update_distrib}
 	\widetilde{g}_{st} = \frac{\left( \frac{\widetilde{n}_{st}}{\phi_s \psi_t} \right)}{\sum_{s',t'} \left( \frac{\widetilde{n}_{s',t'}}{\phi_{s'} \psi_{t'}} \right)}\enspace. 
 \end{equation}
 where $\phi_s$ and $\psi_t$ are the values (\ref{Sol_LagMult}) obtained in the previous maximum entropy step. 
 
-\subsubsection{Algorithm pseudocode}
-
-\begin{algorithm}[H]
-	\caption{Compute the transportation flow matrix $\mathbf{N} = (n_{st})$ knowing the edge-trip incidence matrix $\bm{\chi} = (\chi_{ij}^{st})$, the set of transfer edges $\mathcal{T}$, the embarking flow $\mathbf{a}$, the disambarking flow $\mathbf{b}$, the index of an isolated source node $\tilde{s}$, and the minimum proportion of passengers entering/leaving the network $\theta$.}
+\begin{algorithm}[h]
+	\caption{Compute the transportation flow matrix $\mathbf{N} = (n_{st})$ knowing the edge-trip incidence matrix $\bm{\chi} = (\chi_{ij}^{st})$, the set of transfer edges $T$, the set of permitted trips $P$, the embarking flow $\mathbf{a}$, the disambarking flow $\mathbf{b}$, the index of an isolated source node $\tilde{s}$, and the minimum proportion of passengers entering/leaving the network $\theta$.}
 	\label{algo1}
 	\begin{algorithmic}[1]
-		\State $g_{st} \leftarrow I(\chi_{\bullet \bullet}^{st} > 0) / \sum_{s't'}I(\chi_{\bullet \bullet}^{s't'} > 0), \; \forall s,t$ \Comment{{\footnotesize Initialize the prior distribution}}
+		\State $g_{st} \leftarrow I([s, t] \in P) / \vert P \vert, \; \forall s,t$ \Comment{{\footnotesize Initialize the prior distribution}}
 		
 		\State $\alpha_s \leftarrow a_s / a_\bullet, \; \forall s$ \Comment{{\footnotesize Initialize the network ingoing distribution}}
 		
@@ -401,7 +387,7 @@ where $\phi_s$ and $\psi_t$ are the values (\ref{Sol_LagMult}) obtained in the p
 		
 		\State $n_{st} \leftarrow \frac{a_{\tilde{s}}}{\alpha_{\tilde{s}}} \phi_s \psi_t g_{st}, \; \forall s,t$ \Comment{{\footnotesize Compute the transportation flow}}
 		
-		\State $z_{ij} \leftarrow I((i,j) \in \mathcal{T})\sum_{st} \chi_{ij}^{st} n_{st}, \; \forall i,j$
+		\State $z_{ij} \leftarrow I((i,j) \in T)\sum_{st} \chi_{ij}^{st} n_{st}, \; \forall i,j$
 		
 		\State $\alpha_s \leftarrow \frac{\min(\theta a_s, a_s - z_{\bullet s})}{\sum_{s'} \min(\theta a_{s'}, a_{s'} - z_{\bullet {s'}})}, \; \forall s$ \Comment{{\footnotesize Update the network ingoing distribution}}
 		
@@ -461,44 +447,19 @@ which depends on $t$ only: it appears that the disembarkment probability $\rho_t
 This Markov property, enjoyed by maximum-entropic flows, contrasts other possible solutions, such as  the ``first in, first out" (FIFO) flows (homogenizing the 
 traveled distances among users) or the ``last in, first out" (LIFO) flows (tending to generate maximally  contrasted traveled distances).
 
-
-***  @G, ici davantage de développements sur l'approche Markovienne, ainsi que le joli schéma ?  ***
-
-
-\
-
-*** @G, @R, ici la (les) figure de l'exemple  ``starting from Maladière, Riant-Cour, Dapples"... ? ***
-
  
 %% --------------------------------- CASE STUDIES
 
 \section{Case Studies}
 \label{casestudies}
 
-Case studies are divided in two sections. In the first section, we test the algorithm on toy examples, which are artifical networks where the transportation flow $n_{st}$ is randomly drawn. These examples enable some kind of validation of the algorithm, as "real" transportation flows are known and can be compared to the solutions given by our method. This setup differs from the second section, which is dedicated to applying the algorithm to the real case of the public transportation network of the city of Lausanne (tl), where embarkement and disembarkement flows are measured but transportation flows are unknown. This second case study shows that the algorithm is applicable on large, real datasets and can gives insights about passengers probable routes in the network.
+Case studies are divided in two sections. In the first section, we test the algorithm on toy examples, which are artificial networks where the transportation flow $n_{st}$ is randomly drawn. These examples enable some kind of validation of the algorithm, as "real" transportation flows are known and can be compared to the solutions given by our method. This setup differs from the second section, which is dedicated to applying the algorithm to the real case of the public transportation network of the city of Lausanne (tl), where embankment and disembarkment flows are measured but transportation flows are unknown. This second case study shows that the algorithm is applicable on large, real datasets and can gives insights about passengers probable routes in the network.
 
-\subsection{Toy Examples}
-
-\subsubsection{Examples construction}
-\label{example_construction}
-
-All constructed toy examples are built following the same approach, which aims at being simple but somewhat realistic. We fix a number of \emph{line tours} $p \geq 2$, each of which is constituted of a forward line and a backward line, for a total of $q = 2p$ lines. Every line has a starting and ending node, which are isolated node, and posses $p-1$ intermediary nodes which allows transfers to the other tour lines, giving a total of $n = 2p(p + 1)$ nodes in the network. Examples of these toy networks can be found in Figure \ref{toy_example_plots}.
-
-\begin{figure}
-	\includegraphics[width=0.3\textwidth]{fig/toy_2_display.pdf}
-	\includegraphics[width=0.3\textwidth]{fig/toy_3_display.pdf}
-	\includegraphics[width=0.3\textwidth]{fig/toy_4_display.pdf}
-	\caption{3 toy examples, with the number of tours $p \in \{2,3,4\}$. Tours are displayed in the same color, line have a unique letter, and each stop a unique combination of a letter and a number. Clusters of nodes represent positions where transfer between tours are possible.}
-	\label{toy_example_plots}
-\end{figure}
-
-Allowed origin-destination pairs $(s,t)$ are constructed with the same set of rules found in (REF), but without considering the exclusion criterion based on the pedestrian distance, as nodes are not spatially located. The graph shortest-path structure for the allowed origin-destination pairs is stored in the edge-trip incidence matrix $\bm{\chi}$.
-
-A transportation flow $\mathbf{N}_\text{ref} = (n^\text{ref}_{st})$ is drawn by setting a fixed number of passengers $n^\text{ref}_{\bullet \bullet}$, and each passenger is assigned randomly to a $(s, t)$ pair drawn uniformly among all allowed origin-destination pairs. From this reference transportation flow $\mathbf{N}_\text{ref}$, using the edge-trip incidence matrix $\bm{\chi}$ and equation (\ref{equationGG}), we can compute flow on edges $\mathbf{X}_\text{ref}$ and, in turn, the number of passengers embarking $\mathbf{a}_\text{ref}$ and the number of passengers disembarking $\mathbf{b}_\text{ref}$ at each stop.
-
-\subsubsection{Error measurements}
+\subsection{Error measurements}
 \label{error_measures}
-Using the network structure, $\mathbf{a}_\text{ref}$, $\mathbf{b}_\text{ref}$, we can obtain a estimation of the real flow through the algorithm, noted $\mathbf{N} = (n_{st})$. There are two types of dissimilarity measure between the real data and the solution proposed by the algorithm: (1) how much $\mathbf{N}$ differs from $\mathbf{N}_\text{ref}$, and (2) how well constraints defined by the number of passengers embarking $\mathbf{a}_\text{ref}$ and disembarking $\mathbf{b}_\text{ref}$ are respected. The first dissimilarity is measured through the \emph{mean transportation error}, denoted by $\text{MTE}(\mathbf{N})$, and computed with
+
+In all case studies, we obtain a estimation of the transportation flow with the algorithm, noted $\mathbf{N} = (n_{st})$, starting from the real embarkment flow $\mathbf{a}_\text{ref}$ and disembarkment flow $\mathbf{b}_\text{ref}$. In toy examples, we also have access to the real transportation flow $\mathbf{N}_\text{ref}$. 
+There are two types of dissimilarity measures between the data and the solution proposed by the algorithm: (1) if we have access to $\mathbf{N}_\text{ref}$, how much $\mathbf{N}$ differs from it, and (2) how well constraints defined by $\mathbf{a}_\text{ref}$ and $\mathbf{b}_\text{ref}$ are respected. The first dissimilarity is measured through the \emph{mean transportation error}, denoted by $\text{MTE}(\mathbf{N})$, and computed with
 \begin{equation}
 	\text{MTE}(\mathbf{N}) = \sum_{st} \frac{n^\text{ref}_{st}}{n^\text{ref}_{\bullet \bullet}} \frac{\lvert n_{st} - n^\text{ref}_{st}\lvert}{n^\text{ref}_{st}} = \frac{\sum_{st} \lvert n_{st} - n^\text{ref}_{st}\lvert}{n^\text{ref}_{\bullet \bullet}} 
 	\label{MTE}
@@ -509,22 +470,65 @@ and the second one with the \emph{mean margin error}, noted $\text{MME}(\mathbf{
 	&= \frac{\sum_i (\lvert z_{\bullet i} + n_{i \bullet} - a^\text{ref}_i \lvert + \lvert z_{i \bullet} + n_{\bullet i} - b^\text{ref}_i \lvert)}{2n^\text{ref}_{\bullet \bullet}}
 	\label{MME}
 \end{align} 
-where $z_{ij} = I((i,j) \in \mathcal{T})\sum_{st} \chi_{ij}^{st} n_{st}$ is the flow on transfer edges $\mathcal{T}$. 
+where $z_{ij} = I((i,j) \in T)\sum_{st} \chi_{ij}^{st} n_{st}$ is the flow on transfer edges $T$. 
 
-Note that, by construction, the mean margin error should be null when the algorithm converge. However, it can be informative to track down this error along iterations and, in some practical cases where the network is large, the algorithm convergence criterion is reached without having margin constraints perfectly respected.
+Note that, by construction, the mean margin error should be null when the algorithm converges. However, it can be informative to track down this error along iterations and, in some practical cases where the network is large, the algorithm convergence criterion is reached without having margin constraints perfectly respected.
+
+\subsection{Toy Examples}
+\label{toy_examples}
+
+\subsubsection{Examples construction}
+\label{example_construction}
+
+All constructed toy examples are built following the same approach, which aims at being simple but somewhat realistic. We fix a number of \emph{line tours} $p \geq 2$, each of which is constituted of a forward line and a backward line, for a total of $q = 2p$ lines. Every line has a starting and ending node, which are isolated node, and posses $p-1$ intermediary nodes which allows transfers to the other tour lines, giving a total of $n = 2p(p + 1)$ nodes in the network. Examples of these toy networks can be found in Figure \ref{toy_example_plots}.
+
+\begin{figure}[h]
+	\includegraphics[width=0.3\textwidth]{fig/toy_2_display.pdf}
+	\includegraphics[width=0.3\textwidth]{fig/toy_3_display.pdf}
+	\includegraphics[width=0.3\textwidth]{fig/toy_4_display.pdf}
+	\caption{3 toy examples, with the number of tours $p \in \{2,3,4\}$. Tours are displayed in the same color, line have a unique letter, and each stop a unique combination of a letter and a number. Clusters of nodes represent positions where transfer between tours are possible.}
+	\label{toy_example_plots}
+\end{figure}
+
+In order to be realistic, permitted $st$-trips set $P$ is constructed considering all shortest-path between pair of nodes, excluding :
+\begin{itemize}
+\item $s$ and $t$ that are on the same line but with $t$ preceding $s$ in the line order.
+\item $s$ and $t$ that are on the same tour but opposite line.
+\item $s$ and $t$ whose shortest-path starts with a transfer edge, ends with a transfer edge, or possesses two (or more) consecutive transfer edges.
+\end{itemize}
+
+A transportation flow $\mathbf{N}_\text{ref} = (n^\text{ref}_{st})$ is drawn by setting a fixed number of passengers $n^\text{ref}_{\bullet \bullet}$, and each passenger is assigned randomly to a $(s, t)$ pair drawn uniformly among $P$. From this reference transportation flow $\mathbf{N}_\text{ref}$, using the edge-trip incidence matrix $\bm{\chi}$ and equation (\ref{equationGG}), we can compute flow on edges $\mathbf{X}_\text{ref}$ and, in turn, the number of passengers embarking $\mathbf{a}_\text{ref}$ and the number of passengers disembarking $\mathbf{b}_\text{ref}$ at each stop.
 
 
 \subsubsection{Algorithm iterations}
-\label{example_construction}
+\label{algorithm_iterations}
 
-\begin{figure}
+First, we shows some algorithm iterations on a toy example with $p=2$, where $100$ passengers where drawn uniformly across the $\vert P \vert = 20$ possible st-trips. Some iterations of the algorithm with $\theta=0.1$, along with MTE and MME errors, are shown in Figure \ref{iteration_plots}. 
+\begin{figure}[h]
 	\label{iteration_plots}
 	\includegraphics[width=0.98\textwidth]{fig/iterations.pdf}
-	\caption{Blabla}
+	\caption{Real transportation flow (green arrows) obtained by randomly drawing $100$ passengers on the graph toy example with $p=2$ line tours, along with iterations $1, 3, 6, 10, 15$ of the algorithm with $\theta=0.1$. MTE and MME errors are computed, and embarkment and disembarkment flows are represented respectively by the red and blue colors on nodes.}
 \end{figure}
+On this small example, we can see that the algorithm quickly find an estimation giving small MME error, but still give an MTE of 0.252. This result is due to the fact that only $100$ passengers are drawn, giving a large deviation compared to the optimally found solution which maximize the entropy. Interestingly, we see that a better result is found on iteration 6, but margins constraints at this point are not perfectly respected yet.
+
+\subsubsection{Algorithm iterations}
+\label{algorithm_iterations}
 
 
 \subsection{Real Data}
+\label{real_data}
+
+
+after some preliminary, undocumented corrections (i.e. the components of $\mathbf{a}$ and $\mathbf{b}$ can be non-integer). It may also happen that, on some lines $\ell$,  raw data do not obey the necessary consistency condition  $a_\bullet^\ell=b_\bullet^\ell$ (where the latter quantities denote the total embarkments and disembarkments on line $\ell$), in which case we did rescale the embarking and disembarking line counts as 
+\begin{displaymath}
+	\hat{a}_i=(1-\frac{a_\bullet^\ell-b_\bullet^\ell}{a_\bullet^\ell+b_\bullet^\ell})\, a_i 
+	\qquad\qquad\qquad
+	\hat{b}_i=(1+\frac{a_\bullet^\ell-b_\bullet^\ell}{a_\bullet^\ell+b_\bullet^\ell})\,  b_i 
+\end{displaymath}
+ensuring $\hat{a}_\bullet^\ell=\hat{b}_\bullet^\ell=2a_\bullet^\ell b_\bullet^\ell/(a_\bullet^\ell+b_\bullet^\ell)$. However, strongly unbalanced lines such that  $|a_\bullet^\ell-b_\bullet|^\ell/a_\bullet^\ell > 0.3$ or $|a_\bullet^\ell-b_\bullet^\ell|/b_\bullet^\ell > 0.3$  (which always turned out to be temporary lines with small  counts) were simply disregarded and line $\ell$ removed from the network. 
+
+Also, the geometry of the network permits to derive the edge-trip incidence matrix $\bm{\chi}$ defined in (\ref{edgetrip}). 
+
 \subsubsection{Dataset construction}
 The original dataset used in this contribution consists of over 13 million rows of data over more than 1200 stop on 35 bus lines. Each data row represents a stop by a bus to embark and disembark passengers. The dataset used for further analysis is summed by stop over the year 2019.
 

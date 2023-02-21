@@ -144,8 +144,8 @@ for(it in it_list){
   error_out = sum(abs(flow_l_out - flow_r_out)) / sum(flow_l_out)
   error_m = mean(c(error_in, error_out))
   plot_flow_graph(adj, n_mat, layout, v_names=stop_names, 
-                  main=paste0("\n\nIt=", it - 1, "\nError=", 
-                              format(error, digits=3),"\nMargins error=", 
+                  main=paste0("\n\nIt=", it - 1, "\nMTE=", 
+                              format(error, digits=3),"\nMME=", 
                               round(error_m, digits=3)), 
                   e_line_size=e_line_size, e_flow_size=e_flow_size, 
                   v_label_size=v_label_size, v_size=v_size)

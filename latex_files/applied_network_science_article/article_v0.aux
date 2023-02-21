@@ -16,7 +16,7 @@
 \newlabel{notforma}{{2}{2}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Lines, stops and junctions}{2}{}\protected@file@percent }
 \newlabel{Lines and junctions}{{2.1}{2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Line edges, transfer edges and trips}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Edges, trips, and the incidence matrix}{2}{}\protected@file@percent }
 \newlabel{Line edges, transfer edges and trips}{{2.2}{2}}
 \newlabel{edgetrip}{{1}{2}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Transportation flows}{2}{}\protected@file@percent }
@@ -35,48 +35,50 @@
 \newlabel{maxenso}{{2.4.1}{4}}
 \newlabel{constr_MaxEnt}{{6}{4}}
 \newlabel{Sol}{{7}{4}}
-\newlabel{Sol_LagMult}{{8}{5}}
+\newlabel{Sol_LagMult}{{8}{4}}
 \newlabel{Iterative fitting}{{9}{5}}
 \newlabel{ }{{10}{5}}
 \newlabel{flow_from_distrib}{{11}{5}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.4.2}Initialization of the prior and the margins}{5}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.4.3}Updating the margin distributions}{5}{}\protected@file@percent }
 \newlabel{marginup}{{2.4.3}{5}}
-\newlabel{alpha_beta_update}{{12}{6}}
+\newlabel{alpha_beta_update}{{12}{5}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.4.4}Updating the prior distribution}{6}{}\protected@file@percent }
 \newlabel{priorup}{{2.4.4}{6}}
 \newlabel{flow_ratio}{{13}{6}}
 \newlabel{st_flow_ratio}{{14}{6}}
 \newlabel{update_flow}{{15}{6}}
 \newlabel{update_distrib}{{16}{6}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Compute the transportation flow matrix $\mathbf  {N} = (n_{st})$ knowing the edge-trip incidence matrix $\bm  {\chi } = (\chi _{ij}^{st})$, the set of transfer edges $T$, the set of permitted trips $P$, the embarking flow $\mathbf  {a}$, the disambarking flow $\mathbf  {b}$, the index of an isolated source node $\tilde  {s}$, and the minimum proportion of passengers entering/leaving the network $\theta $.\relax }}{6}{}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{algo1}{{1}{6}}
 \citation{wilson1967statistical}
 \citation{erlander1990gravity}
 \citation{bavaud2002quasi}
 \citation{Thomas-Agnan2021}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.4.5}Algorithm pseudocode}{7}{}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Compute the transportation flow matrix $\mathbf  {N} = (n_{st})$ knowing the edge-trip incidence matrix $\bm  {\chi } = (\chi _{ij}^{st})$, the set of transfer edges $\mathcal  {T}$, the embarking flow $\mathbf  {a}$, the disambarking flow $\mathbf  {b}$, the index of an isolated source node $\tilde  {s}$, and the minimum proportion of passengers entering/leaving the network $\theta $.\relax }}{7}{}\protected@file@percent }
-\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{algo1}{{1}{7}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Markov property for a single line}{7}{}\protected@file@percent }
 \newlabel{Single line}{{2.5}{7}}
 \newlabel{nosignle}{{17}{7}}
 \newlabel{dis embarking constraints}{{18}{7}}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Case Studies}{8}{}\protected@file@percent }
 \newlabel{casestudies}{{3}{8}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Toy Examples}{8}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.1}Examples construction}{8}{}\protected@file@percent }
-\newlabel{example_construction}{{3.1.1}{8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Error measurements}{8}{}\protected@file@percent }
+\newlabel{error_measures}{{3.1}{8}}
+\newlabel{MTE}{{19}{8}}
+\newlabel{MME}{{20}{8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Toy Examples}{8}{}\protected@file@percent }
+\newlabel{toy_examples}{{3.2}{8}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Examples construction}{8}{}\protected@file@percent }
+\newlabel{example_construction}{{3.2.1}{8}}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces 3 toy examples, with the number of tours $p \in \{2,3,4\}$. Tours are displayed in the same color, line have a unique letter, and each stop a unique combination of a letter and a number. Clusters of nodes represent positions where transfer between tours are possible.\relax }}{9}{}\protected@file@percent }
 \newlabel{toy_example_plots}{{1}{9}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.2}Error measurements}{9}{}\protected@file@percent }
-\newlabel{error_measures}{{3.1.2}{9}}
-\newlabel{MTE}{{19}{9}}
-\newlabel{MME}{{20}{9}}
-\newlabel{iteration_plots}{{3.1.3}{10}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Blabla\relax }}{10}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.3}Algorithm iterations}{10}{}\protected@file@percent }
-\newlabel{example_construction}{{3.1.3}{10}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Real Data}{10}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}Algorithm iterations}{9}{}\protected@file@percent }
+\newlabel{algorithm_iterations}{{3.2.2}{9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Real Data}{9}{}\protected@file@percent }
+\newlabel{real_data}{{3.3}{9}}
+\newlabel{iteration_plots}{{3.2.2}{10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Real transportation flow (green arrows) obtained by randomly drawing $100$ passengers on the graph toy example with $p=2$ line tours, along with iterations $1, 3, 6, 10, 15$ of the algorithm with $\theta =0.1$. MTE and MME errors are computed, and embarkment and disembarkment flows are represented respectively by the red and blue colors on nodes.\relax }}{10}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.1}Dataset construction}{10}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {4}Conclusion}{10}{}\protected@file@percent }
 \bibstyle{bmc-mathphys}
 \bibdata{article_tl.bib}
