@@ -160,7 +160,7 @@ Consider a transportation network made of bus lines numbered $\ell=1,\ldots, q$,
 
 The $l=\sum_{\ell=1}^ql_\ell$ bus stops constitute the nodes of the transportation network. Each stop $i=1,\ldots,l$ belongs to {\em  a single bus line}, and defines a unique next or forward stop $F(i)$ (unless $i$ is the line terminus) and a unique backward stop $B(i)$ (unless $i$ is the line start), both on the same line.  
 
-Let $S_i$ denote the set of stops which can be reached from stop $i$ within walking distance, excluding $i$ itself. A stop $i$ is referred to as an {\em isolated stop} if $S_i=\emptyset$, and to as a {\em junction} otherwise. 
+Let $S_i$ denote the set of stops which can be reached from stop $i$ within walking distance, excluding $i$ itself. A stop $i$ is referred to as an {\em isolated stop} if $S_i=\emptyset$, and to as a {\em junction} otherwise. 
 
 
 \subsection{Line edges, transfer edges and trips}
@@ -442,7 +442,7 @@ where (setting $\Psi_s:=\sum_{t>s}\psi_t$ and $\Phi_t:=\sum_{s<t}c\phi_s$) the c
 \end{equation}
 to be solved by iterative fitting. 
 
-Interestingly enough, the form (\ref{nosignle}) for the flows is reminiscent of the {\em gravity flows} of quantitative Geography \cite{wilson1967statistical}  \cite{erlander1990gravity} \cite{bavaud2002quasi} \cite{Thomas-Agnan2021}, where 
+Interestingly enough, the form (\ref{nosignle}) for the flows is reminiscent of the {\em gravity flows} of quantitative Geography \cite{wilson1967statistical}  \cite{erlander1990gravity} \cite{bavaud2002quasi} \cite{Thomas-Agnan2021}, where 
 $\phi_s$ is the {\em push factor}, $\psi_t$ is the {\em pull factor}, and $I(s<t)$ the {\em distance deterrence function}. Yet, instead of  
 being symmetric in $s,t$ and decreasing with the distance $|s-t|$, the distance deterrence function is here asymmetric due to the line orientation, but otherwise constant. 
 
@@ -482,7 +482,7 @@ Case studies are divided in two sections. In the first section, we test the algo
 \subsubsection{Examples construction}
 \label{example_construction}
 
-All constructed toy examples are built following the same approach, which aims at being simple but somewhat realistic. We fix a number of \emph{line tours} $p \geq 2$, each of which is constituted of a forward line and a backward line, for a total of $q = 2p$ lines. Every line has a starting and ending node, which are isolated node, and posses $p-1$ intermediary nodes which allows transfers to the other tour lines, giving a total of $n = 2p(p + 1)$ nodes in the network. Examples of these toy networks can be found in Figure \ref{toy_example_plots}.
+All constructed toy examples are built following the same approach, which aims at being simple but somewhat realistic. We fix a number of \emph{line tours} $p \geq 2$, each of which is constituted of a forward line and a backward line, for a total of $q = 2p$ lines. Every line has a starting and ending node, which are isolated nodes, and posses $p-1$ intermediary nodes which allows transfers to the other tour lines, giving a total of $n = 2p(p + 1)$ nodes in the network. Examples of these toy networks can be found in Figure \ref{toy_example_plots}.
 
 \begin{figure}
 	\includegraphics[width=0.3\textwidth]{fig/toy_2_display.pdf}
@@ -523,6 +523,14 @@ Note that, by construction, the mean margin error should be null when the algori
 	\caption{Blabla}
 \end{figure}
 
+\begin{figure}
+	\includegraphics[width=0.47\textwidth]{fig/toy_MTE_passengers_theta01.pdf}
+	\includegraphics[width=0.47\textwidth]{fig/toy_MTE_tours.pdf}
+	\caption{\emph{Mean transportation error} (MTE), according to the number of tours $p \in \{2,3,4,5,6,7,8\}$ and resp. to the number of passengers into the network per line tour and the minimum proportion $\theta =0.1$ of passengers entering/leaving the network at each stop with a proportional number of passengers to the shortest paths of each line tour.}
+	\label{toy_MTE}
+\end{figure}
+
+By running the algorithm for line tours $p \in \{2,3,4,5,6,7,8\}$, we observe that MTE depends on different parameters. On the graph on the left in Figure \ref{toy_MTE}, the number of passengers inserted in the network has an influence on MTE. The higher the number of passengers, the smaller the error is because passengers are better distributed throughout the larger network. On the right in Figure \ref{toy_MTE}, the aim is to understand how the proportion $\theta\in (0,1)$ responds to different line tours. Dots represent local minimum MTE for each tour.
 
 \subsection{Real Data}
 \subsubsection{Dataset construction}

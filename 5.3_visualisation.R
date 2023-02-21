@@ -71,6 +71,8 @@ hyper_par = 0.1
 
 res_mean = c()
 seq_passengers = seq(from = 200, to = 4000, by = 200)
+seq_passengers = seq(from = 5000, to = 20000, by = 1000)
+
 
 for (j in 1:length(nb_lines)) {
   
@@ -102,6 +104,9 @@ for (j in 1:length(nb_lines)) {
 }
 
 # write.csv(res_mean, "results/5_toy_ex_outputs/res_mean_passengers.csv", row.names = F)
+res_mean0 = read.csv("results/5_toy_ex_outputs/res_mean_passengers_theta01.csv")
+res_mean2 = rbind(res_mean0,res_mean)
+
 
 ### Best graph according to the number of passengers into the network
 # only 1/3 error bar
@@ -115,10 +120,10 @@ for (j in 1:length(nb_lines)) {
 #   labs(title = paste0(n_test, " iterations, ", expression(theta), ": ", hyper_par), x = "Passengers into the network", y = "Mean error")
 
 # Plot the results 2
-ggplot(data=res_mean) +
+ggplot(data=res_mean2) +
   geom_ribbon(aes(x=passengers, ymin=mean_error-sd_error/sqrt(n_test), 
                   ymax=mean_error+sd_error/sqrt(n_test), group=line, 
                   fill=factor(line)), alpha=0.2) +
   geom_line(aes(x=passengers, y=mean_error, group=line, color=factor(line))) +
-  labs(x="Nb passengers", y="MTE") +
-  labs(color = "Nb tours", fill = "Nb tours")
+  labs(x="Number of passengers", y="MTE") +
+  labs(color = "p", fill = "Nb tours")
