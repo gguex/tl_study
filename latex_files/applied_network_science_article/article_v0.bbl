@@ -1,6 +1,6 @@
 %% BioMed_Central_Bib_Style_v1.01
 
-\begin{thebibliography}{14}
+\begin{thebibliography}{12}
 % BibTex style file: bmc-mathphys.bst (version 2.1), 2014-07-24
 \ifx \bisbn   \undefined \def \bisbn  #1{ISBN #1}\fi
 \ifx \binits  \undefined \def \binits#1{#1}\fi
@@ -201,32 +201,6 @@ pp. \bfpage{2179}--\blpage{2199}.
 \end{bbook}
 \endbibitem
 
-%%% 13
-\bibitem{boyle_passenger_1998}
-\begin{bbook}
-\bauthor{\bsnm{Boyle}, \binits{D.}},
-\bauthor{\bsnm{Mark~C}, \binits{D.}}:
-\bbtitle{Passenger Counting Technologies and Procedures}.
-\bpublisher{National Academy Press},
-\blocation{Washington, DC}
-(\byear{1998}).
-\bcomment{OCLC: 632725908}
-\end{bbook}
-\endbibitem
-
-%%% 14
-\bibitem{bishop_discrete_2007}
-\begin{bbook}
-\bauthor{\bsnm{Bishop}, \binits{Y.M.}},
-\bauthor{\bsnm{Fienberg}, \binits{S.E.}},
-\bauthor{\bsnm{Holland}, \binits{P.W.}}:
-\bbtitle{Discrete {Multivariate} {Analysis}: {Theory} and {Practice}}.
-\bpublisher{Springer},
-\blocation{New York}
-(\byear{2007})
-\end{bbook}
-\endbibitem
-
 \end{thebibliography}
 
 \newcommand{\BMCxmlcomment}[1]{}
@@ -403,29 +377,6 @@ pp. \bfpage{2179}--\blpage{2199}.
   <pubdate>2021</pubdate>
   <fpage>2179</fpage>
   <lpage>-2199</lpage>
-</bibl>
-
-<bibl id="B13">
-  <title><p>Passenger counting technologies and procedures</p></title>
-  <aug>
-    <au><snm>Boyle</snm><fnm>D</fnm></au>
-    <au><snm>Mark C</snm><fnm>D</fnm></au>
-  </aug>
-  <publisher>Washington, DC: National Academy Press</publisher>
-  <pubdate>1998</pubdate>
-  <note>OCLC: 632725908</note>
-</bibl>
-
-<bibl id="B14">
-  <title><p>Discrete {Multivariate} {Analysis}: {Theory} and
-  {Practice}</p></title>
-  <aug>
-    <au><snm>Bishop</snm><fnm>YM</fnm></au>
-    <au><snm>Fienberg</snm><fnm>SE</fnm></au>
-    <au><snm>Holland</snm><fnm>PW</fnm></au>
-  </aug>
-  <publisher>New York: Springer</publisher>
-  <pubdate>2007</pubdate>
 </bibl>
 
 </refgrp>

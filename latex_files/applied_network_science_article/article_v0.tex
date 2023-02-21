@@ -160,8 +160,7 @@ Consider a \emph{transportation network} made of \emph{lines} numbered $\ell=1,\
 
 The $l=\sum_{\ell=1}^ql_\ell$ \emph{stops} constitute the nodes of the transportation network. Each stop $i=1,\ldots,l$ belongs to a single line, and defines a unique next or forward stop $F(i)$ (unless $i$ is the line terminus) and a unique backward stop $B(i)$ (unless $i$ is the line start), both on the same line.  
 
-Let $S_i$ denote the \emph{set of stops which can be reached from stop $i$ outside lines connection} (with, e.g., an acceptable walking distance), excluding $i$ itself. A stop $i$ is referred to as an \emph{isolated stop} if $S_i=\emptyset$, and to as a \emph{junction} otherwise. 
-
+Let $S_i$ denotes the \emph{set of stops which can be reached from stop $i$ outside lines connection} (with, e.g., an acceptable walking distance), excluding $i$ itself. A stop $i$ is referred to as an \emph{isolated stop} if $S_i=\emptyset$, and to as a \emph{junction} otherwise. 
 
 \subsection{Edges, trips, and the incidence matrix}
 \label{Line edges, transfer edges and trips}
@@ -428,7 +427,7 @@ where (setting $\Psi_s:=\sum_{t>s}\psi_t$ and $\Phi_t:=\sum_{s<t}c\phi_s$) the c
 \end{equation}
 to be solved by iterative fitting. 
 
-Interestingly enough, the form (\ref{nosignle}) for the flows is reminiscent of the {\em gravity flows} of quantitative Geography \cite{wilson1967statistical}  \cite{erlander1990gravity} \cite{bavaud2002quasi} \cite{Thomas-Agnan2021}, where 
+Interestingly enough, the form (\ref{nosignle}) for the flows is reminiscent of the {\em gravity flows} of quantitative Geography \cite{wilson1967statistical}  \cite{erlander1990gravity} \cite{bavaud2002quasi} \cite{Thomas-Agnan2021}, where 
 $\phi_s$ is the {\em push factor}, $\psi_t$ is the {\em pull factor}, and $I(s<t)$ the {\em distance deterrence function}. Yet, instead of  
 being symmetric in $s,t$ and decreasing with the distance $|s-t|$, the distance deterrence function is here asymmetric due to the line orientation, but otherwise constant. 
 
@@ -503,7 +502,7 @@ A transportation flow $\mathbf{N}_\text{ref} = (n^\text{ref}_{st})$ is drawn by 
 \subsubsection{Algorithm iterations}
 \label{algorithm_iterations}
 
-First, we shows some algorithm iterations on a toy example with $p=2$, where $100$ passengers where drawn uniformly across the $\vert P \vert = 20$ possible st-trips. Some iterations of the algorithm with $\theta=0.1$, along with MTE and MME errors, are shown in Figure \ref{iteration_plots}. 
+First, we shows some algorithm iterations on a toy example with $p=2$, where $100$ passengers where drawn uniformly across the $\vert P \vert = 20$ possible $st$-trips. Some iterations of the algorithm with $\theta=0.1$, along with MTE and MME errors, are shown in Figure \ref{iteration_plots}. 
 \begin{figure}[h]
 	\label{iteration_plots}
 	\includegraphics[width=0.98\textwidth]{fig/iterations.pdf}
@@ -514,6 +513,14 @@ On this small example, we can see that the algorithm quickly find an estimation 
 \subsubsection{Algorithm iterations}
 \label{algorithm_iterations}
 
+\begin{figure}
+	\includegraphics[width=0.47\textwidth]{fig/toy_MTE_passengers_theta01.pdf}
+	\includegraphics[width=0.47\textwidth]{fig/toy_MTE_tours.pdf}
+	\caption{\emph{Mean transportation error} (MTE), according to the number of tours $p \in \{2,3,4,5,6,7,8\}$ and resp. to the number of passengers into the network per line tour and the minimum proportion $\theta =0.1$ of passengers entering/leaving the network at each stop with a proportional number of passengers to the shortest paths of each line tour.}
+	\label{toy_MTE}
+\end{figure}
+
+By running the algorithm for line tours $p \in \{2,3,4,5,6,7,8\}$, we observe that MTE depends on different parameters. On the graph on the left in Figure \ref{toy_MTE}, the number of passengers inserted in the network has an influence on MTE. The higher the number of passengers, the smaller the error is because passengers are better distributed throughout the larger network. On the right in Figure \ref{toy_MTE}, the aim is to understand how the proportion $\theta\in (0,1)$ responds to different line tours. Dots represent local minimum MTE for each tour.
 
 \subsection{Real Data}
 \label{real_data}
