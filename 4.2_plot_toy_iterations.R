@@ -18,7 +18,7 @@ source("local_functions.R")
 #--------------------------------
 
 # Result folder
-result_folder = "results/toy_example_plots"
+result_folder = "results/toy_example_plots_2"
 
 # Choose number of lines
 nb_lines = 2

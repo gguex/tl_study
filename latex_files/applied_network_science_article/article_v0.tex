@@ -513,14 +513,20 @@ On this small example, we can see that the algorithm quickly find an estimation 
 \subsubsection{MTE study}
 \label{mte_study}
 
-The main goal of toy examples, since we have access to the real transportation flow, is to study how the resulting $MTE$ behave regarding passenger $st$-trips distribution and hyperparameter $\theta$ on different network sizes.
+The main goal of toy examples, since we have access to the real transportation flow, is to study how the resulting $MTE$ behave regarding passenger $st$-trips distribution and hyperparameter $\theta$, on different network sizes. The randomness of the $st$-trips distribution 
 
 \begin{figure}
-	\includegraphics[width=0.47\textwidth]{fig/toy_MTE_passengers_theta01.pdf}
-	\includegraphics[width=0.47\textwidth]{fig/toy_MTE_tours.pdf}
+	\includegraphics[width=0.98\textwidth]{fig/MTE_passengers_theta01.pdf}
 	\caption{\emph{Mean transportation error} (MTE), according to the number of tours $p \in \{2,3,4,5,6,7,8\}$ and resp. to the number of passengers into the network per line tour and the minimum proportion $\theta =0.1$ of passengers entering/leaving the network at each stop with a proportional number of passengers to the shortest paths of each line tour.}
-	\label{toy_MTE}
+	\label{MTE_vs_passengers}
 \end{figure}
+
+\begin{figure}
+	\includegraphics[width=0.98\textwidth]{fig/MTE_tours.pdf}
+	\caption{\emph{Mean transportation error} (MTE), according to the number of tours $p \in \{2,3,4,5,6,7,8\}$ and resp. to the number of passengers into the network per line tour and the minimum proportion $\theta =0.1$ of passengers entering/leaving the network at each stop with a proportional number of passengers to the shortest paths of each line tour.}
+	\label{MTE_vs_theta}
+\end{figure}
+
 
 By running the algorithm for line tours $p \in \{2,3,4,5,6,7,8\}$, we observe that MTE depends on different parameters. On the graph on the left in Figure \ref{toy_MTE}, the number of passengers inserted in the network has an influence on MTE. The higher the number of passengers, the smaller the error is because passengers are better distributed throughout the larger network. On the right in Figure \ref{toy_MTE}, the aim is to understand how the proportion $\theta\in (0,1)$ responds to different line tours. Dots represent local minimum MTE for each tour.
 
