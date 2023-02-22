@@ -43,9 +43,9 @@ nb_stops = nb_lines + 1
 #--------------------------------
 
 # Conv threshold for iterative fitting
-conv_thres_if = 0.0001
+conv_thres_if = 1e-5
 # Conv threshold
-conv_thres_algo = 0.0001
+conv_thres_algo = 1e-8
 # epsilon
 epsilon = 1e-40
 # max iteration
@@ -55,7 +55,7 @@ display_it = F
 # number of iterations
 n_test = 10
 # prop limit
-hyper_par = 0.1
+hyper_par = 0.001
 
 #--------------------------------
 # Output and visualizations
@@ -70,9 +70,11 @@ hyper_par = 0.1
 # Create a data frame with all different number of passengers into the network
 
 res_mean = c()
-seq_passengers = seq(from = 200, to = 4000, by = 200)
-seq_passengers = seq(from = 5000, to = 20000, by = 1000)
+# seq_passengers = seq(from = 200, to = 4000, by = 200)
+seq_passengers = seq(from = 1000, to = 20000, by = 1000)
+seq_passengers = seq(from = 200, to = 800, by = 200)
 
+# rbind(seq_passengers,seq_passengers2)
 
 for (j in 1:length(nb_lines)) {
   
@@ -103,9 +105,10 @@ for (j in 1:length(nb_lines)) {
   res_mean = rbind(res_mean, mean_pass)
 }
 
-# write.csv(res_mean, "results/5_toy_ex_outputs/res_mean_passengers.csv", row.names = F)
-res_mean0 = read.csv("results/5_toy_ex_outputs/res_mean_passengers_theta01.csv")
-res_mean2 = rbind(res_mean0,res_mean)
+# write.csv(res_mean2, "results/5_toy_ex_outputs/res_mean_passengersNEWbig.csv", row.names = F)
+# res_mean_big = res_mean
+# res_mean0 = read.csv("results/5_toy_ex_outputs/res_mean_passengers_theta01.csv")
+# res_mean2 = rbind(res_mean,res_mean_big)
 
 
 ### Best graph according to the number of passengers into the network
@@ -120,10 +123,10 @@ res_mean2 = rbind(res_mean0,res_mean)
 #   labs(title = paste0(n_test, " iterations, ", expression(theta), ": ", hyper_par), x = "Passengers into the network", y = "Mean error")
 
 # Plot the results 2
-ggplot(data=res_mean2) +
+ggplot(data=res_mean) +
   geom_ribbon(aes(x=passengers, ymin=mean_error-sd_error/sqrt(n_test), 
                   ymax=mean_error+sd_error/sqrt(n_test), group=line, 
                   fill=factor(line)), alpha=0.2) +
   geom_line(aes(x=passengers, y=mean_error, group=line, color=factor(line))) +
   labs(x="Number of passengers", y="MTE") +
-  labs(color = "p", fill = "Nb tours")
+  labs(color = "p", fill = "p")

@@ -42,9 +42,9 @@ out_folder = "results/loop_toy_example"
 #--------------------------------
 
 # Conv threshold for iterative fitting
-conv_thres_if = 0.0001
+conv_thres_if = 1e-5
 # Conv threshold
-conv_thres_algo = 0.0001
+conv_thres_algo = 1e-8
 # epsilon
 epsilon = 1e-40
 # max iteration
@@ -140,4 +140,4 @@ ggplot(data=mean_line) +
   labs(x=expression(theta), y="MTE") +
   scale_x_continuous(breaks = seq(0, 1, 0.1)) +
   geom_point(data=min_max,aes(x=param, y=mean_error, color=factor(Lines)))+
-  labs(color = "Nb tours", fill = "Nb tours")
+  labs(color = "p", fill = "p")
