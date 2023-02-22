@@ -374,47 +374,56 @@ balance_flow_l_inout =
     line_flow_in[line_length] = 0
     line_flow_out[1] = 0
     
-    # Loop while the balance is not ok
-    balance_ok = F
-    # From where it must be corrected
-    correct_from = 1
-    while(!balance_ok){
-      
-      # The sum of in and out, shifted
-      sum_l_flow_in = cumsum(line_flow_in)[-line_length]
-      sum_l_flow_out = cumsum(line_flow_out)[-1]
-      # The balance of in and out
-      balance = sum_l_flow_in - sum_l_flow_out
-      # Remove already treated values
-      balance[0:(correct_from-1)] = 0
-      
-      # Where there are more passengers exiting than entering
-      where_neg = which(balance < 0)
-      
-      # Where to correct
-      if(length(where_neg) == 0){
-        correct_to = line_length - 1
-      } else {
-        correct_to = where_neg[1]
+    # Conv 
+    conv = F
+    while(!conv){
+      old_line_flow_in = line_flow_in
+      old_line_flow_out = line_flow_out
+      # Loop while the balance is not ok
+      balance_ok = F
+      # From where it must be corrected
+      correct_from = 1
+      while(!balance_ok){
+        
+        # The sum of in and out, shifted
+        sum_l_flow_in = cumsum(line_flow_in)[-line_length]
+        sum_l_flow_out = cumsum(line_flow_out)[-1]
+        # The balance of in and out
+        balance = sum_l_flow_in - sum_l_flow_out
+        # Remove already treated values
+        balance[0:(correct_from-1)] = 0
+        
+        # Where there are more passengers exiting than entering
+        where_neg = which(balance < 0)
+        
+        # Where to correct
+        if(length(where_neg) == 0){
+          correct_to = line_length - 1
+        } else {
+          correct_to = where_neg[1]
+        }
+        
+        # Correcting
+        quantity_to_correct = balance[correct_to]
+        percent = (quantity_to_correct)/
+          (sum(line_flow_in[correct_from:correct_to]) +
+             sum(line_flow_out[(correct_from + 1):(correct_to + 1)]))
+        line_flow_in[correct_from:correct_to] = (1 - percent)*
+          line_flow_in[correct_from:correct_to]
+        line_flow_out[(correct_from + 1):(correct_to + 1)] = (1 + percent)*
+          line_flow_out[(correct_from + 1):(correct_to + 1)]
+        
+        # Check if finished
+        if(correct_to == line_length - 1){
+          balance_ok = T
+        } else {
+          correct_from = correct_to + 1
+        }
       }
-      
-      # Correcting
-      quantity_to_correct = balance[correct_to]
-      percent = (quantity_to_correct)/
-        (sum(line_flow_in[correct_from:correct_to]) +
-           sum(line_flow_out[(correct_from + 1):(correct_to + 1)]))
-      line_flow_in[correct_from:correct_to] = (1 - percent)*
-        line_flow_in[correct_from:correct_to]
-      line_flow_out[(correct_from + 1):(correct_to + 1)] = (1 + percent)*
-        line_flow_out[(correct_from + 1):(correct_to + 1)]
-      
-      # Check if finished
-      if(correct_to == line_length - 1){
-        balance_ok = T
-      } else {
-        correct_from = correct_to + 1
+      if(sum(abs(line_flow_in - old_line_flow_in) + 
+             abs(line_flow_out - old_line_flow_out)) < 1e-5){
+        conv = T
       }
-      
     }
     
     # Add the corrected flow for line to the vector of global corrected flow 
