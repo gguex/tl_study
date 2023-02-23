@@ -251,7 +251,7 @@ Assuming some reasonable initial prior $g_{st}$,
 \begin{itemize}
 \item[(1)] we shall first suppose that the empirical margins $\alpha_s=f_{s\bullet}$ and $\beta_t=f_{\bullet t}$ are known.  
 Then $f_{st}$ can be determined as the maximum entropy solution (section \ref{maxenso}), i.e. as the distribution closest to $g_{st}$ in the Kullback-Leibler divergence sense under the margin constraints, to be calibrated by an iterative fitting inner loop
-\item[(2)] then (section \ref{marginup}), the margins will be updated to $\tilde{\alpha}_s$ and $\tilde{\beta}_t$   by requiring a \emph{minimum proportion} $\theta\in (0,1)$ of passengers entering/leaving the network at each stop, as well as avoiding transfer overflow exceeding the embarking and disembarking counts at each stop
+\item[(2)] then (section \ref{marginup}), the margins will be updated to $\tilde{\alpha}_s$ and $\tilde{\beta}_t$   by requiring a \emph{minimum proportion} $\theta\in [0,1)$ of passengers entering/leaving the network at each stop, as well as avoiding transfer overflow exceeding the embarking and disembarking counts at each stop
  \item[(3)] finally (section \ref{priorup}), the prior will be updated to $\tilde{g}_{st}$ by shrinking, if necessary, the priors $g_{st}$ associated to overflows. 
 \end{itemize}
 With the new prior distribution $\widetilde{g}_{st}$ and the new margin distributions $\widetilde{\alpha}_s$, $\widetilde{\beta}_t$, we can iterate the 
@@ -318,13 +318,13 @@ g_{st} = \begin{cases}
   0    & \text{otherwise}.
 \end{cases}
 \end{equation*}
-The initial margins were chosen as  those of the flow without transfer, namely $\alpha_i=\frac{a_i}{a_{\bullet}}$ and $\beta_i=\frac{b_i}{b_\bullet}$ for all stops. 
+The initial margins were chosen to initially match $g_{st}$, namely $\alpha_s=g_{s \bullet}$ and $\beta_t=g_{\bullet t}$ for all stops. 
 
 
 
 \subsubsection{Updating  the margin distributions}
 \label{marginup}
-Let us define the hyperparameter $ \theta\in (0, 1)$ as the \emph{minimum proportion of passengers (among $a_i$ and $b_i$) entering/leaving the network at each stop}, that is $n_{s\bullet}\ge \theta a_s$ and $n_{\bullet t}\ge \theta b_t$. Note that we could set a different hyperparameter for each node, and differing for embarkments and disembarkments, but without addition information, we will restrain to this simpler case. Identities (\ref{entrer}) and  (\ref{sortir}) then imply the inequalities
+Let us define the hyperparameter $ \theta\in [0, 1)$ as the \emph{minimum proportion of passengers (among $a_i$ and $b_i$) entering/leaving the network at each stop}, that is $n_{s\bullet}\ge \theta a_s$ and $n_{\bullet t}\ge \theta b_t$. Note that we could set a different hyperparameter for each node, and differing for embarkments and disembarkments, but without addition information, we will restrain to this simpler case. Identities (\ref{entrer}) and  (\ref{sortir}) then imply the inequalities
 \begin{displaymath}
 z_{\bullet s} \le (1 - \theta) a_s\qquad\qquad \qquad z_{t \bullet} \le  (1 - \theta) b_t
 \end{displaymath}
@@ -452,7 +452,7 @@ traveled distances among users) or the ``last in, first out" (LIFO) flows (tendi
 \section{Case Studies}
 \label{casestudies}
 
-Case studies are divided in two sections. In the first section, we test the algorithm on toy examples, which are artificial networks where the transportation flow $n_{st}$ is randomly drawn. These examples enable some kind of validation of the algorithm, as "real" transportation flows are known and can be compared to the solutions given by our method. This setup differs from the second section, which is dedicated to applying the algorithm to the real case of the public transportation network of the city of Lausanne (tl), where embankment and disembarkment flows are measured but transportation flows are unknown. This second case study shows that the algorithm is applicable on large, real datasets and can gives insights about passengers probable routes in the network.
+Case studies are divided in two sections. In the first section, we test the algorithm on toy examples, which are artificial networks where the transportation flow $n_{st}$ is randomly drawn. These examples enable some kind of validation of the algorithm, as the "real" transportation flow is known and can be compared to solutions given by our method. This setup differs from the second section, which is dedicated to applying the algorithm to the real case of the public transportation network of the city of Lausanne (tl), where embankment and disembarkment flows are measured but the real transportation flow is unknown. This second case study shows that the algorithm is applicable on large, real datasets and can gives insights about passengers probable routes in the network.
 
 \subsection{Error measurements}
 \label{error_measures}
@@ -469,7 +469,7 @@ and the second one with the \emph{mean margin error}, noted $\text{MME}(\mathbf{
 	&= \frac{\sum_i (\lvert z_{\bullet i} + n_{i \bullet} - a^\text{ref}_i \lvert + \lvert z_{i \bullet} + n_{\bullet i} - b^\text{ref}_i \lvert)}{2n^\text{ref}_{\bullet \bullet}}
 	\label{MME}
 \end{align} 
-where $z_{ij} = I((i,j) \in T)\sum_{st} \chi_{ij}^{st} n_{st}$ is the flow on transfer edges $T$. 
+where $z_{ij} = I((i,j) \in T)\sum_{st} \chi_{ij}^{st} n_{st}$ is the flow on transfer edges $T$. Both errors can be interpreted as a weighted mean deviation percentage. 
 
 Note that, by construction, the MME should be null when the algorithm converges. However, it can be informative to track down this error along iterations and, in some practical cases where the network is large, the algorithm convergence criterion is reached without having margin constraints perfectly respected.
 
@@ -505,19 +505,22 @@ A transportation flow $\mathbf{N}_\text{ref} = (n^\text{ref}_{st})$ is drawn by 
 First, we shows some algorithm iterations on a toy example with $p=2$, where $100$ passengers where drawn uniformly across the $\vert P \vert = 20$ possible $st$-trips. Some iterations of the algorithm with $\theta=0.1$, along with MTE and MME errors, are shown in Figure \ref{iteration_plots}. 
 \begin{figure}[h]
 	\includegraphics[width=0.98\textwidth]{fig/iterations.pdf}
-	\caption{Real transportation flow (green arrows) obtained by randomly drawing $100$ passengers on the graph toy example with $p=2$ line tours, along with iterations $1, 3, 6, 10, 15$ of the algorithm with $\theta=0.1$. MTE and MME errors are computed, and embarkment and disembarkment flows are represented respectively by the red and blue colors on nodes.}
+	\caption{Real transportation flow (green arrows) obtained by randomly drawing $100$ passengers on the graph toy example with $p=2$ line tours, along with iterations $1, 2, 4, 7, 10$ of the algorithm with $\theta=0.1$. MTE and MME errors are computed, and embarkment and disembarkment flows are represented respectively by the red and blue colors on nodes.}
 	\label{iteration_plots}
 \end{figure}
-On this small example, we can see that the algorithm quickly find an estimation giving small MME error, but still give an MTE of 0.252. This result is due to the fact that only $100$ passengers are drawn, giving a large deviation compared to the optimally found solution which maximize the entropy. Interestingly, we see that a better result is found on iteration 6, but margins constraints at this point are not perfectly respected yet.
+On this small example, we can see that the algorithm quickly find an estimation giving small MME error, but still give an MTE of 0.252. This result is due to the fact that only $50$ passengers are drawn, giving a large deviation compared to the optimally found solution which maximize the entropy. Interestingly, we see that a better result is found on iteration , but margins constraints at this point are not perfectly respected yet.
 
 \subsubsection{MTE study}
 \label{mte_study}
 
-The main goal of toy examples, since we have access to the real transportation flow, is to study how the resulting $MTE$ behave regarding passenger $st$-trips distribution and hyperparameter $\theta$, on different network sizes. The randomness of the $st$-trips distribution 
+The main goal of toy examples, since we have access to the real transportation flow, is to study how the resulting $MTE$ behave regarding passenger $st$-trips distribution and hyperparameter $\theta$, on different network sizes. 
+
+The randomness of the $st$-trips distribution is controlled by the number of drawn passengers and we can see that the algorithm performs better if this number increases, as seen in Figure \ref{MTE_vs_passengers}. This behavior can be expected as the method is constructed to find the solution maximizing the entropy while respecting embarkment and disembarkment constraint. In fact, all MTE should converge to $0$ eventually, however this rate of convergence seems to be low. \\
+As for the hyperparameter study, found in Figure \ref{MTE_vs_theta}, we see that the optimal parameter seems to decreases as network size increases. However, 
 
 \begin{figure}
 	\includegraphics[width=0.98\textwidth]{fig/MTE_passengers_theta01.pdf}
-	\caption{\emph{Mean transportation error} (MTE), according to the number of tours $p \in \{2,3,4,5,6,7,8\}$ and resp. to the number of passengers into the network per line tour and the minimum proportion $\theta =0.1$ of passengers entering/leaving the network at each stop with a proportional number of passengers to the shortest paths of each line tour.}
+	\caption{\emph{Mean transportation error} (MTE) vs the number of randomly drawn passengers, in toy examples with number of tours $p$ varying from 2 to 8. The hyperparameter was set to $\theta=0.001$ and $10$ different drawn where performed for each data point.}
 	\label{MTE_vs_passengers}
 \end{figure}
 
@@ -527,8 +530,6 @@ The main goal of toy examples, since we have access to the real transportation f
 	\label{MTE_vs_theta}
 \end{figure}
 
-
-By running the algorithm for line tours $p \in \{2,3,4,5,6,7,8\}$, we observe that MTE depends on different parameters. On the graph on the left in Figure \ref{toy_MTE}, the number of passengers inserted in the network has an influence on MTE. The higher the number of passengers, the smaller the error is because passengers are better distributed throughout the larger network. On the right in Figure \ref{toy_MTE}, the aim is to understand how the proportion $\theta\in (0,1)$ responds to different line tours. Dots represent local minimum MTE for each tour.
 
 \subsection{Real Data}
 \label{real_data}

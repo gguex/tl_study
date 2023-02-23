@@ -18,14 +18,14 @@ source("local_functions.R")
 #--------------------------------
 
 # Result folder
-result_folder = "results/toy_example_plots_2"
+result_folder = "results/toy_example_plots"
 
 # Choose number of lines
 nb_lines = 2
 # Choose number of stops
 nb_stops = nb_lines + 1
 # Choose number of passengers in the network (with normal distribution)
-nb_passengers = 100
+nb_passengers = 50
 # Total number of stops *2 (back and forth)
 nb_stops_tot = nb_lines*nb_stops*2
 
@@ -34,19 +34,19 @@ conv_thres_if = 1e-6
 # Conv threshold
 conv_thres_algo = 1e-8
 # proportional limit 
-min_p_ntwk = 0.1
+min_p_ntwk = 0.01
 # epsilon
 epsilon = 1e-40
 # max iterations
-max_it = 16
+max_it = 50
 # max iterations for iterative fitting
 max_it_if = 1000
 
 # Seed
-set.seed(10)
+set.seed(3)
 
 # It list
-it_list = c(2, 4, 7, 11, 16)
+it_list = c(1, 2, 4, 7, 10)
 
 #--------------------------------
 # Code
@@ -144,7 +144,7 @@ for(it in it_list){
   error_out = sum(abs(flow_l_out - flow_r_out)) / sum(flow_l_out)
   error_m = mean(c(error_in, error_out))
   plot_flow_graph(adj, n_mat, layout, v_names=stop_names, 
-                  main=paste0("\n\nIt=", it - 1, "\nMTE=", 
+                  main=paste0("\n\nIt=", it, "\nMTE=", 
                               format(error, digits=3),"\nMME=", 
                               round(error_m, digits=3)), 
                   e_line_size=e_line_size, e_flow_size=e_flow_size, 
