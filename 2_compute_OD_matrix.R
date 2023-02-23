@@ -41,7 +41,7 @@ min_p_ntwk = 0.001
 # epsilon
 epsilon = 1e-40
 # max iterations
-max_it = 2000
+max_it = 500
 # max iterations for iterative fitting
 max_it_if = 400
 
