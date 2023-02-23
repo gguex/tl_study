@@ -516,8 +516,10 @@ compute_origin_destination =
   sum_flow_l_in = sum(flow_l_in)
   sum_flow_l_out = sum(flow_l_out)
   # The evolving in and out distribution
-  sigma_in = flow_l_in / sum_flow_l_in
-  sigma_out = flow_l_out / sum_flow_l_out
+  #sigma_in = flow_l_in / sum_flow_l_in
+  #sigma_out = flow_l_out / sum_flow_l_out
+  sigma_in = rowSums(g_ref)
+  sigma_out = colSums(g_ref)
   # A boolean for convergence
   converge_algo = F
   # Iteration counter
@@ -618,7 +620,7 @@ compute_origin_destination =
     scaling_phi_psi = mapply(function(i, j) phi[i]*psi[j], 
                              sp_ref[, 1], sp_ref[, 2])
     # Compute the updated g_vec
-    reduced_flow = sp_flow_vec / path_max_ratio
+    reduced_flow = sp_flow_vec / (path_max_ratio)
     g_ref_vec = reduced_flow / (scaling_phi_psi + epsilon)
     g_ref_vec = g_ref_vec / sum(g_ref_vec)
     # Back to g_ref
