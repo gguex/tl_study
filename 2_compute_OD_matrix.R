@@ -35,9 +35,9 @@ out_folder = "results/all_lines"
 # Conv threshold for iterative fitting
 conv_thres_if = 1e-5
 # Conv threshold
-conv_thres_algo = 1e-8
+conv_thres_algo = 1e-7
 # proportional limit 
-min_p_ntwk = 0.001
+min_p_ntwk = 0.1
 # epsilon
 epsilon = 1e-40
 # max iterations

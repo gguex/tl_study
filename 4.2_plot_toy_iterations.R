@@ -32,7 +32,7 @@ nb_stops_tot = nb_lines*nb_stops*2
 # Conv threshold for iterative fitting
 conv_thres_if = 1e-6
 # Conv threshold
-conv_thres_algo = 1e-8
+conv_thres_algo = 1e-10
 # proportional limit 
 min_p_ntwk = 0.01
 # epsilon
@@ -46,7 +46,7 @@ max_it_if = 1000
 set.seed(3)
 
 # It list
-it_list = c(1, 2, 4, 7, 10)
+it_list = c(1, 2, 4, 7, 50)
 
 #--------------------------------
 # Code
@@ -128,12 +128,13 @@ e_flow_size = 3
 v_size = 20
 v_label_size = 0.00001
 
-pdf(paste0(result_folder, "/iterations.pdf"))
+pdf(paste0(result_folder, "/iterations_test.pdf"))
 par(mfrow=c(2,3))
 plot_flow_graph(adj, n_real, layout, v_names=stop_names, main="Real", 
                 e_line_size=e_line_size, e_flow_size=e_flow_size, 
                 v_label_size=v_label_size, v_size=v_size)
 
+it_list[it_list > length(n_mat_list)] = length(n_mat_list)
 for(it in it_list){
   n_mat = n_mat_list[[it]]
   x_r_btw = compute_x_from_n(n_mat, edge_ref, sp_ref, sp_edge_link)$x_btw
