@@ -164,7 +164,7 @@ Consider a \emph{transportation network} made of \emph{lines} numbered $\ell=1,\
 
 The $l=\sum_{\ell=1}^ql_\ell$ \emph{stops} constitute the nodes of the transportation network. Each stop $i=1,\ldots,l$ belongs to a single line, and defines a unique next or forward stop $F(i)$ (unless $i$ is the line terminus) and a unique backward stop $B(i)$ (unless $i$ is the line start), both on the same line.  
 
-Let $S_i$ denotes the \emph{set of stops which can be reached from stop $i$ outside lines connection} (with, e.g., an acceptable walking distance), excluding $i$ itself. A stop $i$ is referred to as an \emph{isolated stop} if $S_i=\emptyset$, and to as a \emph{junction} otherwise. 
+Let $S_i$ denotes the \emph{set of stops which can be reached from stop $i$ outside lines connection} (with, e.g., an acceptable walking distance), excluding $i$ itself. A stop $i$ is referred to as an \emph{isolated stop} if $S_i=\emptyset$, and to as a \emph{junction} otherwise. 
 
 \subsection{Edges, trips, and the incidence matrix}
 \label{Line edges, transfer edges and trips}
@@ -571,7 +571,7 @@ ensuring $\hat{a}_\bullet^\ell=\hat{b}_\bullet^\ell=2a_\bullet^\ell b_\bullet^\e
 Also, the geometry of the network permits to derive the edge-trip incidence matrix $\bm{\chi}$ defined in (\ref{edgetrip}). 
 
 \subsubsection{Dataset construction}
-The original dataset used in this contribution consists of over 13 million rows of data over more than 1200 stop on 35 bus lines. Each data row represents a stop by a bus to embark and disembark passengers. The dataset used for further analysis is summed by stop over the year 2019.
+This research presents a dataset derived from the public transportation agency in Lausanne (tl), Switzerland. Automatic passenger counters were used to collect data on the number of passengers entering and leaving buses and metros at each stop. The dataset comprises 44 lines of metro and bus transportation, 1361 stops, and over 115 million passengers per year. Each round trip forms two separate lines, which often have stops that correspond to both the inbound and outbound directions, but this is not always the case. Some stops may be unique to either the inbound or outbound direction. The initial dataset contained 13 million data rows, which were aggregated to the year 2019, and the passenger data was filtered to include only passengers who boarded and disembarked at each stop. Lines with the most errors were removed, resulting in a final dataset of 35 transportation lines and 1216 stops. The threshold for invalid lines was set at a difference of 15\% between boarded and disembarked passenger counters.
 
 %% --------------------------------- CONCLUSION
 
