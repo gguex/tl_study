@@ -68,11 +68,9 @@ hyper_par = 0.001
 # list2env(network_prop_list, .GlobalEnv)
 
 # Create a data frame with all different number of passengers into the network
-
 res_mean = c()
-# seq_passengers = seq(from = 200, to = 4000, by = 200)
-seq_passengers = seq(from = 1000, to = 20000, by = 1000)
-seq_passengers = seq(from = 200, to = 800, by = 200)
+seq_passengers = c(100,500,1000,1500,2000,2500,3000,3500,4000,5000,6000,7500,
+                   10000,12500,15000,20000,30000,50000)
 
 # rbind(seq_passengers,seq_passengers2)
 
@@ -105,11 +103,7 @@ for (j in 1:length(nb_lines)) {
   res_mean = rbind(res_mean, mean_pass)
 }
 
-# write.csv(res_mean2, "results/5_toy_ex_outputs/res_mean_passengersNEWbig.csv", row.names = F)
-# res_mean_big = res_mean
-# res_mean0 = read.csv("results/5_toy_ex_outputs/res_mean_passengers_theta01.csv")
-# res_mean2 = rbind(res_mean,res_mean_big)
-
+write.csv(res_mean, "results/5_toy_ex_outputs/res_mean_passengers.csv", row.names = F)
 
 ### Best graph according to the number of passengers into the network
 # only 1/3 error bar
@@ -124,9 +118,10 @@ for (j in 1:length(nb_lines)) {
 
 # Plot the results 2
 ggplot(data=res_mean) +
-  geom_ribbon(aes(x=passengers, ymin=mean_error-sd_error/sqrt(n_test), 
-                  ymax=mean_error+sd_error/sqrt(n_test), group=line, 
+  geom_ribbon(aes(x=passengers, ymin=mean_error-2*sd_error/sqrt(n_test), 
+                  ymax=mean_error+2*sd_error/sqrt(n_test), group=line, 
                   fill=factor(line)), alpha=0.2) +
   geom_line(aes(x=passengers, y=mean_error, group=line, color=factor(line))) +
   labs(x="Number of passengers", y="MTE") +
   labs(color = "p", fill = "p")
+
