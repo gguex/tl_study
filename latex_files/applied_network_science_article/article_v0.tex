@@ -140,7 +140,7 @@ They also constitute an endless source of inspiration in formal modeling and opt
 
 This contribution addresses a straightforward, yet central question  in public transportation networks: given a network made of many train, bus, subway, or tram lines, how can one estimate the real trips made by the travelers, on the sole basis of the embarkment (boarding) counts and disembarkment (alighting) counts in each vehicle? Although estimating origin-destination flows is a much addressed issue in transportation modeling (see e.g \cite{bell1997transportation} \cite{hazelton2000estimation} \cite{ashok2002estimation} \cite{cui2006bus} and references therein), the specific problem addressed in this contribution seems, to the best of our knowledge, original. 
 
-Pedestrian transfers of travelers between different lines here constitute the missing information, which planners traditionally try to estimate using census, or more recently with costly and invasive devices located at station, such as mobile phone tracking or facial recognition systems. In this article, we take a different approach, which is to give the best estimation of transportation trajectories without additional data, using the principle of maximum entropy. Section \ref{notforma} introduces the notations and the formalism, as well as the statement of the problem and the iterative solution method, which consist of three consecutive steps: a maximum-entropy computation of the trip distributions, obeying marginal constraints and with a given prior; an update of the marginal flows to avoid transfer overflow; and an update of the prior distribution by shrinking the components responsible for overflow. This iterative procedure clearly evokes the EM algorithm (see e.g. \cite{dempster1977maximum}  \cite{bavaud2009information}), with the first step corresponding to the ``expectation step" and last two steps to the ``maximisation step". Moreover, this solution 
+Pedestrian transfers of travelers between different lines here constitute the missing information, which planners traditionally try to estimate using census, or more recently with costly and invasive devices located at station, such as mobile phone tracking or facial recognition systems. In this article, we take a different approach, which is to give the best estimation of transportation trajectories without additional data, using the principle of maximum entropy. Section \ref{notforma} introduces the notations and the formalism, as well as the statement of the problem and the iterative solution method, which consist of three consecutive steps: a maximum-entropy computation of the trip distributions, obeying marginal constraints and with a given prior;  an update of the prior distribution by shrinking the components responsible for overflow; and an update of the marginal flows to avoid transfer overflow. This iterative procedure clearly evokes the EM algorithm (see e.g. \cite{dempster1977maximum}  \cite{bavaud2009information}), with the first step corresponding to the ``expectation step" and last two steps to the ``maximisation step". Moreover, this solution 
 
 
 
@@ -207,7 +207,7 @@ y_{B(i),i}=b_i \text{\,  and } a_i=0   & \text{if $i$ is a line terminus}, \\
  y_{i,F(i)}=y_{B(i),i}+a_i-b_i     & \text{otherwise}.
 \end{cases}
 \end{equation}
-Also, $\mathbf{a}$ and $\mathbf{b}$ must be consistent, in the sense that $A_i\ge B_i$, where $A_i$ (respectively $B_i$) is the \emph{cumulated number of embarked 
+Also, $\mathbf{a}$ and $\mathbf{b}$ must be consistent, in the sense that $A_{B(i)}\ge B_i$, where $A_i$ (respectively $B_i$) is the \emph{cumulated number of embarked 
 (resp. disembarked) passengers} on the line under consideration, recursively defined as $A_{F(i)}=A_i+a_i$ (resp. $B_{F(i)}=B_i+b_i$). Moreover,  $A_i=B_i$ at a terminal line stop $i$. This common value yields  the total number of passengers transported by the line. 
 
 
@@ -253,15 +253,15 @@ Intra-line edge flows $\mathbf{Y}=(y_{ij})$ can be determined by (\ref{bilan1lig
 Let $f_{st}=n_{st}/n_{\bullet\bullet}$ be the \emph{distribution of $st$-trips} (empirical distribution) and let $g_{st}$ be some prior guess on its shape (theoretical distribution). 
 Assuming some reasonable initial prior $g_{st}$, 
 \begin{itemize}
-\item[(1)] we shall first suppose that the empirical margins $\alpha_s=f_{s\bullet}$ and $\beta_t=f_{\bullet t}$ are known.  
+\item[(1)] we first suppose that the empirical margins $\alpha_s=f_{s\bullet}$ and $\beta_t=f_{\bullet t}$ are known.  
 Then $f_{st}$ can be determined as the maximum entropy solution (section \ref{maxenso}), i.e. as the distribution closest to $g_{st}$ in the Kullback-Leibler divergence sense under the margin constraints, to be calibrated by an iterative fitting inner loop
-\item[(2)] then (section \ref{marginup}), the margins will be updated to $\tilde{\alpha}_s$ and $\tilde{\beta}_t$   by requiring a \emph{minimum proportion} $\theta\in [0,1)$ of passengers entering/leaving the network at each stop, as well as avoiding transfer overflow exceeding the embarking and disembarking counts at each stop
- \item[(3)] finally (section \ref{priorup}), the prior will be updated to $\tilde{g}_{st}$ by shrinking, if necessary, the priors $g_{st}$ associated to overflows. 
+\item[(2)] then (section \ref{priorup}), the prior is updated to $\tilde{g}_{st}$ by shrinking, if necessary, the priors $g_{st}$, thus avoiding transfer overflow exceeding the embarking and disembarking counts at each stop. Moreover, an hyperparameter $\theta \in [0, 1]$ is used at this stage in order to control the minimum proportion of passengers entering/leaving the network at each stop.
+\item[(3)] finally (section \ref{marginup}), the margins are updated to $\tilde{\alpha}_s$ and $\tilde{\beta}_t$.
 \end{itemize}
 With the new prior distribution $\widetilde{g}_{st}$ and the new margin distributions $\widetilde{\alpha}_s$, $\widetilde{\beta}_t$, we can iterate the 
  the above steps, until convergence. The only free parameter is $\theta$, whose effect is studied on toy examples in section \ref{toy_examples}.
  
-The above iterative solution method is somewhat reminiscent of the EM algorithm. As a matter of fact, the first  step  (maximum entropy) exactly correspond to the ``expectation step" of the EM algorithm (see e.g. \cite{dempster1977maximum}  \cite{bavaud2009information}), but steps two and three, aiming at calibrating parameters $\alpha_s$, $\beta_t$ and $g_{st}$, do not follow the maximum likelihood rationale of the ``maximisation step". Pseudocode of the algorithm is shown with Algorithm \ref{algo1}.
+The above iterative solution method is somewhat reminiscent of the EM algorithm. As a matter of fact, the first  step  (maximum entropy) exactly correspond to the ``expectation step" of the EM algorithm (see e.g. \cite{dempster1977maximum}  \cite{bavaud2009information}), but steps two and three, aiming at calibrating parameters $g_{st}$, $\alpha_s$ and $\beta_t$, do not follow the maximum likelihood rationale of the ``maximisation step". Pseudocode of the algorithm is shown with Algorithm \ref{algo1}.
 
 
 
@@ -311,9 +311,11 @@ the $st$-flow itself as
 	\label{flow_from_distrib}
 	n_{st} = n_{\bullet \bullet} f_{st}= n_{\bullet \bullet}\phi_s \psi_t g_{st} 
 \end{equation}
-whose plugging into (\ref{equationGG}) yields the intra-line edge flows $\mathbf{Y}=(y_{ij})$ and the transfer edge flows $\mathbf{Z}=(z_{ij})$.
-
-
+whose plugging into (\ref{equationGG}) yields the intra-line edge flows $\mathbf{Y}=(y_{ij})$ and the transfer edge flows $\mathbf{Z}=(z_{ij})$. Only the latter is required for subsequent algorithm steps and can be computed with 
+\begin{equation}
+	z_{ij} = I((i,j) \in T)\sum_{st} \chi_{ij}^{st} n_{st}
+\end{equation}
+where $I(.)$ denotes the 0/1 indicator function.
 \subsubsection{Initialization of the prior and the margins}
 The geometry of the network permits to define the set of permitted $st$-trips across the network denoted by $P$. The initial prior was chosen as the uniform distribution on admissible paths, that is as
 \begin{equation*}
@@ -330,7 +332,7 @@ After a single iterative fitting step, the resulting transportation flow $\mathb
 
 When $z_{\bullet i} > a_i$, or $z_{i \bullet} > b_i$, the found solution typically predict that there are more passengers entering, respectively exiting, at a stop $i$ than the actual measured quantity. One could be tempted to correct prior distributions in order to have $z_{\bullet i} = a_i$, or $z_{i \bullet} = b_i$, on every problematic nodes $i$, but the latter solution would mean that all passengers entering (resp. exiting) the line at this stop are transiting, which seems unrealistic in most real life scenarios.
 
-We define here the hyperparameter $ \theta\in [0, 1)$ as the \emph{minimum proportion of passengers (among $a_i$ and $b_i$) entering/leaving the \textbf{network} at each stop} (in other words, not transferring), that is
+We define here the hyperparameter $ \theta\in [0, 1]$ as the \emph{minimum proportion of passengers (among $a_i$ and $b_i$) entering/leaving the \textbf{network} at each stop} (in other words, not transferring), that is
 \begin{equation}
 n_{s\bullet}\ge \theta a_s \qquad\qquad \qquad n_{\bullet t}\ge \theta b_t
 \end{equation}
@@ -338,28 +340,9 @@ or
 \begin{equation}
 	z_{\bullet s} \le (1 - \theta) a_s\qquad\qquad \qquad z_{t \bullet} \le  (1 - \theta) b_t
 \end{equation}
-and updates of prior distributions will be made accordingly.
+and updates of distributions will be made accordingly.
 
 Note that, if additional data would be known, we could set a particular value of $\theta$ for every node, and differing for embarkments and disembarkments. However, without addition information, we will restrain to this simpler case. 
-
-With 
-
-\subsubsection{Updating the margin distributions}
-\label{marginup}
-
-By limiting the transfer flow 
-
-Let us define the hyperparameter $ \theta\in [0, 1)$ as the \emph{minimum proportion of passengers (among $a_i$ and $b_i$) entering/leaving the network at each stop}, that is $n_{s\bullet}\ge \theta a_s$ and $n_{\bullet t}\ge \theta b_t$. Note that we could set a different hyperparameter for each node, and differing for embarkments and disembarkments, but without addition information, we will restrain to this simpler case. Identities (\ref{entrer}) and  (\ref{sortir}) then imply the inequalities
-\begin{displaymath}
-z_{\bullet s} \le (1 - \theta) a_s\qquad\qquad \qquad z_{t \bullet} \le  (1 - \theta) b_t
-\end{displaymath}
-the violation of which constitutes transfer overflow. Hence requiring a maximal transfer yet avoiding overflow can be granted with the following updating of margins
-\begin{equation}
-\label{alpha_beta_update}
-\widetilde{\alpha}_s = \frac{\min(\theta a_s, a_s - z_{\bullet s})}{\sum_{s'} \min(\theta a_{s'}, a_{s'} - z_{\bullet {s'}})}   \qquad \qquad \qquad
-	\widetilde{\beta}_t = \frac{\min(\theta b_t, b_t - z_{t \bullet})}{\sum_{t'} \min(\theta b_{t'}, b_{t'} - z_{{t'} \bullet})}  \enspace. 
-\end{equation}
- 
 
 \subsubsection{Updating the prior distribution}
 \label{priorup}
@@ -385,6 +368,20 @@ and define the new prior distribution as
 	\widetilde{g}_{st} = \frac{\left( \frac{\widetilde{n}_{st}}{\phi_s \psi_t} \right)}{\sum_{s',t'} \left( \frac{\widetilde{n}_{s',t'}}{\phi_{s'} \psi_{t'}} \right)}\enspace. 
 \end{equation}
 where $\phi_s$ and $\psi_t$ are the values (\ref{Sol_LagMult}) obtained in the previous maximum entropy step. 
+
+\subsubsection{Updating the margin distributions}
+\label{marginup}
+
+By construction, the corrected flow $\widetilde{n}_{st}$ found in (\ref{update_flow}) now respect embarkment and disembarkment constraints. We can compute the new transfer flow on edge with
+\begin{equation}
+\widetilde{z}_{ij} = I((i,j) \in T)\sum_{st} \chi_{ij}^{st} \widetilde{n}_{st}
+\end{equation}
+and, with (\ref{entrer}) and (\ref{sortir}), updating margin distributions is straightforward 
+\begin{equation}
+\label{alpha_beta_update}
+\widetilde{\alpha}_s = \frac{a_s - \widetilde{z}_{\bullet s}}{\sum_{s'} (a_{s'} - z_{\bullet {s'}})}   \qquad \qquad \qquad
+	\widetilde{\beta}_t = \frac{b_t - \widetilde{z}_{t \bullet}}{\sum_{t'} (b_{t'} - z_{{t'} \bullet})}  \enspace. 
+\end{equation}
 
 \begin{algorithm}[h]
 	\caption{Compute the transportation flow matrix $\mathbf{N} = (n_{st})$ knowing the edge-trip incidence matrix $\bm{\chi} = (\chi_{ij}^{st})$, the set of transfer edges $T$, the set of permitted trips $P$, the embarking flow $\mathbf{a}$, the disambarking flow $\mathbf{b}$, the index of an isolated source node $\tilde{s}$, and the minimum proportion of passengers entering/leaving the network $\theta$.}
@@ -413,15 +410,19 @@ where $\phi_s$ and $\psi_t$ are the values (\ref{Sol_LagMult}) obtained in the p
 		
 		\State $z_{ij} \leftarrow I((i,j) \in T)\sum_{st} \chi_{ij}^{st} n_{st}, \; \forall i,j$
 		
-		\State $\alpha_s \leftarrow \frac{\min(\theta a_s, a_s - z_{\bullet s})}{\sum_{s'} \min(\theta a_{s'}, a_{s'} - z_{\bullet {s'}})}, \; \forall s$ \Comment{{\footnotesize Update the network ingoing distribution}}
-		
-		\State $\beta_t \leftarrow \frac{\min(\theta b_t, b_t - z_{t \bullet})}{\sum_{t'} \min(\theta b_{t'}, b_{t'} - z_{{t'} \bullet})}, \; \forall t$ \Comment{{\footnotesize Update the network outgoing distribution}}
-		
 		\State $r_{ij} \leftarrow \max \left(1, \frac{z_{i \bullet}}{(1 - \theta)b_i}, \frac{z_{\bullet j}}{(1 - \theta)a_j} \right), \; \forall i,j$
 		
 		\State $\bar{r}_{st} \leftarrow \max_{ij} \chi_{ij}^{st} r_{ij}, \; \forall s,t$
 		
-		\State $\widetilde{g}_{st} \leftarrow \frac{\left( \frac{n_{st}}{\phi_s \psi_t \bar{r}_{st} + \epsilon} \right)}{\sum_{s',t'} \left( \frac{n_{s't'}}{\phi_{s'} \psi_{t'}\bar{r}_{s't'} + \epsilon} \right) + \epsilon}, \; \forall s,t$ \Comment{{\footnotesize Update the prior distribution}}
+		\State $\widetilde{n}_{st} \leftarrow \frac{n_{st}}{\bar{r}_{st}}, \; \forall s,t$
+		
+		\State $\widetilde{g}_{st} \leftarrow \frac{\left( \frac{\widetilde{n}_{st}}{\phi_s \psi_t + \epsilon} \right)}{\sum_{s',t'} \left( \frac{\widetilde{n}_{s't'}}{\phi_{s'} \psi_{t'} + \epsilon} \right) + \epsilon}, \; \forall s,t$ \Comment{{\footnotesize Update the prior distribution}}
+		
+		\State $\widetilde{z}_{ij} \leftarrow I((i,j) \in T)\sum_{st} \chi_{ij}^{st} \widetilde{n}_{st}, \; \forall i,j$
+		
+		\State $\alpha_s \leftarrow \frac{a_s - \widetilde{z}_{\bullet s}}{\sum_{s'}(a_{s'} - \widetilde{z}_{\bullet {s'}})}, \; \forall s$ \Comment{{\footnotesize Update the network ingoing distribution}}
+		
+		\State $\beta_t \leftarrow \frac{b_t - \widetilde{z}_{t \bullet}}{\sum_{t'} (b_{t'} - \widetilde{z}_{{t'} \bullet})}, \; \forall t$ \Comment{{\footnotesize Update the network outgoing distribution}}
 		
 		\EndWhile
 		\State \Return $\mathbf{N} = (n_{st})$
@@ -434,7 +435,7 @@ where $\phi_s$ and $\psi_t$ are the values (\ref{Sol_LagMult}) obtained in the p
 A ``network" made of a single line contains no transfers, and flow estimates can be obtained at once by the maximum entropy step only.
 
 
-Let  $i=1,\ldots, l$ enumerate the bus stops in increasing order,  i.e. $F(i)=i+1$. The initial prior is simply $g_{st}=c\; I(s<t)$ and captures solely the unidirectional nature of trips,  where $I(.)$ denotes the 0/1  indicator function and $c=\frac{1}{(l-1)(l-2)}$.   The margins of the empirical distribution $f_{st}$, as well as the total flow, are here known : 
+Let  $i=1,\ldots, l$ enumerate the bus stops in increasing order,  i.e. $F(i)=i+1$. The initial prior is simply $g_{st}=c\; I(s<t)$ and captures solely the unidirectional nature of trips, where $c=\frac{1}{(l-1)(l-2)}$.   The margins of the empirical distribution $f_{st}$, as well as the total flow, are here known : 
 \begin{displaymath}
 \alpha_s=\frac{a_s}{a_\bullet}\qquad\qquad\qquad \beta_t=\frac{b_t}{b_\bullet}\qquad\qquad\qquad n_{\bullet\bullet}=a_{\bullet}=b_\bullet\enspace. 
 \end{displaymath}
@@ -527,13 +528,13 @@ A transportation flow $\mathbf{N}_\text{ref} = (n^\text{ref}_{st})$ is drawn by 
 \subsubsection{Algorithm iterations}
 \label{algorithm_iterations}
 
-First, we shows some algorithm iterations on a toy example with $p=2$, where $100$ passengers where drawn uniformly across the $\vert P \vert = 20$ possible $st$-trips. Some iterations of the algorithm with $\theta=0.1$, along with MTE and MME errors, are shown in Figure \ref{iteration_plots}. 
+First, we shows some algorithm iterations on a toy example with $p=2$, where $50$ passengers where drawn uniformly across the $\vert P \vert = 20$ possible $st$-trips. Some iterations of the algorithm with $\theta=0.001$, along with MTE and MME errors, are shown in Figure \ref{iteration_plots}. 
 \begin{figure}[h]
 	\includegraphics[width=0.98\textwidth]{fig/iterations.pdf}
-	\caption{Real transportation flow (green arrows) obtained by randomly drawing $100$ passengers on the graph toy example with $p=2$ line tours, along with iterations $1, 2, 4, 7, 10$ of the algorithm with $\theta=0.1$. MTE and MME errors are computed, and embarkment and disembarkment flows are represented respectively by the red and blue colors on nodes.}
+	\caption{Real transportation flow (green arrows) obtained by randomly drawing $50$ passengers on the graph toy example with $p=2$ line tours, along with iterations $1, 2, 4, 7, 15$ of the algorithm with $\theta=0.001$. MTE and MME errors are computed, and embarkment and disembarkment flows are represented respectively by the red and blue colors on nodes.}
 	\label{iteration_plots}
 \end{figure}
-On this small example, we can see that the algorithm quickly find an estimation giving small MME error, but still give an MTE of 0.252. This result is due to the fact that only $50$ passengers are drawn, giving a large deviation compared to the optimally found solution which maximize the entropy. Interestingly, we see that a better result is found on iteration , but margins constraints at this point are not perfectly respected yet.
+On this small example, we can see that the algorithm quickly find an estimation giving small MME error, but still give an MTE of 0.256. This result is due to the fact that only $50$ passengers are drawn, giving a large deviation compared to the optimally found solution which maximize the entropy.
 
 \subsubsection{MTE study}
 \label{mte_study}
@@ -544,7 +545,7 @@ The randomness of the $st$-trips distribution is controlled by the number of dra
 As for the hyperparameter study, found in Figure \ref{MTE_vs_theta}, we see that the optimal parameter seems to decreases as network size increases, reaching value close to $0$ for $8$ line tours. However, this is not the only factor which helps to decide this parameter. As a matter of fact, it seems unrealistic, in some real life scenarios, that all passengers embarking or disembarking at junctions are all transiting, and this value will be kept at $0.1$ for our real life study.
 
 \begin{figure}
-	\includegraphics[width=0.98\textwidth]{fig/MTE_passengers_theta01.pdf}
+	\includegraphics[width=0.98\textwidth]{fig/MTE_passengers.pdf}
 	\caption{Mean transportation error (MTE) vs the number of randomly drawn passengers, in toy examples with numbers of tours $p$ varying from 2 to 8. The hyperparameter is set to $\theta=0.001$ and $10$ different draws are performed for each data point.}
 	\label{MTE_vs_passengers}
 \end{figure}
@@ -559,19 +560,8 @@ As for the hyperparameter study, found in Figure \ref{MTE_vs_theta}, we see that
 \subsection{Real Data}
 \label{real_data}
 
-
-after some preliminary, undocumented corrections (i.e. the components of $\mathbf{a}$ and $\mathbf{b}$ can be non-integer). It may also happen that, on some lines $\ell$,  raw data do not obey the necessary consistency condition  $a_\bullet^\ell=b_\bullet^\ell$ (where the latter quantities denote the total embarkments and disembarkments on line $\ell$), in which case we did rescale the embarking and disembarking line counts as 
-\begin{displaymath}
-	\hat{a}_i=(1-\frac{a_\bullet^\ell-b_\bullet^\ell}{a_\bullet^\ell+b_\bullet^\ell})\, a_i 
-	\qquad\qquad\qquad
-	\hat{b}_i=(1+\frac{a_\bullet^\ell-b_\bullet^\ell}{a_\bullet^\ell+b_\bullet^\ell})\,  b_i 
-\end{displaymath}
-ensuring $\hat{a}_\bullet^\ell=\hat{b}_\bullet^\ell=2a_\bullet^\ell b_\bullet^\ell/(a_\bullet^\ell+b_\bullet^\ell)$. However, strongly unbalanced lines such that  $|a_\bullet^\ell-b_\bullet|^\ell/a_\bullet^\ell > 0.3$ or $|a_\bullet^\ell-b_\bullet^\ell|/b_\bullet^\ell > 0.3$  (which always turned out to be temporary lines with small  counts) were simply disregarded and line $\ell$ removed from the network. 
-
-Also, the geometry of the network permits to derive the edge-trip incidence matrix $\bm{\chi}$ defined in (\ref{edgetrip}). 
-
-\subsubsection{Dataset construction}
-This research presents a dataset derived from the public transportation agency in Lausanne (tl), Switzerland. Automatic passenger counters were used to collect data on the number of passengers entering and leaving buses and metros at each stop. The dataset comprises 44 lines of metro and bus transportation, 1361 stops, and over 115 million passengers per year. Each round trip forms two separate lines, which often have stops that correspond to both the inbound and outbound directions, but this is not always the case. Some stops may be unique to either the inbound or outbound direction. The initial dataset contained 13 million data rows, which were aggregated to the year 2019, and the passenger data was filtered to include only passengers who boarded and disembarked at each stop. Lines with the most errors were removed, resulting in a final dataset of 35 transportation lines and 1216 stops. The threshold for invalid lines was set at a difference of 15\% between boarded and disembarked passenger counters.
+\subsubsection{The dataset}
+The dataset derived from the public transportation agency in the city of Lausanne (tl), in Switzerland. Automatic passenger counters were used to collect data on the number of passengers entering and leaving buses and metros at each stop. The dataset comprises 44 lines of metro and bus transportation, 1361 stops, and over 115 million passengers per year. Each round trip forms two separate lines, which often have stops that correspond to both the inbound and outbound directions, but this is not always the case. Some stops may be unique to either the inbound or outbound direction. The initial dataset contained 13 million data rows, which were aggregated to the year 2019, and the passenger data was filtered to include only passengers who boarded and disembarked at each stop. Lines with the most errors were removed, resulting in a final dataset of 35 transportation lines and 1216 stops. The threshold for invalid lines was set when a difference of between total embarkment and disembarked differs more than 15\% of their means. For the rest all other line, the correction found in appendix \ref{} 
 
 %% --------------------------------- CONCLUSION
 
@@ -582,7 +572,26 @@ This research presents a dataset derived from the public transportation agency i
 
 
 \section*{Appendix}
-Text for this section\ldots
+
+\subsection*{Embarkment and disembarkment corrections for lines}
+It may happen that, on some lines $\ell$, with stop indexed in order as $1, \ldots, l$, raw data do not obey the following necessary consistency conditions 
+\begin{align*}
+	a_l &= 0 \\
+	b_1 &= 0 \\
+	A_{i-1} &\geq B_i \qquad \forall i \in \{1, \ldots, l-1\} \\
+	A_{l} &= B_{l} \qquad \text{for terminal stop $l$}
+\end{align*}
+where $A_i$ (respectively $B_i$) is the cumulated number of embarked (resp. disembarked) passengers on the line. The first two conditions are easy to correct, and we will assume that they are valid, but the last two require a recursive procedure.
+
+We first identify all stops $i$ where $A_{i - 1} < B_i$ and store them, along with stop $1$ and $l$, in a order set $\{1, s_1, \ldots, s_r, l\}$. 
+
+$a_\bullet^\ell=b_\bullet^\ell$ (where the latter quantities denote the total embarkments and disembarkments on line $\ell$), in which case we did rescale the embarking and disembarking line counts as 
+\begin{displaymath}
+	\hat{a}_i=(1-\frac{a_\bullet^\ell-b_\bullet^\ell}{a_\bullet^\ell+b_\bullet^\ell})\, a_i 
+	\qquad\qquad\qquad
+	\hat{b}_i=(1+\frac{a_\bullet^\ell-b_\bullet^\ell}{a_\bullet^\ell+b_\bullet^\ell})\,  b_i 
+\end{displaymath}
+ensuring $\hat{a}_\bullet^\ell=\hat{b}_\bullet^\ell=2a_\bullet^\ell b_\bullet^\ell/(a_\bullet^\ell+b_\bullet^\ell)$. This process is applied for every  
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                          %%

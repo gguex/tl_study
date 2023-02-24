@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.1.9)  24 FEB 2023 13:59
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.1.9)  24 FEB 2023 17:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -492,105 +492,112 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 163.
  [2] [3] [4] [5] [6]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 393.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 390.
  [7] [8]
 <fig/toy_2_display.pdf, id=42, 505.89pt x 505.89pt>
 File: fig/toy_2_display.pdf Graphic file (type pdf)
 <use fig/toy_2_display.pdf>
-Package pdftex.def Info: fig/toy_2_display.pdf  used on input line 510.
+Package pdftex.def Info: fig/toy_2_display.pdf  used on input line 511.
 (pdftex.def)             Requested size: 108.3011pt x 108.30107pt.
 <fig/toy_3_display.pdf, id=43, 505.89pt x 505.89pt>
 File: fig/toy_3_display.pdf Graphic file (type pdf)
 <use fig/toy_3_display.pdf>
-Package pdftex.def Info: fig/toy_3_display.pdf  used on input line 511.
+Package pdftex.def Info: fig/toy_3_display.pdf  used on input line 512.
 (pdftex.def)             Requested size: 108.3011pt x 108.30107pt.
 <fig/toy_4_display.pdf, id=44, 505.89pt x 505.89pt>
 File: fig/toy_4_display.pdf Graphic file (type pdf)
 <use fig/toy_4_display.pdf>
-Package pdftex.def Info: fig/toy_4_display.pdf  used on input line 512.
+Package pdftex.def Info: fig/toy_4_display.pdf  used on input line 513.
 (pdftex.def)             Requested size: 108.3011pt x 108.30107pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 5
-19.
+20.
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 ) [9]
 <fig/iterations.pdf, id=48, 505.89pt x 505.89pt>
 File: fig/iterations.pdf Graphic file (type pdf)
 <use fig/iterations.pdf>
-Package pdftex.def Info: fig/iterations.pdf  used on input line 532.
+Package pdftex.def Info: fig/iterations.pdf  used on input line 533.
 (pdftex.def)             Requested size: 353.77846pt x 353.78093pt.
 
-Overfull \hbox (5.27846pt too wide) in paragraph at lines 532--533
+Overfull \hbox (5.27846pt too wide) in paragraph at lines 533--534
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<fig/MTE_passengers_theta01.pdf, id=49, 485.815pt x 234.8775pt>
-File: fig/MTE_passengers_theta01.pdf Graphic file (type pdf)
-<use fig/MTE_passengers_theta01.pdf>
-Package pdftex.def Info: fig/MTE_passengers_theta01.pdf  used on input line 547
-.
-(pdftex.def)             Requested size: 353.77846pt x 171.03983pt.
+<fig/MTE_passengers.pdf, id=49, 580.1675pt x 240.9pt>
+File: fig/MTE_passengers.pdf Graphic file (type pdf)
+<use fig/MTE_passengers.pdf>
+Package pdftex.def Info: fig/MTE_passengers.pdf  used on input line 548.
+(pdftex.def)             Requested size: 353.77846pt x 146.89731pt.
 
-Overfull \hbox (5.27846pt too wide) in paragraph at lines 547--548
- [][] 
- []
-
-<fig/MTE_tours.pdf, id=50, 485.815pt x 234.8775pt>
-File: fig/MTE_tours.pdf Graphic file (type pdf)
-<use fig/MTE_tours.pdf>
-Package pdftex.def Info: fig/MTE_tours.pdf  used on input line 553.
-(pdftex.def)             Requested size: 353.77846pt x 171.03983pt.
-
-Overfull \hbox (5.27846pt too wide) in paragraph at lines 553--554
+Overfull \hbox (5.27846pt too wide) in paragraph at lines 548--549
  [][] 
  []
 
 [10 <./fig/toy_2_display.pdf> <./fig/toy_3_display.pdf> <./fig/toy_4_display.pd
-f>] [11 <./fig/iterations.pdf>] [12 <./fig/MTE_passengers_theta01.pdf>]
-(./article_v0.bbl
+f>]
+<fig/MTE_tours.pdf, id=71, 485.815pt x 234.8775pt>
+File: fig/MTE_tours.pdf Graphic file (type pdf)
+<use fig/MTE_tours.pdf>
+Package pdftex.def Info: fig/MTE_tours.pdf  used on input line 554.
+(pdftex.def)             Requested size: 353.77846pt x 171.03983pt.
+
+Overfull \hbox (5.27846pt too wide) in paragraph at lines 554--555
+ [][] 
+ []
+
+
+LaTeX Warning: Reference `' on page 11 undefined on input line 564.
+
+[11 <./fig/iterations.pdf>] [12 <./fig/MTE_passengers.pdf>] [13 <./fig/MTE_tour
+s.pdf>] (./article_v0.bbl
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <7> not available
 (Font)              Font shape `OT1/phv/m/sl' tried instead on input line 49.
 LaTeX Font Info:    Trying to load font information for TS1+phv on input line 5
 1.
- (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1phv.fd
-File: ts1phv.fd 2020/03/25 scalable font definitions for TS1/phv.
-)
-[13 <./fig/MTE_tours.pdf>]) 
-AED: lastpage setting LastPage
-[14] (./article_v0.aux) ) 
-Here is how much of TeX's memory you used:
- 6760 strings out of 478287
- 108033 string characters out of 5849290
- 410235 words of memory out of 5000000
- 24794 multiletter control sequences out of 15000+600000
- 558474 words of font info for 205 fonts, out of 8000000 for 9000
- 1141 hyphenation exceptions out of 8191
- 69i,14n,79p,1216b,511s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r
-.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><
-/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/s
-hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/
-texmf-dist/fonts/type1/public/rsfs/rsfs10.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/ur
-w/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/u
-hvro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr
-/share/texlive/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/urw/times/utmbi8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/tim
-es/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
 
-Output written on article_v0.pdf (14 pages, 321668 bytes).
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1phv.fd
+File: ts1phv.fd 2020/03/25 scalable font definitions for TS1/phv.
+)) [14]
+
+AED: lastpage setting LastPage
+[15] (./article_v0.aux)
+
+LaTeX Warning: There were undefined references.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 6764 strings out of 478287
+ 107995 string characters out of 5849290
+ 411235 words of memory out of 5000000
+ 24795 multiletter control sequences out of 15000+600000
+ 559252 words of font info for 208 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 69i,14n,79p,1217b,506s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/rsfs/rsfs10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/
+uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/u
+rw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmbi8
+a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/sha
+re/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on article_v0.pdf (15 pages, 322640 bytes).
 PDF statistics:
- 253 PDF objects out of 1000 (max. 8388607)
- 195 compressed objects within 2 object streams
+ 261 PDF objects out of 1000 (max. 8388607)
+ 201 compressed objects within 3 object streams
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 

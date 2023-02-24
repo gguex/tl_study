@@ -34,19 +34,19 @@ conv_thres_if = 1e-6
 # Conv threshold
 conv_thres_algo = 1e-10
 # proportional limit 
-min_p_ntwk = 0.01
+min_p_ntwk = 0.001
 # epsilon
 epsilon = 1e-40
 # max iterations
-max_it = 50
+max_it = 15
 # max iterations for iterative fitting
 max_it_if = 1000
 
 # Seed
-set.seed(3)
+set.seed(30)
 
 # It list
-it_list = c(1, 2, 4, 7, 50)
+it_list = c(1, 2, 4, 7, 15)
 
 #--------------------------------
 # Code
@@ -128,7 +128,7 @@ e_flow_size = 3
 v_size = 20
 v_label_size = 0.00001
 
-pdf(paste0(result_folder, "/iterations_test.pdf"))
+pdf(paste0(result_folder, "/iterations.pdf"))
 par(mfrow=c(2,3))
 plot_flow_graph(adj, n_real, layout, v_names=stop_names, main="Real", 
                 e_line_size=e_line_size, e_flow_size=e_flow_size, 
