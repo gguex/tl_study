@@ -104,7 +104,7 @@ email={fbavaud@unil.ch}
 \begin{abstractbox}
 
 \begin{abstract} % abstract
-Characterizing a public transportation network, such as an urban multi-lines bus network, requires the origin-destination trip counts during a given period. Yet, if automatic counting makes the embarkment (boarding) and disembarkment (alighting) counts at each bus stop known, it often happens that pedestrian transfers between stops are unknown, and this contribution proposes a three-steps procedure for estimating the missing information, involving maximum entropy and iterative fitting. ** à poursuivre ***
+Characterizing a public transportation network, such as an urban network with multiple lines, requires the origin-destination trip counts during a given period. Yet, if automatic counting makes the embarkment (boarding) and disembarkment (alighting) counts in vehicles known, it often happens that pedestrian transfers between lines are harder to track, and require costly and invasive devices (e.g., facial recognition system) to be estimated. In this contribution, we propose a method, based on maximum entropy and involving an iterative fitting procedure, which estimates the passenger flow between origins and destinations solely based on embarkment and disembarkment flows. Moreover, this method is flexible enough to provide an adaptable framework in case additional data is known, such as attraction poles between certain points in the network, or percentages of transferring passengers between some lines. This method is tested on toy examples, as well as with the data of the public transportation network of the city of Lausanne provided by its Transportation Agency (tl), and gives convincing estimations of the transportation flow.
 \end{abstract}
 
 % Keywords begin here  
@@ -115,6 +115,7 @@ Characterizing a public transportation network, such as an urban multi-lines bus
 \kwd{boarding and alighting counts}
 \kwd{transit flows}
 \kwd{maximum entropy estimation}
+\kwd{iterative proportional fitting}
 \end{keyword}
 
 % MSC classifications codes, if any
@@ -137,10 +138,13 @@ Characterizing a public transportation network, such as an urban multi-lines bus
 Transportation networks determine our mobility, require a considerable amount of planning and resources, and elicit much public hopes and critics. 
 They also constitute an endless source of inspiration in formal modeling and optimization, as attested in operations research (classical optimal transportation, maximum flow problem), quantitative geography and spatial econometrics (spatial navigation, multimodality, gravity models for flows), and machine learning (recent developments in regularized optimal transportation, such as color transfer or images interpolation; see e.g. \cite{peyre2019computational}). 
 
-This contribution adresses a straightforward, yet central question  in public transportation networks: given a network made of many bus lines, how can one estimate the real trips made by the travelers, on the sole basis of  the embarkment (boarding) counts and disembarkment (alighting) counts for each bus stop? Although estimating origin-destination flows is a much addressed issue in transportation modeling (see e.g \cite{bell1997transportation} \cite{hazelton2000estimation} \cite{ashok2002estimation} \cite{cui2006bus} and references therein), the specific problem addressed in this contribution seems, to the best of our knowledge, original. 
+This contribution addresses a straightforward, yet central question  in public transportation networks: given a network made of many train, bus, subway, or tram lines, how can one estimate the real trips made by the travelers, on the sole basis of the embarkment (boarding) counts and disembarkment (alighting) counts in each vehicle? Although estimating origin-destination flows is a much addressed issue in transportation modeling (see e.g \cite{bell1997transportation} \cite{hazelton2000estimation} \cite{ashok2002estimation} \cite{cui2006bus} and references therein), the specific problem addressed in this contribution seems, to the best of our knowledge, original. 
+
+Pedestrian transfers of travelers between different lines here constitute the missing information, which planners traditionally try to estimate using census, or more recently with costly and invasive devices located at station, such as mobile phone tracking or facial recognition systems. In this article, we take a different approach, which is to give the best estimation of transportation trajectories without additional data, using the principle of maximum entropy. Section \ref{notforma} introduces the notations and the formalism, as well as the statement of the problem and the iterative solution method, which consist of three consecutive steps: a maximum-entropy computation of the trip distributions, obeying marginal constraints and with a given prior; an update of the marginal flows to avoid transfer overflow; and an update of the prior distribution by shrinking the components responsible for overflow. This iterative procedure clearly evokes the EM algorithm (see e.g. \cite{dempster1977maximum}  \cite{bavaud2009information}), with the first step corresponding to the ``expectation step" and last two steps to the ``maximisation step". Moreover, this solution 
 
 
-Pedestrian transfers of travelers between bus lines here constitute the missing information, whose principled evaluation require some methodological reflexion and experimentation. Section \ref{notforma} introduces the notations and the formalism, as well as the statement of the problem and the iterative solution method, which consist of three consecutive steps: a maximum-entropy computation of the trip distributions, obeying marginal constraints and with a given prior (section \ref{maxenso}); an update of the marginal flows to avoid transfer overflow (section \ref{marginup}); and an update of the prior distribution  (section \ref{priorup}) by shrinking the components responsible for overflow. 
+
+whose principled evaluation require some methodological reflexion and experimentation. : a maximum-entropy computation of the trip distributions, obeying marginal constraints and with a given prior (section \ref{maxenso}); an update of the marginal flows to avoid transfer overflow (section \ref{marginup}); and an update of the prior distribution  (section \ref{priorup}) by shrinking the components responsible for overflow. 
 
 The fist step only is required for solving the single line case (section \ref{Single line}), naturally much simpler but  yet  not trivial, and exhibiting a disembarking probability independent of the embarking stop (Markov property). 
 
@@ -318,12 +322,33 @@ g_{st} = \begin{cases}
   0    & \text{otherwise}.
 \end{cases}
 \end{equation*}
-The initial margins were chosen to initially match $g_{st}$, namely $\alpha_s=g_{s \bullet}$ and $\beta_t=g_{\bullet t}$ for all stops. 
+The initial margins were chosen to initially match $g_{st}$, namely $\alpha_s=g_{s \bullet}$ and $\beta_t=g_{\bullet t}$ for all stops. However, $g_{st}$ could be chosen more carefully in case of additional data. As a matter of fact, they represent \emph{prior attractions} between nodes in equation $\ref{Sol}$, before margin correction given by $\phi_s$ and $\psi_t$ and subsequent algorithm steps. An urban planner could chose to increase or decrease some of these values in order to take into account prior knowledge on commuting habits of inhabitants.
 
+\subsubsection{Embarkment, disembarkment constraints and hyperparameter $\theta$}
+\label{constraints}
+After a single iterative fitting step, the resulting transportation flow $\mathbf{N}=(n_{st})$ and transfer flow $\mathbf{Z}=(z_{ij})$ have little chance to fulfill constraints (\ref{entrer}) and (\ref{sortir}) defined by $\mathbf{a}$ and $\mathbf{b}$, and prior distributions $g_{st}$, $\alpha_s$ and $\beta_t$ must be corrected accordingly.
 
+When $z_{\bullet i} > a_i$, or $z_{i \bullet} > b_i$, the found solution typically predict that there are more passengers entering, respectively exiting, at a stop $i$ than the actual measured quantity. One could be tempted to correct prior distributions in order to have $z_{\bullet i} = a_i$, or $z_{i \bullet} = b_i$, on every problematic nodes $i$, but the latter solution would mean that all passengers entering (resp. exiting) the line at this stop are transiting, which seems unrealistic in most real life scenarios.
 
-\subsubsection{Updating  the margin distributions}
+We define here the hyperparameter $ \theta\in [0, 1)$ as the \emph{minimum proportion of passengers (among $a_i$ and $b_i$) entering/leaving the \textbf{network} at each stop} (in other words, not transferring), that is
+\begin{equation}
+n_{s\bullet}\ge \theta a_s \qquad\qquad \qquad n_{\bullet t}\ge \theta b_t
+\end{equation}
+or 
+\begin{equation}
+	z_{\bullet s} \le (1 - \theta) a_s\qquad\qquad \qquad z_{t \bullet} \le  (1 - \theta) b_t
+\end{equation}
+and updates of prior distributions will be made accordingly.
+
+Note that, if additional data would be known, we could set a particular value of $\theta$ for every node, and differing for embarkments and disembarkments. However, without addition information, we will restrain to this simpler case. 
+
+With 
+
+\subsubsection{Updating the margin distributions}
 \label{marginup}
+
+By limiting the transfer flow 
+
 Let us define the hyperparameter $ \theta\in [0, 1)$ as the \emph{minimum proportion of passengers (among $a_i$ and $b_i$) entering/leaving the network at each stop}, that is $n_{s\bullet}\ge \theta a_s$ and $n_{\bullet t}\ge \theta b_t$. Note that we could set a different hyperparameter for each node, and differing for embarkments and disembarkments, but without addition information, we will restrain to this simpler case. Identities (\ref{entrer}) and  (\ref{sortir}) then imply the inequalities
 \begin{displaymath}
 z_{\bullet s} \le (1 - \theta) a_s\qquad\qquad \qquad z_{t \bullet} \le  (1 - \theta) b_t
@@ -367,9 +392,9 @@ where $\phi_s$ and $\psi_t$ are the values (\ref{Sol_LagMult}) obtained in the p
 	\begin{algorithmic}[1]
 		\State $g_{st} \leftarrow I([s, t] \in P) / \vert P \vert, \; \forall s,t$ \Comment{{\footnotesize Initialize the prior distribution}}
 		
-		\State $\alpha_s \leftarrow a_s / a_\bullet, \; \forall s$ \Comment{{\footnotesize Initialize the network ingoing distribution}}
+		\State $\alpha_s \leftarrow g_{s\bullet}, \; \forall s$ \Comment{{\footnotesize Initialize the network ingoing distribution}}
 		
-		\State $\beta_t \leftarrow b_t / b_\bullet, \; \forall t$ \Comment{{\footnotesize Initialize the network outgoing distribution}}
+		\State $\beta_t \leftarrow g_{\bullet t}, \; \forall t$ \Comment{{\footnotesize Initialize the network outgoing distribution}}
 		
 		\State $\epsilon \leftarrow 10^{-40}$ \Comment{{\footnotesize Fix a small quantity}}
 		
@@ -516,17 +541,17 @@ On this small example, we can see that the algorithm quickly find an estimation 
 The main goal of toy examples, since we have access to the real transportation flow, is to study how the resulting $MTE$ behave regarding passenger $st$-trips distribution and hyperparameter $\theta$, on different network sizes. 
 
 The randomness of the $st$-trips distribution is controlled by the number of drawn passengers and we can see that the algorithm performs better if this number increases, as seen in Figure \ref{MTE_vs_passengers}. This behavior can be expected as the method is constructed to find the solution maximizing the entropy while respecting embarkment and disembarkment constraint. In fact, all MTE should converge to $0$ eventually, however this rate of convergence seems to be low. \\
-As for the hyperparameter study, found in Figure \ref{MTE_vs_theta}, we see that the optimal parameter seems to decreases as network size increases. However, 
+As for the hyperparameter study, found in Figure \ref{MTE_vs_theta}, we see that the optimal parameter seems to decreases as network size increases, reaching value close to $0$ for $8$ line tours. However, this is not the only factor which helps to decide this parameter. As a matter of fact, it seems unrealistic, in some real life scenarios, that all passengers embarking or disembarking at junctions are all transiting, and this value will be kept at $0.1$ for our real life study.
 
 \begin{figure}
 	\includegraphics[width=0.98\textwidth]{fig/MTE_passengers_theta01.pdf}
-	\caption{\emph{Mean transportation error} (MTE) vs the number of randomly drawn passengers, in toy examples with number of tours $p$ varying from 2 to 8. The hyperparameter was set to $\theta=0.001$ and $10$ different drawn where performed for each data point.}
+	\caption{Mean transportation error (MTE) vs the number of randomly drawn passengers, in toy examples with numbers of tours $p$ varying from 2 to 8. The hyperparameter is set to $\theta=0.001$ and $10$ different draws are performed for each data point.}
 	\label{MTE_vs_passengers}
 \end{figure}
 
 \begin{figure}
 	\includegraphics[width=0.98\textwidth]{fig/MTE_tours.pdf}
-	\caption{\emph{Mean transportation error} (MTE), according to the number of tours $p \in \{2,3,4,5,6,7,8\}$ and resp. to the number of passengers into the network per line tour and the minimum proportion $\theta =0.1$ of passengers entering/leaving the network at each stop with a proportional number of passengers to the shortest paths of each line tour.}
+	\caption{Mean transportation error (MTE) vs hyperparameter $\theta$, in toy examples with numbers of tours $p$ varying from 2 to 8. The dot on each curve denotes the minimum. The number of drawn passengers is different for every network size and is set to $20 \cdot \vert P \vert$, in order to keep the randomness level constant. $10$ different draws are performed for each data point.}
 	\label{MTE_vs_theta}
 \end{figure}
 
