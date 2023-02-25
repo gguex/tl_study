@@ -35,6 +35,10 @@ results_folder = "results/test_mc_6789"
 
 # --- Reading files
 
+# Reading graph data
+x_res = compute_x_from_n(n_mat, edge_ref, sp_ref, sp_edge_link)
+node_in_btw = colSums(x_res$x_btw)
+node_out_btw = rowSums(x_res$x_btw)
 # Reading results data 
 line_res = read.csv(paste0(results_folder, "/line_res.csv")) 
 n_mat = as.matrix(read.csv(paste0(results_folder, "/n_mat.csv"), header=F))

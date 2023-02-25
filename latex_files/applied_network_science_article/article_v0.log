@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.4.21)  25 FEB 2023 15:44
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.4.21)  25 FEB 2023 17:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -538,33 +538,50 @@ Overfull \hbox (5.27846pt too wide) in paragraph at lines 524--525
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[10 <./fig/toy_2_display.pdf> <./fig/toy_3_display.pdf> <./fig/toy_4_display.pd
-f>]
-<fig/MTE_passengers.pdf, id=70, 580.1675pt x 240.9pt>
+<fig/MTE_passengers.pdf, id=49, 580.1675pt x 240.9pt>
 File: fig/MTE_passengers.pdf Graphic file (type pdf)
 <use fig/MTE_passengers.pdf>
-Package pdftex.def Info: fig/MTE_passengers.pdf  used on input line 539.
+Package pdftex.def Info: fig/MTE_passengers.pdf  used on input line 537.
 (pdftex.def)             Requested size: 353.77846pt x 146.89731pt.
 
-Overfull \hbox (5.27846pt too wide) in paragraph at lines 539--540
+Overfull \hbox (5.27846pt too wide) in paragraph at lines 537--538
  [][] 
  []
 
-<fig/MTE_tours.pdf, id=71, 485.815pt x 234.8775pt>
+<fig/MTE_tours.pdf, id=50, 485.815pt x 234.8775pt>
 File: fig/MTE_tours.pdf Graphic file (type pdf)
 <use fig/MTE_tours.pdf>
-Package pdftex.def Info: fig/MTE_tours.pdf  used on input line 545.
+Package pdftex.def Info: fig/MTE_tours.pdf  used on input line 543.
 (pdftex.def)             Requested size: 353.77846pt x 171.03983pt.
 
-Overfull \hbox (5.27846pt too wide) in paragraph at lines 545--546
+Overfull \hbox (5.27846pt too wide) in paragraph at lines 543--544
  [][] 
  []
 
 
-LaTeX Warning: Reference `' on page 11 undefined on input line 555.
+LaTeX Warning: `h' float specifier changed to `ht'.
 
-[11 <./fig/iterations.pdf>] [12 <./fig/MTE_passengers.pdf>] [13 <./fig/MTE_tour
-s.pdf>] (./article_v0.bbl
+[10 <./fig/toy_2_display.pdf> <./fig/toy_3_display.pdf> <./fig/toy_4_display.pd
+f>]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[11 <./fig/iterations.pdf>]
+<fig/MME_vs_iteration.pdf, id=170, 1084.05pt x 361.35pt>
+File: fig/MME_vs_iteration.pdf Graphic file (type pdf)
+<use fig/MME_vs_iteration.pdf>
+Package pdftex.def Info: fig/MME_vs_iteration.pdf  used on input line 560.
+(pdftex.def)             Requested size: 353.77846pt x 117.92256pt.
+
+Overfull \hbox (5.27846pt too wide) in paragraph at lines 560--561
+ [][] 
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[12 <./fig/MTE_passengers.pdf>] [13 <./fig/MTE_tours.pdf> <./fig/MME_vs_iterati
+on.pdf>] (./article_v0.bbl
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <7> not available
 (Font)              Font shape `OT1/phv/m/sl' tried instead on input line 49.
 LaTeX Font Info:    Trying to load font information for TS1+phv on input line 5
@@ -574,41 +591,34 @@ LaTeX Font Info:    Trying to load font information for TS1+phv on input line 5
 File: ts1phv.fd 2020/03/25 scalable font definitions for TS1/phv.
 ))
 
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-
 AED: lastpage setting LastPage
-[14] [15] (./article_v0.aux)
-
-LaTeX Warning: There were undefined references.
-
- ) 
+[14] (./article_v0.aux) ) 
 Here is how much of TeX's memory you used:
- 6837 strings out of 478268
- 109822 string characters out of 5846347
- 411988 words of memory out of 5000000
- 24880 multiletter control sequences out of 15000+600000
- 559252 words of font info for 208 fonts, out of 8000000 for 9000
+ 6844 strings out of 478268
+ 110055 string characters out of 5846347
+ 412032 words of memory out of 5000000
+ 24886 multiletter control sequences out of 15000+600000
+ 558745 words of font info for 207 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  69i,14n,79p,1660b,511s stack positions out of 10000i,1000n,20000p,200000b,200000s
-{/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
-exlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
-xlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/tex
-live/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texli
-ve/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texliv
-e/2022/texmf-dist/fonts/type1/public/rsfs/rsfs10.pfb></usr/local/texlive/2022/t
-exmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2022/texmf-di
-st/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2022/texmf-dist/font
-s/type1/urw/helvetic/uhvro8a.pfb></usr/local/texlive/2022/texmf-dist/fonts/type
-1/urw/symbol/usyr.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/urw/symbo
-l/usyr.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/urw/times/utmb8a.pfb
-></usr/local/texlive/2022/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/lo
-cal/texlive/2022/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texliv
-e/2022/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on article_v0.pdf (15 pages, 323618 bytes).
+{/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/ba
+se/8r.enc}</usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+ex10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmm
+i10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
+0.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10
+.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/rsfs/rsfs10.pfb></u
+sr/local/texlive/2022/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/loca
+l/texlive/2022/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texli
+ve/2022/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb></usr/local/texlive/202
+2/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/local/texlive/2022/texmf-dis
+t/fonts/type1/urw/symbol/usyr.pfb></usr/local/texlive/2022/texmf-dist/fonts/typ
+e1/urw/times/utmb8a.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/urw/tim
+es/utmbi8a.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/urw/times/utmr8a
+.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on article_v0.pdf (14 pages, 326559 bytes).
 PDF statistics:
- 261 PDF objects out of 1000 (max. 8388607)
- 201 compressed objects within 3 object streams
+ 264 PDF objects out of 1000 (max. 8388607)
+ 203 compressed objects within 3 object streams
  0 named destinations out of 1000 (max. 500000)
- 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 36 words of extra memory for PDF output out of 10000 (max. 10000000)
 

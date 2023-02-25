@@ -486,9 +486,9 @@ and the second one with the \emph{mean margin error}, noted $\text{MME}(\mathbf{
 	&= \frac{\sum_i (\lvert z_{\bullet i} + n_{i \bullet} - a^\text{ref}_i \lvert + \lvert z_{i \bullet} + n_{\bullet i} - b^\text{ref}_i \lvert)}{2n^\text{ref}_{\bullet \bullet}}
 	\label{MME}
 \end{align} 
-where $z_{ij} = I((i,j) \in T)\sum_{st} \chi_{ij}^{st} n_{st}$ is the flow on transfer edges $T$. Both errors can be interpreted as a weighted mean deviation percentage. 
+where $z_{ij} = I((i,j) \in T)\sum_{st} \chi_{ij}^{st} n_{st}$ is the flow on transfer edges $T$. Both errors can be interpreted as a weighted mean of a percentage of error.
 
-Note that, by construction, the MME should be null when the algorithm converges. However, it can be informative to track down this error along iterations and, in some practical cases where the network is large, the algorithm convergence criterion is reached without having margin constraints perfectly respected.
+Note that, by construction, the MME should be null when the algorithm converges. However, it can be informative to track down this error along iterations and, in some practical cases where margin constraints are impossible to fulfill, the algorithm convergence criterion is reached with MME $> 0$.
 
 \subsection{Toy Examples}
 \label{toy_examples}
@@ -532,27 +532,39 @@ On this small example, we can see that the algorithm quickly find an estimation 
 
 The main goal of toy examples, since we have access to the real transportation flow, is to study how the resulting $MTE$ behave regarding passenger $st$-trips distribution and hyperparameter $\theta$, on different network sizes. 
 
-The randomness of the $st$-trips distribution is controlled by the number of drawn passengers and we can see that the algorithm performs better if this number increases, as seen in Figure \ref{MTE_vs_passengers}. This behavior can be expected as the method is constructed to find the solution maximizing the entropy while respecting embarkment and disembarkment constraint. In fact, all MTE should converge to $0$ eventually, however this rate of convergence seems to be low. \\
-As for the hyperparameter study, found in Figure \ref{MTE_vs_theta}, we see that the optimal parameter seems to decreases as network size increases, reaching value close to $0$ for $8$ line tours. However, this is not the only factor which helps to decide this parameter. As a matter of fact, it seems unrealistic, in some real life scenarios, that all passengers embarking or disembarking at junctions are all transiting, and this value will be kept at $0.1$ for our real life study.
-
-\begin{figure}
+The randomness of the $st$-trips distribution is controlled by the number of drawn passengers and we can see that the algorithm performs better if this number increases, as seen in Figure \ref{MTE_vs_passengers}. This behavior can be expected as the method is constructed to find the solution maximizing the entropy while respecting embarkment and disembarkment constraint. In fact, all MTE should converge to $0$ eventually, however this rate of convergence seems to be low.
+\begin{figure}[h]
 	\includegraphics[width=0.98\textwidth]{fig/MTE_passengers.pdf}
 	\caption{Mean transportation error (MTE) vs the number of randomly drawn passengers, in toy examples with numbers of tours $p$ varying from 2 to 8. The hyperparameter is set to $\theta=0.001$ and $10$ different draws are performed for each data point.}
 	\label{MTE_vs_passengers}
 \end{figure}
-
-\begin{figure}
+As for the hyperparameter study, found in Figure \ref{MTE_vs_theta}, we see that the optimal parameter seems to decreases as network size increases, reaching value close to $0$ for $8$ line tours. However, this is not the only factor which helps to decide this parameter. As a matter of fact, it seems unrealistic, in some real life scenarios, that all passengers embarking or disembarking at junctions are all transiting, and this value will be kept at $0.1$ for our real life study.
+\begin{figure}[h]
 	\includegraphics[width=0.98\textwidth]{fig/MTE_tours.pdf}
 	\caption{Mean transportation error (MTE) vs hyperparameter $\theta$, in toy examples with numbers of tours $p$ varying from 2 to 8. The dot on each curve denotes the minimum. The number of drawn passengers is different for every network size and is set to $20 \cdot \vert P \vert$, in order to keep the randomness level constant. $10$ different draws are performed for each data point.}
 	\label{MTE_vs_theta}
 \end{figure}
 
-
 \subsection{Real Data}
 \label{real_data}
 
-\subsubsection{The dataset}
-The dataset derived from the public transportation agency in the city of Lausanne (tl), in Switzerland. Automatic passenger counters were used to collect data on the number of passengers entering and leaving buses and metros at each stop. The dataset comprises 44 lines of metro and bus transportation, 1361 stops, and over 115 million passengers per year. Each round trip forms two separate lines, which often have stops that correspond to both the inbound and outbound directions, but this is not always the case. Some stops may be unique to either the inbound or outbound direction. The initial dataset contained 13 million data rows, which were aggregated to the year 2019, and the passenger data was filtered to include only passengers who boarded and disembarked at each stop. Lines with the most errors were removed, resulting in a final dataset of 35 transportation lines and 1216 stops. The threshold for invalid lines was set when a difference of between total embarkment and disembarked differs more than 15\% of their means. For the rest all other line, the correction found in appendix \ref{} 
+\subsubsection{The dataset and algorithm setup}
+\label{data_algo}
+The dataset derived from the public transportation agency in the city of Lausanne (tl), in Switzerland. Automatic passenger counters were used to collect data on the number of passengers entering and leaving buses and metros at each stop. The dataset comprises 44 lines of metro and bus transportation, 1361 stops, and over 115 million passengers per year. Each round trip forms two separate lines, which often have stops that correspond to both the inbound and outbound directions, but this is not always the case. Some stops may be unique to either the inbound or outbound direction. The initial dataset contained 13 million data rows, which were aggregated to the year 2019, and the passenger data was filtered to include only passengers who boarded and disembarked at each stop. Lines with the most errors were removed, resulting in a final dataset of 35 transportation lines and 1216 stops. The threshold for invalid lines was set when a difference of between total embarkment and disembarked differs more than 15\% of their means. For the rest all other lines, the correction found in appendix was applied to ensure consistency conditions.  
+
+The matrix $P$, containing valid $st$-trips, was built using same condition found in toy example with an additional one. If the estimated pedestrian time (using Open Trip Planner (REF)) between two stops $s$ and $t$ was shorter than the estimated time by taking the public transportation network, this $st$-trip was also removed from $P$. The graph structure, consisting in matrices $\bm{\chi}$ and $P$, was constructed beforehand testing the method.
+
+The algorithm was run with hyperparameter $\theta = 0.1$. Tracking the error on margins (MME) showed a rapid decreases, as seen in Figure \ref{MME_vs_iteration}, but the (conservative) convergence criterion (chosen as when $\sum_{st} \vert f^{prev}_{st} - f_{st} \vert< 10^{-6} $) was reach after 316 iterations, which corresponds to approximately one hour of computing time with a single thread.
+
+\begin{figure}[h]
+	\includegraphics[width=0.98\textwidth]{fig/MME_vs_iteration.pdf}
+	\caption{Mean margin error (MME) vs iteration for the algorithm run with the public transportation network data of city of Lausanne (35 lines, 1216 stops).}
+	\label{MME_vs_iteration}
+\end{figure}
+
+\subsubsection{Results}
+\label{lausanne_results}
+
 
 %% --------------------------------- CONCLUSION
 
@@ -565,6 +577,7 @@ The dataset derived from the public transportation agency in the city of Lausann
 \section*{Appendix}
 
 \subsection*{Embarkment and disembarkment corrections for lines}
+\label{flow_correction}
 It may happen that, on some lines $\ell$, with stops indexed in order as $1, \ldots, l$, raw data do not obey the following necessary consistency conditions 
 \begin{align*}
 	a_l = 0&, \; b_1 = 0 \\
@@ -578,7 +591,7 @@ We first identify all stops $i$ where $A_{i - 1} < B_i$ and store them, along wi
 		\hat{a}_j&=\left( 1-\frac{(A_{(i-1)} - A_{(\text{Prev}(i)-1)}) - (B_{i} -  B_{\text{Prev}(i)})}{(A_{(i-1)} - A_{(\text{Prev}(i)-1)}) + (B_{i} -  B_{\text{Prev}(i)})}\right)\, a_j  \qquad \forall j \in \{ \text{Prev}(i), \ldots, i-1 \} \\
 	\hat{b}_j&=\left( 1+\frac{(A_{(i-1)} - A_{(\text{Prev}(i)-1)}) - (B_{i} -  B_{\text{Prev}(i)})}{(A_{(i-1)} - A_{(\text{Prev}(i)-1)}) + (B_{i} -  B_{\text{Prev}(i)})}\right)\, b_j  \qquad \forall j \in \{ \text{Prev}(i) + 1, \ldots, i \}
 \end{align*}
-Before the last step, all conditions $A_{(i-1)} \geq  B_{i}$, should be respected except for node $l$. The last step ensures that $A_{l} = B_{l} $, however, as it can sometimes lowers the embarkment count and increases the disembarkment count on previous nodes, some new nodes can now violate $A_{(i-1)} \geq B_i$. This is why this procedure should be iterated until all stops on the line verify consistency conditions. 
+Before the last step, all conditions $A_{(i-1)} \geq  B_{i}$ should be respected except for node $l$. The last step ensures that $A_{l} = B_{l}$, however, as it can sometimes lower the embarkment count and increase the disembarkment count on previous nodes, some new nodes can now violate $A_{(i-1)} \geq B_i$. This is why this procedure must be iterated until all stops on the line verify consistency conditions. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                          %%
@@ -591,118 +604,12 @@ Before the last step, all conditions $A_{(i-1)} \geq  B_{i}$, should be respecte
 \section*{Acknowledgements}%% if any
 Text for this section\ldots
 
-\section*{Funding}%% if any
-Text for this section\ldots
-
-\section*{Abbreviations}%% if any
-Text for this section\ldots
-
-\section*{Availability of data and materials}%% if any
-Text for this section\ldots
-
-\section*{Ethics approval and consent to participate}%% if any
-Text for this section\ldots
-
 \section*{Competing interests}
 The authors declare that they have no competing interests.
-
-\section*{Consent for publication}%% if any
-Text for this section\ldots
-
-\section*{Authors' contributions}
-Text for this section \ldots
-
-\section*{Authors' information}%% if any
-Text for this section\ldots
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                  The Bibliography                       %%
-%%                                                         %%
-%%  Bmc_mathpys.bst  will be used to                       %%
-%%  create a .BBL file for submission.                     %%
-%%  After submission of the .TEX file,                     %%
-%%  you will be prompted to submit your .BBL file.         %%
-%%                                                         %%
-%%                                                         %%
-%%  Note that the displayed Bibliography will not          %%
-%%  necessarily be rendered by Latex exactly as specified  %%
-%%  in the online Instructions for Authors.                %%
-%%                                                         %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % if your bibliography is in bibtex format, use those commands:
 \bibliographystyle{bmc-mathphys} % Style BST file (bmc-mathphys, vancouver, spbasic).
 \bibliography{article_tl.bib}      % Bibliography file (usually '*.bib' )
-% for author-year bibliography (bmc-mathphys or spbasic)
-% a) write to bib file (bmc-mathphys only)
-% @settings{label, options="nameyear"}
-% b) uncomment next line
-%\nocite{label}
-
-% or include bibliography directly:
-% \begin{thebibliography}
-% \bibitem{b1}
-% \end{thebibliography}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                               %%
-%% Figures                       %%
-%%                               %%
-%% NB: this is for captions and  %%
-%% Titles. All graphics must be  %%
-%% submitted separately and NOT  %%
-%% included in the Tex document  %%
-%%                               %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%
-%% Do not use \listoffigures as most will included as separate files
-
-\section*{Figures}
-  \begin{figure}[h!]
-  \caption{Sample figure title}
-\end{figure}
-
-\begin{figure}[h!]
-  \caption{Sample figure title}
-\end{figure}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                               %%
-%% Tables                        %%
-%%                               %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%% Use of \listoftables is discouraged.
-%%
-\section*{Tables}
-\begin{table}[h!]
-\caption{Sample table title. This is where the description of the table should go}
-  \begin{tabular}{cccc}
-    \hline
-    & B1  &B2   & B3\\ \hline
-    A1 & 0.1 & 0.2 & 0.3\\
-    A2 & ... & ..  & .\\
-    A3 & ..  & .   & .\\ \hline
-  \end{tabular}
-\end{table}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                               %%
-%% Additional Files              %%
-%%                               %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section*{Additional Files}
-  \subsection*{Additional file 1 --- Sample additional file title}
-    Additional file descriptions text (including details of how to
-    view the file, if it is in a non-standard format or the file extension).  This might
-    refer to a multi-page table or a figure.
-
-  \subsection*{Additional file 2 --- Sample additional file title}
-    Additional file descriptions text.
-
-
 
 
 \end{backmatter}
