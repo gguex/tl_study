@@ -140,18 +140,9 @@ They also constitute an endless source of inspiration in formal modeling and opt
 
 This contribution addresses a straightforward, yet central question  in public transportation networks: given a network made of many train, bus, subway, or tram lines, how can one estimate the real trips made by the travelers, on the sole basis of the embarkment (boarding) counts and disembarkment (alighting) counts in each vehicle? Although estimating origin-destination flows is a much addressed issue in transportation modeling (see e.g \cite{bell1997transportation} \cite{hazelton2000estimation} \cite{ashok2002estimation} \cite{cui2006bus} and references therein), the specific problem addressed in this contribution seems, to the best of our knowledge, original. 
 
-Pedestrian transfers of travelers between different lines here constitute the missing information, which planners traditionally try to estimate using census, or more recently with costly and invasive devices located at station, such as mobile phone tracking or facial recognition systems. In this article, we take a different approach, which is to give the best estimation of transportation trajectories without additional data, using the principle of maximum entropy. Section \ref{notforma} introduces the notations and the formalism, as well as the statement of the problem and the iterative solution method, which consist of three consecutive steps: a maximum-entropy computation of the trip distributions, obeying marginal constraints and with a given prior;  an update of the prior distribution by shrinking the components responsible for overflow; and an update of the marginal flows to avoid transfer overflow. This iterative procedure clearly evokes the EM algorithm (see e.g. \cite{dempster1977maximum}  \cite{bavaud2009information}), with the first step corresponding to the ``expectation step" and last two steps to the ``maximisation step". Moreover, this solution 
+Pedestrian transfers of travelers between different lines here constitute the missing information, which planners traditionally try to estimate using census, or more recently with costly and invasive devices located at station, such as mobile phone tracking or facial recognition systems. In this article, we take a different approach, which is to give the best estimation of transportation trajectories without additional data, using the principle of maximum entropy. Section \ref{notforma} introduces the notations and the formalism, as well as the statement of the problem and the iterative solution method, which consist of three consecutive steps: a maximum-entropy computation of the trip distributions, obeying marginal constraints and with a given prior;  an update of the prior distribution by shrinking the components responsible for overflow; and an update of the marginal flows to avoid transfer overflow. This iterative procedure clearly evokes the EM algorithm (see e.g. \cite{dempster1977maximum}  \cite{bavaud2009information}), with the first step corresponding to the ``expectation step" and last two steps to the ``maximization step". The fist step only is required for solving the single line case (section \ref{Single line}), naturally much simpler but  yet  not trivial, and exhibiting a disembarking probability independent of the embarking stop (Markov property).  Moreover, this solution offer some flexibility, as it is possible to set a prior distribution taking into account attraction or repulsion poles among stops, and to fix hyperparameters limiting the number of transfers between lines.
 
-
-
-whose principled evaluation require some methodological reflexion and experimentation. : a maximum-entropy computation of the trip distributions, obeying marginal constraints and with a given prior (section \ref{maxenso}); an update of the marginal flows to avoid transfer overflow (section \ref{marginup}); and an update of the prior distribution  (section \ref{priorup}) by shrinking the components responsible for overflow. 
-
-The fist step only is required for solving the single line case (section \ref{Single line}), naturally much simpler but  yet  not trivial, and exhibiting a disembarking probability independent of the embarking stop (Markov property). 
-
-Cases studies are presented in section \ref{casestudies} *** à poursuivre *** 
-
-
-
+In section \ref{casestudies}, we test the propose method on toy examples and the data of the public transportation network of the city of Lausanne. Toy examples offer some kind of validation, as a transportation flow can be set on toy networks and compared to the solution given by our algorithm. The real case scenario with the data from the public transportation network of the city of Lausanne shows that this method is applicable on a large transportation network and can give pertinent insights about travelers habits.
 
 
 %% --------------------------------- NOTATIONS AND FORMALISM
@@ -574,24 +565,20 @@ The dataset derived from the public transportation agency in the city of Lausann
 \section*{Appendix}
 
 \subsection*{Embarkment and disembarkment corrections for lines}
-It may happen that, on some lines $\ell$, with stop indexed in order as $1, \ldots, l$, raw data do not obey the following necessary consistency conditions 
+It may happen that, on some lines $\ell$, with stops indexed in order as $1, \ldots, l$, raw data do not obey the following necessary consistency conditions 
 \begin{align*}
-	a_l &= 0 \\
-	b_1 &= 0 \\
-	A_{i-1} &\geq B_i \qquad \forall i \in \{1, \ldots, l-1\} \\
+	a_l = 0&, \; b_1 = 0 \\
+	A_{(i-1)} &\geq B_i \qquad \forall i \in \{1, \ldots, l-1\} \\
 	A_{l} &= B_{l} \qquad \text{for terminal stop $l$}
 \end{align*}
-where $A_i$ (respectively $B_i$) is the cumulated number of embarked (resp. disembarked) passengers on the line. The first two conditions are easy to correct, and we will assume that they are valid, but the last two require a recursive procedure.
+where $A_i$ (respectively $B_i$) is the cumulated number of embarked (resp. disembarked) passengers on the line at stop $i$. The first condition is easy to correct (by setting both quantities to $0$), and we will assume that they are valid. The last two require an iterative procedure, explained here.
 
-We first identify all stops $i$ where $A_{i - 1} < B_i$ and store them, along with stop $1$ and $l$, in a order set $\{1, s_1, \ldots, s_r, l\}$. 
-
-$a_\bullet^\ell=b_\bullet^\ell$ (where the latter quantities denote the total embarkments and disembarkments on line $\ell$), in which case we did rescale the embarking and disembarking line counts as 
-\begin{displaymath}
-	\hat{a}_i=(1-\frac{a_\bullet^\ell-b_\bullet^\ell}{a_\bullet^\ell+b_\bullet^\ell})\, a_i 
-	\qquad\qquad\qquad
-	\hat{b}_i=(1+\frac{a_\bullet^\ell-b_\bullet^\ell}{a_\bullet^\ell+b_\bullet^\ell})\,  b_i 
-\end{displaymath}
-ensuring $\hat{a}_\bullet^\ell=\hat{b}_\bullet^\ell=2a_\bullet^\ell b_\bullet^\ell/(a_\bullet^\ell+b_\bullet^\ell)$. This process is applied for every  
+We first identify all stops $i$ where $A_{i - 1} < B_i$ and store them, along with stop $1$ and $l$, in a order set $S$. Let $\text{Prev}(i)$ be the item right before $i$ in the set $S$. For all $i \in S \setminus \{1\}$, we do :
+\begin{align*}
+		\hat{a}_j&=\left( 1-\frac{(A_{(i-1)} - A_{(\text{Prev}(i)-1)}) - (B_{i} -  B_{\text{Prev}(i)})}{(A_{(i-1)} - A_{(\text{Prev}(i)-1)}) + (B_{i} -  B_{\text{Prev}(i)})}\right)\, a_j  \qquad \forall j \in \{ \text{Prev}(i), \ldots, i-1 \} \\
+	\hat{b}_j&=\left( 1+\frac{(A_{(i-1)} - A_{(\text{Prev}(i)-1)}) - (B_{i} -  B_{\text{Prev}(i)})}{(A_{(i-1)} - A_{(\text{Prev}(i)-1)}) + (B_{i} -  B_{\text{Prev}(i)})}\right)\, b_j  \qquad \forall j \in \{ \text{Prev}(i) + 1, \ldots, i \}
+\end{align*}
+Before the last step, all conditions $A_{(i-1)} \geq  B_{i}$, should be respected except for node $l$. The last step ensures that $A_{l} = B_{l} $, however, as it can sometimes lowers the embarkment count and increases the disembarkment count on previous nodes, some new nodes can now violate $A_{(i-1)} \geq B_i$. This is why this procedure should be iterated until all stops on the line verify consistency conditions. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                          %%
