@@ -6,3 +6,6 @@ tl_study.Rproj
 .DS_Store
 multiple_lines/.DS_Store
 multiple_lines/notes/.DS_Store
+latex_files/applied_network_science_article/article_v0.log
+*.log
+latex_files/applied_network_science_article/article_v0.aux
