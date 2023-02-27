@@ -62,7 +62,14 @@ while(sum(x_to_empty) != 0){
   x_to_empty[indices_stop[1], indices_stop[2]] = 0
 }
 
+aggregate_transfer_df = transfer_df %>% 
+  group_by(stop_i) %>% 
+  summarise(sum(number_of_transfers))
+
 write.table(transfer_df, paste0(results_folder, "/transfer_df.csv"), sep=",",
+            row.names=F)
+write.table(aggregate_transfer_df, 
+            paste0(results_folder, "/aggregate_transfers_df.csv"), sep=",",
             row.names=F)
 
 

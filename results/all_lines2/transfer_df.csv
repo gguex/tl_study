@@ -74,7 +74,7 @@
 232,"S7_A_VVERT_T","Pully, Val-Vert",7,"A",923,"S47_R_VVERT_P","Pully, Val-Vert",47,"R",62612.8524282811
 335,"S9_R_SF_P","St-François",9,"R",392,"S16_A_SF_P","St-François",16,"A",62169.3170916914
 197,"S6_R_OURS_O","Ours",6,"R",1197,"S72_A_OUR","Ours",72,"A",61793.3013922981
-474,"S17_R_BOST_E","Boston",17,"R",317,"S9_A_BOST_N","Boston",9,"A",60514.967065234
+474,"S17_R_BOST_E","Boston",17,"R",317,"S9_A_BOST_N","Boston",9,"A",60514.9670652341
 283,"S8_R_B-AIR_D","Bel-Air",8,"R",133,"S4_A_B-AIR_O","Bel-Air",4,"A",59276.8844287563
 855,"S42_R_SALA_D","Sallaz",42,"R",191,"S6_R_SALA_B","Sallaz",6,"R",58745.1055364446
 910,"S47_A_VVERT_B","Pully, Val-Vert",47,"A",211,"S7_R_VVERT_T","Pully, Val-Vert",7,"A",58442.2387952666
@@ -82,7 +82,7 @@
 152,"S4_R_SF_S","St-François",4,"R",172,"S6_A_SF_P","St-François",6,"A",58010.4898952502
 149,"S4_R_SROCH_E","St-Roch",4,"R",117,"S3_R_SROCH_S","St-Roch",3,"R",57313.9160923257
 317,"S9_A_BOST_N","Boston",9,"A",437,"S17_A_BOST_O","Boston",17,"A",56859.6923483756
-923,"S47_R_VVERT_P","Pully, Val-Vert",47,"R",211,"S7_R_VVERT_T","Pully, Val-Vert",7,"A",56686.487263541
+923,"S47_R_VVERT_P","Pully, Val-Vert",47,"R",211,"S7_R_VVERT_T","Pully, Val-Vert",7,"A",56686.4872635409
 209,"S6_R_MTOIE_O","Montoie",6,"R",2,"S1_A_MTOIE_E","Montoie",1,"A",55677.8284822076
 59,"S2_A_B-AIR_N","Bel-Air",2,"A",248,"S8_A_B-AIR_N","Bel-Air",8,"A",55325.0824694687
 1208,"S72_R_OUR","Ours",72,"R",218,"S7_R_OURS_O","Ours",7,"A",54968.7307929045
@@ -359,7 +359,7 @@
 33,"S1_R_B-AIR_D","Bel-Air",1,"R",200,"S6_R_B-AIR_O","Bel-Air",6,"R",9774.50379712909
 928,"S47_R_CLERG_O","Pully, Clergère",47,"R",342,"S9_R_CLERG_E","Pully, Clergère",9,"R",9768.77275333811
 134,"S4_A_CH_O","Chauderon",4,"A",424,"S16_R_CH_O","Chauderon",16,"R",9733.20648828011
-198,"S6_R_BESS_S","Bessières",6,"R",394,"S16_A_PBESS_N","Pont Bessières",16,"A",9730.4917870555
+198,"S6_R_BESS_S","Bessières",6,"R",394,"S16_A_PBESS_N","Pont Bessières",16,"A",9730.49178705551
 301,"S9_A_VOISD_O","Voisinand",9,"A",1130,"S68_A_CHAMP_N","Les Champs",68,"A",9716.26445037734
 421,"S16_R_PBESS_S","Pont Bessières",16,"R",1209,"S72_R_BES","Bessières",72,"R",9479.60357875204
 58,"S2_A_SF_O","St-François",2,"A",422,"S16_R_SF_O","St-François",16,"R",9466.35414488833
@@ -384,7 +384,7 @@
 172,"S6_A_SF_P","St-François",6,"A",477,"S17_R_SF_P","St-François",17,"R",8462.35837897386
 578,"S22_A_TNEL_N","Tunnel",22,"A",281,"S8_R_TNEL_S","Tunnel",8,"R",8389.3870246396
 109,"S3_A_BELVO_B","Bellevaux",3,"A",585,"S22_A_BELVO_M","Bellevaux",22,"A",8286.41503802261
-57,"S2_A_GTE_N","Georgette",2,"A",285,"S8_R_GTE_S","Georgette",8,"R",8114.5717972803
+57,"S2_A_GTE_N","Georgette",2,"A",285,"S8_R_GTE_S","Georgette",8,"R",8114.57179728029
 752,"S32_R_CENSU_E","Censuy",32,"R",630,"S25_A_CENSU_E","Censuy",25,"A",7999.07525244895
 392,"S16_A_SF_P","St-François",16,"A",368,"S13_A_SF_P","St-François",13,"A",7828.41698569053
 731,"S32_A_CPEAG_M","Croix-Péage",32,"A",456,"S17_R_CPEAG_B","Croix-Péage",17,"R",7790.8709680511
@@ -454,7 +454,7 @@
 1193,"S72_A_CFF","Lausanne-Gare",72,"A",37,"S1_R_GARE_S","Lausanne-Gare",1,"R",5003.87925902441
 523,"S19_A_PZROS_O","Prélaz-les-Roses",19,"A",511,"S18_R_PZROS_E","Prélaz-les-Roses",18,"R",4941.99023950615
 1216,"S72_R_OUC","Ouchy-Olympique",72,"R",613,"S24_A_OUCHY_E","Ouchy-Olympique",24,"A",4923.27581861134
-356,"S12_A_GTE_O","Georgette",12,"A",57,"S2_A_GTE_N","Georgette",2,"A",4918.7928267831
+356,"S12_A_GTE_O","Georgette",12,"A",57,"S2_A_GTE_N","Georgette",2,"A",4918.79282678309
 250,"S8_A_TNEL_N","Tunnel",8,"A",419,"S16_R_TNEL_S","Tunnel",16,"R",4870.97813719427
 1048,"S64_R_CROIS_A","Epalinges, Croisettes",64,"R",974,"S62_A_CROIS_B","Epalinges, Croisettes",62,"A",4852.18259198302
 282,"S8_R_RIP_S","Riponne-M. Béjart",8,"R",83,"S2_R_RNEUV_S","Rue Neuve",2,"R",4816.99535838351
@@ -644,7 +644,7 @@
 1196,"S72_A_BES","Bessières",72,"A",421,"S16_R_PBESS_S","Pont Bessières",16,"R",802.618234630498
 338,"S9_R_LEMAN_E","Avenue du Léman",9,"R",363,"S12_R_LEMAN_E","Avenue du Léman",12,"R",794.456092051852
 202,"S6_R_PT-CH_S","Pont Chauderon",6,"R",543,"S19_R_CH_N","Chauderon",19,"R",794.016937148481
-657,"S25_R_MTSI_S","Montchoisi",25,"R",288,"S8_R_MTSI_S","Montchoisi",8,"R",787.89246592513
+657,"S25_R_MTSI_S","Montchoisi",25,"R",288,"S8_R_MTSI_S","Montchoisi",8,"R",787.892465925129
 84,"S2_R_B-AIR_D","Bel-Air",2,"R",423,"S16_R_B-AIR_O","Bel-Air",16,"R",760.18772590983
 1175,"S70_R_VIGIE_R","Vigie",70,"R",425,"S16_R_TIVOL_O","Tivoli",16,"R",759.189799643903
 497,"S18_A_TIMON_T","Crissier, Timonet",18,"A",962,"S54_A_TIMON_O","Crissier, Timonet",54,"A",752.175219138242
