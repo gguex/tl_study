@@ -1,6 +1,6 @@
 %% BioMed_Central_Bib_Style_v1.01
 
-\begin{thebibliography}{12}
+\begin{thebibliography}{14}
 % BibTex style file: bmc-mathphys.bst (version 2.1), 2014-07-24
 \ifx \bisbn   \undefined \def \bisbn  #1{ISBN #1}\fi
 \ifx \binits  \undefined \def \binits#1{#1}\fi
@@ -107,43 +107,6 @@ Massachusetts Institute of Technology
 \endbibitem
 
 %%% 6
-\bibitem{jaynes1957information}
-\begin{barticle}
-\bauthor{\bsnm{Jaynes}, \binits{E.T.}}:
-\batitle{Information theory and statistical mechanics}.
-\bjtitle{Physical review}
-\bvolume{106}(\bissue{4}),
-\bfpage{620}
-(\byear{1957})
-\end{barticle}
-\endbibitem
-
-%%% 7
-\bibitem{wilson1967statistical}
-\begin{barticle}
-\bauthor{\bsnm{Wilson}, \binits{A.}}:
-\batitle{A statistical theory of spatial distribution models}.
-\bjtitle{Transportation Research}
-\bvolume{1}(\bissue{3}),
-\bfpage{253}--\blpage{269}
-(\byear{1967})
-\end{barticle}
-\endbibitem
-
-%%% 8
-\bibitem{erlander1990gravity}
-\begin{bbook}
-\bauthor{\bsnm{Erlander}, \binits{S.}},
-\bauthor{\bsnm{Stewart}, \binits{N.F.}}:
-\bbtitle{The Gravity Model in Transportation Analysis: Theory and Extensions}
-vol. \bseriesno{3}.
-\bpublisher{VSP},
-\blocation{Leiden}
-(\byear{1990})
-\end{bbook}
-\endbibitem
-
-%%% 9
 \bibitem{dempster1977maximum}
 \begin{barticle}
 \bauthor{\bsnm{Dempster}, \binits{A.P.}},
@@ -157,7 +120,7 @@ vol. \bseriesno{3}.
 \end{barticle}
 \endbibitem
 
-%%% 10
+%%% 7
 \bibitem{bavaud2009information}
 \begin{bchapter}
 \bauthor{\bsnm{Bavaud}, \binits{F.}}:
@@ -172,6 +135,43 @@ pp. \bfpage{54}--\blpage{78}.
 \blocation{Berlin}
 (\byear{2009})
 \end{bchapter}
+\endbibitem
+
+%%% 8
+\bibitem{jaynes1957information}
+\begin{barticle}
+\bauthor{\bsnm{Jaynes}, \binits{E.T.}}:
+\batitle{Information theory and statistical mechanics}.
+\bjtitle{Physical review}
+\bvolume{106}(\bissue{4}),
+\bfpage{620}
+(\byear{1957})
+\end{barticle}
+\endbibitem
+
+%%% 9
+\bibitem{wilson1967statistical}
+\begin{barticle}
+\bauthor{\bsnm{Wilson}, \binits{A.}}:
+\batitle{A statistical theory of spatial distribution models}.
+\bjtitle{Transportation Research}
+\bvolume{1}(\bissue{3}),
+\bfpage{253}--\blpage{269}
+(\byear{1967})
+\end{barticle}
+\endbibitem
+
+%%% 10
+\bibitem{erlander1990gravity}
+\begin{bbook}
+\bauthor{\bsnm{Erlander}, \binits{S.}},
+\bauthor{\bsnm{Stewart}, \binits{N.F.}}:
+\bbtitle{The Gravity Model in Transportation Analysis: Theory and Extensions}
+vol. \bseriesno{3}.
+\bpublisher{VSP},
+\blocation{Leiden}
+(\byear{1990})
+\end{bbook}
 \endbibitem
 
 %%% 11
@@ -199,6 +199,35 @@ pp. \bfpage{2179}--\blpage{2199}.
 \blocation{Berlin, Heidelberg}
 (\byear{2021})
 \end{bbook}
+\endbibitem
+
+%%% 13
+\bibitem{MalcolmMorgan2019}
+\begin{barticle}
+\bauthor{\bsnm{{Malcolm Morgan}}},
+\bauthor{\bsnm{{Marcus Young}}},
+\bauthor{\bsnm{{Robin Lovelace}}},
+\bauthor{\bsnm{{Layik Hama}}}:
+\batitle{Opentripplanner for r}.
+\bjtitle{Journal of Open Source Software}
+\bvolume{4}(\bissue{44}),
+\bfpage{1926}
+(\byear{2019}).
+doi:\doiurl{10.21105/joss.01926}
+\end{barticle}
+\endbibitem
+
+%%% 14
+\bibitem{benzecri1977histoire}
+\begin{barticle}
+\bauthor{\bsnm{Benz{\'e}cri}, \binits{J.-P.}}:
+\batitle{Histoire et pr{\'e}histoire de l'analyse des donn{\'e}es. partie v
+  l'analyse des correspondances}.
+\bjtitle{Cahiers de l'analyse des donn{\'e}es}
+\bvolume{2}(\bissue{1}),
+\bfpage{9}--\blpage{40}
+(\byear{1977})
+\end{barticle}
 \endbibitem
 
 \end{thebibliography}
@@ -279,45 +308,6 @@ pp. \bfpage{2179}--\blpage{2199}.
 </bibl>
 
 <bibl id="B6">
-  <title><p>Information theory and statistical mechanics</p></title>
-  <aug>
-    <au><snm>Jaynes</snm><fnm>ET</fnm></au>
-  </aug>
-  <source>Physical review</source>
-  <publisher>APS</publisher>
-  <pubdate>1957</pubdate>
-  <volume>106</volume>
-  <issue>4</issue>
-  <fpage>620</fpage>
-</bibl>
-
-<bibl id="B7">
-  <title><p>A statistical theory of spatial distribution models</p></title>
-  <aug>
-    <au><snm>Wilson</snm><fnm>AG</fnm></au>
-  </aug>
-  <source>Transportation Research</source>
-  <publisher>Elsevier</publisher>
-  <pubdate>1967</pubdate>
-  <volume>1</volume>
-  <issue>3</issue>
-  <fpage>253</fpage>
-  <lpage>-269</lpage>
-</bibl>
-
-<bibl id="B8">
-  <title><p>The gravity model in transportation analysis: theory and
-  extensions</p></title>
-  <aug>
-    <au><snm>Erlander</snm><fnm>S</fnm></au>
-    <au><snm>Stewart</snm><fnm>NF</fnm></au>
-  </aug>
-  <publisher>Leiden: VSP</publisher>
-  <pubdate>1990</pubdate>
-  <volume>3</volume>
-</bibl>
-
-<bibl id="B9">
   <title><p>Maximum likelihood from incomplete data via the {E}{M}
   algorithm</p></title>
   <aug>
@@ -335,7 +325,7 @@ pp. \bfpage{2179}--\blpage{2199}.
   <lpage>-22</lpage>
 </bibl>
 
-<bibl id="B10">
+<bibl id="B7">
   <title><p>Information theory, relative entropy and statistics</p></title>
   <aug>
     <au><snm>Bavaud</snm><fnm>F</fnm></au>
@@ -349,6 +339,45 @@ pp. \bfpage{2179}--\blpage{2199}.
   <volume>5363</volume>
   <fpage>54</fpage>
   <lpage>78</lpage>
+</bibl>
+
+<bibl id="B8">
+  <title><p>Information theory and statistical mechanics</p></title>
+  <aug>
+    <au><snm>Jaynes</snm><fnm>ET</fnm></au>
+  </aug>
+  <source>Physical review</source>
+  <publisher>APS</publisher>
+  <pubdate>1957</pubdate>
+  <volume>106</volume>
+  <issue>4</issue>
+  <fpage>620</fpage>
+</bibl>
+
+<bibl id="B9">
+  <title><p>A statistical theory of spatial distribution models</p></title>
+  <aug>
+    <au><snm>Wilson</snm><fnm>AG</fnm></au>
+  </aug>
+  <source>Transportation Research</source>
+  <publisher>Elsevier</publisher>
+  <pubdate>1967</pubdate>
+  <volume>1</volume>
+  <issue>3</issue>
+  <fpage>253</fpage>
+  <lpage>-269</lpage>
+</bibl>
+
+<bibl id="B10">
+  <title><p>The gravity model in transportation analysis: theory and
+  extensions</p></title>
+  <aug>
+    <au><snm>Erlander</snm><fnm>S</fnm></au>
+    <au><snm>Stewart</snm><fnm>NF</fnm></au>
+  </aug>
+  <publisher>Leiden: VSP</publisher>
+  <pubdate>1990</pubdate>
+  <volume>3</volume>
 </bibl>
 
 <bibl id="B11">
@@ -377,6 +406,35 @@ pp. \bfpage{2179}--\blpage{2199}.
   <pubdate>2021</pubdate>
   <fpage>2179</fpage>
   <lpage>-2199</lpage>
+</bibl>
+
+<bibl id="B13">
+  <title><p>OpenTripPlanner for R</p></title>
+  <aug>
+    <au><cnm>{Malcolm Morgan}</cnm></au>
+    <au><cnm>{Marcus Young}</cnm></au>
+    <au><cnm>{Robin Lovelace}</cnm></au>
+    <au><cnm>{Layik Hama}</cnm></au>
+  </aug>
+  <source>Journal of Open Source Software</source>
+  <pubdate>2019</pubdate>
+  <volume>4</volume>
+  <issue>44</issue>
+  <fpage>1926</fpage>
+</bibl>
+
+<bibl id="B14">
+  <title><p>Histoire et pr{\'e}histoire de l'analyse des donn{\'e}es. Partie V
+  L'analyse des correspondances</p></title>
+  <aug>
+    <au><snm>Benz{\'e}cri</snm><fnm>JP</fnm></au>
+  </aug>
+  <source>Cahiers de l'analyse des donn{\'e}es</source>
+  <pubdate>1977</pubdate>
+  <volume>2</volume>
+  <issue>1</issue>
+  <fpage>9</fpage>
+  <lpage>-40</lpage>
 </bibl>
 
 </refgrp>

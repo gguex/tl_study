@@ -29,6 +29,7 @@
 \usepackage{bm} 
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{hyperref}
 
 \usepackage{caption}
 
@@ -289,7 +290,7 @@ which yields the following \emph{iterative fitting algorithm}: starting with som
 	\label{Iterative fitting}
 	\phi^{(\iota)}_s = \frac{\alpha_s}{\sum_t \psi^{(\iota)}_t g_{st}}, \qquad \psi^{(\iota + 1)}_t = \frac{\beta_t}{\sum_s \phi^{(\iota)}_s g_{st}}, 
 \end{equation}
-until convergence to $\phi_s$ and $\psi_t$ obeying (\ref{Sol_LagMult}). 
+until convergence to $\phi_s$ and $\psi_t$ obeying (\ref{Sol_LagMult}).\footnote{with possibly a small quantity $\epsilon > 0$ added on null components of $g_{st}$.} 
 
 In view of (\ref{entrer}) and (\ref{sortir}), the postulated margins must satisfy, for each isolated stop $i$
 \begin{equation}
@@ -535,13 +536,13 @@ The main goal of toy examples, since we have access to the real transportation f
 The randomness of the $st$-trips distribution is controlled by the number of drawn passengers and we can see that the algorithm performs better if this number increases, as seen in Figure \ref{MTE_vs_passengers}. This behavior can be expected as the method is constructed to find the solution maximizing the entropy while respecting embarkment and disembarkment constraint. In fact, all MTE should converge to $0$ eventually, however this rate of convergence seems to be low.
 \begin{figure}[h]
 	\includegraphics[width=0.98\textwidth]{fig/MTE_passengers.pdf}
-	\caption{Mean transportation error (MTE) vs the number of randomly drawn passengers, in toy examples with numbers of tours $p$ varying from 2 to 8. The hyperparameter is set to $\theta=0.001$ and $10$ different draws are performed for each data point.}
+	\caption{Mean Transportation Error (MTE) vs the number of randomly drawn passengers, in toy examples with numbers of tours $p$ varying from 2 to 8. The hyperparameter is set to $\theta=0.001$ and $10$ different draws are performed for each data point.}
 	\label{MTE_vs_passengers}
 \end{figure}
 As for the hyperparameter study, found in Figure \ref{MTE_vs_theta}, we see that the optimal parameter seems to decreases as network size increases, reaching value close to $0$ for $8$ line tours. However, this is not the only factor which helps to decide this parameter. As a matter of fact, it seems unrealistic, in some real life scenarios, that all passengers embarking or disembarking at junctions are all transiting, and this value will be kept at $0.1$ for our real life study.
 \begin{figure}[h]
 	\includegraphics[width=0.98\textwidth]{fig/MTE_tours.pdf}
-	\caption{Mean transportation error (MTE) vs hyperparameter $\theta$, in toy examples with numbers of tours $p$ varying from 2 to 8. The dot on each curve denotes the minimum. The number of drawn passengers is different for every network size and is set to $20 \cdot \vert P \vert$, in order to keep the randomness level constant. $10$ different draws are performed for each data point.}
+	\caption{Mean Transportation Error (MTE) vs hyperparameter $\theta$, in toy examples with numbers of tours $p$ varying from 2 to 8. The dot on each curve denotes the minimum. The number of drawn passengers is different for every network size and is set to $20 \cdot \vert P \vert$, in order to keep the randomness level constant. $10$ different draws are performed for each data point.}
 	\label{MTE_vs_theta}
 \end{figure}
 
@@ -552,14 +553,26 @@ As for the hyperparameter study, found in Figure \ref{MTE_vs_theta}, we see that
 \label{data_algo}
 The dataset derived from the public transportation agency in the city of Lausanne (tl), in Switzerland. Automatic passenger counters were used to collect data on the number of passengers entering and leaving buses and metros at each stop. The dataset comprises 44 lines of metro and bus transportation, 1361 stops, and over 115 million passengers per year. Each round trip forms two separate lines, which often have stops that correspond to both the inbound and outbound directions, but this is not always the case. Some stops may be unique to either the inbound or outbound direction. The initial dataset contained 13 million data rows, which were aggregated to the year 2019, and the passenger data was filtered to include only passengers who boarded and disembarked at each stop. Lines with the most errors were removed, resulting in a final dataset of 35 transportation lines and 1216 stops. The threshold for invalid lines was set when a difference of between total embarkment and disembarked differs more than 15\% of their means. For the rest all other lines, the correction found in appendix was applied to ensure consistency conditions.  
 
-The matrix $P$, containing valid $st$-trips, was built using same condition found in toy example with an additional one. If the estimated pedestrian time (using Open Trip Planner (REF)) between two stops $s$ and $t$ was shorter than the estimated time by taking the public transportation network, this $st$-trip was also removed from $P$. The graph structure, consisting in matrices $\bm{\chi}$ and $P$, was constructed beforehand testing the method.
+The matrix $P$, containing valid $st$-trips, was built using same condition found in toy example with an additional one. If the estimated pedestrian time (using Open Trip Planner\footnote{\url{https://docs.opentripplanner.org/en/v2.2.0/}} \cite{MalcolmMorgan2019}) between two stops $s$ and $t$ was shorter than the estimated time by taking the public transportation network, this $st$-trip was also removed from $P$. The graph structure, consisting in matrices $\bm{\chi}$ and $P$, was constructed beforehand testing the method.
 
-The algorithm was run with hyperparameter $\theta = 0.1$. Tracking the error on margins (MME) showed a rapid decreases, as seen in Figure \ref{MME_vs_iteration}, but the (conservative) convergence criterion (chosen as when $\sum_{st} \vert f^{prev}_{st} - f_{st} \vert< 10^{-6} $) was reach after 316 iterations, which corresponds to approximately one hour of computing time with a single thread.
+The algorithm was run with hyperparameter $\theta = 0.1$. Tracking the Mean Margin Error (MME) showed a rapid decreases but the (conservative) convergence criterion (chosen as when $\sum_{st} \vert f^{prev}_{st} - f_{st} \vert< 10^{-6} $) was reach after 316 iterations, which corresponds to approximately one hour of computing time with a single thread.
+
+\subsubsection{Results}
+\label{real_results}
+
+As the result of our algorithm consists in the $(1216 \times 1216)$ matrix $\mathbf{N} = (n_{st})$, it is difficult to present them succinctly. We chose here to focus on two aspects: (1) displaying the localization of the predicted transfers; and (2) mapping the origin and destination profiles of stops with the help of Correspondence Analysis (CA) \cite{benzecri1977histoire}.
+
+The first and second factorial dimensions of the destination and origin profiles of stops, obtained with CA applied on $\mathbf{N}$ , can be found on Figure \ref{afc}. We can see that origin and destination of each stop are quite similar when displayed on the first two factorial axis. 
+
+
 
 \begin{figure}[h]
-	\includegraphics[width=0.98\textwidth]{fig/MME_vs_iteration.pdf}
-	\caption{Mean margin error (MME) vs iteration for the algorithm run with the public transportation network data of city of Lausanne (35 lines, 1216 stops).}
-	\label{MME_vs_iteration}
+	\includegraphics[width=0.46\textwidth]{fig/afc_in_dim1.png}
+	\includegraphics[width=0.46\textwidth]{fig/afc_in_dim2.png} \\
+	\includegraphics[width=0.46\textwidth]{fig/afc_out_dim1.png}
+	\includegraphics[width=0.46\textwidth]{fig/afc_out_dim2.png}
+	\caption{Color representations (red positive value, blue negative values) of factorial coordinates of stops, after Correspondence analysis (CA) performed on matrix $\mathbf{N}$. Top figures map stops as ``origin profiles" (``where passengers are going"), bottom figures map stops as ``destination profile" (``where passengers are coming from"). Left column is the first factorial dimension, right column is the second factorial dimension. Ring sizes correspond to the number of embarkments (top) and disembarkment (bottom).}
+	\label{afc}
 \end{figure}
 
 \subsubsection{Results}
@@ -569,6 +582,8 @@ The algorithm was run with hyperparameter $\theta = 0.1$. Tracking the error on 
 %% --------------------------------- CONCLUSION
 
 \section{Conclusion}
+
+
 
   
 \newpage
