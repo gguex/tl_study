@@ -143,7 +143,7 @@ This contribution addresses a straightforward, yet central question  in public t
 
 Pedestrian transfers of travelers between different lines here constitute the missing information, which planners traditionally try to estimate using census, or more recently with costly and invasive devices located at station, such as mobile phone tracking or facial recognition systems. In this article, we take a different approach, which is to give the best estimation of transportation trajectories without additional data, using the principle of maximum entropy. Section \ref{notforma} introduces the notations and the formalism, as well as the statement of the problem and the iterative solution method, which consist of three consecutive steps: a maximum-entropy computation of the trip distributions, obeying marginal constraints and with a given prior;  an update of the prior distribution by shrinking the components responsible for overflow; and an update of the marginal flows to avoid transfer overflow. This iterative procedure clearly evokes the EM algorithm (see e.g. \cite{dempster1977maximum}  \cite{bavaud2009information}), with the first step corresponding to the ``expectation step" and last two steps to the ``maximization step". The fist step only is required for solving the single line case (section \ref{Single line}), naturally much simpler but  yet  not trivial, and exhibiting a disembarking probability independent of the embarking stop (Markov property).  Moreover, this solution offer some flexibility, as it is possible to set a prior distribution taking into account attraction or repulsion poles among stops, and to fix hyperparameters limiting the number of transfers between lines.
 
-In section \ref{casestudies}, we test the propose method on toy examples and the data of the public transportation network of the city of Lausanne. Toy examples offer some kind of validation, as a transportation flow can be set on toy networks and compared to the solution given by our algorithm. The real case scenario with the data from the public transportation network of the city of Lausanne shows that this method is applicable on a large transportation network and can give pertinent insights about travelers habits.
+In section \ref{casestudies}, we test the propose method on toy examples and with the data of the public transportation network of the city of Lausanne. Toy examples offer some kind of validation, as a transportation flow can be set on toy networks and compared to the solution given by our algorithm. The real case scenario with the data from the public transportation network of the city of Lausanne shows that this method is applicable on a large transportation network and can give pertinent insights about travelers habits.
 
 
 %% --------------------------------- NOTATIONS AND FORMALISM
@@ -231,12 +231,12 @@ where $n_{\bullet\bullet}$ counts the number of passengers, and $z_{\bullet\bull
 
 
 
-As explained in section \ref{Lines and junctions}, transfers can only occur at junctions, that is $z_{ij}>0$ implies $(i, j) \in T$. In particular,  $z_{ii}=0$ : no traveller is supposed to disembark and re-embark later at the same stop. 
+As explained in section \ref{Lines and junctions}, transfers can only occur at junctions, that is $z_{ij}>0$ implies $(i, j) \in T$. In particular,  $z_{ii}=0$ : no traveler is supposed to disembark and re-embark later at the same stop. 
 
 
  
 \subsection{Statement of the problem and solution method}
-\emph{Automatic passenger counters} measure the number of passengers entering and leaving lines at each stop [Boyle, 1998], that is $\mathbf{a}$ and $\mathbf{b}$, which provide the basic raw data of the present study, kindly provided by the Lausanne Transportation Agency (tl) for the case study in section \ref{real_data}. We will suppose here that this data obeys the necessary consistency condition $a_\bullet^\ell=b_\bullet^\ell$ (where the latter quantities denote the total embarkments and disembarkments on line $\ell$), even if, in real case studies, a rescaling must usually be performed to balance in and out-flows on each lines.
+\emph{Automatic passenger counters} measure the number of passengers entering and leaving lines at each stop [Boyle, 1998], that is $\mathbf{a}$ and $\mathbf{b}$, which provide the basic raw data of the present study, kindly provided by the Lausanne Transportation Agency (tl) for the case study in section \ref{real_data}. We will suppose here that this data obeys the necessary consistency conditions for embarkment and disembarkment counts which can be found in the Appendix, even if, in real case studies, a rescaling must usually be performed to balance in and out-flows on each lines (also given in the Appendix).
 
 Intra-line edge flows $\mathbf{Y}=(y_{ij})$ can be determined by (\ref{bilan1ligne}), but transfer edge flows $\mathbf{Z}=(z_{ij})$ are, here and typically, unknown. The objective is to estimate the $l\times l$ transportation flow matrix $\mathbf{N}=(n_{st})$. Many consistent solutions coexist in general, even for a single line with no transferts (section \ref{Single line}). This issue of incompletely observed data can be tackled by the maximum entropy formalism \cite{jaynes1957information}, which has often been the case in transportation modelling researches \cite{wilson1967statistical}  \cite{erlander1990gravity}. 
 
@@ -560,19 +560,25 @@ The algorithm was run with hyperparameter $\theta = 0.1$. Tracking the Mean Marg
 \subsubsection{Results}
 \label{real_results}
 
-As the result of our algorithm consists in the $(1216 \times 1216)$ matrix $\mathbf{N} = (n_{st})$, it is difficult to present them succinctly. We chose here to focus on two aspects: (1) displaying the localization of the predicted transfers; and (2) mapping the origin and destination profiles of stops with the help of Correspondence Analysis (CA) \cite{benzecri1977histoire}.
+As the result of our algorithm consists in the $(1216 \times 1216)$ matrix $\mathbf{N} = (n_{st})$, it is difficult to present them succinctly. We chose here to focus on two aspects: (1) mapping the origin and destination profiles of stops with the help of Correspondence Analysis (CA) \cite{benzecri1977histoire}; and (2) mapping the predicted transfers between lines.
 
-The first and second factorial dimensions of the destination and origin profiles of stops, obtained with CA applied on $\mathbf{N}$ , can be found on Figure \ref{afc}. We can see that origin and destination of each stop are quite similar when displayed on the first two factorial axis. 
+The first and second factorial dimensions of the destination and origin profiles of stops, obtained with CA applied on $\mathbf{N}$ , can be found on Figure \ref{afc}. We can see that origin and destination of each stop are quite similar when displayed on the first two factorial axes. This result can be explained if we understand that, in fact, origin and destination profiles are in fact kinda symmetrical: at the beginning of a line, stops have several choices of destinations but very few origins ``point" to them, and this is the opposite for stops at the end of the line. Intermediary stops are generally located at the center of the city, and have a similar and rich origin and destination profiles. Concerning the dimensions, we can see that the first one divided the city stops between west and east, a known dichotomy in the city of Lausanne in public transportation usage: the east of the city is less well deserved and often use cars, while the west intensively use the public transportation network. The second dimension is harder to interpret, but seems to highlight the radial structure of the transportation network in Lausanne.
 
-
+Figure \ref{transfers} maps the geographically aggregate transfer flows $z_{ij}$ between lines. As expected, most transfers occur in the city center, with top 5 largest hubs located at St-François (2,132,597 transfers), Lausanne-Gare (2,035,543 transfers), Bel-Air (1,908,168 transfers), Ours (1,057,282 transfers), and Chauderon (969,789 transfers). When taken individually, four of the top 5 transfer counts is predicted between line $1$ and line $72$ occurring at the train station (Lausanne-Gare). Line 72 is actually a subway line connecting north and south region of the city, and is by far the most used line in the network. Line $1$ is also a very frequented line and operated toward the western region of the city. It is not surprising to see most transfer occurring between these two lines, as they permit to connect the region with an high density of public transportation network users (the western part of Lausanne), to the main artery of the network (line 72).
 
 \begin{figure}[h]
 	\includegraphics[width=0.46\textwidth]{fig/afc_in_dim1.png}
 	\includegraphics[width=0.46\textwidth]{fig/afc_in_dim2.png} \\
 	\includegraphics[width=0.46\textwidth]{fig/afc_out_dim1.png}
 	\includegraphics[width=0.46\textwidth]{fig/afc_out_dim2.png}
-	\caption{Color representations (red positive value, blue negative values) of factorial coordinates of stops, after Correspondence analysis (CA) performed on matrix $\mathbf{N}$. Top figures map stops as ``origin profiles" (``where passengers are going"), bottom figures map stops as ``destination profile" (``where passengers are coming from"). Left column is the first factorial dimension, right column is the second factorial dimension. Ring sizes correspond to the number of embarkments (top) and disembarkment (bottom).}
+	\caption{Color representations (positive values in red, negative values in blue) of the first two factorial coordinates of stops, after Correspondence analysis (CA) performed on transportation matrix $\mathbf{N}$. Top row maps stops as ``origin profiles" (``where passengers are going"), bottom row maps stops as ``destination profile" (``where passengers are coming from"). Left column is the first factorial dimension, right column is the second factorial dimension. Ring sizes correspond to the number of embarkments (top) and disembarkment (bottom).}
 	\label{afc}
+\end{figure}
+
+\begin{figure}[h]
+	\includegraphics[width=0.97\textwidth]{fig/transfers.png}
+	\caption{Location and size (ring size and color) of estimated transfer flows $z_{ij}$ between lines.}
+	\label{transfers}
 \end{figure}
 
 \subsubsection{Results}
