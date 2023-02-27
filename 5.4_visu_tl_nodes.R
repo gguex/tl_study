@@ -31,6 +31,7 @@ coord = read.csv2("utilities/data_processing/stop_frequentation2.csv")
 coord$id = paste0("S", coord$code_ligne_theo,"_", coord$direction_voy_theo, "_",
                   coord$code_arret_theo)
 coord = coord[,c(11, 9, 10)]
+coord$id <- gsub("\\s+", "", coord$id)
 
 # Join i
 transfer_df <- left_join(
