@@ -21,23 +21,23 @@ source("local_functions.R")
 # --- Test 6789
 
 # The folder containing pre-processed data
-# data_folder = "multilines_data/preprocessed_data/test_mc_6789"
-# # Output folder for results
-# out_folder = "results/test_mc_6789"
+data_folder = "multilines_data/preprocessed_data/test_mc_6789"
+# Output folder for results
+out_folder = "results/test_mc_6789"
 
 # --- all lines
 
-# The folder containing pre-processed data
-data_folder = "multilines_data/preprocessed_data/all_lines"
-# Output folder for results
-out_folder = "results/all_lines"
+# # The folder containing pre-processed data
+# data_folder = "multilines_data/preprocessed_data/all_lines"
+# # Output folder for results
+# out_folder = "results/all_lines"
 
 # Conv threshold for iterative fitting
 conv_thres_if = 1e-5
 # Conv threshold
-conv_thres_algo = 1e-8
+conv_thres_algo = 1e-7
 # proportional limit 
-min_p_ntwk = 0.1
+min_p_ntwk = 0
 # epsilon
 epsilon = 1e-40
 # max iterations
@@ -64,17 +64,19 @@ sp_edge_link = readMM(paste0(data_folder, "/sp_edge_link.mtx"))
 
 # --- Run the algorithm 
 
-n_mat = compute_origin_destination(flow_l_in,
-                                   flow_l_out,
-                                   edge_ref,
-                                   sp_ref, 
-                                   sp_edge_link, 
-                                   min_p_ntwk=min_p_ntwk,
-                                   conv_thres_algo=conv_thres_algo,
-                                   conv_thres_if=conv_thres_if,
-                                   epsilon=epsilon,
-                                   max_it=max_it,
-                                   max_it_if=max_it_if)
+alg_res = compute_origin_destination(flow_l_in,
+                                     flow_l_out,
+                                     edge_ref,
+                                     sp_ref, 
+                                     sp_edge_link, 
+                                     min_p_ntwk=min_p_ntwk,
+                                     conv_thres_algo=conv_thres_algo,
+                                     conv_thres_if=conv_thres_if,
+                                     epsilon=epsilon,
+                                     max_it=max_it,
+                                     max_it_if=max_it_if, 
+                                     return_details=T)
+n_mat = alg_res$n_mat
 
 # --- Save the results
 
@@ -117,3 +119,5 @@ write.table(x_res$x_mat, paste0(out_folder, "/x_mat.csv"), sep=",",
             row.names=F, col.names=F)
 write.table(x_res$x_btw, paste0(out_folder, "/x_btw.csv"), sep=",",
             row.names=F, col.names=F)
+write.table(alg_res$iterations_df, paste0(out_folder, "/iterations_df.csv"), 
+            sep=",", row.names=F)

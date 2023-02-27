@@ -27,15 +27,15 @@ stop_names = trimws(paste(paste0("S", line_data$code_ligne_theo),
 # --- Pedestrian time matrix
 
 # Pedestrian time martix 
-ped_time_mat = read.csv("ped_time_tot.csv", sep=",")
-ped_time_names = names(ped_time_mat)
-formatted_names = c()
-for(name in ped_time_names){
-  f_name = str_replace_all(name, "[\\.]+$", "")
-  f_name = str_replace_all(f_name, "\\.", "-")
-  f_name = paste0("S", str_sub(f_name, 2))
-  formatted_names = c(formatted_names, f_name)
-}
+ped_time_mat = read.csv("ped_time_tot.csv", sep=",", header=F)
+# ped_time_names = names(ped_time_mat)
+# formatted_names = c()
+# for(name in ped_time_names){
+#   f_name = str_replace_all(name, "[\\.]+$", "")
+#   f_name = str_replace_all(f_name, "\\.", "-")
+#   f_name = paste0("S", str_sub(f_name, 2))
+#   formatted_names = c(formatted_names, f_name)
+# }
 
 #---------------------------
 # Building new datasets  

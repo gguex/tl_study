@@ -1,0 +1,383 @@
+%% BioMed_Central_Bib_Style_v1.01
+
+\begin{thebibliography}{12}
+% BibTex style file: bmc-mathphys.bst (version 2.1), 2014-07-24
+\ifx \bisbn   \undefined \def \bisbn  #1{ISBN #1}\fi
+\ifx \binits  \undefined \def \binits#1{#1}\fi
+\ifx \bauthor  \undefined \def \bauthor#1{#1}\fi
+\ifx \batitle  \undefined \def \batitle#1{#1}\fi
+\ifx \bjtitle  \undefined \def \bjtitle#1{#1}\fi
+\ifx \bvolume  \undefined \def \bvolume#1{\textbf{#1}}\fi
+\ifx \byear  \undefined \def \byear#1{#1}\fi
+\ifx \bissue  \undefined \def \bissue#1{#1}\fi
+\ifx \bfpage  \undefined \def \bfpage#1{#1}\fi
+\ifx \blpage  \undefined \def \blpage #1{#1}\fi
+\ifx \burl  \undefined \def \burl#1{\textsf{#1}}\fi
+\ifx \doiurl  \undefined \def \doiurl#1{\textsf{#1}}\fi
+\ifx \betal  \undefined \def \betal{\textit{et al.}}\fi
+\ifx \binstitute  \undefined \def \binstitute#1{#1}\fi
+\ifx \binstitutionaled  \undefined \def \binstitutionaled#1{#1}\fi
+\ifx \bctitle  \undefined \def \bctitle#1{#1}\fi
+\ifx \beditor  \undefined \def \beditor#1{#1}\fi
+\ifx \bpublisher  \undefined \def \bpublisher#1{#1}\fi
+\ifx \bbtitle  \undefined \def \bbtitle#1{#1}\fi
+\ifx \bedition  \undefined \def \bedition#1{#1}\fi
+\ifx \bseriesno  \undefined \def \bseriesno#1{#1}\fi
+\ifx \blocation  \undefined \def \blocation#1{#1}\fi
+\ifx \bsertitle  \undefined \def \bsertitle#1{#1}\fi
+\ifx \bsnm \undefined \def \bsnm#1{#1}\fi
+\ifx \bsuffix \undefined \def \bsuffix#1{#1}\fi
+\ifx \bparticle \undefined \def \bparticle#1{#1}\fi
+\ifx \barticle \undefined \def \barticle#1{#1}\fi
+\ifx \bconfdate \undefined \def \bconfdate #1{#1}\fi
+\ifx \botherref \undefined \def \botherref #1{#1}\fi
+\ifx \url \undefined \def \url#1{\textsf{#1}}\fi
+\ifx \bchapter \undefined \def \bchapter#1{#1}\fi
+\ifx \bbook \undefined \def \bbook#1{#1}\fi
+\ifx \bcomment \undefined \def \bcomment#1{#1}\fi
+\ifx \oauthor \undefined \def \oauthor#1{#1}\fi
+\ifx \citeauthoryear \undefined \def \citeauthoryear#1{#1}\fi
+\ifx \endbibitem  \undefined \def \endbibitem {}\fi
+\ifx \bconflocation  \undefined \def \bconflocation#1{#1}\fi
+\ifx \arxivurl  \undefined \def \arxivurl#1{\textsf{#1}}\fi
+\csname PreBibitemsHook\endcsname
+
+%%% 1
+\bibitem{peyre2019computational}
+\begin{barticle}
+\bauthor{\bsnm{Peyr{\'e}}, \binits{G.}},
+\bauthor{\bsnm{Cuturi}, \binits{M.}}, \betal:
+\batitle{Computational optimal transport: With applications to data science}.
+\bjtitle{Foundations and Trends{\textregistered} in Machine Learning}
+\bvolume{11}(\bissue{5-6}),
+\bfpage{355}--\blpage{607}
+(\byear{2019})
+\end{barticle}
+\endbibitem
+
+%%% 2
+\bibitem{bell1997transportation}
+\begin{bbook}
+\bauthor{\bsnm{Bell}, \binits{M.G.}},
+\bauthor{\bsnm{Lida}, \binits{Y.}}:
+\bbtitle{Transportation Network Analysis}.
+\bpublisher{Wiley},
+\blocation{Chichester}
+(\byear{1997})
+\end{bbook}
+\endbibitem
+
+%%% 3
+\bibitem{hazelton2000estimation}
+\begin{barticle}
+\bauthor{\bsnm{Hazelton}, \binits{M.L.}}:
+\batitle{Estimation of origin--destination matrices from link flows on
+  uncongested networks}.
+\bjtitle{Transportation Research Part B: Methodological}
+\bvolume{34}(\bissue{7}),
+\bfpage{549}--\blpage{566}
+(\byear{2000})
+\end{barticle}
+\endbibitem
+
+%%% 4
+\bibitem{ashok2002estimation}
+\begin{barticle}
+\bauthor{\bsnm{Ashok}, \binits{K.}},
+\bauthor{\bsnm{Ben-Akiva}, \binits{M.E.}}:
+\batitle{Estimation and prediction of time-dependent origin-destination flows
+  with a stochastic mapping to path flows and link flows}.
+\bjtitle{Transportation science}
+\bvolume{36}(\bissue{2}),
+\bfpage{184}--\blpage{198}
+(\byear{2002})
+\end{barticle}
+\endbibitem
+
+%%% 5
+\bibitem{cui2006bus}
+\begin{botherref}
+\oauthor{\bsnm{Cui}, \binits{A.}}:
+Bus passenger origin-destination matrix estimation using automated data
+  collection systems.
+PhD thesis,
+Massachusetts Institute of Technology
+(2006)
+\end{botherref}
+\endbibitem
+
+%%% 6
+\bibitem{jaynes1957information}
+\begin{barticle}
+\bauthor{\bsnm{Jaynes}, \binits{E.T.}}:
+\batitle{Information theory and statistical mechanics}.
+\bjtitle{Physical review}
+\bvolume{106}(\bissue{4}),
+\bfpage{620}
+(\byear{1957})
+\end{barticle}
+\endbibitem
+
+%%% 7
+\bibitem{wilson1967statistical}
+\begin{barticle}
+\bauthor{\bsnm{Wilson}, \binits{A.}}:
+\batitle{A statistical theory of spatial distribution models}.
+\bjtitle{Transportation Research}
+\bvolume{1}(\bissue{3}),
+\bfpage{253}--\blpage{269}
+(\byear{1967})
+\end{barticle}
+\endbibitem
+
+%%% 8
+\bibitem{erlander1990gravity}
+\begin{bbook}
+\bauthor{\bsnm{Erlander}, \binits{S.}},
+\bauthor{\bsnm{Stewart}, \binits{N.F.}}:
+\bbtitle{The Gravity Model in Transportation Analysis: Theory and Extensions}
+vol. \bseriesno{3}.
+\bpublisher{VSP},
+\blocation{Leiden}
+(\byear{1990})
+\end{bbook}
+\endbibitem
+
+%%% 9
+\bibitem{dempster1977maximum}
+\begin{barticle}
+\bauthor{\bsnm{Dempster}, \binits{A.P.}},
+\bauthor{\bsnm{Laird}, \binits{N.M.}},
+\bauthor{\bsnm{Rubin}, \binits{D.B.}}:
+\batitle{Maximum likelihood from incomplete data via the {E}{M} algorithm}.
+\bjtitle{Journal of the royal statistical society: series B (methodological)}
+\bvolume{39}(\bissue{1}),
+\bfpage{1}--\blpage{22}
+(\byear{1977})
+\end{barticle}
+\endbibitem
+
+%%% 10
+\bibitem{bavaud2009information}
+\begin{bchapter}
+\bauthor{\bsnm{Bavaud}, \binits{F.}}:
+\bctitle{Information theory, relative entropy and statistics}.
+In: \beditor{\bsnm{Sommaruga}, \binits{G.}} (ed.)
+\bbtitle{Formal Theories of Information: From Shannon to Semantic Information
+  Theory and General Concepts of Information}.
+\bsertitle{LNCS},
+vol. \bseriesno{5363},
+pp. \bfpage{54}--\blpage{78}.
+\bpublisher{Springer},
+\blocation{Berlin}
+(\byear{2009})
+\end{bchapter}
+\endbibitem
+
+%%% 11
+\bibitem{bavaud2002quasi}
+\begin{barticle}
+\bauthor{\bsnm{Bavaud}, \binits{F.}}:
+\batitle{The quasi-symmetric side of gravity modelling}.
+\bjtitle{Environment and Planning A}
+\bvolume{34}(\bissue{1}),
+\bfpage{61}--\blpage{79}
+(\byear{2002})
+\end{barticle}
+\endbibitem
+
+%%% 12
+\bibitem{Thomas-Agnan2021}
+\begin{bbook}
+\bauthor{\bsnm{Thomas-Agnan}, \binits{C.}},
+\bauthor{\bsnm{LeSage}, \binits{J.P.}}:
+In: \beditor{\bsnm{Fischer}, \binits{M.M.}},
+\beditor{\bsnm{Nijkamp}, \binits{P.}} (eds.)
+\bbtitle{Spatial Econometric OD-Flow Models},
+pp. \bfpage{2179}--\blpage{2199}.
+\bpublisher{Springer},
+\blocation{Berlin, Heidelberg}
+(\byear{2021})
+\end{bbook}
+\endbibitem
+
+\end{thebibliography}
+
+\newcommand{\BMCxmlcomment}[1]{}
+
+\BMCxmlcomment{
+
+<refgrp>
+
+<bibl id="B1">
+  <title><p>Computational optimal transport: With applications to data
+  science</p></title>
+  <aug>
+    <au><snm>Peyr{\'e}</snm><fnm>G</fnm></au>
+    <au><snm>Cuturi</snm><fnm>M</fnm></au>
+    <au><cnm>others</cnm></au>
+  </aug>
+  <source>Foundations and Trends{\textregistered} in Machine Learning</source>
+  <publisher>Now Publishers, Inc.</publisher>
+  <pubdate>2019</pubdate>
+  <volume>11</volume>
+  <issue>5-6</issue>
+  <fpage>355</fpage>
+  <lpage>-607</lpage>
+</bibl>
+
+<bibl id="B2">
+  <title><p>Transportation network analysis</p></title>
+  <aug>
+    <au><snm>Bell</snm><fnm>MG</fnm></au>
+    <au><snm>Lida</snm><fnm>Y</fnm></au>
+  </aug>
+  <publisher>Chichester: Wiley</publisher>
+  <pubdate>1997</pubdate>
+</bibl>
+
+<bibl id="B3">
+  <title><p>Estimation of origin--destination matrices from link flows on
+  uncongested networks</p></title>
+  <aug>
+    <au><snm>Hazelton</snm><fnm>ML</fnm></au>
+  </aug>
+  <source>Transportation Research Part B: Methodological</source>
+  <publisher>Elsevier</publisher>
+  <pubdate>2000</pubdate>
+  <volume>34</volume>
+  <issue>7</issue>
+  <fpage>549</fpage>
+  <lpage>-566</lpage>
+</bibl>
+
+<bibl id="B4">
+  <title><p>Estimation and prediction of time-dependent origin-destination
+  flows with a stochastic mapping to path flows and link flows</p></title>
+  <aug>
+    <au><snm>Ashok</snm><fnm>K</fnm></au>
+    <au><snm>Ben Akiva</snm><fnm>ME</fnm></au>
+  </aug>
+  <source>Transportation science</source>
+  <publisher>INFORMS</publisher>
+  <pubdate>2002</pubdate>
+  <volume>36</volume>
+  <issue>2</issue>
+  <fpage>184</fpage>
+  <lpage>-198</lpage>
+</bibl>
+
+<bibl id="B5">
+  <title><p>Bus passenger origin-destination matrix estimation using automated
+  data collection systems</p></title>
+  <aug>
+    <au><snm>Cui</snm><fnm>A</fnm></au>
+  </aug>
+  <source>PhD thesis</source>
+  <publisher>Massachusetts Institute of Technology</publisher>
+  <pubdate>2006</pubdate>
+</bibl>
+
+<bibl id="B6">
+  <title><p>Information theory and statistical mechanics</p></title>
+  <aug>
+    <au><snm>Jaynes</snm><fnm>ET</fnm></au>
+  </aug>
+  <source>Physical review</source>
+  <publisher>APS</publisher>
+  <pubdate>1957</pubdate>
+  <volume>106</volume>
+  <issue>4</issue>
+  <fpage>620</fpage>
+</bibl>
+
+<bibl id="B7">
+  <title><p>A statistical theory of spatial distribution models</p></title>
+  <aug>
+    <au><snm>Wilson</snm><fnm>AG</fnm></au>
+  </aug>
+  <source>Transportation Research</source>
+  <publisher>Elsevier</publisher>
+  <pubdate>1967</pubdate>
+  <volume>1</volume>
+  <issue>3</issue>
+  <fpage>253</fpage>
+  <lpage>-269</lpage>
+</bibl>
+
+<bibl id="B8">
+  <title><p>The gravity model in transportation analysis: theory and
+  extensions</p></title>
+  <aug>
+    <au><snm>Erlander</snm><fnm>S</fnm></au>
+    <au><snm>Stewart</snm><fnm>NF</fnm></au>
+  </aug>
+  <publisher>Leiden: VSP</publisher>
+  <pubdate>1990</pubdate>
+  <volume>3</volume>
+</bibl>
+
+<bibl id="B9">
+  <title><p>Maximum likelihood from incomplete data via the {E}{M}
+  algorithm</p></title>
+  <aug>
+    <au><snm>Dempster</snm><fnm>AP</fnm></au>
+    <au><snm>Laird</snm><fnm>NM</fnm></au>
+    <au><snm>Rubin</snm><fnm>DB</fnm></au>
+  </aug>
+  <source>Journal of the royal statistical society: series B
+  (methodological)</source>
+  <publisher>Wiley Online Library</publisher>
+  <pubdate>1977</pubdate>
+  <volume>39</volume>
+  <issue>1</issue>
+  <fpage>1</fpage>
+  <lpage>-22</lpage>
+</bibl>
+
+<bibl id="B10">
+  <title><p>Information theory, relative entropy and statistics</p></title>
+  <aug>
+    <au><snm>Bavaud</snm><fnm>F</fnm></au>
+  </aug>
+  <source>Formal Theories of Information: From Shannon to Semantic Information
+  Theory and General Concepts of Information</source>
+  <publisher>Berlin: Springer</publisher>
+  <editor>Sommaruga, Giovanni</editor>
+  <series><title><p>LNCS</p></title></series>
+  <pubdate>2009</pubdate>
+  <volume>5363</volume>
+  <fpage>54</fpage>
+  <lpage>78</lpage>
+</bibl>
+
+<bibl id="B11">
+  <title><p>The quasi-symmetric side of gravity modelling</p></title>
+  <aug>
+    <au><snm>Bavaud</snm><fnm>F</fnm></au>
+  </aug>
+  <source>Environment and Planning A</source>
+  <publisher>SAGE Publications Sage UK: London, England</publisher>
+  <pubdate>2002</pubdate>
+  <volume>34</volume>
+  <issue>1</issue>
+  <fpage>61</fpage>
+  <lpage>-79</lpage>
+</bibl>
+
+<bibl id="B12">
+  <title><p>Spatial Econometric OD-Flow Models</p></title>
+  <aug>
+    <au><snm>Thomas Agnan</snm><fnm>C</fnm></au>
+    <au><snm>LeSage</snm><fnm>JP</fnm></au>
+  </aug>
+  <source>Handbook of Regional Science</source>
+  <publisher>Berlin, Heidelberg: Springer Berlin Heidelberg</publisher>
+  <editor>Fischer, Manfred M. and Nijkamp, Peter</editor>
+  <pubdate>2021</pubdate>
+  <fpage>2179</fpage>
+  <lpage>-2199</lpage>
+</bibl>
+
+</refgrp>
+} % end of \BMCxmlcomment
