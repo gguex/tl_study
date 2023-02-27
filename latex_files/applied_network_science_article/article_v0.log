@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.1.9)  27 FEB 2023 17:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.1.9)  27 FEB 2023 17:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -784,22 +784,22 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 [11 <./fig/iterations.pdf>] [12 <./fig/MTE_passengers.pdf> <./fig/MTE_tours.pdf
 >] [13]
-<fig/afc_in_dim1.png, id=445, 1126.2075pt x 730.73pt>
+<fig/afc_in_dim1.png, id=452, 1126.2075pt x 730.73pt>
 File: fig/afc_in_dim1.png Graphic file (type png)
 <use fig/afc_in_dim1.png>
 Package pdftex.def Info: fig/afc_in_dim1.png  used on input line 564.
 (pdftex.def)             Requested size: 166.06242pt x 107.7427pt.
-<fig/afc_in_dim2.png, id=447, 1126.2075pt x 730.73pt>
+<fig/afc_in_dim2.png, id=454, 1126.2075pt x 730.73pt>
 File: fig/afc_in_dim2.png Graphic file (type png)
 <use fig/afc_in_dim2.png>
 Package pdftex.def Info: fig/afc_in_dim2.png  used on input line 565.
 (pdftex.def)             Requested size: 166.06242pt x 107.7427pt.
-<fig/afc_out_dim1.png, id=448, 1126.2075pt x 730.73pt>
+<fig/afc_out_dim1.png, id=455, 1126.2075pt x 730.73pt>
 File: fig/afc_out_dim1.png Graphic file (type png)
 <use fig/afc_out_dim1.png>
 Package pdftex.def Info: fig/afc_out_dim1.png  used on input line 566.
 (pdftex.def)             Requested size: 166.06242pt x 107.7427pt.
-<fig/afc_out_dim2.png, id=449, 1126.2075pt x 730.73pt>
+<fig/afc_out_dim2.png, id=456, 1126.2075pt x 730.73pt>
 File: fig/afc_out_dim2.png Graphic file (type png)
 <use fig/afc_out_dim2.png>
 Package pdftex.def Info: fig/afc_out_dim2.png  used on input line 567.
@@ -810,7 +810,7 @@ Package caption Warning: The option `hypcap=true' will be ignored for this
 (caption)                particular \caption on input line 568.
 See the caption package documentation for explanation.
 
-<fig/transfers.png, id=450, 1427.3325pt x 964.60374pt>
+<fig/transfers.png, id=457, 1427.3325pt x 964.60374pt>
 File: fig/transfers.png Graphic file (type png)
 <use fig/transfers.png>
 Package pdftex.def Info: fig/transfers.png  used on input line 573.
@@ -845,13 +845,13 @@ Package rerunfilecheck Info: File `article_v0.out' has not changed.
 (rerunfilecheck)             Checksum: 0BAAA40174789273DE630DF3C8E8ABB1;4235.
  ) 
 Here is how much of TeX's memory you used:
- 13706 strings out of 478287
- 217258 string characters out of 5849290
- 518213 words of memory out of 5000000
- 31509 multiletter control sequences out of 15000+600000
+ 13711 strings out of 478287
+ 217343 string characters out of 5849290
+ 518289 words of memory out of 5000000
+ 31511 multiletter control sequences out of 15000+600000
  559260 words of font info for 209 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 69i,14n,79p,1517b,529s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 69i,14n,79p,1503b,529s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist
@@ -866,10 +866,10 @@ xlive/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb></usr/share/texlive/texmf
 8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/s
 hare/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/te
 xmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on article_v0.pdf (16 pages, 2053263 bytes).
+Output written on article_v0.pdf (16 pages, 2054714 bytes).
 PDF statistics:
- 570 PDF objects out of 1000 (max. 8388607)
- 495 compressed objects within 5 object streams
- 108 named destinations out of 1000 (max. 500000)
+ 580 PDF objects out of 1000 (max. 8388607)
+ 504 compressed objects within 6 object streams
+ 111 named destinations out of 1000 (max. 500000)
  240 words of extra memory for PDF output out of 10000 (max. 10000000)
 

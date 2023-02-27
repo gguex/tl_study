@@ -1,6 +1,6 @@
 %% BioMed_Central_Bib_Style_v1.01
 
-\begin{thebibliography}{14}
+\begin{thebibliography}{16}
 % BibTex style file: bmc-mathphys.bst (version 2.1), 2014-07-24
 \ifx \bisbn   \undefined \def \bisbn  #1{ISBN #1}\fi
 \ifx \binits  \undefined \def \binits#1{#1}\fi
@@ -218,6 +218,30 @@ doi:\doiurl{10.21105/joss.01926}
 \endbibitem
 
 %%% 14
+\bibitem{west2001introduction}
+\begin{bbook}
+\bauthor{\bsnm{West}, \binits{D.B.}}, \betal:
+\bbtitle{Introduction to Graph Theory}
+vol. \bseriesno{2}.
+\bpublisher{Prentice hall Upper Saddle River}, \blocation{???}
+(\byear{2001})
+\end{bbook}
+\endbibitem
+
+%%% 15
+\bibitem{Csardi2006}
+\begin{barticle}
+\bauthor{\bsnm{Csardi}, \binits{G.}},
+\bauthor{\bsnm{Nepusz}, \binits{T.}}:
+\batitle{The igraph software package for complex network research}.
+\bjtitle{InterJournal}
+\bvolume{Complex Systems},
+\bfpage{1695}
+(\byear{2006})
+\end{barticle}
+\endbibitem
+
+%%% 16
 \bibitem{benzecri1977histoire}
 \begin{barticle}
 \bauthor{\bsnm{Benz{\'e}cri}, \binits{J.-P.}}:
@@ -424,6 +448,31 @@ doi:\doiurl{10.21105/joss.01926}
 </bibl>
 
 <bibl id="B14">
+  <title><p>Introduction to graph theory</p></title>
+  <aug>
+    <au><snm>West</snm><fnm>DB</fnm></au>
+    <au><cnm>others</cnm></au>
+  </aug>
+  <publisher>Prentice hall Upper Saddle River</publisher>
+  <pubdate>2001</pubdate>
+  <volume>2</volume>
+</bibl>
+
+<bibl id="B15">
+  <title><p>The igraph software package for complex network
+  research</p></title>
+  <aug>
+    <au><snm>Csardi</snm><fnm>G</fnm></au>
+    <au><snm>Nepusz</snm><fnm>T</fnm></au>
+  </aug>
+  <source>InterJournal</source>
+  <pubdate>2006</pubdate>
+  <volume>Complex Systems</volume>
+  <fpage>1695</fpage>
+  <url>https://igraph.org</url>
+</bibl>
+
+<bibl id="B16">
   <title><p>Histoire et pr{\'e}histoire de l'analyse des donn{\'e}es. Partie V
   L'analyse des correspondances</p></title>
   <aug>

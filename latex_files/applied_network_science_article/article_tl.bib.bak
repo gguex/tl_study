@@ -189,7 +189,7 @@ pages="2179--2199"
   volume    = {2},
 }
 
-@Article{Csardi2006,
+@Article{,
   author  = {Gabor Csardi and Tamas Nepusz},
   journal = {InterJournal},
   title   = {The igraph software package for complex network research},
