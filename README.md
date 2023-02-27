@@ -24,3 +24,10 @@ well as with the data of the public transportation network of the city of
 Lausanne provided by its Transportation Agency (tl), and gives arguably
 convincing estimations of the transportation flow.
 
+## Keywords 
+
+multiline bus network; origin-destination flows; boarding and alighting counts; transit flows; maximum entropy estimation; iterative
+proportional fitting
+
+## Some Results
+
