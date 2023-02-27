@@ -64,10 +64,10 @@ rownames(n_mat) = stop_names
 res.ca <- CA(n_mat, graph = FALSE)
 
 if (up_down == "up") {
-  CA_dim = res.ca$row$coord[,1:2]
+  CA_dim = res.ca$row$coord[, 1:2]
 }
 if (up_down == "down") {
-  CA_dim = res.ca$col$coord[,1:2]
+  CA_dim = res.ca$col$coord[, 1:2]
 }
 
 colnames(CA_dim) <- c("dim1","dim2")
@@ -150,7 +150,7 @@ CA_map2 = leaflet(CA_shp) %>%
     # radius = ((CA_shp$montees)/max(CA_shp$montees)*100000)^0.45, # coefficient de correction avec un minimum de largeur de 1
     radius = ((CA_shp$CA_radius)/max(CA_shp$CA_radius)*100000)^0.45, # coefficient de correction avec un minimum de largeur de 1
     fillColor = "transparent",
-    opacity = 1,
+    opacity = ((CA_shp$CA_radius)/max(CA_shp$CA_radius))^0.05,
     color = ~colorPal1(dim1),
     highlight = highlightOptions(
       color = "white",
@@ -162,7 +162,7 @@ CA_map2 = leaflet(CA_shp) %>%
     # radius = ((CA_shp$montees)/max(CA_shp$montees)*100000)^0.45, # coefficient de correction avec un minimum de largeur de 1
     radius = ((CA_shp$CA_radius)/max(CA_shp$CA_radius)*100000)^0.45, # coefficient de correction avec un minimum de largeur de 1
     fillColor = "transparent",
-    opacity = 1,
+    opacity = ((CA_shp$CA_radius)/max(CA_shp$CA_radius))^0.05,
     color = ~colorPal2(dim2),
     highlight = highlightOptions(
       color = "white",
