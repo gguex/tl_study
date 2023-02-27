@@ -105,7 +105,7 @@ email={fbavaud@unil.ch}
 \begin{abstractbox}
 
 \begin{abstract} % abstract
-Characterizing a public transportation network, such as an urban network with multiple lines, requires the origin-destination trip counts during a given period. Yet, if automatic counting makes the embarkment (boarding) and disembarkment (alighting) counts in vehicles known, it often happens that pedestrian transfers between lines are harder to track, and require costly and invasive devices (e.g., facial recognition system) to be estimated. In this contribution, we propose a method, based on maximum entropy and involving an iterative fitting procedure, which estimates the passenger flow between origins and destinations solely based on embarkment and disembarkment flows. Moreover, this method is flexible enough to provide an adaptable framework in case additional data is known, such as attraction poles between certain points in the network, or percentages of transferring passengers between some lines. This method is tested on toy examples, as well as with the data of the public transportation network of the city of Lausanne provided by its Transportation Agency (tl), and gives convincing estimations of the transportation flow.
+Characterizing a public transportation network, such as an urban network with multiple lines, requires the origin-destination trip counts during a given period. Yet, if automatic counting makes the embarkment (boarding) and disembarkment (alighting) counts in vehicles known, it often happens that pedestrian transfers between lines are harder to track, and require costly and invasive devices (e.g., facial recognition system) to be estimated. In this contribution, we propose a method, based on maximum entropy and involving an iterative fitting procedure, which estimates the passenger flow between origins and destinations solely based on embarkment and disembarkment counts. Moreover, this method is flexible enough to provide an adaptable framework in case additional data is known, such as attraction poles between certain points in the network, or percentages of transferring passengers between some lines. This method is tested on toy examples, as well as with the data of the public transportation network of the city of Lausanne provided by its Transportation Agency (tl), and gives arguably convincing estimations of the transportation flow.
 \end{abstract}
 
 % Keywords begin here  
@@ -141,9 +141,11 @@ They also constitute an endless source of inspiration in formal modeling and opt
 
 This contribution addresses a straightforward, yet central question  in public transportation networks: given a network made of many train, bus, subway, or tram lines, how can one estimate the real trips made by the travelers, on the sole basis of the embarkment (boarding) counts and disembarkment (alighting) counts in each vehicle? Although estimating origin-destination flows is a much addressed issue in transportation modeling (see e.g \cite{bell1997transportation} \cite{hazelton2000estimation} \cite{ashok2002estimation} \cite{cui2006bus} and references therein), the specific problem addressed in this contribution seems, to the best of our knowledge, original. 
 
-Pedestrian transfers of travelers between different lines here constitute the missing information, which planners traditionally try to estimate using census, or more recently with costly and invasive devices located at station, such as mobile phone tracking or facial recognition systems. In this article, we take a different approach, which is to give the best estimation of transportation trajectories without additional data, using the principle of maximum entropy. Section \ref{notforma} introduces the notations and the formalism, as well as the statement of the problem and the iterative solution method, which consist of three consecutive steps: a maximum-entropy computation of the trip distributions, obeying marginal constraints and with a given prior;  an update of the prior distribution by shrinking the components responsible for overflow; and an update of the marginal flows to avoid transfer overflow. This iterative procedure clearly evokes the EM algorithm (see e.g. \cite{dempster1977maximum}  \cite{bavaud2009information}), with the first step corresponding to the ``expectation step" and last two steps to the ``maximization step". The fist step only is required for solving the single line case (section \ref{Single line}), naturally much simpler but  yet  not trivial, and exhibiting a disembarking probability independent of the embarking stop (Markov property).  Moreover, this solution offer some flexibility, as it is possible to set a prior distribution taking into account attraction or repulsion poles among stops, and to fix hyperparameters limiting the number of transfers between lines.
+Pedestrian transfers of travelers between different lines here constitute the missing information, which planners traditionally attempt to estimate using census, or more recently with costly and invasive devices located at station, such as mobile phone tracking or facial recognition systems. In this article, we take a different approach, which is to produce the optimal estimation of transportation trajectories without additional data, using the principle of maximum entropy. The proposed solution consists of three consecutive steps: a maximum-entropy computation of the trip distributions, obeying marginal constraints and with a given prior;  an update of the prior distribution by shrinking the components responsible for overflow; and an update of the marginal flows to avoid transfer overflow. This iterative procedure clearly evokes the EM algorithm (see e.g. \cite{dempster1977maximum}  \cite{bavaud2009information}), with the first step corresponding to the ``expectation step" and last two steps to the ``maximization step". The fist step only is required for solving the single line case, naturally much simpler but  yet  not trivial, and exhibiting a disembarking probability independent of the embarking stop (Markov property). Moreover, this solution offers some flexibility, as it is possible to set a prior distribution taking into account attraction or repulsion poles among stops, and to fix hyperparameters limiting the number of transfers between lines.
 
-In section \ref{casestudies}, we test the propose method on toy examples and with the data of the public transportation network of the city of Lausanne. Toy examples offer some kind of validation, as a transportation flow can be set on toy networks and compared to the solution given by our algorithm. The real case scenario with the data from the public transportation network of the city of Lausanne shows that this method is applicable on a large transportation network and can give pertinent insights about travelers habits.
+As case studies, we test the proposed method on toy examples as well as with the data of the public transportation network of the city of Lausanne, in Switzerland. Toy examples offer some kind of validation, as a transportation flow can be entirely set on toy networks and compared to the solution given by our algorithm. The real case scenario with the data from the Lausanne public transportation network demonstrates that this method is applicable on a large transportation network and can yield pertinent insights about traveler habits.
+
+Section \ref{notforma} introduces the notations and the formalism, as well as the statement of the problem and the proposed solution. Section \ref{casestudies} contains case studies of the method on toy examples and on the data from the Lausanne public transportation network. Section \ref{conclusion} concludes the article.
 
 
 %% --------------------------------- NOTATIONS AND FORMALISM
@@ -178,7 +180,7 @@ The succession of edges $(i, j)$ belonging to the $st$-trip, noted $(i,j)\in [s,
 \end{cases}
 \end{equation}
 
-Note that we can also forbid some aberrant trips across the network, for example, trips $[s, t]$ where $(s, t)$ is a transfer edge (making this trip do not actually use the line network). The \emph{set of permitted trips} across the network is denoted by $P$, and can be defined regarding some conditions.
+Note that we can also forbid some aberrant trips across the network, for example, trips $[s, t]$ where $(s, t)$ is a transfer edge (making this trip do not actually use the line network). The \emph{set of permitted trips} across the network is denoted by $P$, and can be defined following some conditions (see, e.g., section \ref{example_construction}).
 
 \vspace*{0.1cm}
 
@@ -236,11 +238,9 @@ As explained in section \ref{Lines and junctions}, transfers can only occur at j
 
  
 \subsection{Statement of the problem and solution method}
-\emph{Automatic passenger counters} measure the number of passengers entering and leaving lines at each stop [Boyle, 1998], that is $\mathbf{a}$ and $\mathbf{b}$, which provide the basic raw data of the present study, kindly provided by the Lausanne Transportation Agency (tl) for the case study in section \ref{real_data}. We will suppose here that this data obeys the necessary consistency conditions for embarkment and disembarkment counts which can be found in the Appendix, even if, in real case studies, a rescaling must usually be performed to balance in and out-flows on each lines (also given in the Appendix).
+\emph{Automatic passenger counters} measure the number of passengers entering and leaving lines at each stop [Boyle, 1998], that is $\mathbf{a}$ and $\mathbf{b}$, which provide the basic raw data of the present study, kindly provided by the Lausanne Transportation Agency (tl) for the case study in section \ref{real_data}. We will suppose here that this data obeys the necessary consistency conditions for embarkment and disembarkment counts which can be found in appendix, even if, in real case studies, a rescaling must usually be performed to balance in and out-flows on each lines (also given in appendix).
 
-Intra-line edge flows $\mathbf{Y}=(y_{ij})$ can be determined by (\ref{bilan1ligne}), but transfer edge flows $\mathbf{Z}=(z_{ij})$ are, here and typically, unknown. The objective is to estimate the $l\times l$ transportation flow matrix $\mathbf{N}=(n_{st})$. Many consistent solutions coexist in general, even for a single line with no transferts (section \ref{Single line}). This issue of incompletely observed data can be tackled by the maximum entropy formalism \cite{jaynes1957information}, which has often been the case in transportation modelling researches \cite{wilson1967statistical}  \cite{erlander1990gravity}. 
-
-
+Intra-line edge flows $\mathbf{Y}=(y_{ij})$ can be determined by (\ref{bilan1ligne}), but transfer edge flows $\mathbf{Z}=(z_{ij})$ are, here and typically, unknown. The objective is to estimate the $l\times l$ transportation flow matrix $\mathbf{N}=(n_{st})$. Many consistent solutions coexist in general, even for a single line with no transferts (section \ref{Single line}). This issue of incompletely observed data can be tackled by the maximum entropy formalism \cite{jaynes1957information}, which has often been invoked in transportation modeling researches \cite{wilson1967statistical}  \cite{erlander1990gravity}. 
 
 Let $f_{st}=n_{st}/n_{\bullet\bullet}$ be the \emph{distribution of $st$-trips} (empirical distribution) and let $g_{st}$ be some prior guess on its shape (theoretical distribution). 
 Assuming some reasonable initial prior $g_{st}$, 
@@ -250,14 +250,9 @@ Then $f_{st}$ can be determined as the maximum entropy solution (section \ref{ma
 \item[(2)] then (section \ref{priorup}), the prior is updated to $\tilde{g}_{st}$ by shrinking, if necessary, the priors $g_{st}$, thus avoiding transfer overflow exceeding the embarking and disembarking counts at each stop. Moreover, an hyperparameter $\theta \in [0, 1]$ is used at this stage in order to control the minimum proportion of passengers entering/leaving the network at each stop.
 \item[(3)] finally (section \ref{marginup}), the margins are updated to $\tilde{\alpha}_s$ and $\tilde{\beta}_t$.
 \end{itemize}
-With the new prior distribution $\widetilde{g}_{st}$ and the new margin distributions $\widetilde{\alpha}_s$, $\widetilde{\beta}_t$, we can iterate the 
- the above steps, until convergence. The only free parameter is $\theta$, whose effect is studied on toy examples in section \ref{toy_examples}.
+With the new prior distribution $\widetilde{g}_{st}$ and the new margin distributions $\widetilde{\alpha}_s$, $\widetilde{\beta}_t$, we can iterate the above steps, until convergence. The only free parameter is $\theta$, whose effect is studied on toy examples in section \ref{toy_examples}.
  
 The above iterative solution method is somewhat reminiscent of the EM algorithm. As a matter of fact, the first  step  (maximum entropy) exactly correspond to the ``expectation step" of the EM algorithm (see e.g. \cite{dempster1977maximum}  \cite{bavaud2009information}), but steps two and three, aiming at calibrating parameters $g_{st}$, $\alpha_s$ and $\beta_t$, do not follow the maximum likelihood rationale of the ``maximisation step". Pseudocode of the algorithm is shown with Algorithm \ref{algo1}.
-
-
-
-
 
 
 \subsubsection{Maximum entropy estimate of $st$-trips}
@@ -316,25 +311,25 @@ g_{st} = \begin{cases}
   0    & \text{otherwise}.
 \end{cases}
 \end{equation*}
-The initial margins were chosen to initially match $g_{st}$, namely $\alpha_s=g_{s \bullet}$ and $\beta_t=g_{\bullet t}$ for all stops. However, $g_{st}$ could be chosen more carefully in case of additional data. As a matter of fact, they represent \emph{prior attractions} between nodes in equation $\ref{Sol}$, before margin correction given by $\phi_s$ and $\psi_t$ and subsequent algorithm steps. An urban planner could chose to increase or decrease some of these values in order to take into account prior knowledge on commuting habits of inhabitants.
+The initial margins were chosen to initially match $g_{st}$, namely $\alpha_s=g_{s \bullet}$ and $\beta_t=g_{\bullet t}$ for all stops. However, $g_{st}$ could be chosen more carefully in case of additional data. As a matter of fact, $g_{st}$ represent \emph{prior attractions} between nodes in equation (\ref{Sol}), before margin correction given by $\phi_s$ and $\psi_t$ and subsequent algorithm steps. An urban planner could chose to increase or decrease some of these values in order to take into account prior knowledge on commuting habits of inhabitants.
 
 \subsubsection{Embarkment, disembarkment constraints and hyperparameter $\theta$}
 \label{constraints}
 After a single iterative fitting step, the resulting transportation flow $\mathbf{N}=(n_{st})$ and transfer flow $\mathbf{Z}=(z_{ij})$ have little chance to fulfill constraints (\ref{entrer}) and (\ref{sortir}) defined by $\mathbf{a}$ and $\mathbf{b}$, and prior distributions $g_{st}$, $\alpha_s$ and $\beta_t$ must be corrected accordingly.
 
-When $z_{\bullet i} > a_i$, or $z_{i \bullet} > b_i$, the found solution typically predict that there are more passengers entering, respectively exiting, at a stop $i$ than the actual measured quantity. One could be tempted to correct prior distributions in order to have $z_{\bullet i} = a_i$, or $z_{i \bullet} = b_i$, on every problematic nodes $i$, but the latter solution would mean that all passengers entering (resp. exiting) the line at this stop are transiting, which seems unrealistic in most real life scenarios.
+When $z_{\bullet i} > a_i$, or $z_{i \bullet} > b_i$, the found solution typically predicts that there are more passengers entering, respectively exiting, at a stop $i$ than the actual measured quantity. One could be tempted to correct prior distributions in order to have $z_{\bullet i} = a_i$, or $z_{i \bullet} = b_i$, on every problematic nodes $i$, but the latter solution would mean that all passengers entering (resp. exiting) the line at this stop are transiting, which seems unrealistic in most real life scenarios.
 
 We define here the hyperparameter $ \theta\in [0, 1]$ as the \emph{minimum proportion of passengers (among $a_i$ and $b_i$) entering/leaving the \textbf{network} at each stop} (in other words, not transferring), that is
 \begin{equation}
 n_{s\bullet}\ge \theta a_s \qquad\qquad \qquad n_{\bullet t}\ge \theta b_t
 \end{equation}
-or 
+or equivalently 
 \begin{equation}
 	z_{\bullet s} \le (1 - \theta) a_s\qquad\qquad \qquad z_{t \bullet} \le  (1 - \theta) b_t
 \end{equation}
 and updates of distributions will be made accordingly.
 
-Note that, if additional data would be known, we could set a particular value of $\theta$ for every node, and differing for embarkments and disembarkments. However, without addition information, we will restrain to this simpler case. 
+Note that, if additional data were known, we could set a particular value of $\theta$ for every node, and differing for embarkments and disembarkments. However, without additional information, we will restrain to this simpler case. 
 
 \subsubsection{Updating the prior distribution}
 \label{priorup}
@@ -376,7 +371,7 @@ and, with (\ref{entrer}) and (\ref{sortir}), updating margin distributions is st
 \end{equation}
 
 \begin{algorithm}[h]
-	\caption{Compute the transportation flow matrix $\mathbf{N} = (n_{st})$ knowing the edge-trip incidence matrix $\bm{\chi} = (\chi_{ij}^{st})$, the set of transfer edges $T$, the set of permitted trips $P$, the embarking flow $\mathbf{a}$, the disambarking flow $\mathbf{b}$, the index of an isolated source node $\tilde{s}$, and the minimum proportion of passengers entering/leaving the network $\theta$.}
+	\caption{Computes the transportation flow matrix $\mathbf{N} = (n_{st})$, knowing the edge-trip incidence matrix $\bm{\chi} = (\chi_{ij}^{st})$, the set of transfer edges $T$, the set of permitted trips $P$, the embarking flow $\mathbf{a}$, the disambarking flow $\mathbf{b}$, the index of an isolated source node $\tilde{s}$, and the minimum proportion of passengers entering/leaving the network $\theta$.}
 	\label{algo1}
 	\begin{algorithmic}[1]
 		\State $g_{st} \leftarrow I([s, t] \in P) / \vert P \vert, \; \forall s,t$ \Comment{{\footnotesize Initialize the prior distribution}}
@@ -426,11 +421,10 @@ and, with (\ref{entrer}) and (\ref{sortir}), updating margin distributions is st
 \label{Single line}
 A ``network" made of a single line contains no transfers, and flow estimates can be obtained at once by the maximum entropy step only.
 
-
-Let  $i=1,\ldots, l$ enumerate the bus stops in increasing order,  i.e. $F(i)=i+1$. The initial prior is simply $g_{st}=c\; I(s<t)$ and captures solely the unidirectional nature of trips, where $c=\frac{1}{(l-1)(l-2)}$.   The margins of the empirical distribution $f_{st}$, as well as the total flow, are here known : 
-\begin{displaymath}
+Let  $i=1,\ldots, l$ enumerate the bus stops in increasing order, that is $F(i)=i+1$. The initial prior is simply $g_{st}=c\; I(s<t)$ and captures solely the unidirectional nature of trips, where $c=\frac{1}{(l-1)(l-2)}$.   The margins of the empirical distribution $f_{st}$, as well as the total flow, are here known
+\begin{equation}
 \alpha_s=\frac{a_s}{a_\bullet}\qquad\qquad\qquad \beta_t=\frac{b_t}{b_\bullet}\qquad\qquad\qquad n_{\bullet\bullet}=a_{\bullet}=b_\bullet\enspace. 
-\end{displaymath}
+\end{equation}
 Following  (\ref{Sol}) maximum entropy flows are of the form
 \begin{equation}
 \label{nosignle}
@@ -470,18 +464,18 @@ traveled distances among users) or the ``last in, first out" (LIFO) flows (tendi
 \section{Case Studies}
 \label{casestudies}
 
-Case studies are divided in two sections. In the first section, we test the algorithm on toy examples, which are artificial networks where the transportation flow $n_{st}$ is randomly drawn. These examples enable some kind of validation of the algorithm, as the "real" transportation flow is known and can be compared to solutions given by our method. This setup differs from the second section, which is dedicated to applying the algorithm to the real case of the public transportation network of the city of Lausanne (tl), where embankment and disembarkment flows are measured but the real transportation flow is unknown. This second case study shows that the algorithm is applicable on large, real datasets and can gives insights about passengers probable routes in the network.
+Case studies are divided in two sections. In the first section, we test the algorithm on toy examples, which are artificial networks where the transportation flow $\mathbf{N}_\text{ref} = (n^\text{ref}_{st})$ is randomly drawn. These examples enable some kind of validation of the algorithm, as the "real" transportation flow is known and can be compared to the solution $\mathbf{N} = (n_{st})$ given by our method. This setup differs from the second section, which is dedicated to applying the algorithm to the real case of the public transportation network of the city of Lausanne (tl), where embankment and disembarkment flows are measured but the real transportation flow is unknown. This second case study shows that the algorithm is applicable on large, real datasets and can gives insights about passengers probable routes in the network.
 
 \subsection{Error measurements}
 \label{error_measures}
 
 In all case studies, we obtain a estimation of the transportation flow with the algorithm, noted $\mathbf{N} = (n_{st})$, starting from the real embarkment flow $\mathbf{a}_\text{ref}$ and disembarkment flow $\mathbf{b}_\text{ref}$. In toy examples, we also have access to the real transportation flow $\mathbf{N}_\text{ref}$. 
-There are two types of dissimilarity measures between the data and the solution proposed by the algorithm: (1) if we have access to $\mathbf{N}_\text{ref}$, how much $\mathbf{N}$ differs from it, and (2) how well constraints defined by $\mathbf{a}_\text{ref}$ and $\mathbf{b}_\text{ref}$ are respected. The first dissimilarity is measured through the \emph{mean transportation error}, denoted by $\text{MTE}(\mathbf{N})$, and computed with
+There are two types of dissimilarity measures between the data and the solution proposed by the algorithm: (1) if we have access to $\mathbf{N}_\text{ref}$, how much $\mathbf{N}$ differs from it, and (2) how well constraints defined by $\mathbf{a}_\text{ref}$ and $\mathbf{b}_\text{ref}$ are respected. The first dissimilarity is measured through the \emph{mean transportation error}, denoted by $\text{MTE}(\mathbf{N})$, and computed as
 \begin{equation}
 	\text{MTE}(\mathbf{N}) = \sum_{st} \frac{n^\text{ref}_{st}}{n^\text{ref}_{\bullet \bullet}} \frac{\lvert n_{st} - n^\text{ref}_{st}\lvert}{n^\text{ref}_{st}} = \frac{\sum_{st} \lvert n_{st} - n^\text{ref}_{st}\lvert}{n^\text{ref}_{\bullet \bullet}} 
 	\label{MTE}
 \end{equation} 
-and the second one with the \emph{mean margin error}, noted $\text{MME}(\mathbf{N})$, obtained with
+and the second one with the \emph{mean margin error}, noted $\text{MME}(\mathbf{N})$, defined as
 \begin{align}
 	\text{MME}(\mathbf{N}) &= \frac{1}{2} \sum_{i} \frac{a^\text{ref}_i}{a^\text{ref}_\bullet} \frac{\lvert z_{\bullet i} + n_{i \bullet} - a^\text{ref}_i \lvert}{a^\text{ref}_i} + \frac{1}{2} \sum_{i} \frac{b^\text{ref}_i}{b^\text{ref}_\bullet} \frac{\lvert z_{i \bullet} + n_{\bullet i} - b^\text{ref}_i \lvert}{a^\text{ref}_i} \notag \\
 	&= \frac{\sum_i (\lvert z_{\bullet i} + n_{i \bullet} - a^\text{ref}_i \lvert + \lvert z_{i \bullet} + n_{\bullet i} - b^\text{ref}_i \lvert)}{2n^\text{ref}_{\bullet \bullet}}
@@ -489,7 +483,7 @@ and the second one with the \emph{mean margin error}, noted $\text{MME}(\mathbf{
 \end{align} 
 where $z_{ij} = I((i,j) \in T)\sum_{st} \chi_{ij}^{st} n_{st}$ is the flow on transfer edges $T$. Both errors can be interpreted as a weighted mean of a percentage of error.
 
-Note that, by construction, the MME should be null when the algorithm converges. However, it can be informative to track down this error along iterations and, in some practical cases where margin constraints are impossible to fulfill, the algorithm convergence criterion is reached with MME $> 0$.
+Note that, by construction, the MME should be zero when the algorithm converges. However, it can be informative to track down this error along iterations and, in some practical cases where margin constraints are impossible to fulfill, the algorithm convergence criterion is reached with MME $> 0$.
 
 \subsection{Toy Examples}
 \label{toy_examples}
@@ -497,20 +491,20 @@ Note that, by construction, the MME should be null when the algorithm converges.
 \subsubsection{Construction}
 \label{example_construction}
 
-All constructed toy examples are built following the same approach, which aims at being simple but somewhat realistic. We fix a number of \emph{line tours} $p \geq 2$, each of which is constituted of a forward line and a backward line, for a total of $q = 2p$ lines. Every line has a starting and ending node, which are isolated node, and posses $p-1$ intermediary nodes which allows transfers to the other tour lines, giving a total of $n = 2p(p + 1)$ nodes in the network. Examples of these toy networks can be found in Figure \ref{toy_example_plots}.
+All constructed toy examples are built following the same approach, which aims at being simple but somewhat realistic. We fix a number of \emph{round trips} $p \geq 2$, each of which is constituted of a forward line and a backward line, for a total of $q = 2p$ lines. Every line has a starting and ending node, which are isolated nodes, and possesses $p-1$ intermediary nodes which allow transfers to the other round trips, yielding a total of $n = 2p(p + 1)$ nodes in the network. Examples of these toy networks can be found in Figure \ref{toy_example_plots}.
 
 \begin{figure}[h]
 	\includegraphics[width=0.3\textwidth]{fig/toy_2_display.pdf}
 	\includegraphics[width=0.3\textwidth]{fig/toy_3_display.pdf}
 	\includegraphics[width=0.3\textwidth]{fig/toy_4_display.pdf}
-	\caption{3 toy examples, with the number of tours $p \in \{2,3,4\}$. Tours are displayed in the same color, line have a unique letter, and each stop a unique combination of a letter and a number. Clusters of nodes represent positions where transfer between tours are possible.}
+	\caption{3 toy examples, with the number of round trips $p \in \{2,3,4\}$. Trips are displayed in the same color, lines possess a unique letter, and each stop correspond to a unique combination of a letter and a number. Clusters of nodes represent positions where transfers between round trips are possible.}
 	\label{toy_example_plots}
 \end{figure}
 
-In order to be realistic, permitted $st$-trips set $P$ is constructed considering all shortest-path between pair of nodes, excluding :
+In order to be realistic, the permitted $st$-trips set $P$ is constructed by considering all shortest-path between pair of nodes, excluding :
 \begin{itemize}
-\item $s$ and $t$ that are on the same line but with $t$ preceding $s$ in the line order.
-\item $s$ and $t$ that are on the same tour but opposite line.
+\item $s$ and $t$ that are on the same line but with $t$ preceding (or equal to) $s$ in the line order.
+\item $s$ and $t$ that are on the same round trip but on opposite lines.
 \item $s$ and $t$ whose shortest-path starts with a transfer edge, ends with a transfer edge, or possesses two (or more) consecutive transfer edges.
 \end{itemize}
 
@@ -520,29 +514,29 @@ A transportation flow $\mathbf{N}_\text{ref} = (n^\text{ref}_{st})$ is drawn by 
 \subsubsection{Algorithm iterations}
 \label{algorithm_iterations}
 
-First, we shows some algorithm iterations on a toy example with $p=2$, where $50$ passengers where drawn uniformly across the $\vert P \vert = 20$ possible $st$-trips. Some iterations of the algorithm with $\theta=0.001$, along with MTE and MME errors, are shown in Figure \ref{iteration_plots}. 
+First, we exhibit some algorithm iterations on a toy example with $p=2$, where $50$ passengers where drawn uniformly across the $\vert P \vert = 20$ possible $st$-trips. Some iterations of the algorithm with $\theta=0.001$, along with MTE and MME errors, are shown in Figure \ref{iteration_plots}. 
 \begin{figure}[h]
 	\includegraphics[width=0.98\textwidth]{fig/iterations.pdf}
-	\caption{Real transportation flow (green arrows) obtained by randomly drawing $50$ passengers on the graph toy example with $p=2$ line tours, along with iterations $1, 2, 4, 7, 15$ of the algorithm with $\theta=0.001$. MTE and MME errors are computed, and embarkment and disembarkment flows are represented respectively by the red and blue colors on nodes.}
+	\caption{Real transportation flow (green arrows) obtained by randomly drawing $50$ passengers on the graph toy example with $p=2$ round trips, along with iterations $1, 2, 4, 7, 15$ of the algorithm with $\theta=0.001$. MTE and MME errors are computed, and embarkment and disembarkment flows are represented respectively by the red and blue colors on nodes.}
 	\label{iteration_plots}
 \end{figure}
-On this small example, we can see that the algorithm quickly find an estimation giving small MME error, but still give an MTE of 0.256. This result is due to the fact that only $50$ passengers are drawn, giving a large deviation compared to the optimally found solution which maximize the entropy.
+On this small example, we can see that the algorithm quickly find an estimation giving small MME error, but still give an MTE of 0.256. This result is due to the fact that only $50$ passengers are drawn, giving a large deviation compared to the optimally found solution which maximizes the entropy.
 
 \subsubsection{MTE study}
 \label{mte_study}
 
-The main goal of toy examples, since we have access to the real transportation flow, is to study how the resulting $MTE$ behave regarding passenger $st$-trips distribution and hyperparameter $\theta$, on different network sizes. 
+The main goal of toy examples, since we have access to the real transportation flow, is to study how the resulting MTE behaves regarding passenger $st$-trips distribution and hyperparameter $\theta$, on different network sizes. 
 
-The randomness of the $st$-trips distribution is controlled by the number of drawn passengers and we can see that the algorithm performs better if this number increases, as seen in Figure \ref{MTE_vs_passengers}. This behavior can be expected as the method is constructed to find the solution maximizing the entropy while respecting embarkment and disembarkment constraint. In fact, all MTE should converge to $0$ eventually, however this rate of convergence seems to be low.
+The randomness of the $st$-trips distribution is controlled by the number of drawn passengers and we can see that the algorithm performs better if this number increases, as seen in Figure \ref{MTE_vs_passengers}. This behavior can be expected as the method is constructed to find the solution maximizing the entropy while respecting embarkment and disembarkment constraints. In fact, all MTE should converge to $0$ eventually, however this rate of convergence seems to be low.
 \begin{figure}[h]
 	\includegraphics[width=0.98\textwidth]{fig/MTE_passengers.pdf}
-	\caption{Mean Transportation Error (MTE) vs the number of randomly drawn passengers, in toy examples with numbers of tours $p$ varying from 2 to 8. The hyperparameter is set to $\theta=0.001$ and $10$ different draws are performed for each data point.}
+	\caption{Mean Transportation Error (MTE) vs the number of randomly drawn passengers, in toy examples with numbers of round trips $p$ varying from 2 to 8. The hyperparameter is set to $\theta=0.001$ and $10$ different draws are performed for each data point.}
 	\label{MTE_vs_passengers}
 \end{figure}
-As for the hyperparameter study, found in Figure \ref{MTE_vs_theta}, we see that the optimal parameter seems to decreases as network size increases, reaching value close to $0$ for $8$ line tours. However, this is not the only factor which helps to decide this parameter. As a matter of fact, it seems unrealistic, in some real life scenarios, that all passengers embarking or disembarking at junctions are all transiting, and this value will be kept at $0.1$ for our real life study.
+As for the hyperparameter study, found in Figure \ref{MTE_vs_theta}, we see that the optimal parameter seems to decrease as the network size increases, reaching value close to $0$ for $8$ round trips. However, this is not the only factor which helps to calibrate this parameter. As a matter of fact, it seems unrealistic, in some real life scenarios, that all passengers embarking or disembarking at junctions are all transiting, and this value will be kept at $0.1$ for our real life study.
 \begin{figure}[h]
 	\includegraphics[width=0.98\textwidth]{fig/MTE_tours.pdf}
-	\caption{Mean Transportation Error (MTE) vs hyperparameter $\theta$, in toy examples with numbers of tours $p$ varying from 2 to 8. The dot on each curve denotes the minimum. The number of drawn passengers is different for every network size and is set to $20 \cdot \vert P \vert$, in order to keep the randomness level constant. $10$ different draws are performed for each data point.}
+	\caption{Mean Transportation Error (MTE) vs hyperparameter $\theta$, in toy examples with numbers of round trips $p$ varying from 2 to 8. The dot on each curve denotes the minimum. The number of drawn passengers is different for every network size and is set to $5 \cdot \vert P \vert$, in order to keep the randomness level constant. $10$ different draws are performed for each data point.}
 	\label{MTE_vs_theta}
 \end{figure}
 
@@ -551,20 +545,20 @@ As for the hyperparameter study, found in Figure \ref{MTE_vs_theta}, we see that
 
 \subsubsection{The dataset and algorithm setup}
 \label{data_algo}
-The dataset derived from the public transportation agency in the city of Lausanne (tl), in Switzerland. Automatic passenger counters were used to collect data on the number of passengers entering and leaving buses and metros at each stop. The dataset comprises 44 lines of metro and bus transportation, 1361 stops, and over 115 million passengers per year. Each round trip forms two separate lines, which often have stops that correspond to both the inbound and outbound directions, but this is not always the case. Some stops may be unique to either the inbound or outbound direction. The initial dataset contained 13 million data rows, which were aggregated to the year 2019, and the passenger data was filtered to include only passengers who boarded and disembarked at each stop. Lines with the most errors were removed, resulting in a final dataset of 35 transportation lines and 1216 stops. The threshold for invalid lines was set when a difference of between total embarkment and disembarked differs more than 15\% of their means. For the rest all other lines, the correction found in appendix was applied to ensure consistency conditions.  
+The dataset derived from the public transportation agency in the city of Lausanne (tl), in Switzerland. Automatic passenger counters were used to collect data on the number of passengers entering and leaving buses and subways at each stop. The dataset comprises 44 lines, 1361 stops, and over 115 million passengers per year. Each round trip forms two separate lines, which often have stops that correspond to both the inbound and outbound directions, but this is not always the case. Some stops may be unique to either the inbound or outbound direction. The initial dataset contained 13 million data rows, which were aggregated to the year 2019, and the passenger data was filtered to include only passengers who boarded and disembarked at each stop. Lines with the most errors were removed, resulting in a final dataset of 35 transportation lines and 1216 stops. The threshold for invalid lines was set when a difference between total embarkment and disembarked differs more than 15\% of their means. For the rest all other lines, the correction found in appendix was applied to ensure consistency conditions.  
 
-The matrix $P$, containing valid $st$-trips, was built using same condition found in toy example with an additional one. If the estimated pedestrian time (using Open Trip Planner\footnote{\url{https://docs.opentripplanner.org/en/v2.2.0/}} \cite{MalcolmMorgan2019}) between two stops $s$ and $t$ was shorter than the estimated time by taking the public transportation network, this $st$-trip was also removed from $P$. The graph structure, consisting in matrices $\bm{\chi}$ and $P$, was constructed beforehand testing the method.
+The matrix $P$, containing valid $st$-trips, was built using same condition found in toy example (section \ref{example_construction}) with an additional one. If the estimated pedestrian time (using Open Trip Planner\footnote{\url{https://docs.opentripplanner.org/en/v2.2.0/}} \cite{MalcolmMorgan2019}) between two stops $s$ and $t$ was shorter than the estimated time by taking the public transportation network, this $st$-trip was also removed from $P$. The graph structure, consisting in matrices $\bm{\chi}$, $P$ and $T$, was constructed beforehand testing the method.
 
-The algorithm was run with hyperparameter $\theta = 0.1$. Tracking the Mean Margin Error (MME) showed a rapid decreases but the (conservative) convergence criterion (chosen as when $\sum_{st} \vert f^{prev}_{st} - f_{st} \vert< 10^{-6} $) was reach after 316 iterations, which corresponds to approximately one hour of computing time with a single thread.
+The algorithm was run with hyperparameter $\theta = 0.1$. Tracking the Mean Margin Error (MME) showed a rapid decrease but the (conservative) convergence criterion (chosen as when $\sum_{st} \vert f^{prev}_{st} - f_{st} \vert< 10^{-6} $) was reach after 316 iterations, which corresponds to approximately one hour of computing time with a single thread on a AMD Epyc2 7402 with 32GB of RAM.
 
 \subsubsection{Results}
 \label{real_results}
 
-As the result of our algorithm consists in the $(1216 \times 1216)$ matrix $\mathbf{N} = (n_{st})$, it is difficult to present them succinctly. We chose here to focus on two aspects: (1) mapping the origin and destination profiles of stops with the help of Correspondence Analysis (CA) \cite{benzecri1977histoire}; and (2) mapping the predicted transfers between lines.
+As the result of our algorithm consists in the $(1216 \times 1216)$ matrix $\mathbf{N} = (n_{st})$, it is difficult to present them succinctly. We chose here to focus on two aspects: (1) mapping the origin and destination profiles of stops with the help of Correspondence Analysis (CA) \cite{benzecri1977histoire}; and (2) mapping the aggregated transfers between lines.
 
-The first and second factorial dimensions of the destination and origin profiles of stops, obtained with CA applied on $\mathbf{N}$ , can be found on Figure \ref{afc}. We can see that origin and destination of each stop are quite similar when displayed on the first two factorial axes. This result can be explained if we understand that, in fact, origin and destination profiles are in fact kinda symmetrical: at the beginning of a line, stops have several choices of destinations but very few origins ``point" to them, and this is the opposite for stops at the end of the line. Intermediary stops are generally located at the center of the city, and have a similar and rich origin and destination profiles. Concerning the dimensions, we can see that the first one divided the city stops between west and east, a known dichotomy in the city of Lausanne in public transportation usage: the east of the city is less well deserved and often use cars, while the west intensively use the public transportation network. The second dimension is harder to interpret, but seems to highlight the radial structure of the transportation network in Lausanne.
+The first and second factorial dimensions of the destination and origin profiles of stops, obtained with CA applied on $\mathbf{N}$, can be found on Figure \ref{afc}. We can see that origin and destination coordinates of each stop are quite similar when displayed on the first two factorial axes. This result can be explained if we understand that, in fact, origin and destination profiles are in fact kinda symmetrical: at the beginning of a line, stops have several choices of destinations, but very few origins ``point" at them, which is exactly reversed for stops at the end of a line. Intermediary stops are generally located near city center, and have a similarly rich origin and destination profiles. Concerning the dimensions, we can see that the first one divided the city stops between west and east, a known dichotomy in the public transportation usage in Lausanne: the east of the city is less well served by public transport and inhabitants often use cars, while the west intensively use public transports. The second dimension is harder to interpret, but seems to highlight the radial structure of the transportation network in Lausanne.
 
-Figure \ref{transfers} maps the geographically aggregate transfer flows $z_{ij}$ between lines. As expected, most transfers occur in the city center, with top 5 largest hubs located at St-François (2,132,597 transfers), Lausanne-Gare (2,035,543 transfers), Bel-Air (1,908,168 transfers), Ours (1,057,282 transfers), and Chauderon (969,789 transfers). When taken individually, four of the top 5 transfer counts is predicted between line $1$ and line $72$ occurring at the train station (Lausanne-Gare). Line 72 is actually a subway line connecting north and south region of the city, and is by far the most used line in the network. Line $1$ is also a very frequented line and operated toward the western region of the city. It is not surprising to see most transfer occurring between these two lines, as they permit to connect the region with an high density of public transportation network users (the western part of Lausanne), to the main artery of the network (line 72).
+Figure \ref{transfers} maps predicted transfer hubs, obtained by aggregating every transfer counts $z_{ij}$ between lines when they occurs in a spatial cluster of stops. As expected, most transfers occur in the city center, with top 5 largest hubs located at St-François (2,132,597 transfers), Lausanne-Gare (2,035,543 transfers), Bel-Air (1,908,168 transfers), Ours (1,057,282 transfers), and Chauderon (969,789 transfers). When taken individually, four of the top 5 transfer counts is predicted between line $1$ and line $72$ occurring at the train station (Lausanne-Gare). Line 72 is actually a subway line connecting the north and south regions of the city, and is by far the most used line in the network. Line $1$ is also a highly frequented line and operated toward the western region of the city. It is not surprising to see most transfer occurring between these two lines, as they permit to connect the region with an high density of public transportation network users (the western part of Lausanne), to the main artery of the network (line 72).
 
 \begin{figure}[h]
 	\includegraphics[width=0.46\textwidth]{fig/afc_in_dim1.png}
@@ -577,18 +571,14 @@ Figure \ref{transfers} maps the geographically aggregate transfer flows $z_{ij}$
 
 \begin{figure}[h]
 	\includegraphics[width=0.97\textwidth]{fig/transfers.png}
-	\caption{Location and size (ring size and color) of estimated transfer flows $z_{ij}$ between lines.}
+	\caption{Location and size of transfer hubs, obtained by aggregating estimated transfer flows between lines $z_{ij}$ in geographical clusters.}
 	\label{transfers}
 \end{figure}
-
-\subsubsection{Results}
-\label{lausanne_results}
-
 
 %% --------------------------------- CONCLUSION
 
 \section{Conclusion}
-
+\label{conclusion}
 
 
   
@@ -599,20 +589,20 @@ Figure \ref{transfers} maps the geographically aggregate transfer flows $z_{ij}$
 
 \subsection*{Embarkment and disembarkment corrections for lines}
 \label{flow_correction}
-It may happen that, on some lines $\ell$, with stops indexed in order as $1, \ldots, l$, raw data do not obey the following necessary consistency conditions 
+It may happen that, on some lines $\ell$ with stops indexed in order as $1, \ldots, l$, raw data $\mathbf{a}=(a_i)$ and $\mathbf{b}=(b_i)$ do not obey the following necessary consistency conditions 
 \begin{align*}
 	a_l = 0&, \; b_1 = 0 \\
 	A_{(i-1)} &\geq B_i \qquad \forall i \in \{1, \ldots, l-1\} \\
 	A_{l} &= B_{l} \qquad \text{for terminal stop $l$}
 \end{align*}
-where $A_i$ (respectively $B_i$) is the cumulated number of embarked (resp. disembarked) passengers on the line at stop $i$. The first condition is easy to correct (by setting both quantities to $0$), and we will assume that they are valid. The last two require an iterative procedure, explained here.
+where $A_i$ (respectively $B_i$) is the cumulated number of embarked (resp. disembarked) passengers on the line at stop $i$, i.e. $A_i = \sum_{j=1}^{i} a_j$ and $B_i = \sum_{j=1}^{i} b_j$. The first condition is easy to correct (by setting both quantities to $0$), and we will assume that they are valid. The last two require an iterative procedure, explained here.
 
 We first identify all stops $i$ where $A_{i - 1} < B_i$ and store them, along with stop $1$ and $l$, in a order set $S$. Let $\text{Prev}(i)$ be the item right before $i$ in the set $S$. For all $i \in S \setminus \{1\}$, we do :
 \begin{align*}
 		\hat{a}_j&=\left( 1-\frac{(A_{(i-1)} - A_{(\text{Prev}(i)-1)}) - (B_{i} -  B_{\text{Prev}(i)})}{(A_{(i-1)} - A_{(\text{Prev}(i)-1)}) + (B_{i} -  B_{\text{Prev}(i)})}\right)\, a_j  \qquad \forall j \in \{ \text{Prev}(i), \ldots, i-1 \} \\
 	\hat{b}_j&=\left( 1+\frac{(A_{(i-1)} - A_{(\text{Prev}(i)-1)}) - (B_{i} -  B_{\text{Prev}(i)})}{(A_{(i-1)} - A_{(\text{Prev}(i)-1)}) + (B_{i} -  B_{\text{Prev}(i)})}\right)\, b_j  \qquad \forall j \in \{ \text{Prev}(i) + 1, \ldots, i \}
 \end{align*}
-Before the last step, all conditions $A_{(i-1)} \geq  B_{i}$ should be respected except for node $l$. The last step ensures that $A_{l} = B_{l}$, however, as it can sometimes lower the embarkment count and increase the disembarkment count on previous nodes, some new nodes can now violate $A_{(i-1)} \geq B_i$. This is why this procedure must be iterated until all stops on the line verify consistency conditions. 
+Before the last step, all conditions $A_{(i-1)} \geq  B_{i}$ should be respected except for node $l$. The last step ensures that $A_{l} = B_{l}$. However, as this last step can sometimes lower the embarkment count and increase the disembarkment count on previous nodes, some new nodes can now violate $A_{(i-1)} \geq B_i$. This is why this procedure must be iterated until all stops on the line verify consistency conditions. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                          %%
@@ -623,7 +613,7 @@ Before the last step, all conditions $A_{(i-1)} \geq  B_{i}$ should be respected
 \begin{backmatter}
 
 \section*{Acknowledgements}%% if any
-Text for this section\ldots
+This paper would not have been possible without the dataset given by the transportation agency of the city of Lausanne (tl). We wish to thank the agency for its kindness and hope this research will help them for future developments.
 
 \section*{Competing interests}
 The authors declare that they have no competing interests.
