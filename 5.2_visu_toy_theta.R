@@ -4,15 +4,12 @@
 # Visualisation output
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-# - Histogram of mean error, according to the number of lines into the network
-#   (possible to have more than 1 hyper parameter)
+# - Line plot of the mean error, according to the theta hyper parameter and the
+#   number of passengers depends on number of line tours
 
 #--------------------------------
 # Head
 #--------------------------------
-
-# Set working directory path
-# setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Libraries
 #--------------------------------
@@ -24,18 +21,16 @@ library(reshape2)
 # Load functions
 source("local_functions.R")
 
-
-# The folder containing pre-processed data
-data_folder = "multilines_data/preprocessed_data/loop_toy_example"
-
-# Output folder for results
-out_folder = "results/loop_toy_example"
-
 #--------------------------------
 # Network parameters
 #--------------------------------
-# Choose number of lines
-# below
+# Choose tours
+seq_lines = 2:8
+# Choose prop limit theta
+hyper_par = c(seq(0.001,0.009, 0.001), seq(0.01,0.1, 0.01), seq(0.12,0.2, 0.02),
+              0.25, 0.3, 0.35, seq(0.4,1, 0.1))
+# number of passengers per node (n_passengers = sum(paths)*nb_pass_stop)
+nb_pass_stop = 5
 
 #--------------------------------
 # Algorithm parameters
@@ -53,20 +48,8 @@ max_it = 1000
 display_it = F
 # number of iterations
 n_test = 10
-# prop limit
-# hyper_par = c(0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1,
-#               0.12, 0.14, 0.16, 0.18, 0.2,
-#               0.25, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1)
-hyper_par = c(seq(0.001,0.009, 0.001), seq(0.01,0.1, 0.01), seq(0.12,0.2, 0.02),
-              0.25, 0.3, 0.35, seq(0.4,1, 0.1))
-
-# number of passengers
-# n_passengers = 2000
-nb_pass_stop = 5
-# number of cores
+# multicors
 mc.cores = detectCores() - 2
-# lines
-seq_lines = 2:8
 
 #--------------------------------
 # Output and visualizations
@@ -108,14 +91,26 @@ for (j in 1:length(hyper_par)) {
 # write.csv(res_mat_line, "results/5_toy_ex_outputs/res_line_param.csv", row.names = F)
 # write.csv(mean_line, "results/5_toy_ex_outputs/mean_line_param.csv", row.names = F)
 # Read saved data
-mean_line = read.csv("results/5_toy_ex_outputs/mean_line_param.csv")
+# mean_line = read.csv("results/5_toy_ex_outputs/mean_line_param.csv")
 
 mean_line$param = as.numeric(mean_line$param)
 
 # Extract min/max
 min_max = as.data.frame(mean_line %>% group_by(Lines) %>% top_n(-1, mean_error))
 
+# Plot the results
+ggplot(data=mean_line) +
+  geom_ribbon(aes(x=param, ymin=mean_error-sd_error/sqrt(n_test), 
+                  ymax=mean_error+sd_error/sqrt(n_test), group=Lines, 
+                  fill=factor(Lines)), alpha=0.2) +
+  geom_line(aes(x=param, y=mean_error, group=Lines, color=factor(Lines))) +
+  labs(x=expression(theta), y="MTE") +
+  scale_x_continuous(breaks = seq(0, 1, 0.1)) +
+  geom_point(data=min_max,aes(x=param, y=mean_error, color=factor(Lines)))+
+  labs(color = "p", fill = "p")
 
+
+### Old visu
 # Plot the results
 # ggplot() +
 #   geom_line(data=mean_line,
@@ -130,15 +125,3 @@ min_max = as.data.frame(mean_line %>% group_by(Lines) %>% top_n(-1, mean_error))
 #   labs(color=expression(theta)) 
 # 
 # mean_line_tot_order$param = as.numeric(mean_line_tot_order$param)
-
-
-# Plot the results 2
-ggplot(data=mean_line) +
-  geom_ribbon(aes(x=param, ymin=mean_error-sd_error/sqrt(n_test), 
-                  ymax=mean_error+sd_error/sqrt(n_test), group=Lines, 
-                  fill=factor(Lines)), alpha=0.2) +
-  geom_line(aes(x=param, y=mean_error, group=Lines, color=factor(Lines))) +
-  labs(x=expression(theta), y="MTE") +
-  scale_x_continuous(breaks = seq(0, 1, 0.1)) +
-  geom_point(data=min_max,aes(x=param, y=mean_error, color=factor(Lines)))+
-  labs(color = "p", fill = "p")

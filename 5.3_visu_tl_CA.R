@@ -1,15 +1,14 @@
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-# AFC
+# Correspondence Analysis (CA)
 # Visualisation output
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-# - Map AFC
+# - Map CA
 
 #--------------------------------
 # Head
 #--------------------------------
-
 
 # Libraries
 #--------------------------------
@@ -22,12 +21,6 @@ library(sf)
 library(RColorBrewer)
 library(leaflet)
 
-# Load functions
-# source("local_functions.R")
-
-# The folder containing pre-processed data
-# data_folder = "multilines_data/preprocessed_data/all_lines"
-
 # The folder containing results
 results_folder = "results/all_lines2"
 
@@ -35,7 +28,7 @@ results_folder = "results/all_lines2"
 # Process
 #--------------------------------
 
-# up or down ?
+# Choose "up" or "down" to set visualisation
 up_down = "up"
 
 # --- Reading files
@@ -61,15 +54,16 @@ rownames(n_mat) = stop_names
 # ped_acc <- apply(ped_time, MARGIN = c(1, 2), FUN = access)
 # ANA = ped_acc %*% n_mat %*% ped_acc
 
+# Compute CA
 res.ca <- CA(n_mat, graph = FALSE)
 
+# Dim 1 and 2 according to up_down
 if (up_down == "up") {
   CA_dim = res.ca$row$coord[, 1:2]
 }
 if (up_down == "down") {
   CA_dim = res.ca$col$coord[, 1:2]
 }
-
 colnames(CA_dim) <- c("dim1","dim2")
 CA_dim = as.data.frame(CA_dim)
 CA_dim$stop_names = rownames(CA_dim)
@@ -124,7 +118,7 @@ CA_shp = right_join(stops_shp, CA_dim, by = "stop_names")
 
 lines_shp_sample = right_join(lines_shp, CA_dim, by = "stop_names")
 
-
+# Radius of the proportional circles
 if (up_down == "up") {
   CA_shp$CA_radius = CA_shp$montees
 }
@@ -134,8 +128,9 @@ if (up_down == "down") {
 }
 
 
-# Mapping results
+# --- Mapping results
 
+# Color palette for 2 dimensions
 colorPal1 = colorNumeric(palette = "RdBu", domain = CA_shp$dim1)
 colorPal2 = colorNumeric(palette = "RdBu", domain = CA_shp$dim2)
 
@@ -147,8 +142,8 @@ CA_map2 = leaflet(CA_shp) %>%
                color = "#eeeeee") %>%
   addCircles(
     group = "dim1",
-    # radius = ((CA_shp$montees)/max(CA_shp$montees)*100000)^0.45, # coefficient de correction avec un minimum de largeur de 1
-    radius = ((CA_shp$CA_radius)/max(CA_shp$CA_radius)*100000)^0.45, # coefficient de correction avec un minimum de largeur de 1
+    # radius = ((CA_shp$montees)/max(CA_shp$montees)*100000)^0.45,
+    radius = ((CA_shp$CA_radius)/max(CA_shp$CA_radius)*100000)^0.45, # corr coef
     fillColor = "transparent",
     opacity = ((CA_shp$CA_radius)/max(CA_shp$CA_radius))^0.05,
     color = ~colorPal1(dim1),
@@ -159,15 +154,15 @@ CA_map2 = leaflet(CA_shp) %>%
   ) %>%
   addCircles(
     group = "dim2",
-    # radius = ((CA_shp$montees)/max(CA_shp$montees)*100000)^0.45, # coefficient de correction avec un minimum de largeur de 1
-    radius = ((CA_shp$CA_radius)/max(CA_shp$CA_radius)*100000)^0.45, # coefficient de correction avec un minimum de largeur de 1
+    # radius = ((CA_shp$montees)/max(CA_shp$montees)*100000)^0.45,
+    radius = ((CA_shp$CA_radius)/max(CA_shp$CA_radius)*100000)^0.45, # corr coef
     fillColor = "transparent",
     opacity = ((CA_shp$CA_radius)/max(CA_shp$CA_radius))^0.05,
     color = ~colorPal2(dim2),
     highlight = highlightOptions(
       color = "white",
       bringToFront = TRUE),
-    label = paste0("Dim 2: ",CA_shp$dim2), # avec le hover
+    label = paste0("Dim 2: ",CA_shp$dim2), # mouse hover
   ) %>%
   addLayersControl(
     baseGroups = c("dim1", "dim2"),

@@ -9,7 +9,6 @@
 # Head
 #--------------------------------
 
-
 # Libraries
 #--------------------------------
 library(dplyr)
@@ -74,10 +73,9 @@ nodes_map = leaflet() %>%
              fillColor = "transparent",
              opacity = 1
   )
-
 nodes_map
 
-# # Flow map
+# Flow map (not used)
 # library(leaflet.minicharts)
 # 
 # leaflet() %>%
