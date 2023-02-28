@@ -60,7 +60,6 @@ n_test = 10
 hyper_par = c(seq(0.001,0.009, 0.001), seq(0.01,0.1, 0.01), seq(0.12,0.2, 0.02),
               0.25, 0.3, 0.35, seq(0.4,1, 0.1))
 
-
 # number of passengers
 # n_passengers = 2000
 nb_pass_stop = 5
@@ -77,11 +76,12 @@ seq_lines = 2:8
 res_mat_line = c()
 
 for (j in 1:length(hyper_par)) {
+  print(paste("hyperpar", j))
   for (i in seq_lines) {
     nb_lines = i
     nb_stops = i + 1
     # Network properties output
-    network_prop_res = network_prop(nb_lines, nb_stops)
+    network_prop_res = network_prop(nb_lines, nb_stops, mc.cores )
     # Unlist and save variables
     list2env(network_prop_res, .GlobalEnv)
     
@@ -103,12 +103,14 @@ for (j in 1:length(hyper_par)) {
   mean_line = cbind(seq_lines, mean_line, sd_line)
   mean_line$param = row.names(mean_line)
   colnames(mean_line) <- c("Lines", "mean_error", "sd_error","param")
-  mean_line$param = substr(mean_line$param, 4, 7)
+  mean_line$param = substring(mean_line$param, 4)
 }
-write.csv(res_mat_line, "results/5_toy_ex_outputs/res_line_param.csv", row.names = F)
-write.csv(mean_line, "results/5_toy_ex_outputs/mean_line_param.csv", row.names = F)
+# write.csv(res_mat_line, "results/5_toy_ex_outputs/res_line_param.csv", row.names = F)
+# write.csv(mean_line, "results/5_toy_ex_outputs/mean_line_param.csv", row.names = F)
 # Read saved data
-# mean_line = read.csv("results/5_toy_ex_outputs/mean_line_param.csv")
+mean_line = read.csv("results/5_toy_ex_outputs/mean_line_param.csv")
+
+mean_line$param = as.numeric(mean_line$param)
 
 # Extract min/max
 min_max = as.data.frame(mean_line %>% group_by(Lines) %>% top_n(-1, mean_error))
