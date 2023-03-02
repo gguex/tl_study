@@ -25,7 +25,7 @@ source("local_functions.R")
 # # The file containing the pedestrian distance between stops
 # d_ped_file = "multilines_data/formatted_data/test_6789/ped_time.csv"
 # # Out folder
-# out_folder = "multilines_data/preprocessed_data/test_mc_6789"
+# out_folder = "multilines_data/preprocessed_data/test_6789"
 
 # --- ALL LINES
 
