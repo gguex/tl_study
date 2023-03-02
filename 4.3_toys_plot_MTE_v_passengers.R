@@ -1,18 +1,14 @@
 #-------------------------------------------------------------------------------
+#
+# Plot mean transportation error (MTE) vs number of passengers in toy networks
+#
 #-------------------------------------------------------------------------------
-# COMPUTE TOY EXAMPLE
-# Visualisation output
-#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-# - Line plot of the mean error, according to the number of passengers
-#   travelling into the network (fixed theta hyper parameter)
 
 #--------------------------------
 # Head
 #--------------------------------
 
 # Libraries
-#--------------------------------
 library(dplyr)
 library(ggplot2)
 library(gridExtra)
@@ -22,8 +18,11 @@ library(reshape2)
 source("local_functions.R")
 
 #--------------------------------
-# Network parameters
+# Global parameters
 #--------------------------------
+
+# -- Network 
+
 # Choose tours
 nb_lines = 2:8
 # Nb stop depends of tours
@@ -32,9 +31,7 @@ nb_stops = nb_lines + 1
 seq_passengers = c(100,500,1000,1500,2000,2500,3000,3500,4000,5000,6000,7500,
                    10000,12500,15000,20000,30000,50000)
 
-#--------------------------------
-# Algorithm parameters
-#--------------------------------
+# -- Algorithm
 
 # Conv threshold for iterative fitting
 conv_thres_if = 1e-5
@@ -52,7 +49,7 @@ n_test = 10
 hyper_par = 0.001
 
 #--------------------------------
-# Output and visualizations
+# Code
 #--------------------------------
 
 # Network properties output

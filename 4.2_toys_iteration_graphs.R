@@ -1,6 +1,6 @@
 #-------------------------------------------------------------------------------
 #
-# Preprocess data and save it
+# Create graphs for each iteration for toy networks
 #
 #-------------------------------------------------------------------------------
 
@@ -8,13 +8,10 @@
 # Head
 #--------------------------------
 
-#------ Set working directory path
-# setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-
 source("local_functions.R")
 
 #--------------------------------
-# Parameters
+# Global parameters
 #--------------------------------
 
 # Result folder

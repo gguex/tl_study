@@ -1,6 +1,6 @@
 #-------------------------------------------------------------------------------
 #
-# Preprocess data and save it
+# Preprocess the tl data in order to get the network structure
 #
 #-------------------------------------------------------------------------------
 
@@ -8,17 +8,14 @@
 # Head
 #--------------------------------
 
-# Set working directory path
-# setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-
 # Load functions
 source("local_functions.R")
 
 #--------------------------------
-# Parameters
+# Global parameters
 #--------------------------------
 
-# --- TEST 6789
+# --- Test 6789
 
 # # The file containing the dataset
 # line_data_file = "multilines_data/formatted_data/test_6789/bus_df.csv"
@@ -27,13 +24,13 @@ source("local_functions.R")
 # # Out folder
 # out_folder = "multilines_data/preprocessed_data/test_6789"
 
-# --- ALL LINES
+# --- All lines
 
 # The file containing the dataset
 line_data_file = "multilines_data/formatted_data/all_lines/bus_df.csv"
 # The file containing the pedestrian distance between stops
 d_ped_file = "multilines_data/formatted_data/all_lines/ped_time.csv"
-# Out folder
+# Output folder
 out_folder = "multilines_data/preprocessed_data/all_lines"
 
 # Pedestrian threshold for connecting stops
@@ -42,7 +39,7 @@ ped_t_thres = 120
 waiting_time = 120
 
 #--------------------------------
-# Process
+# Code
 #--------------------------------
 
 # Load the line file

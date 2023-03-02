@@ -1,18 +1,14 @@
 #-------------------------------------------------------------------------------
+#
+# Plot mean transportation error (MTE) vs hyperparameter theta in toy networks
+#
 #-------------------------------------------------------------------------------
-# COMPUTE TOY EXAMPLE
-# Visualisation output
-#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-# - Line plot of the mean error, according to the theta hyper parameter and the
-#   number of passengers depends on number of line tours
 
 #--------------------------------
 # Head
 #--------------------------------
 
 # Libraries
-#--------------------------------
 library(dplyr)
 library(ggplot2)
 library(gridExtra)
@@ -22,8 +18,11 @@ library(reshape2)
 source("local_functions.R")
 
 #--------------------------------
-# Network parameters
+# Global parameters
 #--------------------------------
+
+# -- Network
+
 # Choose tours
 seq_lines = 2:8
 # Choose prop limit theta
@@ -32,9 +31,7 @@ hyper_par = c(seq(0.001,0.009, 0.001), seq(0.01,0.1, 0.01), seq(0.12,0.2, 0.02),
 # number of passengers per node (n_passengers = sum(paths)*nb_pass_stop)
 nb_pass_stop = 5
 
-#--------------------------------
-# Algorithm parameters
-#--------------------------------
+# -- Algorithm
 
 # Conv threshold for iterative fitting
 conv_thres_if = 1e-5
@@ -52,7 +49,7 @@ n_test = 10
 mc.cores = detectCores() - 2
 
 #--------------------------------
-# Output and visualizations
+# Code
 #--------------------------------
 
 # Create a data frame with different number of line into the network

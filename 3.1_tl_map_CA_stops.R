@@ -1,17 +1,14 @@
 #-------------------------------------------------------------------------------
+#
+# Map the CA components for stops in tl results 
+#
 #-------------------------------------------------------------------------------
-# Correspondence Analysis (CA)
-# Visualisation output
-#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-# - Map CA
 
 #--------------------------------
 # Head
 #--------------------------------
 
 # Libraries
-#--------------------------------
 library(dplyr)
 library(ggplot2)
 library(gridExtra)
@@ -21,22 +18,27 @@ library(sf)
 library(RColorBrewer)
 library(leaflet)
 
+#--------------------------------
+# Global parameters
+#--------------------------------
+
 # The folder containing results
 results_folder = "results/all_lines"
 
-#--------------------------------
-# Process
-#--------------------------------
-
 # Choose "up" or "down" to set visualisation
 up_down = "up"
+
+#--------------------------------
+# Code
+#--------------------------------
 
 # --- Reading files
 
 # Reading results data 
 line_res = read.csv(paste0(results_folder, "/line_res.csv")) 
 n_mat = as.matrix(read.csv(paste0(results_folder, "/n_mat.csv"), header=F))
-ped_time = read.csv(as.matrix("multilines_data/formatted_data/all_lines/ped_time.csv"), header=F)
+ped_time = read.csv(
+  as.matrix("multilines_data/formatted_data/all_lines/ped_time.csv"), header=F)
 stop_names = line_res$stop_names
 
 colnames(n_mat) = stop_names

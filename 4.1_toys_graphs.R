@@ -1,6 +1,6 @@
 #-------------------------------------------------------------------------------
 #
-# Preprocess data and save it
+# Create graph representations of some toy network examples
 #
 #-------------------------------------------------------------------------------
 
@@ -8,13 +8,10 @@
 # Head
 #--------------------------------
 
-#------ Set working directory path
-# setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-
 source("local_functions.R")
 
 #--------------------------------
-# Parameters
+# Global parameters
 #--------------------------------
 
 # Result folder
@@ -24,8 +21,6 @@ result_folder = "results/toys_graphs"
 n_lines_vec = c(2, 3, 4)
 seed_vec = c(0, 2, 11)
 theta_vec = c(0, -0.08,-0.051)
-
-# Choose a seed
 
 #--------------------------------
 # Code

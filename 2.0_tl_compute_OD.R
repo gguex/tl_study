@@ -1,6 +1,6 @@
 #-------------------------------------------------------------------------------
 #
-# Run the algorithm from pre-processed data
+# Compute the origin-destination transfer matrix from tl preprocessed data
 #
 #-------------------------------------------------------------------------------
 
@@ -8,14 +8,11 @@
 # Head
 #--------------------------------
 
-# Set working directory path
-# setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-
 # Load functions
 source("local_functions.R")
 
 #--------------------------------
-# Parameters
+# Global parameters
 #--------------------------------
 
 # --- Test 6789
@@ -25,7 +22,7 @@ source("local_functions.R")
 # # Output folder for results
 # out_folder = "results/test_6789"
 
-# --- all lines
+# --- All lines
 
 # The folder containing pre-processed data
 data_folder = "multilines_data/preprocessed_data/all_lines"
@@ -46,7 +43,7 @@ max_it = 500
 max_it_if = 400
 
 #--------------------------------
-# Process
+# Code
 #--------------------------------
 
 # --- Load the data

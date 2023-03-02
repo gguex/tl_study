@@ -1,6 +1,6 @@
 #-------------------------------------------------------------------------------
 #
-# Plot the graphic for MME error vs iterations
+# Extract tranfer flow informations from tl results 
 #
 #-------------------------------------------------------------------------------
 
@@ -12,7 +12,7 @@
 library("tidyverse")
 
 #--------------------------------
-# Parameters
+# Global parameters
 #--------------------------------
 
 # The folder containing results
@@ -20,7 +20,7 @@ data_folder = "multilines_data/preprocessed_data/all_lines"
 results_folder = "results/all_lines"
 
 #--------------------------------
-# Process
+# Code
 #--------------------------------
 
 # Load network data

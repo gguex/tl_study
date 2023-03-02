@@ -1,25 +1,27 @@
 #-------------------------------------------------------------------------------
+#
+# Map the estimated transfer hubs, from tl results, in the city of Lausanne
+#
 #-------------------------------------------------------------------------------
-# Transfer visualisation
-#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-# - Map important nodes, nodes aggregated by stop names
 
 #--------------------------------
 # Head
 #--------------------------------
 
 # Libraries
-#--------------------------------
 library(dplyr)
 library(leaflet)
 library(BAMMtools) # Jenks library
+
+#--------------------------------
+# Global parameters
+#--------------------------------
 
 # The folder containing results
 results_folder = "results/all_lines"
 
 #--------------------------------
-# Process
+# Code
 #--------------------------------
 
 # --- Reading files
