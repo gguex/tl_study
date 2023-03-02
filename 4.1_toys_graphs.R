@@ -18,7 +18,7 @@ source("local_functions.R")
 #--------------------------------
 
 # Result folder
-result_folder = "results/toy_example_plots"
+result_folder = "results/toys_graphs"
 
 # Choose number of lines
 n_lines_vec = c(2, 3, 4)

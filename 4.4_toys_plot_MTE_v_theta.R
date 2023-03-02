@@ -88,10 +88,10 @@ for (j in 1:length(hyper_par)) {
   colnames(mean_line) <- c("Lines", "mean_error", "sd_error","param")
   mean_line$param = substring(mean_line$param, 4)
 }
-# write.csv(res_mat_line, "results/5_toy_ex_outputs/res_line_param.csv", row.names = F)
-# write.csv(mean_line, "results/5_toy_ex_outputs/mean_line_param.csv", row.names = F)
+# write.csv(res_mat_line, "results/toys_plots/res_line_param.csv", row.names = F)
+# write.csv(mean_line, "results/toys_plots/mean_line_param.csv", row.names = F)
 # Read saved data
-# mean_line = read.csv("results/5_toy_ex_outputs/mean_line_param.csv")
+# mean_line = read.csv("results/toys_plots/mean_line_param.csv")
 
 mean_line$param = as.numeric(mean_line$param)
 

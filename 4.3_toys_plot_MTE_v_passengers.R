@@ -91,7 +91,7 @@ for (j in 1:length(nb_lines)) {
 }
 
 # Save results
-# write.csv(res_mean, "results/5_toy_ex_outputs/res_mean_passengers.csv", row.names = F)
+# write.csv(res_mean, "results/toys_plots/res_mean_passengers.csv", row.names = F)
 
 # Plot the results
 ggplot(data=res_mean) +
