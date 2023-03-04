@@ -63,4 +63,9 @@ To present how the algorithm work, we present a small tutorial with a very simpl
   <figcaption>Tutorial network</figcaption>
 </figure>
 
+All the functions to run the algorithm are located in `local_functions.R`, we first need to load them
+
+```{r}
+source("local_functions.R")
+```
 
