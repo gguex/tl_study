@@ -65,7 +65,7 @@ To present how the algorithm work, we present a small tutorial with a very simpl
 
 All the functions to run the algorithm are located in `local_functions.R`, we first need to load them
 
-```{r}
+```r
 source("local_functions.R")
 ```
 
