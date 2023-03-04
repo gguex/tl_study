@@ -34,7 +34,7 @@ proportional fitting
 ### Iteration example on a toy network. The network edges are represented by black edges, transfer flow is represented by green edges
 
 <p>
-  <iframe src="results/toys_graphs/iterations.pdf" height="200" width="300"></iframe>
+  <img src="utilities/readme_img/iterations.pdf" alt="tutorial example" style="width:20%">
 </p>
 
 
@@ -43,7 +43,7 @@ proportional fitting
 To present how the algorithm work, we present a small tutorial with a very simple network (the code for this tutorial can be found in `0.0_tutorial.R`). This network have two lines, with 3 stops each, and transfer edges connecting their middle stops.
 
 <p>
-  <img src="utilities/tuto_network.png" alt="tutorial example" style="width:20%">
+  <img src="utilities/readme_img/tuto_network.png" alt="tutorial example" style="width:20%">
 </p>
 
 
