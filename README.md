@@ -42,6 +42,18 @@ proportional fitting
     <img src="utilities/readme_img/MTE_tours.png" alt="tutorial example" style="width:50%">
 </figure>
 
+#### Profiles of stops in the city of Lausanne (first CA dimension)
+
+<figure>
+    <img src="utilities/readme_img/afc_in_dim1.png" alt="tutorial example" style="width:50%">
+</figure>
+
+#### Largest estimated public transportation hubs in the city of Lausanne
+
+<figure>
+    <img src="utilities/readme_img/transfers.png" alt="tutorial example" style="width:50%">
+</figure>
+
 ## Tutorial 
 
 To present how the algorithm work, we present a small tutorial with a very simple network (the code for this tutorial can be found in `0.0_tutorial.R`). This network have two lines, with 3 stops each, and transfer edges connecting their middle stops.
