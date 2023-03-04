@@ -37,6 +37,10 @@ proportional fitting
   <img src="utilities/readme_img/iterations.png" alt="tutorial example" style="width:50%">
 </p>
 
+<figure>
+    <img src="utilities/readme_img/iterations.png" alt="tutorial example" style="width:50%">
+    <figcaption>Iteration example on a toy network. The network edges are represented by black edges, transfer flow is represented by green edges</figcaption>
+</figure>
 
 ## Tutorial 
 
