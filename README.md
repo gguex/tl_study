@@ -31,13 +31,18 @@ proportional fitting
 
 ## Some Results
 
+### Iteration example on a toy network. The network edges are represented by black edges, transfer flow is represented by green edges
+
+<p>
+<img src="results/toys_graphs/iterations.pdf" alt="iterations" style="width:30%">
+</p>
 
 
 ## Tutorial 
 
-To present how the algorithm work, we present a small tutorial with a very simple network (the code for this tutorial can be found in `0.0_tutorial.R`. This network have two lines, with 3 stops each, and transfer edges connecting their middle stops.
+To present how the algorithm work, we present a small tutorial with a very simple network (the code for this tutorial can be found in `0.0_tutorial.R`). This network have two lines, with 3 stops each, and transfer edges connecting their middle stops.
 
-<p style="text-align:center;">
+<p>
 <img src="utilities/tuto_network.png" alt="tutorial example" style="width:20%">
 </p>
 
