@@ -179,7 +179,7 @@ All useful functions in order to run the algorithm are contained in the `local_f
 * `3.x` scripts: allow to map results from the estimated transportation flow.
 * `4.x` scripts: create the results for toy examples.
 
-The folder contain the following:
+The folders contain the following:
 
 * `archives`: old scripts 
 * `latex_files`: various notes and presentations about the method
