@@ -54,25 +54,35 @@ x_btw = compute_x_from_n(n_real,
                          sp_data$sp_ref, 
                          sp_data$sp_edge_link)$x_btw
 
-# Compute the embarkment and disembarkment counts
+# Compute the embarkment counts
 flow_l_in = rowSums(n_real) + colSums(x_btw)
 flow_l_in
+# Compute the disembarkment counts
 flow_l_out = colSums(n_real) + rowSums(x_btw)
 flow_l_out
 
 # -- Estimation of the flow
 
-# Run the algorithm 
-n_algo = compute_origin_destination(flow_l_in,
-                                    flow_l_out,
-                                    sp_data$edge_ref,
-                                    sp_data$sp_ref, 
-                                    sp_data$sp_edge_link, 
-                                    min_p_ntwk=0.001, 
-                                    display_it=F)
+n_alg = compute_origin_destination(flow_l_in,
+                                   flow_l_out,
+                                   sp_data$edge_ref,
+                                   sp_data$sp_ref, 
+                                   sp_data$sp_edge_link, 
+                                   min_p_ntwk=0.001, 
+                                   display_it=F)
 
 # Compute the MTE
-mean_transport_error = sum(abs(n_algo - n_real)) / sum(n_real)
-n_algo
+mean_transport_error = sum(abs(n_alg - n_real)) / sum(n_real)
+# Compute the MME
+x_btw_alg = compute_x_from_n(n_alg, 
+                             sp_data$edge_ref, 
+                             sp_data$sp_ref, 
+                             sp_data$sp_edge_link)$x_btw
+mean_margin_error = sum(abs(flow_l_in - rowSums(n_alg) - colSums(x_btw_alg))) + 
+  sum(abs(flow_l_out - colSums(n_alg) - rowSums(x_btw_alg))) / 
+  (2 * sum(flow_l_in))
+
+n_alg
 n_real
 mean_transport_error
+mean_margin_error

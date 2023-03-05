@@ -460,10 +460,10 @@ balance_flow_l_inout =
 # - conv_thres_if:    A threshold for the convergence of the iterative fitting 
 #                     algorithm (default = 1e-5).
 # - conv_thres_algo:  A threshold for the convergence of the whole algorithm 
-#                     (default = 1e-5).
+#                     (default = 1e-6).
 # - epsilon:  A small number, added in iterative fitting to make sure 
 #             the components are not null (default = 1e-40).
-# - max_it:   The maximum number of iterations (default = 200)
+# - max_it:   The maximum number of iterations (default = 500)
 # - max_it_if:  The maximum iterative fitting iterations (default = 400)
 # - display_it: Display iteration details (default = T)
 # - return_it:  Return n_mat for every iterations (default = F)
@@ -480,8 +480,8 @@ balance_flow_l_inout =
 compute_origin_destination = 
   function(flow_l_in, flow_l_out, edge_ref, sp_ref, sp_edge_link, 
            s_mat=NULL, min_p_ntwk=0.1, conv_thres_if=1e-5,
-           conv_thres_algo=1e-5, epsilon=1e-40,
-           max_it=200, max_it_if=400, display_it=T, return_it=F, 
+           conv_thres_algo=1e-6, epsilon=1e-40,
+           max_it=500, max_it_if=400, display_it=T, return_it=F, 
            return_details=F){
     
     # --- Get the network structure 
