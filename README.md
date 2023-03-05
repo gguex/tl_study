@@ -103,7 +103,7 @@ sp_data = build_sp_data(line_mbrshps,
 
 This function return 3 elements : `sp_data$edge_ref` is a table describing oriented edges, with 3 columns: the starting node, the ending node and a boolean indicator equal to 1 if the edge is a transfer edge. `sp_data$sp_ref` is a table referencing perimitted shortest-paths among the network, with 2 columns: the origin node and the destination node. Finally, `sp_data$sp_edge_link` is the shortest-paths/edges incidence matrix, with order corresponding to the one given in reference matrices. This matrix might be very large, and is given in a sparse format (`"ngCMatrix"`).
 
-Now that the permitted shortest-paths data is constructed, we will draw a random number of passengers on each possible trips. First let us construct the possible path in a matrix format 
+Now that the permitted shortest-paths data is constructed, we will draw a random number of passengers on each possible trips. First let us construct the permitted path in a matrix format 
 
 ```R
 permitted_paths = as.matrix(sparseMatrix(sp_data$sp_ref[, 1], 
@@ -117,7 +117,7 @@ And let us draw the passengers
 # A random vector with the size of possible paths
 random_vec = round(runif(sum(permitted_paths), 1, 1000))
 
-# Fill possible paths
+# Fill permitted paths
 n_real = permitted_paths
 n_real[n_real] = random_vec
 n_real
