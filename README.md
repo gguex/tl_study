@@ -65,7 +65,44 @@ To present how the algorithm work, we present a small tutorial with a very simpl
 
 All the functions to run the algorithm are located in `local_functions.R`, we first need to load them
 
-```r
+```R
 source("local_functions.R")
 ```
+
+We will build the network structure by hand 
+
+```R
+# The line memberships of nodes
+line_mbrshps = c(1, 1, 1, 2, 2, 2)
+
+# The adjacency matrix within lines
+adj_w = matrix(c(0, 1, 0, 0, 0, 0,
+                 0, 0, 1, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 
+                 0, 0, 0, 0, 1, 0,
+                 0, 0, 0, 0, 0, 1,
+                 0, 0, 0, 0, 0, 0), 6, 6, byrow=T)
+
+# The adjacency matrix between lines
+adj_b = matrix(c(0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 1, 0,
+                 0, 0, 0, 0, 0, 0, 
+                 0, 0, 0, 0, 0, 0,
+                 0, 1, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0), 6, 6, byrow=T)
+```
+
+The (permitted) shortest-paths in the network are needed to run the algorithm. Information about them can be constructed with `build_sp_data()` function. This function need memberships of each line, memberships of each tour (back and forth trips), the adjacency matrix within lines (`adj_w`) and between lines `adj_b`)
+
+```R
+# Prepare the shortest-paths data
+sp_data = build_sp_data(line_mbrshps, 
+                        tour_mbrshps=line_mbrshps, 
+                        adj_w, 
+                        adj_b)
+```
+
+This function return 3 elements : `sp_data$edge_ref` is a table describing oriented edges, with 3 columns: the starting node, the ending node and a boolean indicator equal to 1 if the edge is a transfer edge. `sp_data$sp_ref` is a table referencing perimitted shortest-paths among the network, with 2 columns: the origin node and the destination node. Finally, `sp_data$sp_edge_link` is the shortest-paths/edges incidence matrix, with order corresponding to the one given in reference matrices. This matrix might be very large, and is given in a sparse format (`"ngCMatrix"`).
+
+
 
