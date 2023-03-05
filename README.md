@@ -170,3 +170,19 @@ mean_margin_error = sum(abs(flow_l_in - rowSums(n_alg) - colSums(x_btw_alg))) +
 ```
 
 ## Organization of the repository 
+
+All useful functions in order to run the algorithm are contained in the `local_functions.R` script. Most of them are documented. The rest of the scripts permit to create the results found in the article:
+
+* `0.0_tutorial.R`: contains the tutorial, as seen in the previous section.
+* `1.0_tl_build_data.R`: permits to build shortest-paths data and balance the lines counts for the "transport lausannois" (tl) data.
+* `2.0_tl_compute_OD.R`: permits to compute the estimated transportation flow on tl data.
+* `3.x` scripts: allow to map results from the estimated transportation flow.
+* `4.x` scripts: create the results for toy examples.
+
+The folder contain the following:
+
+* `archives`: old scripts 
+* `latex_files`: various notes and presentations about the method
+* `multilines_data`: the tl data
+* `results`: various results produced by the method
+* `utilities`: utility scripts.
