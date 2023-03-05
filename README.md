@@ -104,5 +104,69 @@ sp_data = build_sp_data(line_mbrshps,
 
 This function return 3 elements : `sp_data$edge_ref` is a table describing oriented edges, with 3 columns: the starting node, the ending node and a boolean indicator equal to 1 if the edge is a transfer edge. `sp_data$sp_ref` is a table referencing perimitted shortest-paths among the network, with 2 columns: the origin node and the destination node. Finally, `sp_data$sp_edge_link` is the shortest-paths/edges incidence matrix, with order corresponding to the one given in reference matrices. This matrix might be very large, and is given in a sparse format (`"ngCMatrix"`).
 
+Now that the permitted shortest-paths data is constructed, we will draw a random number of passengers on each possible trips. First let us construct the possible path in a matrix format 
 
+```R
+permitted_paths = as.matrix(sparseMatrix(sp_data$sp_ref[, 1], 
+                                         sp_data$sp_ref[, 2], 
+                                         dims=c(6, 6)))
+```
 
+And let us draw the passengers
+
+```R
+# A random vector with the size of possible paths
+random_vec = round(runif(sum(permitted_paths), 1, 1000))
+
+# Fill possible paths
+n_real = permitted_paths
+n_real[n_real] = random_vec
+n_real
+````
+
+The matrix `n_real` contains the drawn flow, and the algorithm will estimate it according the embarkment and disembarkment counts. To compute the latters, we will need the flow on edges, which can be obtained with the `compute_x_from_n` function (for convenience, this function give 3 outputs, $x_mat, $x_wit and $x_btw, respectively all flows, the flow within lines and the flow between lines)
+
+```R
+# Compute the flow on transfer edges
+x_btw = compute_x_from_n(n_real, 
+                         sp_data$edge_ref, 
+                         sp_data$sp_ref, 
+                         sp_data$sp_edge_link)$x_btw
+```
+
+We can now compute the embarkment and disembarkment counts on every nodes 
+
+```R
+# Compute the embarkment counts
+flow_l_in = rowSums(n_real) + colSums(x_btw)
+# Compute the disembarkment counts
+flow_l_out = colSums(n_real) + rowSums(x_btw)
+```
+
+Finally, we can use the function `compute_origin_destination()` in order to get an estimation of the flow based on the embarkment and disembarkment counts
+
+```R
+n_algo = compute_origin_destination(flow_l_in,  # embarkment counts
+                                    flow_l_out, # disembarkment counts
+                                    sp_data$edge_ref,   # edges reference
+                                    sp_data$sp_ref,     # shortest-paths reference
+                                    sp_data$sp_edge_link,   # sp-edges incidence matrix
+                                    min_p_ntwk=0.001,   # minimum embarkment/disembarkement proportion hyperparameter
+                                    display_it=F)   # do not display information along iterations
+```
+We can now compute the MME and MTE errors 
+
+```R
+# Compute the MTE
+mean_transport_error = sum(abs(n_alg - n_real)) / sum(n_real)
+# Compute the MME
+x_btw_alg = compute_x_from_n(n_alg, 
+                             sp_data$edge_ref, 
+                             sp_data$sp_ref, 
+                             sp_data$sp_edge_link)$x_btw
+mean_margin_error = sum(abs(flow_l_in - rowSums(n_alg) - colSums(x_btw_alg))) + 
+  sum(abs(flow_l_out - colSums(n_alg) - rowSums(x_btw_alg))) / 
+  (2 * sum(flow_l_in))
+```
+
+## Organization of the repository 
