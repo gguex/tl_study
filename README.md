@@ -60,7 +60,6 @@ To present how the algorithm work, we present a small tutorial with a very simpl
 
 <figure>
   <img src="utilities/readme_img/tuto_network.png" alt="tutorial example" style="width:20%">
-  <figcaption>Tutorial network</figcaption>
 </figure>
 
 All the functions to run the algorithm are located in `local_functions.R`, we first need to load them
