@@ -114,7 +114,7 @@ permitted_paths = as.matrix(sparseMatrix(sp_data$sp_ref[, 1],
 And let us draw the passengers
 
 ```R
-# A random vector with the size of possible paths
+# A random vector with the size of permitted paths
 random_vec = round(runif(sum(permitted_paths), 1, 1000))
 
 # Fill permitted paths
