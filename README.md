@@ -93,7 +93,7 @@ adj_b = matrix(c(0, 0, 0, 0, 0, 0,
 
 The permitted trips in the network, using shortest-paths, are needed to run the algorithm. Information about them can be constructed with `build_sp_data()` function, which use the rules found in the article to construct permitted trips in the network, i.e. all $s,t$-trips but:
 
-* $s$ and $t$ that are on the same line but with t preceding (or equal to) s in the line order.
+* $s$ and $t$ that are on the same line but with $t$ preceding (or equal to) $s$ in the line order.
 * $s$ and $t$ that are on the same round trip, or tour, but on opposite lines.
 * $s$ and $t$ whose shortest-path starts with a transfer edge, ends with a transfer edge, or possesses two (or more) consecutive transfer edges.
 
