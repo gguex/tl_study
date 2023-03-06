@@ -30,19 +30,19 @@ sp_data = build_sp_data(line_mbrshps,
                         adj_b)
 sp_data
 
-# Matrix of permitted paths
-permitted_paths = as.matrix(sparseMatrix(sp_data$sp_ref[, 1], 
+# Matrix of permitted trips
+permitted_trips = as.matrix(sparseMatrix(sp_data$sp_ref[, 1], 
                                          sp_data$sp_ref[, 2], 
                                          dims=c(6, 6)))
-permitted_paths
+permitted_trips
 
 # -- Draw a random flow 
 
-# A random vector with the size of possible paths
-random_vec = round(runif(sum(permitted_paths), 1, 1000))
+# A random vector with the size of permitted_trips
+random_vec = round(runif(sum(permitted_trips), 1, 1000))
 
-# Fill possible paths
-n_real = permitted_paths
+# Fill permitted_trips
+n_real = permitted_trips
 n_real[n_real] = random_vec
 n_real
 
@@ -63,13 +63,13 @@ flow_l_out
 
 # -- Estimation of the flow
 
-n_alg = compute_origin_destination(flow_l_in,
-                                   flow_l_out,
-                                   sp_data$edge_ref,
-                                   sp_data$sp_ref, 
-                                   sp_data$sp_edge_link, 
-                                   min_p_ntwk=0.001, 
-                                   display_it=F)
+n_algo = compute_origin_destination(flow_l_in,  # embarkment counts
+                                    flow_l_out, # disembarkment counts
+                                    sp_data$edge_ref,   # edges reference
+                                    sp_data$sp_ref,     # shortest-paths reference
+                                    sp_data$sp_edge_link,   # sp-edges incidence matrix
+                                    min_p_ntwk=0.001,   # minimum embarkment/disembarkement proportion hyperparameter
+                                    display_it=F)   # do not display information along iterations
 
 # Compute the MTE
 mean_transport_error = sum(abs(n_alg - n_real)) / sum(n_real)
