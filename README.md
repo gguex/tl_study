@@ -128,7 +128,6 @@ random_vec = round(runif(sum(permitted_trips), 1, 1000))
 # Fill permitted trips
 n_real = permitted_trips
 n_real[n_real] = random_vec
-n_real
 ````
 
 The matrix `n_real` contains the drawn flow, and the algorithm will estimate it according the embarkment and disembarkment counts. To compute the latters, we will need the flow on edges, which can be obtained with the `compute_x_from_n` function (for convenience, this function gives 3 outputs, $x_mat, $x_wit and $x_btw, respectively all flows, flows within lines and flows between lines)
