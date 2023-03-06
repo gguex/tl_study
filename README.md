@@ -56,7 +56,7 @@ proportional fitting
 
 ## Tutorial 
 
-To present how the algorithm work, we present a small tutorial with a very simple network (the code for this tutorial can be found in `0.0_tutorial.R`). This network have two lines, with 3 stops each, and transfer edges connecting their middle stops.
+To present how the algorithm work, we present a small tutorial with a very simple network (the code for this tutorial can be found in `0.0_tutorial.R`). This network has two lines, with 3 stops each, and two transfer edges connecting their intermediary stops.
 
 <figure>
   <img src="utilities/readme_img/tuto_network.png" alt="tutorial example" style="width:20%">
