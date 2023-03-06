@@ -123,7 +123,7 @@ n_real[n_real] = random_vec
 n_real
 ````
 
-The matrix `n_real` contains the drawn flow, and the algorithm will estimate it according the embarkment and disembarkment counts. To compute the latters, we will need the flow on edges, which can be obtained with the `compute_x_from_n` function (for convenience, this function give 3 outputs, $x_mat, $x_wit and $x_btw, respectively all flows, flows within lines and flows between lines)
+The matrix `n_real` contains the drawn flow, and the algorithm will estimate it according the embarkment and disembarkment counts. To compute the latters, we will need the flow on edges, which can be obtained with the `compute_x_from_n` function (for convenience, this function gives 3 outputs, $x_mat, $x_wit and $x_btw, respectively all flows, flows within lines and flows between lines)
 
 ```R
 # Compute the flow on transfer edges
@@ -133,7 +133,7 @@ x_btw = compute_x_from_n(n_real,
                          sp_data$sp_edge_link)$x_btw
 ```
 
-We can now compute the embarkment and disembarkment counts on every nodes 
+We can now compute the embarkment and disembarkment counts on every node 
 
 ```R
 # Compute the embarkment counts
