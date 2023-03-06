@@ -91,7 +91,13 @@ adj_b = matrix(c(0, 0, 0, 0, 0, 0,
                  0, 0, 0, 0, 0, 0), 6, 6, byrow=T)
 ```
 
-The (permitted) shortest-paths in the network are needed to run the algorithm. Information about them can be constructed with `build_sp_data()` function. This function need memberships of each line, memberships of each tour (back and forth trips), the adjacency matrix within lines (`adj_w`) and between lines `adj_b`)
+The permitted trips in the network, using shortest-paths, are needed to run the algorithm. Information about them can be constructed with `build_sp_data()` function, which use the rules found in the article to construct permitted trips in the network, i.e. all $s,t$-trips but:
+
+* $s$ and $t$ that are on the same line but with t preceding (or equal to) s in the line order.
+* $s$ and $t$ that are on the same round trip, or tour, but on opposite lines.
+* $s$ and $t$ whose shortest-path starts with a transfer edge, ends with a transfer edge, or possesses two (or more) consecutive transfer edges.
+
+This function needs, in order to test these conditions, the memberships of stops in each line (`line_mbrshps`), the memberships of stops in each tour (back and forth trips - `tour_mbrshps`), the adjacency matrix within lines (`adj_w`) and between lines (`adj_b`)
 
 ```R
 # Prepare the shortest-paths data
@@ -101,12 +107,14 @@ sp_data = build_sp_data(line_mbrshps,
                         adj_b)
 ```
 
-This function return 3 elements : `sp_data$edge_ref` is a table describing oriented edges, with 3 columns: the starting node, the ending node and a boolean indicator equal to 1 if the edge is a transfer edge. `sp_data$sp_ref` is a table referencing perimitted shortest-paths among the network, with 2 columns: the origin node and the destination node. Finally, `sp_data$sp_edge_link` is the shortest-paths/edges incidence matrix, with order corresponding to the one given in reference matrices. This matrix might be very large, and is given in a sparse format (`"ngCMatrix"`).
+Optionnaly, by giving the transportation time on line edges (`travel_t_vec`), the mean waiting time at each stop (`wait_t_vec`), and the pedestrian time between stops (`ped_t_mat`), it is possible to exclude $s,t$-paths which need more time with the transportation network than on foot.
 
-Now that the permitted shortest-paths data is constructed, we will draw a random number of passengers on each possible trips. First let us construct the permitted path in a matrix format 
+This function return 3 elements: `sp_data$edge_ref` is a table describing oriented edges, with 3 columns: the starting node, the ending node and a boolean indicator equal to 1 if the edge is a transfer edge. `sp_data$sp_ref` is a table referencing perimitted shortest-paths among the network, with 2 columns: the origin node and the destination node. Finally, `sp_data$sp_edge_link` is the shortest-paths/edges incidence matrix, with order corresponding to the one given in reference matrices. This matrix might be very large, and is given in a sparse format (`"ngCMatrix"`).
+
+Now that the permitted shortest-paths data is constructed, we will draw a random number of passengers on each permitted trips. First let us construct the permitted trips in a matrix format 
 
 ```R
-permitted_paths = as.matrix(sparseMatrix(sp_data$sp_ref[, 1], 
+permitted_trips = as.matrix(sparseMatrix(sp_data$sp_ref[, 1], 
                                          sp_data$sp_ref[, 2], 
                                          dims=c(6, 6)))
 ```
@@ -114,11 +122,11 @@ permitted_paths = as.matrix(sparseMatrix(sp_data$sp_ref[, 1],
 And let us draw the passengers
 
 ```R
-# A random vector with the size of permitted paths
-random_vec = round(runif(sum(permitted_paths), 1, 1000))
+# A random vector with the size of permitted trips
+random_vec = round(runif(sum(permitted_trips), 1, 1000))
 
-# Fill permitted paths
-n_real = permitted_paths
+# Fill permitted trips
+n_real = permitted_trips
 n_real[n_real] = random_vec
 n_real
 ````
