@@ -175,7 +175,7 @@ mean_margin_error = sum(abs(flow_l_in - rowSums(n_alg) - colSums(x_btw_alg))) +
   (2 * sum(flow_l_in))
 ```
 
-## Organization of the repository 
+## Organisation of the repository 
 
 All useful functions in order to run the algorithm are contained in the `local_functions.R` script. Most of them are documented. The rest of the scripts permit to create the results found in the article:
 
