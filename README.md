@@ -2,10 +2,8 @@
 
 ### Guillaume Guex, Romain Loup, François Bavaud
 
-This repository contains the data and code in order to produce the results in the article *Estimation of flow trajectories in a multi-lines
-transportation network*, with applications to the public transportation network in the city of Lausanne.
-
-    https://appliednetsci.springeropen.com/articles/10.1007/s41109-023-00570-7
+This repository contains the data and code in order to produce the results in the article <a href=https://appliednetsci.springeropen.com/articles/10.1007/s41109-023-00570-7> *Estimation of flow trajectories in a multi-lines
+transportation network*</a>, with applications to the public transportation network in the city of Lausanne.
 
 ## Abstract 
 
